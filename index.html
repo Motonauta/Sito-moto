@@ -13,7 +13,10 @@
 
 <header class="site-header">
   <div class="wrap">
-    <a href="index.html" class="logo">IL <span>MOTONAUTA</span></a>
+    <a href="index.html" class="logo logo-wrap">
+      <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784625152/IMG_1429_dyz5re.jpg" alt="Logo Il Motonauta">
+      IL <span>MOTONAUTA</span>
+    </a>
     <nav class="nav-links">
       <a href="index.html" class="active">Home</a>
       <a href="sponsor.html">Partner</a>
@@ -44,14 +47,75 @@
     </div>
   </div>
 
-  <svg class="road-line" viewBox="0 0 1180 160" preserveAspectRatio="none" style="margin-top:56px;">
-    <path d="M -50 120 C 200 20, 400 180, 650 90 S 1100 10, 1230 100" />
+  <svg class="moto-scene" viewBox="0 0 1180 240" preserveAspectRatio="xMidYMax meet" style="margin-top:40px;" role="img" aria-label="Illustrazione di una moto da viaggio carica di bagagli lungo una strada">
+    <!-- sole e montagne sullo sfondo -->
+    <circle cx="990" cy="55" r="34" fill="var(--gold)" opacity="0.35"/>
+    <path d="M -20 150 L 110 85 L 210 150 L 330 60 L 470 150 L 640 95 L 800 150 L 960 65 L 1120 150 L 1200 150 L 1200 190 L -20 190 Z" fill="var(--steel)" opacity="0.22"/>
+
+    <!-- strada -->
+    <rect x="-20" y="190" width="1220" height="40" fill="var(--asphalt-2)"/>
+    <line x1="-20" y1="190" x2="1200" y2="190" stroke="var(--gold)" stroke-width="2" opacity="0.55"/>
+    <line class="road-dash" x1="-20" y1="209" x2="1200" y2="209" stroke="var(--sand)" stroke-width="3" stroke-dasharray="26 22" opacity="0.45" stroke-linecap="round"/>
+
+    <!-- moto da viaggio, vista di profilo -->
+    <g>
+      <!-- bagaglio posteriore -->
+      <rect x="418" y="128" width="52" height="42" rx="5" fill="var(--gold)" opacity="0.9"/>
+      <line x1="418" y1="146" x2="470" y2="146" stroke="var(--asphalt)" stroke-width="2" opacity="0.4"/>
+
+      <!-- scarico -->
+      <rect x="432" y="158" width="46" height="9" rx="4" fill="var(--steel)"/>
+
+      <!-- telaio posteriore verso la sella -->
+      <line x1="472" y1="164" x2="500" y2="115" stroke="var(--sand)" stroke-width="6" stroke-linecap="round"/>
+      <!-- sella -->
+      <rect x="478" y="104" width="66" height="16" rx="6" fill="var(--asphalt-2)"/>
+      <!-- blocco motore -->
+      <rect x="495" y="130" width="105" height="28" rx="6" fill="var(--asphalt-2)"/>
+      <!-- serbatoio -->
+      <ellipse cx="548" cy="100" rx="40" ry="21" fill="var(--rust)"/>
+      <!-- parabrezza -->
+      <path d="M 600 72 L 632 62 L 636 100 L 606 104 Z" fill="var(--sand)" opacity="0.45"/>
+      <!-- faro -->
+      <circle cx="634" cy="108" r="9" fill="var(--gold)"/>
+      <!-- forcella anteriore -->
+      <line x1="662" y1="164" x2="632" y2="104" stroke="var(--sand)" stroke-width="6" stroke-linecap="round"/>
+
+      <!-- gambe pilota -->
+      <line x1="540" y1="112" x2="512" y2="150" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
+      <!-- busto pilota -->
+      <path d="M 566 66 Q 550 90 538 114 L 558 118 Q 574 92 584 68 Z" fill="var(--rust-dim)"/>
+      <!-- braccio pilota -->
+      <line x1="572" y1="72" x2="618" y2="96" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
+      <!-- casco -->
+      <circle cx="576" cy="54" r="17" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="2"/>
+      <path d="M 562 50 Q 576 40 592 50" stroke="var(--gold)" stroke-width="2" fill="none" opacity="0.6"/>
+
+      <!-- ruota posteriore -->
+      <g class="wheel">
+        <circle cx="470" cy="164" r="27" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="5"/>
+        <circle cx="470" cy="164" r="7" fill="var(--gold)"/>
+        <line x1="470" y1="141" x2="470" y2="187" stroke="var(--sand)" stroke-width="2" opacity="0.55"/>
+        <line x1="447" y1="164" x2="493" y2="164" stroke="var(--sand)" stroke-width="2" opacity="0.55"/>
+        <line x1="453" y1="147" x2="487" y2="181" stroke="var(--sand)" stroke-width="2" opacity="0.4"/>
+        <line x1="453" y1="181" x2="487" y2="147" stroke="var(--sand)" stroke-width="2" opacity="0.4"/>
+      </g>
+      <!-- ruota anteriore -->
+      <g class="wheel">
+        <circle cx="662" cy="164" r="27" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="5"/>
+        <circle cx="662" cy="164" r="7" fill="var(--gold)"/>
+        <line x1="662" y1="141" x2="662" y2="187" stroke="var(--sand)" stroke-width="2" opacity="0.55"/>
+        <line x1="639" y1="164" x2="685" y2="164" stroke="var(--sand)" stroke-width="2" opacity="0.55"/>
+        <line x1="645" y1="147" x2="679" y2="181" stroke="var(--sand)" stroke-width="2" opacity="0.4"/>
+        <line x1="645" y1="181" x2="679" y2="147" stroke="var(--sand)" stroke-width="2" opacity="0.4"/>
+      </g>
+    </g>
   </svg>
 </section>
 
 <!-- CHI SONO ======================================================== -->
 <section class="section-alt">
-  <div class="wrap" style="display:grid; grid-template-columns:1fr 1.3fr; gap:60px; align-items:center;">
+  <div class="wrap feature-grid">
    <div style="aspect-ratio:4/5; overflow:hidden;">
   <img src=https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/IMG_0181_TIF_1_qemfue alt="Foto profilo" style="width:100%; height:100%; object-fit:cover;">
 </div>
@@ -79,18 +143,18 @@
     <p class="marker">Cosa faccio</p>
     <h2 style="max-width:16ch;">Contenuti on the road, dal casco allo schermo</h2>
 
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:rgba(245,240,230,0.14); margin-top:48px;">
-      <div style="background:var(--asphalt); padding:34px;">
+    <div class="grid-flat-3" style="margin-top:48px;">
+      <div style="padding:34px;">
         <p class="marker">01 — viaggi</p>
         <h3 style="font-size:1.2rem; color:var(--sand);">Itinerari e diari di viaggio</h3>
         <p style="margin-top:12px; font-size:0.95rem;">Tappe, percorsi e consigli pratici da chi la strada l'ha davvero fatta.</p>
       </div>
-      <div style="background:var(--asphalt); padding:34px;">
+      <div style="padding:34px;">
         <p class="marker">02 — mezzi</p>
         <h3 style="font-size:1.2rem; color:var(--sand);">Test e recensioni</h3>
         <p style="margin-top:12px; font-size:0.95rem;">Prove su strada, equipaggiamento e attrezzatura da viaggio.</p>
       </div>
-      <div style="background:var(--asphalt); padding:34px;">
+      <div style="padding:34px;">
         <p class="marker">03 — community</p>
         <h3 style="font-size:1.2rem; color:var(--sand);">Community e collaborazioni</h3>
         <p style="margin-top:12px; font-size:0.95rem;">Progetti con brand e altri rider per raccontare la cultura del viaggio in moto.</p>
@@ -105,7 +169,7 @@
     <p class="marker">Esplora</p>
     <h2>Dove vuoi andare?</h2>
 
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; margin-top:44px;">
+    <div class="grid-cards-3" style="margin-top:44px;">
 
       <a href="sponsor.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
         <p class="marker">Collaborazioni</p>
