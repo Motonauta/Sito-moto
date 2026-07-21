@@ -158,20 +158,77 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
-   ROAD LINE — signature element
+   MOTO SCENE — signature element (strada + moto da viaggio)
    ========================================================== */
-.road-line{
+.moto-scene{
   width:100%; height:auto; display:block;
 }
-.road-line path{
-  fill:none;
-  stroke:var(--gold);
-  stroke-width:2;
-  stroke-dasharray:14 12;
-  opacity:0.55;
-  animation:drive 26s linear infinite;
+.moto-scene .bike{
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:bike-bob 1s ease-in-out infinite alternate;
 }
-@keyframes drive{ to{ stroke-dashoffset:-1000; } }
+@keyframes bike-bob{ from{ transform:translateY(0); } to{ transform:translateY(-3px); } }
+.moto-scene .wheel{
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:wheel-spin 1s linear infinite;
+}
+@keyframes wheel-spin{ to{ transform:rotate(360deg); } }
+.moto-scene .road-dash{
+  animation:road-move 1.3s linear infinite;
+}
+@keyframes road-move{ to{ stroke-dashoffset:-1080; } }
+
+/* ==========================================================
+   GRID UTILITIES — responsive (desktop -> tablet -> mobile)
+   ========================================================== */
+.grid-flat-3{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:1px;
+  background:rgba(245,240,230,0.14);
+}
+.grid-flat-3 > div{ background:var(--asphalt); }
+@media (max-width:860px){
+  .grid-flat-3{ grid-template-columns:repeat(2, 1fr); }
+}
+@media (max-width:560px){
+  .grid-flat-3{ grid-template-columns:1fr; }
+}
+
+.grid-cards-3{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+}
+@media (max-width:860px){
+  .grid-cards-3{ grid-template-columns:1fr; }
+}
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:1fr 1.3fr;
+  gap:60px;
+  align-items:center;
+}
+@media (max-width:780px){
+  .feature-grid{ grid-template-columns:1fr; gap:32px; }
+}
+
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo-wrap img{
+  height:40px;
+  width:auto;
+  display:block;
+}
+@media (max-width:480px){
+  .logo-wrap img{ height:32px; }
+}
 
 /* ==========================================================
    FOOTER
@@ -204,6 +261,10 @@ p{color:var(--cream-dim); max-width:60ch;}
    SECTION SPACING
    ========================================================== */
 section{padding:96px 0;}
+@media (max-width:780px){
+  section{padding:64px 0;}
+  .wrap{padding:0 20px;}
+}
 .section-alt{background:var(--asphalt-2);}
 .divider{
   border:none; border-top:1px dashed rgba(245,240,230,0.18);
