@@ -7,7 +7,7 @@
 <meta name="description" content="Content creator che racconta viaggi in moto, strade e destinazioni.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style_fixed.css">
 </head>
 <body>
 
@@ -17,13 +17,13 @@
       <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784625152/IMG_1429_dyz5re.jpg" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;">
       IL <span>MOTONAUTA</span>
     </a>
-    <nav class="nav-links">
+    <nav class="nav-links" id="mobile-menu">
       <a href="index.html" class="active">Home</a>
       <a href="sponsor.html">Partner</a>
       <a href="galleria.html">Galleria</a>
       <a href="contatti.html">Contatti</a>
     </nav>
-    <button class="nav-toggle" aria-label="Apri menu">
+    <button class="nav-toggle" type="button" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -143,6 +143,6 @@
   </div>
 </footer>
 
-<script src="script.js"></script>
+<script src="script_fixed.js"></script>
 </body>
 </html>
