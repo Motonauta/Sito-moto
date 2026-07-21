@@ -47,67 +47,101 @@
     </div>
   </div>
 
-  <svg class="moto-scene" viewBox="0 0 1180 240" preserveAspectRatio="xMidYMax meet" style="margin-top:40px;" role="img" aria-label="Illustrazione di una moto da viaggio carica di bagagli lungo una strada">
+  <svg class="moto-scene" viewBox="0 0 1180 260" preserveAspectRatio="xMidYMax meet" style="margin-top:32px;" role="img" aria-label="Illustrazione di una moto da viaggio carica di bagagli, con pilota, che percorre una strada">
     <!-- sole e montagne sullo sfondo -->
-    <circle cx="990" cy="55" r="34" fill="var(--gold)" opacity="0.35"/>
-    <path d="M -20 150 L 110 85 L 210 150 L 330 60 L 470 150 L 640 95 L 800 150 L 960 65 L 1120 150 L 1200 150 L 1200 190 L -20 190 Z" fill="var(--steel)" opacity="0.22"/>
+    <circle cx="990" cy="60" r="36" fill="var(--gold)" opacity="0.35"/>
+    <path d="M -20 170 L 110 95 L 210 170 L 330 70 L 470 170 L 640 105 L 800 170 L 960 75 L 1120 170 L 1200 170 L 1200 210 L -20 210 Z" fill="var(--steel)" opacity="0.22"/>
 
     <!-- strada -->
-    <rect x="-20" y="190" width="1220" height="40" fill="var(--asphalt-2)"/>
-    <line x1="-20" y1="190" x2="1200" y2="190" stroke="var(--gold)" stroke-width="2" opacity="0.55"/>
-    <line class="road-dash" x1="-20" y1="209" x2="1200" y2="209" stroke="var(--sand)" stroke-width="3" stroke-dasharray="26 22" opacity="0.45" stroke-linecap="round"/>
+    <rect x="-20" y="210" width="1220" height="50" fill="var(--asphalt-2)"/>
+    <line x1="-20" y1="210" x2="1200" y2="210" stroke="var(--gold)" stroke-width="2" opacity="0.55"/>
+    <line class="road-dash" x1="-20" y1="233" x2="1200" y2="233" stroke="var(--sand)" stroke-width="4" stroke-dasharray="30 24" opacity="0.5" stroke-linecap="round"/>
 
-    <!-- moto da viaggio, vista di profilo -->
-    <g>
-      <!-- bagaglio posteriore -->
-      <rect x="418" y="128" width="52" height="42" rx="5" fill="var(--gold)" opacity="0.9"/>
-      <line x1="418" y1="146" x2="470" y2="146" stroke="var(--asphalt)" stroke-width="2" opacity="0.4"/>
+    <!-- moto da viaggio con pilota, vista di profilo -->
+    <g class="bike">
+
+      <!-- borsa/rullo posteriore sul portapacchi -->
+      <ellipse cx="478" cy="128" rx="38" ry="16" fill="var(--rust-dim)"/>
+      <line x1="460" y1="115" x2="460" y2="141" stroke="var(--asphalt)" stroke-width="2" opacity="0.35"/>
+      <line x1="496" y1="115" x2="496" y2="141" stroke="var(--asphalt)" stroke-width="2" opacity="0.35"/>
+
+      <!-- valigia laterale -->
+      <rect x="440" y="140" width="70" height="55" rx="10" fill="var(--gold)"/>
+      <line x1="440" y1="160" x2="510" y2="160" stroke="var(--asphalt)" stroke-width="3" opacity="0.35"/>
+
+      <!-- parafango posteriore -->
+      <path d="M 480 176 A 40 40 0 0 1 560 176" fill="none" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
 
       <!-- scarico -->
-      <rect x="432" y="158" width="46" height="9" rx="4" fill="var(--steel)"/>
+      <rect x="470" y="168" width="70" height="12" rx="6" fill="var(--steel)"/>
+      <circle cx="468" cy="174" r="7" fill="var(--asphalt)"/>
 
       <!-- telaio posteriore verso la sella -->
-      <line x1="472" y1="164" x2="500" y2="115" stroke="var(--sand)" stroke-width="6" stroke-linecap="round"/>
-      <!-- sella -->
-      <rect x="478" y="104" width="66" height="16" rx="6" fill="var(--asphalt-2)"/>
-      <!-- blocco motore -->
-      <rect x="495" y="130" width="105" height="28" rx="6" fill="var(--asphalt-2)"/>
-      <!-- serbatoio -->
-      <ellipse cx="548" cy="100" rx="40" ry="21" fill="var(--rust)"/>
-      <!-- parabrezza -->
-      <path d="M 600 72 L 632 62 L 636 100 L 606 104 Z" fill="var(--sand)" opacity="0.45"/>
-      <!-- faro -->
-      <circle cx="634" cy="108" r="9" fill="var(--gold)"/>
-      <!-- forcella anteriore -->
-      <line x1="662" y1="164" x2="632" y2="104" stroke="var(--sand)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="520" y1="176" x2="505" y2="125" stroke="var(--sand)" stroke-width="6" stroke-linecap="round"/>
 
-      <!-- gambe pilota -->
-      <line x1="540" y1="112" x2="512" y2="150" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
-      <!-- busto pilota -->
-      <path d="M 566 66 Q 550 90 538 114 L 558 118 Q 574 92 584 68 Z" fill="var(--rust-dim)"/>
+      <!-- blocco motore -->
+      <rect x="555" y="145" width="90" height="32" rx="8" fill="var(--asphalt-2)"/>
+
+      <!-- sella -->
+      <path d="M 500 122 Q 535 100 575 108 L 575 122 Q 535 118 500 130 Z" fill="var(--asphalt-2)"/>
+
+      <!-- serbatoio -->
+      <path d="M 575 108 Q 600 78 630 92 Q 655 100 645 128 Q 610 140 580 125 Z" fill="var(--rust)"/>
+
+      <!-- parabrezza -->
+      <path d="M 680 65 Q 705 55 715 75 L 705 118 Q 685 122 675 108 Z" fill="var(--sand)" opacity="0.4"/>
+
+      <!-- faro -->
+      <circle cx="722" cy="130" r="10" fill="var(--gold)"/>
+
+      <!-- forcelle anteriori -->
+      <line x1="740" y1="176" x2="703" y2="100" stroke="var(--sand)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="746" y1="176" x2="709" y2="100" stroke="var(--sand)" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+
+      <!-- parafango anteriore -->
+      <path d="M 700 176 A 40 40 0 0 1 780 176" fill="none" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- manubrio e specchietto -->
+      <line x1="690" y1="95" x2="715" y2="90" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
+      <line x1="712" y1="90" x2="725" y2="78" stroke="var(--sand)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="727" cy="76" r="5" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="2"/>
+
+      <!-- gamba pilota -->
+      <polyline points="612,128 600,155 590,178" fill="none" stroke="var(--sand)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="580" y="172" width="22" height="14" rx="4" fill="var(--asphalt-2)"/>
+
+      <!-- busto / giacca pilota -->
+      <path d="M 630 85 Q 613 100 605 130 Q 616 140 635 138 Q 656 105 665 88 Q 648 78 630 85 Z" fill="var(--rust-dim)"/>
+
       <!-- braccio pilota -->
-      <line x1="572" y1="72" x2="618" y2="96" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
+      <polyline points="628,92 660,100 700,97" fill="none" stroke="var(--sand)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="700" cy="97" r="6" fill="var(--asphalt-2)"/>
+
       <!-- casco -->
-      <circle cx="576" cy="54" r="17" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="2"/>
-      <path d="M 562 50 Q 576 40 592 50" stroke="var(--gold)" stroke-width="2" fill="none" opacity="0.6"/>
+      <circle cx="655" cy="65" r="21" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="2.5"/>
+      <path d="M 640 60 Q 655 50 673 58" stroke="var(--gold)" stroke-width="3" fill="none" opacity="0.7" stroke-linecap="round"/>
+      <line x1="645" y1="46" x2="666" y2="46" stroke="var(--gold)" stroke-width="2" opacity="0.5"/>
 
       <!-- ruota posteriore -->
       <g class="wheel">
-        <circle cx="470" cy="164" r="27" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="5"/>
-        <circle cx="470" cy="164" r="7" fill="var(--gold)"/>
-        <line x1="470" y1="141" x2="470" y2="187" stroke="var(--sand)" stroke-width="2" opacity="0.55"/>
-        <line x1="447" y1="164" x2="493" y2="164" stroke="var(--sand)" stroke-width="2" opacity="0.55"/>
-        <line x1="453" y1="147" x2="487" y2="181" stroke="var(--sand)" stroke-width="2" opacity="0.4"/>
-        <line x1="453" y1="181" x2="487" y2="147" stroke="var(--sand)" stroke-width="2" opacity="0.4"/>
+        <circle cx="520" cy="176" r="34" fill="var(--asphalt)" stroke="var(--asphalt-2)" stroke-width="10"/>
+        <circle cx="520" cy="176" r="27" fill="none" stroke="var(--sand)" stroke-width="3"/>
+        <circle cx="520" cy="176" r="7" fill="var(--gold)"/>
+        <line x1="520" y1="152" x2="520" y2="200" stroke="var(--sand)" stroke-width="2" opacity="0.5"/>
+        <line x1="496" y1="176" x2="544" y2="176" stroke="var(--sand)" stroke-width="2" opacity="0.5"/>
+        <line x1="503" y1="159" x2="537" y2="193" stroke="var(--sand)" stroke-width="2" opacity="0.35"/>
+        <line x1="503" y1="193" x2="537" y2="159" stroke="var(--sand)" stroke-width="2" opacity="0.35"/>
       </g>
+
       <!-- ruota anteriore -->
       <g class="wheel">
-        <circle cx="662" cy="164" r="27" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="5"/>
-        <circle cx="662" cy="164" r="7" fill="var(--gold)"/>
-        <line x1="662" y1="141" x2="662" y2="187" stroke="var(--sand)" stroke-width="2" opacity="0.55"/>
-        <line x1="639" y1="164" x2="685" y2="164" stroke="var(--sand)" stroke-width="2" opacity="0.55"/>
-        <line x1="645" y1="147" x2="679" y2="181" stroke="var(--sand)" stroke-width="2" opacity="0.4"/>
-        <line x1="645" y1="181" x2="679" y2="147" stroke="var(--sand)" stroke-width="2" opacity="0.4"/>
+        <circle cx="740" cy="176" r="34" fill="var(--asphalt)" stroke="var(--asphalt-2)" stroke-width="10"/>
+        <circle cx="740" cy="176" r="27" fill="none" stroke="var(--sand)" stroke-width="3"/>
+        <circle cx="740" cy="176" r="7" fill="var(--gold)"/>
+        <line x1="740" y1="152" x2="740" y2="200" stroke="var(--sand)" stroke-width="2" opacity="0.5"/>
+        <line x1="716" y1="176" x2="764" y2="176" stroke="var(--sand)" stroke-width="2" opacity="0.5"/>
+        <line x1="723" y1="159" x2="757" y2="193" stroke="var(--sand)" stroke-width="2" opacity="0.35"/>
+        <line x1="723" y1="193" x2="757" y2="159" stroke="var(--sand)" stroke-width="2" opacity="0.35"/>
       </g>
     </g>
   </svg>
