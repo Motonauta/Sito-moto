@@ -152,6 +152,8 @@ p{color:var(--cream-dim); max-width:60ch;}
     padding:10px 28px;
     transform:translateY(-110%);
     transition:transform .3s ease;
+    z-index:60;
+    overflow-y:auto;
   }
   .nav-links.open{transform:translateY(0);}
   .nav-links a{padding:18px 0; border-bottom:var(--line); width:100%;}
@@ -160,25 +162,21 @@ p{color:var(--cream-dim); max-width:60ch;}
 /* ==========================================================
    MOTO SCENE — signature element (strada + moto da viaggio)
    ========================================================== */
-.moto-scene{
+/* ==========================================================
+   ROAD LINE — signature element
+   ========================================================== */
+.road-line{
   width:100%; height:auto; display:block;
 }
-.moto-scene .bike{
-  transform-box:fill-box;
-  transform-origin:center;
-  animation:bike-bob 1s ease-in-out infinite alternate;
+.road-line path{
+  fill:none;
+  stroke:var(--gold);
+  stroke-width:2;
+  stroke-dasharray:14 12;
+  opacity:0.55;
+  animation:drive 26s linear infinite;
 }
-@keyframes bike-bob{ from{ transform:translateY(0); } to{ transform:translateY(-3px); } }
-.moto-scene .wheel{
-  transform-box:fill-box;
-  transform-origin:center;
-  animation:wheel-spin 1s linear infinite;
-}
-@keyframes wheel-spin{ to{ transform:rotate(360deg); } }
-.moto-scene .road-dash{
-  animation:road-move 1.3s linear infinite;
-}
-@keyframes road-move{ to{ stroke-dashoffset:-1080; } }
+@keyframes drive{ to{ stroke-dashoffset:-1000; } }
 
 /* ==========================================================
    GRID UTILITIES — responsive (desktop -> tablet -> mobile)
