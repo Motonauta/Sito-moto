@@ -156,6 +156,7 @@ p{color:var(--cream-dim); max-width:60ch;}
 
 @media (max-width: 780px){
   .nav-toggle{display:flex;}
+  .site-header{backdrop-filter:none;}
   .nav-links{
     position:fixed; inset:78px 0 0 0;
     background:var(--asphalt);
