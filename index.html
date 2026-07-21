@@ -61,87 +61,95 @@
     <g class="bike">
 
       <!-- borsa/rullo posteriore sul portapacchi -->
-      <ellipse cx="478" cy="128" rx="38" ry="16" fill="var(--rust-dim)"/>
-      <line x1="460" y1="115" x2="460" y2="141" stroke="var(--asphalt)" stroke-width="2" opacity="0.35"/>
-      <line x1="496" y1="115" x2="496" y2="141" stroke="var(--asphalt)" stroke-width="2" opacity="0.35"/>
+      <ellipse cx="478" cy="130" rx="36" ry="15" fill="var(--rust-dim)" stroke="var(--asphalt)" stroke-width="3"/>
+      <line x1="462" y1="118" x2="462" y2="142" stroke="var(--asphalt)" stroke-width="2" opacity="0.5"/>
+      <line x1="494" y1="118" x2="494" y2="142" stroke="var(--asphalt)" stroke-width="2" opacity="0.5"/>
 
       <!-- valigia laterale -->
-      <rect x="440" y="140" width="70" height="55" rx="10" fill="var(--gold)"/>
-      <line x1="440" y1="160" x2="510" y2="160" stroke="var(--asphalt)" stroke-width="3" opacity="0.35"/>
+      <rect x="440" y="142" width="68" height="54" rx="10" fill="var(--gold)" stroke="var(--asphalt)" stroke-width="3"/>
+      <line x1="440" y1="162" x2="508" y2="162" stroke="var(--asphalt)" stroke-width="2.5" opacity="0.55"/>
 
-      <!-- parafango posteriore -->
-      <path d="M 480 176 A 40 40 0 0 1 560 176" fill="none" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
+      <!-- parafango posteriore (doppia linea per effetto contorno) -->
+      <path d="M 486 176 A 34 34 0 0 1 554 176" fill="none" stroke="var(--asphalt)" stroke-width="9" stroke-linecap="round"/>
+      <path d="M 486 176 A 34 34 0 0 1 554 176" fill="none" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
 
       <!-- scarico -->
-      <rect x="470" y="168" width="70" height="12" rx="6" fill="var(--steel)"/>
-      <circle cx="468" cy="174" r="7" fill="var(--asphalt)"/>
+      <rect x="468" y="168" width="66" height="13" rx="6" fill="var(--steel)" stroke="var(--asphalt)" stroke-width="2.5"/>
+      <circle cx="466" cy="175" r="8" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="2"/>
 
       <!-- telaio posteriore verso la sella -->
-      <line x1="520" y1="176" x2="505" y2="125" stroke="var(--sand)" stroke-width="6" stroke-linecap="round"/>
+      <line x1="520" y1="176" x2="508" y2="128" stroke="var(--asphalt)" stroke-width="9" stroke-linecap="round"/>
+      <line x1="520" y1="176" x2="508" y2="128" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
 
       <!-- blocco motore -->
-      <rect x="555" y="145" width="90" height="32" rx="8" fill="var(--asphalt-2)"/>
+      <rect x="555" y="145" width="95" height="34" rx="8" fill="var(--asphalt-2)" stroke="var(--asphalt)" stroke-width="3"/>
 
       <!-- sella -->
-      <path d="M 500 122 Q 535 100 575 108 L 575 122 Q 535 118 500 130 Z" fill="var(--asphalt-2)"/>
+      <path d="M 502 126 Q 538 104 580 112 L 580 126 Q 538 122 502 134 Z" fill="var(--asphalt-2)" stroke="var(--asphalt)" stroke-width="3" stroke-linejoin="round"/>
 
       <!-- serbatoio -->
-      <path d="M 575 108 Q 600 78 630 92 Q 655 100 645 128 Q 610 140 580 125 Z" fill="var(--rust)"/>
+      <path d="M 580 112 Q 606 82 638 96 Q 662 104 652 132 Q 616 144 585 129 Z" fill="var(--rust)" stroke="var(--asphalt)" stroke-width="3" stroke-linejoin="round"/>
 
       <!-- parabrezza -->
-      <path d="M 680 65 Q 705 55 715 75 L 705 118 Q 685 122 675 108 Z" fill="var(--sand)" opacity="0.4"/>
+      <path d="M 688 68 Q 712 58 722 78 L 712 120 Q 692 124 682 110 Z" fill="var(--sand)" fill-opacity="0.5" stroke="var(--asphalt)" stroke-width="2.5" stroke-linejoin="round"/>
 
       <!-- faro -->
-      <circle cx="722" cy="130" r="10" fill="var(--gold)"/>
+      <circle cx="728" cy="132" r="10" fill="var(--gold)" stroke="var(--asphalt)" stroke-width="2.5"/>
 
       <!-- forcelle anteriori -->
-      <line x1="740" y1="176" x2="703" y2="100" stroke="var(--sand)" stroke-width="6" stroke-linecap="round"/>
-      <line x1="746" y1="176" x2="709" y2="100" stroke="var(--sand)" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+      <line x1="730" y1="176" x2="695" y2="102" stroke="var(--asphalt)" stroke-width="9" stroke-linecap="round"/>
+      <line x1="730" y1="176" x2="695" y2="102" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
 
       <!-- parafango anteriore -->
-      <path d="M 700 176 A 40 40 0 0 1 780 176" fill="none" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 696 176 A 34 34 0 0 1 764 176" fill="none" stroke="var(--asphalt)" stroke-width="9" stroke-linecap="round"/>
+      <path d="M 696 176 A 34 34 0 0 1 764 176" fill="none" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
 
       <!-- manubrio e specchietto -->
-      <line x1="690" y1="95" x2="715" y2="90" stroke="var(--sand)" stroke-width="5" stroke-linecap="round"/>
-      <line x1="712" y1="90" x2="725" y2="78" stroke="var(--sand)" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="727" cy="76" r="5" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="2"/>
+      <line x1="682" y1="97" x2="706" y2="92" stroke="var(--asphalt)" stroke-width="7" stroke-linecap="round"/>
+      <line x1="682" y1="97" x2="706" y2="92" stroke="var(--sand)" stroke-width="4" stroke-linecap="round"/>
+      <line x1="703" y1="92" x2="716" y2="80" stroke="var(--sand)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="718" cy="78" r="5" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="2"/>
 
       <!-- gamba pilota -->
-      <polyline points="612,128 600,155 590,178" fill="none" stroke="var(--sand)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect x="580" y="172" width="22" height="14" rx="4" fill="var(--asphalt-2)"/>
+      <polyline points="604,130 592,157 582,180" fill="none" stroke="var(--asphalt)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="604,130 592,157 582,180" fill="none" stroke="var(--sand)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="572" y="174" width="22" height="14" rx="4" fill="var(--asphalt-2)" stroke="var(--asphalt)" stroke-width="2.5"/>
 
       <!-- busto / giacca pilota -->
-      <path d="M 630 85 Q 613 100 605 130 Q 616 140 635 138 Q 656 105 665 88 Q 648 78 630 85 Z" fill="var(--rust-dim)"/>
+      <path d="M 622 88 Q 604 104 596 132 Q 608 142 628 140 Q 650 106 660 90 Q 642 80 622 88 Z" fill="var(--rust-dim)" stroke="var(--asphalt)" stroke-width="3" stroke-linejoin="round"/>
 
       <!-- braccio pilota -->
-      <polyline points="628,92 660,100 700,97" fill="none" stroke="var(--sand)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="700" cy="97" r="6" fill="var(--asphalt-2)"/>
+      <polyline points="620,95 654,102 692,97" fill="none" stroke="var(--asphalt)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="620,95 654,102 692,97" fill="none" stroke="var(--sand)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="692" cy="97" r="7" fill="var(--asphalt-2)" stroke="var(--asphalt)" stroke-width="2.5"/>
 
       <!-- casco -->
-      <circle cx="655" cy="65" r="21" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="2.5"/>
-      <path d="M 640 60 Q 655 50 673 58" stroke="var(--gold)" stroke-width="3" fill="none" opacity="0.7" stroke-linecap="round"/>
-      <line x1="645" y1="46" x2="666" y2="46" stroke="var(--gold)" stroke-width="2" opacity="0.5"/>
+      <circle cx="648" cy="68" r="22" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="3"/>
+      <path d="M 632 62 Q 648 52 668 60" stroke="var(--gold)" stroke-width="4" fill="none" opacity="0.8" stroke-linecap="round"/>
+      <line x1="638" y1="48" x2="660" y2="48" stroke="var(--gold)" stroke-width="2" opacity="0.5"/>
 
       <!-- ruota posteriore -->
       <g class="wheel">
-        <circle cx="520" cy="176" r="34" fill="var(--asphalt)" stroke="var(--asphalt-2)" stroke-width="10"/>
-        <circle cx="520" cy="176" r="27" fill="none" stroke="var(--sand)" stroke-width="3"/>
-        <circle cx="520" cy="176" r="7" fill="var(--gold)"/>
-        <line x1="520" y1="152" x2="520" y2="200" stroke="var(--sand)" stroke-width="2" opacity="0.5"/>
-        <line x1="496" y1="176" x2="544" y2="176" stroke="var(--sand)" stroke-width="2" opacity="0.5"/>
-        <line x1="503" y1="159" x2="537" y2="193" stroke="var(--sand)" stroke-width="2" opacity="0.35"/>
-        <line x1="503" y1="193" x2="537" y2="159" stroke="var(--sand)" stroke-width="2" opacity="0.35"/>
+        <circle cx="520" cy="176" r="34" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="4"/>
+        <circle cx="520" cy="176" r="23" fill="var(--asphalt-2)" stroke="var(--sand)" stroke-width="2"/>
+        <circle cx="520" cy="176" r="6" fill="var(--gold)"/>
+        <path d="M 520 176 L 517 155 L 523 155 Z" fill="var(--sand)" opacity="0.7"/>
+        <path d="M 520 176 L 517 155 L 523 155 Z" fill="var(--sand)" opacity="0.7" transform="rotate(72 520 176)"/>
+        <path d="M 520 176 L 517 155 L 523 155 Z" fill="var(--sand)" opacity="0.7" transform="rotate(144 520 176)"/>
+        <path d="M 520 176 L 517 155 L 523 155 Z" fill="var(--sand)" opacity="0.7" transform="rotate(216 520 176)"/>
+        <path d="M 520 176 L 517 155 L 523 155 Z" fill="var(--sand)" opacity="0.7" transform="rotate(288 520 176)"/>
       </g>
 
       <!-- ruota anteriore -->
       <g class="wheel">
-        <circle cx="740" cy="176" r="34" fill="var(--asphalt)" stroke="var(--asphalt-2)" stroke-width="10"/>
-        <circle cx="740" cy="176" r="27" fill="none" stroke="var(--sand)" stroke-width="3"/>
-        <circle cx="740" cy="176" r="7" fill="var(--gold)"/>
-        <line x1="740" y1="152" x2="740" y2="200" stroke="var(--sand)" stroke-width="2" opacity="0.5"/>
-        <line x1="716" y1="176" x2="764" y2="176" stroke="var(--sand)" stroke-width="2" opacity="0.5"/>
-        <line x1="723" y1="159" x2="757" y2="193" stroke="var(--sand)" stroke-width="2" opacity="0.35"/>
-        <line x1="723" y1="193" x2="757" y2="159" stroke="var(--sand)" stroke-width="2" opacity="0.35"/>
+        <circle cx="730" cy="176" r="34" fill="var(--asphalt)" stroke="var(--sand)" stroke-width="4"/>
+        <circle cx="730" cy="176" r="23" fill="var(--asphalt-2)" stroke="var(--sand)" stroke-width="2"/>
+        <circle cx="730" cy="176" r="6" fill="var(--gold)"/>
+        <path d="M 730 176 L 727 155 L 733 155 Z" fill="var(--sand)" opacity="0.7"/>
+        <path d="M 730 176 L 727 155 L 733 155 Z" fill="var(--sand)" opacity="0.7" transform="rotate(72 730 176)"/>
+        <path d="M 730 176 L 727 155 L 733 155 Z" fill="var(--sand)" opacity="0.7" transform="rotate(144 730 176)"/>
+        <path d="M 730 176 L 727 155 L 733 155 Z" fill="var(--sand)" opacity="0.7" transform="rotate(216 730 176)"/>
+        <path d="M 730 176 L 727 155 L 733 155 Z" fill="var(--sand)" opacity="0.7" transform="rotate(288 730 176)"/>
       </g>
     </g>
   </svg>
