@@ -1,0 +1,8 @@
+{
+  "name": "il-motonauta-sito",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "cloudinary": "^2.0.0"
+  }
+}

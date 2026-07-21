@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Area riservata — Il Motonauta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .admin-label{
+    font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--gold); display:block; margin-bottom:8px;
+  }
+  .admin-input, .admin-select, .admin-file{
+    width:100%;
+    background:var(--asphalt);
+    border:1px solid rgba(245,240,230,0.2);
+    color:var(--cream);
+    padding:12px 14px;
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    margin-bottom:20px;
+  }
+  .admin-select{ appearance:none; }
+  .admin-btn{
+    font-family:var(--font-mono); font-size:0.82rem; text-transform:uppercase; letter-spacing:0.06em;
+    padding:14px 26px; background:var(--rust); border:1px solid var(--rust); color:var(--cream);
+    cursor:pointer; transition:background .25s ease, color .25s ease, transform .2s ease;
+  }
+  .admin-btn:hover{ background:var(--gold); border-color:var(--gold); color:var(--asphalt); transform:translateY(-2px); }
+  .admin-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
+  .admin-btn.outline{ background:transparent; }
+  .admin-btn.outline:hover{ background:var(--rust); border-color:var(--rust); color:var(--cream); }
+  .admin-btn.danger{ border-color:var(--rust); }
+
+  .status-list{ margin-top:20px; font-family:var(--font-mono); font-size:0.82rem; }
+  .status-list div{ padding:6px 0; color:var(--cream-dim); }
+  .status-list div.ok{ color:var(--gold); }
+  .status-list div.err{ color:var(--rust); }
+
+  #output-wrap{ display:none; margin-top:28px; }
+  #output-code, #output-filter{
+    width:100%; min-height:220px; background:var(--asphalt);
+    color:var(--sand); font-family:var(--font-mono); font-size:0.8rem;
+    border:1px solid rgba(245,240,230,0.2); padding:16px; white-space:pre;
+    overflow:auto;
+  }
+
+  #gate{ text-align:center; }
+  #gate input{ max-width:280px; margin:0 auto 20px; }
+  #panel{ display:none; }
+
+  .caption-row{
+    display:flex; align-items:center; gap:12px; margin-bottom:10px;
+  }
+  .caption-row span{
+    font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim);
+    width:150px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .caption-row input{ margin-bottom:0; }
+
+  .thumb-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:14px; margin-top:24px;
+  }
+  .thumb{
+    position:relative; aspect-ratio:4/3; overflow:hidden; border:1px solid rgba(245,240,230,0.15);
+  }
+  .thumb img{ width:100%; height:100%; object-fit:cover; }
+  .thumb button{
+    position:absolute; bottom:0; left:0; right:0;
+    background:rgba(27,26,23,0.85); color:var(--sand);
+    font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em;
+    border:none; padding:8px 0; cursor:pointer;
+  }
+  .thumb button:hover{ background:var(--rust); }
+  .reminder{
+    font-family:var(--font-mono); font-size:0.78rem; color:var(--gold);
+    border:1px dashed var(--gold); padding:12px 14px; margin-top:14px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">IL <span>MOTONAUTA</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="sponsor.html">Sponsor</a>
+      <a href="galleria.html">Galleria</a>
+      <a href="contatti.html">Contatti</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Apri menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- BLOCCO ACCESSO ================================================ -->
+<section id="gate">
+  <div class="wrap" style="text-align:center; max-width:480px;">
+    <p class="marker" style="justify-content:center;">Area riservata</p>
+    <h1 style="font-size:clamp(2rem, 5vw, 2.8rem); color:var(--sand);">Accesso</h1>
+    <div class="contact-card" style="margin-top:28px; text-align:left;">
+      <label class="admin-label">Password</label>
+      <input type="password" id="password-input" class="admin-input" autocomplete="off">
+      <button class="admin-btn" onclick="checkPassword()">Entra</button>
+      <p id="gate-error" style="color:var(--rust); margin-top:14px; display:none;">Password errata.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PANNELLO ADMIN ================================================= -->
+<section id="panel" style="display:none; padding-bottom:0;">
+  <div class="wrap">
+    <p class="marker">Area riservata</p>
+    <h1 style="font-size:clamp(2rem, 5vw, 2.8rem); color:var(--sand); max-width:18ch;">Carica foto in galleria</h1>
+    <p style="margin-top:14px;">Seleziona l'album, scegli le foto, scrivi una didascalia per ciascuna e carica. Alla fine ti genero il codice pronto da incollare in <code>galleria.html</code> su GitHub.</p>
+  </div>
+</section>
+
+<section style="padding-top:32px; display:none;" id="panel-upload">
+  <div class="wrap">
+    <div class="contact-card">
+      <label class="admin-label">Album</label>
+      <select id="album-select" class="admin-select" onchange="onAlbumChange()">
+        <option value="olanda">Olanda</option>
+        <option value="stelvio">Passo dello Stelvio</option>
+        <option value="austria">Austria</option>
+        <option value="germania">Germania</option>
+        <option value="corsica">Corsica</option>
+        <option value="__new__">+ Nuovo album</option>
+      </select>
+
+      <div id="new-album-wrap" style="display:none;">
+        <label class="admin-label">Nome nuovo album (es. "Toscana")</label>
+        <input type="text" id="new-album-name" class="admin-input" placeholder="Toscana">
+      </div>
+
+      <label class="admin-label">Foto da caricare</label>
+      <input type="file" id="file-input" class="admin-file" multiple accept="image/*" onchange="renderCaptionRows()">
+
+      <div id="caption-list"></div>
+
+      <button class="admin-btn" id="upload-btn" onclick="startUpload()">Carica su Cloudinary</button>
+
+      <div class="status-list" id="status-list"></div>
+    </div>
+
+    <div id="output-wrap">
+      <p class="marker">Fatto — copia questo codice</p>
+      <p style="font-size:0.9rem;">Incolla questo blocco dentro <code>galleria.html</code> su GitHub, appena prima della riga <code>&lt;/div&gt;</code> che chiude <code>gallery-grid</code>.</p>
+      <textarea id="output-code" readonly></textarea>
+      <button class="admin-btn" style="margin-top:14px;" onclick="copyOutput('output-code')">Copia codice foto</button>
+      <span id="copy-confirm-code" style="color:var(--gold); margin-left:12px; display:none; font-family:var(--font-mono); font-size:0.8rem;">Copiato ✓</span>
+
+      <div id="filter-btn-wrap" style="display:none; margin-top:26px;">
+        <p class="marker">Nuovo album: aggiungi anche il filtro</p>
+        <p style="font-size:0.9rem;">Questo è un nuovo album, quindi incolla anche questa riga dentro il blocco <code>.filters</code> di <code>galleria.html</code>:</p>
+        <textarea id="output-filter" readonly style="min-height:60px;"></textarea>
+        <button class="admin-btn" style="margin-top:14px;" onclick="copyOutput('output-filter')">Copia riga filtro</button>
+        <span id="copy-confirm-filter" style="color:var(--gold); margin-left:12px; display:none; font-family:var(--font-mono); font-size:0.8rem;">Copiato ✓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="panel-manage" style="display:none;">
+  <div class="wrap">
+    <p class="marker">Gestione</p>
+    <h2>Elimina foto o album</h2>
+    <p style="margin-top:14px;">Scegli un album per vedere le foto caricate su Cloudinary. Puoi eliminare singole foto o l'intero album.</p>
+
+    <div class="contact-card" style="margin-top:28px;">
+      <label class="admin-label">Album da gestire</label>
+      <select id="manage-album-select" class="admin-select">
+        <option value="olanda">Olanda</option>
+        <option value="stelvio">Passo dello Stelvio</option>
+        <option value="austria">Austria</option>
+        <option value="germania">Germania</option>
+        <option value="corsica">Corsica</option>
+      </select>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <button class="admin-btn outline" onclick="loadAlbumPhotos()">Mostra foto dell'album</button>
+        <button class="admin-btn danger" onclick="deleteWholeAlbum()">Elimina intero album</button>
+      </div>
+
+      <div id="manage-status" class="status-list"></div>
+      <div class="thumb-grid" id="thumb-grid"></div>
+      <div id="manage-reminder"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-social">
+      <a href="contatti.html">Instagram</a>
+      <a href="contatti.html">TikTok</a>
+      <a href="contatti.html">YouTube</a>
+    </div>
+    <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  // ⚠️ CAMBIA QUESTA PASSWORD prima di pubblicare il sito
+  // Usa la STESSA password anche come variabile d'ambiente ADMIN_PASSWORD su Vercel
+  const ADMIN_PASSWORD = "CAMBIAMI-2026";
+
+  const CLOUD_NAME = "whqpxxz1";
+  const UPLOAD_PRESET = "Motonauta_Gallery";
+
+  const ALBUM_LABELS = {
+    olanda: "Olanda",
+    stelvio: "Passo dello Stelvio",
+    austria: "Austria",
+    germania: "Germania",
+    corsica: "Corsica"
+  };
+
+  let sessionPassword = "";
+
+  function checkPassword(){
+    const val = document.getElementById("password-input").value;
+    if(val === ADMIN_PASSWORD){
+      sessionPassword = val;
+      document.getElementById("gate").style.display = "none";
+      document.getElementById("panel").style.display = "block";
+      document.getElementById("panel-upload").style.display = "block";
+      document.getElementById("panel-manage").style.display = "block";
+      sessionStorage.setItem("motonauta_admin_ok", val);
+    } else {
+      document.getElementById("gate-error").style.display = "block";
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const saved = sessionStorage.getItem("motonauta_admin_ok");
+    if(saved === ADMIN_PASSWORD){
+      sessionPassword = saved;
+      document.getElementById("gate").style.display = "none";
+      document.getElementById("panel").style.display = "block";
+      document.getElementById("panel-upload").style.display = "block";
+      document.getElementById("panel-manage").style.display = "block";
+    }
+  });
+
+  function onAlbumChange(){
+    const val = document.getElementById("album-select").value;
+    document.getElementById("new-album-wrap").style.display = (val === "__new__") ? "block" : "none";
+  }
+
+  function slugify(text){
+    return text
+      .toString()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "");
+  }
+
+  function optimizeUrl(url){
+    return url.replace("/upload/", "/upload/f_auto,q_auto/");
+  }
+
+  // -------- didascalie per singola foto --------
+  function renderCaptionRows(){
+    const files = document.getElementById("file-input").files;
+    const wrap = document.getElementById("caption-list");
+    wrap.innerHTML = "";
+    if(!files.length) return;
+
+    const label = document.createElement("label");
+    label.className = "admin-label";
+    label.textContent = "Didascalia per ogni foto (facoltativa)";
+    wrap.appendChild(label);
+
+    Array.from(files).forEach((file, i) => {
+      const row = document.createElement("div");
+      row.className = "caption-row";
+      row.innerHTML = `
+        <span>${file.name}</span>
+        <input type="text" class="admin-input caption-field" data-index="${i}" placeholder="es. Passo del Bernina">
+      `;
+      wrap.appendChild(row);
+    });
+  }
+
+  // -------- upload --------
+  async function uploadOne(file, folder, tag){
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+    formData.append("folder", folder);
+    formData.append("tags", tag);
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+      method: "POST",
+      body: formData
+    });
+    if(!res.ok){
+      const errText = await res.text();
+      throw new Error(errText);
+    }
+    return await res.json();
+  }
+
+  async function startUpload(){
+    const selectEl = document.getElementById("album-select");
+    let slug = selectEl.value;
+    let label;
+    let isNew = false;
+
+    if(slug === "__new__"){
+      const newName = document.getElementById("new-album-name").value.trim();
+      if(!newName){
+        alert("Scrivi il nome del nuovo album.");
+        return;
+      }
+      slug = slugify(newName);
+      label = newName;
+      isNew = true;
+    } else {
+      label = ALBUM_LABELS[slug];
+    }
+
+    const files = document.getElementById("file-input").files;
+    if(!files.length){
+      alert("Seleziona almeno una foto.");
+      return;
+    }
+
+    const captionFields = document.querySelectorAll(".caption-field");
+
+    const uploadBtn = document.getElementById("upload-btn");
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = "Caricamento in corso...";
+
+    const statusList = document.getElementById("status-list");
+    statusList.innerHTML = "";
+
+    const results = [];
+
+    for(let i = 0; i < files.length; i++){
+      const file = files[i];
+      const caption = (captionFields[i] && captionFields[i].value.trim()) || label;
+      const row = document.createElement("div");
+      row.textContent = `Carico ${file.name}...`;
+      statusList.appendChild(row);
+      try{
+        const data = await uploadOne(file, slug, slug);
+        results.push({ url: data.secure_url, caption });
+        row.textContent = `✓ ${file.name} caricata`;
+        row.classList.add("ok");
+      } catch(err){
+        row.textContent = `✗ ${file.name} — errore (controlla il nome del preset)`;
+        row.classList.add("err");
+      }
+    }
+
+    uploadBtn.disabled = false;
+    uploadBtn.textContent = "Carica su Cloudinary";
+
+    if(results.length){
+      const blocks = results.map(r => {
+        const optimized = optimizeUrl(r.url);
+        return `      <div class="gallery-item" data-trip="${slug}">
+        <img src="${optimized}" alt="${r.caption}" style="width:100%; height:100%; object-fit:cover;">
+        <span class="tag">${r.caption}</span>
+      </div>`;
+      });
+      document.getElementById("output-code").value = blocks.join("\n\n");
+      document.getElementById("output-wrap").style.display = "block";
+
+      if(isNew){
+        document.getElementById("output-filter").value =
+          `      <button class="filter-btn" data-filter="${slug}">${label}</button>`;
+        document.getElementById("filter-btn-wrap").style.display = "block";
+      } else {
+        document.getElementById("filter-btn-wrap").style.display = "none";
+      }
+    }
+  }
+
+  function copyOutput(id){
+    const el = document.getElementById(id);
+    el.select();
+    document.execCommand("copy");
+    const confirmId = id === "output-code" ? "copy-confirm-code" : "copy-confirm-filter";
+    const confirmEl = document.getElementById(confirmId);
+    confirmEl.style.display = "inline";
+    setTimeout(() => confirmEl.style.display = "none", 2000);
+  }
+
+  // -------- gestione / cancellazione --------
+  async function loadAlbumPhotos(){
+    const slug = document.getElementById("manage-album-select").value;
+    const statusEl = document.getElementById("manage-status");
+    const grid = document.getElementById("thumb-grid");
+    const reminder = document.getElementById("manage-reminder");
+    grid.innerHTML = "";
+    reminder.innerHTML = "";
+    statusEl.innerHTML = "<div>Carico le foto dell'album...</div>";
+
+    try{
+      const res = await fetch(`/api/list-photos?album=${slug}`);
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+
+      statusEl.innerHTML = "";
+      if(!data.resources.length){
+        statusEl.innerHTML = "<div>Nessuna foto trovata in questo album.</div>";
+        return;
+      }
+
+      data.resources.forEach(r => {
+        const thumb = document.createElement("div");
+        thumb.className = "thumb";
+        thumb.innerHTML = `
+          <img src="${optimizeUrl(r.secure_url)}" alt="">
+          <button onclick="deleteOnePhoto('${r.public_id}', this)">Elimina</button>
+        `;
+        grid.appendChild(thumb);
+      });
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">Errore: ${err.message}. Hai creato le funzioni /api e le variabili d'ambiente su Vercel?</div>`;
+    }
+  }
+
+  async function deleteOnePhoto(publicId, btnEl){
+    if(!confirm("Eliminare questa foto da Cloudinary?")) return;
+    try{
+      const res = await fetch("/api/delete-photo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: sessionPassword, publicId })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+
+      btnEl.closest(".thumb").remove();
+      const reminder = document.getElementById("manage-reminder");
+      reminder.innerHTML = `<div class="reminder">Foto eliminata da Cloudinary. Ricordati di rimuovere anche il blocco corrispondente da <code>galleria.html</code> su GitHub (cerca l'URL che conteneva "${publicId.split('/').pop()}").</div>`;
+    } catch(err){
+      alert("Errore durante l'eliminazione: " + err.message);
+    }
+  }
+
+  async function deleteWholeAlbum(){
+    const slug = document.getElementById("manage-album-select").value;
+    const label = ALBUM_LABELS[slug] || slug;
+    if(!confirm(`Eliminare TUTTE le foto dell'album "${label}" da Cloudinary? Non si può annullare.`)) return;
+
+    try{
+      const res = await fetch("/api/delete-album", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: sessionPassword, album: slug })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+
+      document.getElementById("thumb-grid").innerHTML = "";
+      document.getElementById("manage-reminder").innerHTML =
+        `<div class="reminder">Album "${label}" eliminato da Cloudinary. Ricordati di rimuovere da <code>galleria.html</code> su GitHub sia il pulsante filtro (<code>data-filter="${slug}"</code>) sia tutti i blocchi foto (<code>data-trip="${slug}"</code>).</div>`;
+    } catch(err){
+      alert("Errore durante l'eliminazione dell'album: " + err.message);
+    }
+  }
+</script>
+</body>
+</html>
