@@ -55,9 +55,13 @@
   .caption-row{
     display:flex; align-items:center; gap:12px; margin-bottom:10px;
   }
+  .caption-row img{
+    width:56px; height:56px; object-fit:cover; flex-shrink:0;
+    border:1px solid rgba(245,240,230,0.2);
+  }
   .caption-row span{
-    font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim);
-    width:150px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    font-family:var(--font-mono); font-size:0.72rem; color:var(--cream-dim);
+    width:110px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
   .caption-row input{ margin-bottom:0; }
 
@@ -280,9 +284,11 @@
     wrap.appendChild(label);
 
     Array.from(files).forEach((file, i) => {
+      const previewUrl = URL.createObjectURL(file);
       const row = document.createElement("div");
       row.className = "caption-row";
       row.innerHTML = `
+        <img src="${previewUrl}" alt="">
         <span>${file.name}</span>
         <input type="text" class="admin-input caption-field" data-index="${i}" placeholder="es. Passo del Bernina">
       `;
