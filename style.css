@@ -181,13 +181,24 @@ p{color:var(--cream-dim); max-width:60ch;}
 .road-line{
   width:100%; height:auto; display:block;
 }
-.road-line path{
+.road-line .road-surface{
+  fill:var(--asphalt-2);
+  stroke:none;
+}
+.road-line .road-edge{
+  fill:none;
+  stroke:var(--sand);
+  stroke-width:1.5;
+  opacity:0.16;
+}
+.road-line .road-center{
   fill:none;
   stroke:var(--gold);
-  stroke-width:2;
+  stroke-width:2.5;
+  stroke-linecap:round;
   stroke-dasharray:14 12;
-  opacity:0.55;
-  animation:drive 26s linear infinite;
+  opacity:0.75;
+  animation:drive 12s linear infinite;
 }
 @keyframes drive{ to{ stroke-dashoffset:-1000; } }
 
@@ -244,7 +255,7 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 .social-feed-frame{
   position:relative;
-  height:950px;
+  height:880px;
   overflow:hidden;
 }
 .social-feed-frame iframe{
@@ -257,11 +268,11 @@ p{color:var(--cream-dim); max-width:60ch;}
   position:absolute;
   left:0; right:0; bottom:0;
   height:60px;
-  background:linear-gradient(to bottom, rgba(35,32,25,0) 0%, rgba(35,32,25,0.9) 40%, var(--asphalt-2) 60%);
+  background:linear-gradient(to bottom, rgba(35,32,25,0) 0%, rgba(35,32,25,0.9) 40%, var(--asphalt-2) 70%);
   pointer-events:none;
 }
 @media (max-width:480px){
-  .social-feed-frame{ height:700px; }
+  .social-feed-frame{ height:680px; }
   .social-feed-cover{ height:48px; }
 }
 
@@ -276,7 +287,7 @@ p{color:var(--cream-dim); max-width:60ch;}
   display:block;
 }
 @media (max-width:480px){
-  .logo-wrap img{ height:22px; }
+  .logo-wrap img{ height:32px; }
 }
 
 /* ==========================================================
