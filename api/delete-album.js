@@ -20,7 +20,8 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Manca il parametro album' });
     }
 
-    await cloudinary.api.delete_resources_by_prefix(`${album}/`);
+    await cloudinary.api.delete_resources_by_prefix(`${album}/`, { resource_type: 'image' });
+    await cloudinary.api.delete_resources_by_prefix(`${album}/`, { resource_type: 'video' });
     try {
       await cloudinary.api.delete_folder(album);
     } catch (e) {
