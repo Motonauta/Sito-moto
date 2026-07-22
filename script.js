@@ -57,6 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if(lightbox){
       lightbox.classList.remove("open");
       document.body.style.overflow = "";
+      const mc = lightbox.querySelector(".lightbox-media");
+      if(mc) mc.innerHTML = "";
     }
   }
 
@@ -82,28 +84,31 @@ document.addEventListener("DOMContentLoaded", () => {
     lightbox.innerHTML = `
       <button class="lightbox-close" aria-label="Chiudi">&times;</button>
       <button class="lightbox-nav lightbox-prev" aria-label="Foto precedente">&#8249;</button>
-      <img src="" alt="">
+      <div class="lightbox-media"></div>
       <button class="lightbox-nav lightbox-next" aria-label="Foto successiva">&#8250;</button>
       <div class="lightbox-caption"></div>
     `;
     document.body.appendChild(lightbox);
 
-    const lbImg = lightbox.querySelector("img");
+    const mediaContainer = lightbox.querySelector(".lightbox-media");
     const lbCaption = lightbox.querySelector(".lightbox-caption");
     let currentItems = [];
     let currentIndex = 0;
 
     const getVisibleItemsWithImg = () =>
       Array.from(document.querySelectorAll(".gallery-item"))
-        .filter(item => item.querySelector("img") && item.style.display !== "none");
+        .filter(item => item.querySelector("img, video") && item.style.display !== "none");
 
     const showCurrent = () => {
       const item = currentItems[currentIndex];
       if (!item) return;
-      const img = item.querySelector("img");
+      const mediaEl = item.querySelector("img, video");
       const tag = item.querySelector(".tag");
-      lbImg.src = img.src;
-      lbImg.alt = img.alt || "";
+      if (mediaEl.tagName === "VIDEO") {
+        mediaContainer.innerHTML = `<video src="${mediaEl.currentSrc || mediaEl.src}" controls autoplay playsinline></video>`;
+      } else {
+        mediaContainer.innerHTML = `<img src="${mediaEl.src}" alt="${mediaEl.alt || ''}">`;
+      }
       lbCaption.textContent = tag ? tag.textContent : "";
     };
 
@@ -126,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     galleryGrid.addEventListener("click", (e) => {
       const item = e.target.closest(".gallery-item");
-      if (item && item.querySelector("img")) openLightbox(item);
+      if (item && item.querySelector("img, video")) openLightbox(item);
     });
 
     lightbox.querySelector(".lightbox-close").addEventListener("click", closeLightboxIfOpen);
