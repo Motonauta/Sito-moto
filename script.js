@@ -48,36 +48,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // filtro galleria per destinazione
-  const filterButtons = document.querySelectorAll(".filter-btn");
-  const galleryItems = document.querySelectorAll(".gallery-item");
-  const lightboxEl = document.querySelector(".lightbox");
-  if (filterButtons.length) {
-    filterButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        filterButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        const target = btn.dataset.filter;
-        galleryItems.forEach(item => {
-          const show = target === "all" || item.dataset.trip === target;
-          item.style.display = show ? "" : "none";
-        });
-        if (lightboxEl) {
-          lightboxEl.classList.remove("open");
-          document.body.style.overflow = "";
-        }
+  // filtro galleria per destinazione (delegato: funziona anche con pulsanti aggiunti dopo)
+  const filtersContainer = document.querySelector(".filters");
+  const galleryGrid = document.querySelector(".gallery-grid");
+  let lightbox = null;
+
+  function closeLightboxIfOpen(){
+    if(lightbox){
+      lightbox.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+  }
+
+  if (filtersContainer) {
+    filtersContainer.addEventListener("click", (e) => {
+      const btn = e.target.closest(".filter-btn");
+      if (!btn) return;
+      filtersContainer.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const target = btn.dataset.filter;
+      document.querySelectorAll(".gallery-item").forEach(item => {
+        const show = target === "all" || item.dataset.trip === target;
+        item.style.display = show ? "" : "none";
       });
+      closeLightboxIfOpen();
     });
   }
 
-  // lightbox: apre le foto della galleria a schermo intero
-  const galleryGrid = document.querySelector(".gallery-grid");
+  // lightbox: apre le foto della galleria a schermo intero (delegato sul contenitore)
   if (galleryGrid) {
-    document.querySelectorAll(".gallery-item").forEach(item => {
-      if (item.querySelector("img")) item.classList.add("has-img");
-    });
-
-    const lightbox = document.createElement("div");
+    lightbox = document.createElement("div");
     lightbox.className = "lightbox";
     lightbox.innerHTML = `
       <button class="lightbox-close" aria-label="Chiudi">&times;</button>
@@ -93,9 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentItems = [];
     let currentIndex = 0;
 
-    const getVisibleItems = () =>
-      Array.from(document.querySelectorAll(".gallery-item.has-img"))
-        .filter(item => item.style.display !== "none");
+    const getVisibleItemsWithImg = () =>
+      Array.from(document.querySelectorAll(".gallery-item"))
+        .filter(item => item.querySelector("img") && item.style.display !== "none");
 
     const showCurrent = () => {
       const item = currentItems[currentIndex];
@@ -108,16 +108,11 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const openLightbox = (item) => {
-      currentItems = getVisibleItems();
+      currentItems = getVisibleItemsWithImg();
       currentIndex = currentItems.indexOf(item);
       showCurrent();
       lightbox.classList.add("open");
       document.body.style.overflow = "hidden";
-    };
-
-    const closeLightbox = () => {
-      lightbox.classList.remove("open");
-      document.body.style.overflow = "";
     };
 
     const showNext = () => {
@@ -130,20 +125,20 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     galleryGrid.addEventListener("click", (e) => {
-      const item = e.target.closest(".gallery-item.has-img");
-      if (item) openLightbox(item);
+      const item = e.target.closest(".gallery-item");
+      if (item && item.querySelector("img")) openLightbox(item);
     });
 
-    lightbox.querySelector(".lightbox-close").addEventListener("click", closeLightbox);
+    lightbox.querySelector(".lightbox-close").addEventListener("click", closeLightboxIfOpen);
     lightbox.querySelector(".lightbox-next").addEventListener("click", showNext);
     lightbox.querySelector(".lightbox-prev").addEventListener("click", showPrev);
     lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) closeLightbox();
+      if (e.target === lightbox) closeLightboxIfOpen();
     });
 
     document.addEventListener("keydown", (e) => {
       if (!lightbox.classList.contains("open")) return;
-      if (e.key === "Escape") closeLightbox();
+      if (e.key === "Escape") closeLightboxIfOpen();
       if (e.key === "ArrowRight") showNext();
       if (e.key === "ArrowLeft") showPrev();
     });
