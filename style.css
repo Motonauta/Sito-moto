@@ -181,6 +181,18 @@ p{color:var(--cream-dim); max-width:60ch;}
 .road-line{
   width:100%; height:auto; display:block;
 }
+.road-line .road-forest circle{
+  fill:var(--steel);
+  opacity:0.32;
+}
+.road-line .road-forest circle.dark{
+  fill:var(--asphalt-2);
+  opacity:0.5;
+}
+.road-line .road-cliff{
+  fill:var(--rust-dim);
+  opacity:0.32;
+}
 .road-line .road-surface{
   fill:var(--asphalt-2);
   stroke:none;
