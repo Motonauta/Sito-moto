@@ -30,8 +30,18 @@
     color:var(--cream-dim);
     position:relative; z-index:1;
   }
-  .gallery-item img{
+  .gallery-item img, .gallery-item video{
     position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  }
+  .gallery-item .play-icon{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:0; height:0;
+    border-top:14px solid transparent;
+    border-bottom:14px solid transparent;
+    border-left:22px solid var(--sand);
+    opacity:0.9; z-index:1;
+    pointer-events:none;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5));
   }
   @media (max-width: 780px){
     .gallery-grid{grid-template-columns:repeat(2, 1fr);}
@@ -112,7 +122,8 @@
     const gridEl = document.getElementById("gallery-grid");
     const filtersEl = document.getElementById("filters-container");
 
-    function optimizeUrl(url){
+    function optimizeUrl(url, type){
+      if(type === "video") return url.replace("/upload/", "/upload/q_auto/");
       return url.replace("/upload/", "/upload/f_auto,q_auto/");
     }
 
@@ -138,15 +149,15 @@
           filtersEl.appendChild(btn);
         }
 
-        // aggiunge le foto alla griglia
+        // aggiunge le foto/video alla griglia
         photos.forEach(photo => {
           const item = document.createElement("div");
           item.className = "gallery-item";
           item.dataset.trip = albumName;
-          item.innerHTML = `
-            <img src="${optimizeUrl(photo.url)}" alt="${photo.caption}">
-            <span class="tag">${photo.caption}</span>
-          `;
+          const mediaHtml = photo.type === "video"
+            ? `<video src="${optimizeUrl(photo.url, "video")}" muted loop playsinline preload="metadata"></video><div class="play-icon"></div>`
+            : `<img src="${optimizeUrl(photo.url, "image")}" alt="${photo.caption}">`;
+          item.innerHTML = `${mediaHtml}<span class="tag">${photo.caption}</span>`;
           gridEl.appendChild(item);
         });
       });
