@@ -261,8 +261,8 @@ p{color:var(--cream-dim); max-width:60ch;}
   pointer-events:none;
 }
 @media (max-width:480px){
-  .social-feed-frame{ height:680px; }
-  .social-feed-cover{ height:48px; }
+  .social-feed-frame{ height:700px; }
+  .social-feed-cover{ height:28px; }
 }
 
 .logo-wrap{
