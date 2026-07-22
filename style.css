@@ -244,7 +244,7 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 .social-feed-frame{
   position:relative;
-  height:880px;
+  height:900px;
   overflow:hidden;
 }
 .social-feed-frame iframe{
