@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Metodo non consentito' });
   }
   try {
-    const { password, publicId } = req.body;
+    const { password, publicId, resourceType } = req.body;
 
     if (password !== process.env.ADMIN_PASSWORD) {
       return res.status(401).json({ error: 'Password errata' });
@@ -20,7 +20,9 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Manca publicId' });
     }
 
-    await cloudinary.uploader.destroy(publicId);
+    await cloudinary.uploader.destroy(publicId, {
+      resource_type: resourceType || 'image',
+    });
     res.status(200).json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
