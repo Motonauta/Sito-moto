@@ -13,13 +13,27 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Manca il parametro album' });
     }
 
-    const result = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: `${album}/`,
-      max_results: 200,
-    });
+    const [imageResult, videoResult] = await Promise.all([
+      cloudinary.api.resources({
+        type: 'upload',
+        resource_type: 'image',
+        prefix: `${album}/`,
+        max_results: 200,
+      }),
+      cloudinary.api.resources({
+        type: 'upload',
+        resource_type: 'video',
+        prefix: `${album}/`,
+        max_results: 200,
+      }),
+    ]);
 
-    res.status(200).json({ resources: result.resources });
+    const resources = [
+      ...imageResult.resources.map(r => ({ ...r, resource_type: 'image' })),
+      ...videoResult.resources.map(r => ({ ...r, resource_type: 'video' })),
+    ];
+
+    res.status(200).json({ resources });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
