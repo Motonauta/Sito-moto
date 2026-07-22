@@ -154,18 +154,11 @@
     </div>
 
     <div id="output-wrap">
-      <p class="marker">Fatto — copia questo codice</p>
-      <p style="font-size:0.9rem;">Incolla questo blocco dentro <code>galleria.html</code> su GitHub, appena prima della riga <code>&lt;/div&gt;</code> che chiude <code>gallery-grid</code>.</p>
-      <textarea id="output-code" readonly></textarea>
-      <button class="admin-btn" style="margin-top:14px;" onclick="copyOutput('output-code')">Copia codice foto</button>
-      <span id="copy-confirm-code" style="color:var(--gold); margin-left:12px; display:none; font-family:var(--font-mono); font-size:0.8rem;">Copiato ✓</span>
-
-      <div id="filter-btn-wrap" style="display:none; margin-top:26px;">
-        <p class="marker">Nuovo album: aggiungi anche il filtro</p>
-        <p style="font-size:0.9rem;">Questo è un nuovo album, quindi incolla anche questa riga dentro il blocco <code>.filters</code> di <code>galleria.html</code>:</p>
+      <p class="marker">Fatto</p>
+      <div id="done-message" class="reminder" style="display:none;"></div>
+      <textarea id="output-code" readonly style="display:none;"></textarea>
+      <div id="filter-btn-wrap" style="display:none;">
         <textarea id="output-filter" readonly style="min-height:60px;"></textarea>
-        <button class="admin-btn" style="margin-top:14px;" onclick="copyOutput('output-filter')">Copia riga filtro</button>
-        <span id="copy-confirm-filter" style="color:var(--gold); margin-left:12px; display:none; font-family:var(--font-mono); font-size:0.8rem;">Copiato ✓</span>
       </div>
     </div>
   </div>
@@ -237,6 +230,7 @@
       document.getElementById("panel-upload").style.display = "block";
       document.getElementById("panel-manage").style.display = "block";
       sessionStorage.setItem("motonauta_admin_ok", val);
+      populateAlbumSelects();
     } else {
       document.getElementById("gate-error").style.display = "block";
     }
@@ -250,8 +244,36 @@
       document.getElementById("panel").style.display = "block";
       document.getElementById("panel-upload").style.display = "block";
       document.getElementById("panel-manage").style.display = "block";
+      populateAlbumSelects();
     }
   });
+
+  async function populateAlbumSelects(){
+    try{
+      const res = await fetch("/api/gallery");
+      const data = await res.json();
+      if(!res.ok) return;
+      const existingAlbums = Object.keys(data.albums || {});
+
+      const uploadSelect = document.getElementById("album-select");
+      const manageSelect = document.getElementById("manage-album-select");
+
+      existingAlbums.forEach(name => {
+        const alreadyThere = Array.from(uploadSelect.options).some(o => o.value === name);
+        if(!alreadyThere){
+          const opt1 = document.createElement("option");
+          opt1.value = name; opt1.textContent = name;
+          uploadSelect.insertBefore(opt1, uploadSelect.querySelector('option[value="__new__"]'));
+
+          const opt2 = document.createElement("option");
+          opt2.value = name; opt2.textContent = name;
+          manageSelect.appendChild(opt2);
+        }
+      });
+    } catch(err){
+      // se le funzioni /api non sono ancora pronte, i menu restano quelli fissi
+    }
+  }
 
   function onAlbumChange(){
     const val = document.getElementById("album-select").value;
@@ -297,12 +319,13 @@
   }
 
   // -------- upload --------
-  async function uploadOne(file, folder, tag){
+  async function uploadOne(file, folder, tag, caption){
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", UPLOAD_PRESET);
     formData.append("folder", folder);
     formData.append("tags", tag);
+    formData.append("context", `caption=${caption.replace(/[|=]/g, "-")}`);
 
     const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
       method: "POST",
@@ -327,7 +350,7 @@
         alert("Scrivi il nome del nuovo album.");
         return;
       }
-      slug = slugify(newName);
+      slug = newName;
       label = newName;
       isNew = true;
     } else {
@@ -358,7 +381,7 @@
       row.textContent = `Carico ${file.name}...`;
       statusList.appendChild(row);
       try{
-        const data = await uploadOne(file, slug, slug);
+        const data = await uploadOne(file, slug, slug, caption);
         results.push({ url: data.secure_url, caption });
         row.textContent = `✓ ${file.name} caricata`;
         row.classList.add("ok");
@@ -372,23 +395,12 @@
     uploadBtn.textContent = "Carica su Cloudinary";
 
     if(results.length){
-      const blocks = results.map(r => {
-        const optimized = optimizeUrl(r.url);
-        return `      <div class="gallery-item" data-trip="${slug}">
-        <img src="${optimized}" alt="${r.caption}" style="width:100%; height:100%; object-fit:cover;">
-        <span class="tag">${r.caption}</span>
-      </div>`;
-      });
-      document.getElementById("output-code").value = blocks.join("\n\n");
       document.getElementById("output-wrap").style.display = "block";
-
-      if(isNew){
-        document.getElementById("output-filter").value =
-          `      <button class="filter-btn" data-filter="${slug}">${label}</button>`;
-        document.getElementById("filter-btn-wrap").style.display = "block";
-      } else {
-        document.getElementById("filter-btn-wrap").style.display = "none";
-      }
+      document.getElementById("output-code").style.display = "none";
+      document.getElementById("filter-btn-wrap").style.display = "none";
+      const doneMsg = document.getElementById("done-message");
+      doneMsg.style.display = "block";
+      doneMsg.textContent = `Fatto! ${results.length} foto caricate nell'album "${label}". Sono già visibili nella pagina Galleria del sito — nessun codice da incollare.`;
     }
   }
 
