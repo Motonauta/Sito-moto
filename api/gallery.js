@@ -13,16 +13,35 @@ module.exports = async (req, res) => {
 
     const data = {};
     for (const album of albums) {
-      const resResult = await cloudinary.api.resources({
-        type: 'upload',
-        prefix: `${album}/`,
-        max_results: 200,
-        context: true,
-      });
-      data[album] = resResult.resources.map(r => ({
+      const [imageResult, videoResult] = await Promise.all([
+        cloudinary.api.resources({
+          type: 'upload',
+          resource_type: 'image',
+          prefix: `${album}/`,
+          max_results: 200,
+          context: true,
+        }),
+        cloudinary.api.resources({
+          type: 'upload',
+          resource_type: 'video',
+          prefix: `${album}/`,
+          max_results: 200,
+          context: true,
+        }),
+      ]);
+
+      const images = imageResult.resources.map(r => ({
         url: r.secure_url,
         caption: (r.context && r.context.custom && r.context.custom.caption) || album,
+        type: 'image',
       }));
+      const videos = videoResult.resources.map(r => ({
+        url: r.secure_url,
+        caption: (r.context && r.context.custom && r.context.custom.caption) || album,
+        type: 'video',
+      }));
+
+      data[album] = [...images, ...videos];
     }
 
     res.status(200).json({ albums: data });
