@@ -47,8 +47,14 @@
     </div>
   </div>
 
-  <svg class="road-line" viewBox="0 0 1180 160" preserveAspectRatio="none" style="margin-top:56px;">
-    <path d="M -50 120 C 200 20, 400 180, 650 90 S 1100 10, 1230 100" />
+  <svg class="road-line" viewBox="0 -15 1180 210" preserveAspectRatio="none" style="margin-top:56px;">
+    <!-- superficie stradale -->
+    <path class="road-surface" d="M -50 110 C 200 10, 400 170, 650 80 C 900 -10, 1100 0, 1230 90 L 1230 110 C 1100 20, 900 10, 650 100 C 400 190, 200 30, -50 130 Z"/>
+    <!-- bordi della carreggiata -->
+    <path class="road-edge" d="M -50 110 C 200 10, 400 170, 650 80 C 900 -10, 1100 0, 1230 90"/>
+    <path class="road-edge" d="M -50 130 C 200 30, 400 190, 650 100 C 900 10, 1100 20, 1230 110"/>
+    <!-- linea di mezzeria tratteggiata, animata -->
+    <path class="road-center" d="M -50 120 C 200 20, 400 180, 650 90 C 900 0, 1100 10, 1230 100"/>
   </svg>
 </section>
 
