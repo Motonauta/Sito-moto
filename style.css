@@ -9,6 +9,8 @@
   --gold: #D9A441;
   --sand: #EDE3D0;
   --steel: #4A5859;
+  --forest-green: #3E4F35;
+  --forest-green-dark: #283420;
   --cream: #F5F0E6;
   --cream-dim: rgba(245,240,230,0.68);
 
@@ -182,16 +184,16 @@ p{color:var(--cream-dim); max-width:60ch;}
   width:100%; height:auto; display:block;
 }
 .road-line .road-forest circle{
-  fill:var(--steel);
-  opacity:0.4;
-}
-.road-line .road-forest circle.shadow{
-  fill:var(--asphalt-2);
+  fill:var(--forest-green);
   opacity:0.55;
 }
+.road-line .road-forest circle.shadow{
+  fill:var(--forest-green-dark);
+  opacity:0.65;
+}
 .road-line .road-forest circle.bush{
-  fill:var(--steel);
-  opacity:0.28;
+  fill:var(--forest-green);
+  opacity:0.4;
 }
 .road-line .road-birds path{
   fill:none;
