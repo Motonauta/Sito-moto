@@ -9,6 +9,7 @@
   --gold: #D9A441;
   --sand: #EDE3D0;
   --steel: #4A5859;
+  --concrete: #7C7C72;
   --forest-green: #4F7038;
   --forest-green-dark: #2A3B1C;
   --cream: #F5F0E6;
@@ -201,9 +202,13 @@ p{color:var(--cream-dim); max-width:60ch;}
 .road-line .road-forest-bottom circle.shadow{
   opacity:0.6;
 }
-.road-line .road-pylon rect{
-  fill:var(--steel);
-  opacity:0.75;
+.road-line .road-pylon circle{
+  fill:var(--concrete);
+  opacity:0.85;
+}
+.road-line .road-pylon circle.hole{
+  fill:var(--asphalt);
+  opacity:0.7;
 }
 .road-line .road-shadow{
   fill:var(--asphalt);
