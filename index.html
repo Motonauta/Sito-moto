@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-546ZL2T52G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-546ZL2T52G");
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title> il Motonauta — Moto & Viaggi</title>
@@ -47,8 +55,14 @@
     </div>
   </div>
 
-  <svg class="road-line" viewBox="0 0 1180 160" preserveAspectRatio="none" style="margin-top:56px;">
-    <path d="M -50 120 C 200 20, 400 180, 650 90 S 1100 10, 1230 100" />
+  <svg class="road-line" viewBox="0 -15 1180 210" preserveAspectRatio="none" style="margin-top:56px;">
+    <!-- superficie stradale -->
+    <path class="road-surface" d="M -50 110 C 200 10, 400 170, 650 80 C 900 -10, 1100 0, 1230 90 L 1230 110 C 1100 20, 900 10, 650 100 C 400 190, 200 30, -50 130 Z"/>
+    <!-- bordi della carreggiata -->
+    <path class="road-edge" d="M -50 110 C 200 10, 400 170, 650 80 C 900 -10, 1100 0, 1230 90"/>
+    <path class="road-edge" d="M -50 130 C 200 30, 400 190, 650 100 C 900 10, 1100 20, 1230 110"/>
+    <!-- linea di mezzeria tratteggiata, animata -->
+    <path class="road-center" d="M -50 120 C 200 20, 400 180, 650 90 C 900 0, 1100 10, 1230 100"/>
   </svg>
 </section>
 
@@ -98,37 +112,6 @@
   </div>
 </section>
 <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
-
-<!-- FOLLOWER LIVE ==================================================== -->
-<section class="section-alt" style="padding-top:56px; padding-bottom:56px;">
-  <div class="wrap" style="max-width:340px;">
-    <p class="marker">Numeri</p>
-    <h2 style="font-size:1.6rem;">Follower TikTok in tempo reale</h2>
-    <div class="follower-live-card">
-      <div id="countik-widget"></div>
-      <a href="https://countik.com/user/ilmotonauta" target="_blank" class="footer-note" style="display:block; padding-top:10px; text-align:center; text-decoration:none;">Powered by Countik™</a>
-    </div>
-  </div>
-</section>
-<script>
-  (function() {
-    var countikWidget = document.createElement('script');
-    countikWidget.src = 'https://countik.com/widget.js';
-    countikWidget.async = true;
-    countikWidget.onload = function() {
-      if (typeof window.initializeCountikWidget === 'function') {
-        window.initializeCountikWidget({
-          container: '#countik-widget',
-          themeColor: '#D9A441',
-          uniqueId: 'ilmotonauta',
-          language: 'it'
-        });
-      }
-    };
-    var firstScript = document.getElementsByTagName('script')[0];
-    firstScript.parentNode.insertBefore(countikWidget, firstScript);
-  })();
-</script>
 
 <!-- COSA FACCIO ===================================================== -->
 <section>
