@@ -191,6 +191,20 @@
   </div>
 </section>
 
+<section id="panel-ideas" style="display:none;">
+  <div class="wrap">
+    <p class="marker">Suggerimenti dai visitatori</p>
+    <h2>Idee per un video</h2>
+    <p style="margin-top:14px;">Quello che le persone scrivono nel box "Suggerisci un video" della home.</p>
+
+    <div class="contact-card" style="margin-top:28px;">
+      <button class="admin-btn outline" onclick="loadIdeas()">Aggiorna elenco</button>
+      <div id="ideas-status" class="status-list"></div>
+      <div id="ideas-list" style="margin-top:20px;"></div>
+    </div>
+  </div>
+</section>
+
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-social">
@@ -229,6 +243,8 @@
       document.getElementById("panel").style.display = "block";
       document.getElementById("panel-upload").style.display = "block";
       document.getElementById("panel-manage").style.display = "block";
+      document.getElementById("panel-ideas").style.display = "block";
+      loadIdeas();
       sessionStorage.setItem("motonauta_admin_ok", val);
       populateAlbumSelects();
     } else {
@@ -244,6 +260,8 @@
       document.getElementById("panel").style.display = "block";
       document.getElementById("panel-upload").style.display = "block";
       document.getElementById("panel-manage").style.display = "block";
+      document.getElementById("panel-ideas").style.display = "block";
+      loadIdeas();
       populateAlbumSelects();
     }
   });
@@ -494,6 +512,69 @@
         `<div class="reminder">Album "${label}" eliminato da Cloudinary. Ricordati di rimuovere da <code>galleria.html</code> su GitHub sia il pulsante filtro (<code>data-filter="${slug}"</code>) sia tutti i blocchi foto (<code>data-trip="${slug}"</code>).</div>`;
     } catch(err){
       alert("Errore durante l'eliminazione dell'album: " + err.message);
+    }
+  }
+
+  // -------- idee dai visitatori --------
+  function escapeHtml(str){
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  async function loadIdeas(){
+    const statusEl = document.getElementById("ideas-status");
+    const listEl = document.getElementById("ideas-list");
+    statusEl.innerHTML = "<div>Carico le idee...</div>";
+    listEl.innerHTML = "";
+
+    try{
+      const res = await fetch("/api/list-ideas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: sessionPassword })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+
+      statusEl.innerHTML = "";
+      if(!data.ideas.length){
+        statusEl.innerHTML = "<div>Nessuna idea ricevuta finora.</div>";
+        return;
+      }
+
+      data.ideas.forEach(idea => {
+        const row = document.createElement("div");
+        row.className = "idea-row";
+        row.style.cssText = "border-bottom:1px solid rgba(245,240,230,0.14); padding:16px 0;";
+        const date = new Date(idea.date).toLocaleString("it-IT");
+        row.innerHTML = `
+          <p style="font-size:0.95rem; color:var(--sand);">${escapeHtml(idea.text)}</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; gap:10px; flex-wrap:wrap;">
+            <span style="font-family:var(--font-mono); font-size:0.72rem; color:var(--cream-dim);">${date}</span>
+            <button class="admin-btn danger" style="padding:8px 16px; font-size:0.72rem;" onclick="deleteIdea('${idea.id}', this)">Elimina</button>
+          </div>
+        `;
+        listEl.appendChild(row);
+      });
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">Errore: ${err.message}</div>`;
+    }
+  }
+
+  async function deleteIdea(id, btnEl){
+    if(!confirm("Eliminare questa idea?")) return;
+    try{
+      const res = await fetch("/api/delete-idea", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: sessionPassword, id })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+      btnEl.closest(".idea-row").remove();
+    } catch(err){
+      alert("Errore durante l'eliminazione: " + err.message);
     }
   }
 </script>
