@@ -99,6 +99,37 @@
 </section>
 <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
 
+<!-- FOLLOWER LIVE ==================================================== -->
+<section class="section-alt" style="padding-top:56px; padding-bottom:56px;">
+  <div class="wrap" style="max-width:340px;">
+    <p class="marker">Numeri</p>
+    <h2 style="font-size:1.6rem;">Follower TikTok in tempo reale</h2>
+    <div class="follower-live-card">
+      <div id="countik-widget"></div>
+      <a href="https://countik.com/user/ilmotonauta" target="_blank" class="footer-note" style="display:block; padding-top:10px; text-align:center; text-decoration:none;">Powered by Countik™</a>
+    </div>
+  </div>
+</section>
+<script>
+  (function() {
+    var countikWidget = document.createElement('script');
+    countikWidget.src = 'https://countik.com/widget.js';
+    countikWidget.async = true;
+    countikWidget.onload = function() {
+      if (typeof window.initializeCountikWidget === 'function') {
+        window.initializeCountikWidget({
+          container: '#countik-widget',
+          themeColor: '#D9A441',
+          uniqueId: 'ilmotonauta',
+          language: 'it'
+        });
+      }
+    };
+    var firstScript = document.getElementsByTagName('script')[0];
+    firstScript.parentNode.insertBefore(countikWidget, firstScript);
+  })();
+</script>
+
 <!-- COSA FACCIO ===================================================== -->
 <section>
   <div class="wrap">
