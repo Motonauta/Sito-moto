@@ -176,70 +176,9 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
-   MOTO SCENE — signature element (strada + moto da viaggio)
+   ROAD SEPARATOR — illustrazione Figma, auto-contenuta
    ========================================================== */
-/* ==========================================================
-   ROAD LINE — signature element
-   ========================================================== */
-.road-line{
-  width:100%; height:auto; display:block;
-}
-.road-line .road-forest circle{
-  fill:var(--forest-green);
-  opacity:0.75;
-}
-.road-line .road-forest circle.shadow{
-  fill:var(--forest-green-dark);
-  opacity:0.8;
-}
-.road-line .road-forest circle.bush{
-  fill:var(--forest-green);
-  opacity:0.55;
-}
-.road-line .road-forest-bottom circle{
-  opacity:0.5;
-}
-.road-line .road-forest-bottom circle.shadow{
-  opacity:0.6;
-}
-.road-line .road-pylon circle{
-  fill:var(--concrete);
-  opacity:0.85;
-}
-.road-line .road-pylon circle.hole{
-  fill:var(--asphalt);
-  opacity:0.7;
-}
-.road-line .road-shadow{
-  fill:var(--asphalt);
-  opacity:0.4;
-}
-.road-line .road-rail{
-  fill:none;
-  stroke:var(--sand);
-  stroke-width:1;
-  opacity:0.22;
-}
-.road-line .road-surface{
-  fill:var(--asphalt-2);
-  stroke:none;
-}
-.road-line .road-edge{
-  fill:none;
-  stroke:var(--sand);
-  stroke-width:1.5;
-  opacity:0.16;
-}
-.road-line .road-center{
-  fill:none;
-  stroke:var(--gold);
-  stroke-width:2.5;
-  stroke-linecap:round;
-  stroke-dasharray:14 12;
-  opacity:0.75;
-  animation:drive 12s linear infinite;
-}
-@keyframes drive{ to{ stroke-dashoffset:-1000; } }
+.road-separator{ display:block; width:100%; }
 
 /* ==========================================================
    GRID UTILITIES — responsive (desktop -> tablet -> mobile)
