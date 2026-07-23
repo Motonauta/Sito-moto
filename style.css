@@ -176,9 +176,20 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
-   ROAD SEPARATOR — illustrazione Figma, auto-contenuta
+   ROAD LINE — signature element
    ========================================================== */
-.road-separator{ display:block; width:100%; }
+.road-line{
+  width:100%; height:auto; display:block;
+}
+.road-line path{
+  fill:none;
+  stroke:var(--gold);
+  stroke-width:2;
+  stroke-dasharray:14 12;
+  opacity:0.55;
+  animation:drive 26s linear infinite;
+}
+@keyframes drive{ to{ stroke-dashoffset:-1000; } }
 
 /* ==========================================================
    GRID UTILITIES — responsive (desktop -> tablet -> mobile)
