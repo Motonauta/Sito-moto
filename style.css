@@ -202,8 +202,8 @@ p{color:var(--cream-dim); max-width:60ch;}
   opacity:0.6;
 }
 .road-line .road-pylon rect{
-  fill:var(--asphalt);
-  opacity:0.6;
+  fill:var(--steel);
+  opacity:0.75;
 }
 .road-line .road-shadow{
   fill:var(--asphalt);
