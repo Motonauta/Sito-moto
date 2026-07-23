@@ -195,22 +195,25 @@ p{color:var(--cream-dim); max-width:60ch;}
   fill:var(--forest-green);
   opacity:0.55;
 }
-.road-line .road-cliff.back{
-  fill:var(--asphalt-2);
+.road-line .road-forest-bottom circle{
   opacity:0.5;
 }
-.road-line .road-cliff.front{
-  fill:var(--rust-dim);
-  opacity:0.4;
+.road-line .road-forest-bottom circle.shadow{
+  opacity:0.6;
 }
-.road-line .road-rock-detail line{
-  stroke:var(--asphalt);
-  stroke-width:1;
-  opacity:0.35;
+.road-line .road-pylon rect{
+  fill:var(--asphalt);
+  opacity:0.6;
 }
-.road-line .road-rock-detail circle{
+.road-line .road-shadow{
   fill:var(--asphalt);
   opacity:0.4;
+}
+.road-line .road-rail{
+  fill:none;
+  stroke:var(--sand);
+  stroke-width:1;
+  opacity:0.22;
 }
 .road-line .road-surface{
   fill:var(--asphalt-2);
