@@ -253,6 +253,27 @@ p{color:var(--cream-dim); max-width:60ch;}
   border:1px solid rgba(245,240,230,0.14);
   padding:16px;
 }
+.idea-card{
+  background:var(--asphalt);
+  border:1px solid rgba(245,240,230,0.14);
+  padding:24px;
+  margin-top:28px;
+}
+.idea-textarea{
+  width:100%;
+  background:var(--asphalt-2);
+  border:1px solid rgba(245,240,230,0.2);
+  color:var(--cream);
+  padding:14px;
+  font-family:var(--font-body);
+  font-size:0.95rem;
+  resize:vertical;
+  min-height:100px;
+}
+.idea-textarea:focus{
+  outline:none;
+  border-color:var(--gold);
+}
 .social-feed-frame{
   position:relative;
   height:880px;
