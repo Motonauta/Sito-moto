@@ -113,6 +113,85 @@
 </section>
 <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
 
+<!-- SUGGERISCI UN'IDEA ============================================== -->
+<section class="section-alt">
+  <div class="wrap" style="max-width:560px;">
+    <p class="marker">Hai un'idea?</p>
+    <h2>Suggerisci un video</h2>
+    <p style="margin-top:14px;">
+      Un viaggio da fare, una moto da provare, qualcosa da spiegare
+      (es. "come funziona un motore 2 tempi") — scrivimelo qui, leggo
+      tutti i suggerimenti.
+    </p>
+
+    <div class="idea-card">
+      <form id="idea-form">
+        <textarea id="idea-text" class="idea-textarea" maxlength="600" rows="4" placeholder="Es. Un video sul giro delle Dolomiti, o su come si fa la manutenzione della catena..." required></textarea>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; flex-wrap:wrap; gap:10px;">
+          <span id="idea-count" style="font-family:var(--font-mono); font-size:0.72rem; color:var(--cream-dim);">0 / 600</span>
+          <button type="submit" class="btn solid" id="idea-submit">Invia idea</button>
+        </div>
+      </form>
+      <p id="idea-message" style="display:none; margin-top:16px; font-family:var(--font-mono); font-size:0.85rem;"></p>
+    </div>
+  </div>
+</section>
+<script>
+  (function(){
+    const form = document.getElementById("idea-form");
+    const textarea = document.getElementById("idea-text");
+    const count = document.getElementById("idea-count");
+    const submitBtn = document.getElementById("idea-submit");
+    const message = document.getElementById("idea-message");
+
+    if(!form) return;
+
+    // se ha già mandato un'idea da questo browser, lo ricordiamo (il vero blocco resta lato server sull'IP)
+    if(localStorage.getItem("motonauta_idea_sent")){
+      form.style.display = "none";
+      message.style.display = "block";
+      message.style.color = "var(--gold)";
+      message.textContent = "Hai già inviato un'idea. Grazie! Ne leggo sempre di nuove.";
+    }
+
+    textarea.addEventListener("input", () => {
+      count.textContent = `${textarea.value.length} / 600`;
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = textarea.value.trim();
+      if(!text) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Invio...";
+
+      try{
+        const res = await fetch("/api/submit-idea", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text })
+        });
+        const data = await res.json();
+
+        if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+
+        localStorage.setItem("motonauta_idea_sent", "1");
+        form.style.display = "none";
+        message.style.display = "block";
+        message.style.color = "var(--gold)";
+        message.textContent = "Grazie! La tua idea è stata inviata.";
+      } catch(err){
+        message.style.display = "block";
+        message.style.color = "var(--rust)";
+        message.textContent = err.message;
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Invia idea";
+      }
+    });
+  })();
+</script>
+
 <!-- COSA FACCIO ===================================================== -->
 <section>
   <div class="wrap">
