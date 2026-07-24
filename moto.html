@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-546ZL2T52G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-546ZL2T52G");
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La mia moto — Il Motonauta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .bike-stats{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+    background:rgba(245,240,230,0.14); margin-top:44px;
+  }
+  .bike-stats > div{ background:var(--asphalt); padding:26px 20px; }
+  .bike-stats .value{
+    font-family:var(--font-display); font-size:1.6rem; color:var(--gold);
+    text-transform:uppercase; line-height:1;
+  }
+  .bike-stats .label{
+    font-family:var(--font-mono); font-size:0.7rem; color:var(--cream-dim);
+    text-transform:uppercase; letter-spacing:0.05em; margin-top:8px;
+  }
+  @media (max-width:860px){ .bike-stats{ grid-template-columns:repeat(2, 1fr); } }
+
+  .bike-gallery{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:24px;
+  }
+  .bike-gallery .gallery-item{
+    aspect-ratio:4/3; position:relative; overflow:hidden;
+    border:1px dashed rgba(245,240,230,0.22);
+    display:flex; align-items:flex-end;
+  }
+  .bike-gallery img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .bike-gallery .tag{
+    padding:16px; font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); position:relative; z-index:1;
+  }
+  @media (max-width:780px){ .bike-gallery{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:520px){ .bike-gallery{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">IL <span>MOTONAUTA</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="sponsor.html">Sponsor</a>
+      <a href="moto.html" class="active">La mia moto</a>
+      <a href="galleria.html">Galleria</a>
+      <a href="contatti.html">Contatti</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Apri menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section style="padding-bottom:0;">
+  <div class="wrap">
+    <p class="marker">Il mio mezzo</p>
+    <h1 style="font-size:clamp(2.2rem, 5vw, 3.6rem); color:var(--sand); max-width:20ch;">
+      La mia moto
+    </h1>
+    <p style="margin-top:18px; font-size:1.02rem;">
+      La compagna di ogni viaggio, di ogni imprevisto e di ogni strada
+      dimenticata che ho raccontato fin qui. Ecco i numeri e la storia
+      dietro le due ruote che mi portano in giro.
+    </p>
+
+    <div class="bike-stats">
+      <div>
+        <p class="value">BMW S1000XR</p>
+        <p class="label">Modello</p>
+      </div>
+      <div>
+        <p class="value">2021</p>
+        <p class="label">Anno</p>
+      </div>
+      <div>
+        <p class="value">999 cc</p>
+        <p class="label">Cilindrata</p>
+      </div>
+      <div>
+        <p class="value">Novembre 2025</p>
+        <p class="label">Data di acquisto</p>
+      </div>
+      <div>
+        <p class="value">23.000 km</p>
+        <p class="label">Km all'acquisto</p>
+      </div>
+      <div>
+        <p class="value" id="km-attuali">— km</p>
+        <p class="label">Km percorsi ad oggi</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  fetch("/api/get-km")
+    .then(res => res.json())
+    .then(data => {
+      const el = document.getElementById("km-attuali");
+      if (el) el.textContent = `${data.km} km`;
+    })
+    .catch(() => {
+      const el = document.getElementById("km-attuali");
+      if (el) el.textContent = "23.000 km";
+    });
+</script>
+
+<section class="section-alt">
+  <div class="wrap feature-grid">
+    <div style="aspect-ratio:4/5; overflow:hidden; border:1px dashed rgba(245,240,230,0.25); display:flex; align-items:center; justify-content:center;">
+      <span class="marker" style="margin:0;">foto moto — segnaposto</span>
+    </div>
+    <div>
+      <p class="marker">Perché questa moto</p>
+      <h2>Un mezzo pensato per la strada, non solo per la pista</h2>
+      <p style="margin-top:20px;">
+        [Scrivi qui perché hai scelto questa moto: cosa ti ha convinto,
+        cosa cercavi in un mezzo da viaggio, come si comporta su lunghe
+        percorrenze e su strade non asfaltate.]
+      </p>
+      <p style="margin-top:16px;">
+        [Racconta qui eventuali modifiche o allestimenti che hai fatto:
+        borse laterali, protezioni, sella, elettronica, ecc.]
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="marker">In giro con lei</p>
+    <h2 style="max-width:18ch;">Qualche scatto della mia moto</h2>
+
+    <div class="bike-gallery">
+      <div class="gallery-item">
+        <span class="tag">foto moto 1 — segnaposto</span>
+      </div>
+      <div class="gallery-item">
+        <span class="tag">foto moto 2 — segnaposto</span>
+      </div>
+      <div class="gallery-item">
+        <span class="tag">foto moto 3 — segnaposto</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" style="text-align:center;">
+  <div class="wrap" style="text-align:center;">
+    <p class="marker" style="justify-content:center;">Prossima tappa</p>
+    <h2>Vuoi vedere dove ci ha già portati?</h2>
+    <p style="margin:18px auto 30px; max-width:50ch;">
+      Nella galleria trovi i viaggi divisi per destinazione, tappa dopo
+      tappa.
+    </p>
+    <a href="galleria.html" class="btn solid">Guarda la galleria</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-social">
+      <a href="contatti.html">Instagram</a>
+      <a href="contatti.html">TikTok</a>
+      <a href="contatti.html">YouTube</a>
+    </div>
+    <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
