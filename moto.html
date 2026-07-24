@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="style.css">
 <style>
   .bike-stats{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:1px;
     background:rgba(245,240,230,0.14); margin-top:44px;
   }
   .bike-stats > div{ background:var(--asphalt); padding:26px 20px; }
@@ -46,6 +46,27 @@
   }
   @media (max-width:780px){ .bike-gallery{ grid-template-columns:repeat(2, 1fr); } }
   @media (max-width:520px){ .bike-gallery{ grid-template-columns:1fr; } }
+
+  .accessori-list{
+    list-style:none;
+    margin-top:22px;
+  }
+  .accessori-list li{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px 0;
+    border-bottom:1px solid rgba(245,240,230,0.14);
+    font-size:0.95rem;
+    color:var(--cream-dim);
+  }
+  .accessori-list li:last-child{ border-bottom:none; }
+  .accessori-list li::before{
+    content:"—";
+    font-family:var(--font-mono);
+    color:var(--gold);
+    flex-shrink:0;
+  }
 </style>
 </head>
 <body>
@@ -101,22 +122,40 @@
       </div>
       <div>
         <p class="value" id="km-attuali">— km</p>
-        <p class="label">Km attuali</p>
+        <p class="label">Km totali</p>
+      </div>
+      <div>
+        <p class="value" id="km-personali">— km</p>
+        <p class="label">Km percorsi da me</p>
       </div>
     </div>
   </div>
 </section>
 
 <script>
+  const KM_ALL_ACQUISTO = 23000;
+
+  function parseKm(str){
+    const digits = String(str).replace(/[^\d]/g, "");
+    return parseInt(digits, 10) || 0;
+  }
+
   fetch("/api/get-km")
     .then(res => res.json())
     .then(data => {
-      const el = document.getElementById("km-attuali");
-      if (el) el.textContent = `${data.km} km`;
+      const totaleNum = parseKm(data.km);
+      const personaliNum = Math.max(totaleNum - KM_ALL_ACQUISTO, 0);
+
+      const elTotale = document.getElementById("km-attuali");
+      const elPersonali = document.getElementById("km-personali");
+      if (elTotale) elTotale.textContent = `${totaleNum.toLocaleString("it-IT")} km`;
+      if (elPersonali) elPersonali.textContent = `${personaliNum.toLocaleString("it-IT")} km`;
     })
     .catch(() => {
-      const el = document.getElementById("km-attuali");
-      if (el) el.textContent = "23.000 km";
+      const elTotale = document.getElementById("km-attuali");
+      const elPersonali = document.getElementById("km-personali");
+      if (elTotale) elTotale.textContent = "23.000 km";
+      if (elPersonali) elPersonali.textContent = "0 km";
     });
 </script>
 
@@ -127,24 +166,32 @@
     </div>
     <div>
       <p class="marker">Perché questa moto</p>
-      <h2>Un mezzo pensato per la strada, che non disdegna la pista</h2>
+      <h2>Un mezzo pensato per la strada, non solo per la pista</h2>
       <p style="margin-top:20px;">
-        Dopo centinaia di migliaia di km su mezzi scomodi ( più sportivi che da lunga percorrenza ) 
-        cercavo una moto che fosse comoda, si potesse caricare come un mulo, senza rinunciare
-        alla potenza e al divertimento nelle uscite domenicali. Beh, la mia S1000 XR è esattamente ciò che cercavo.
-        Ha i suoi difetti ma anche tantissimi pregi, e sono loro che la rendono la mia compagna di viaggio perfetta, 
-        senza parlare del sound e l'estetica che fa si che tutti si girino a guardarla ! ( direi che non passa inosservata )
+        Dopo centinaia di migliaia di km su mezzi scomodi (più sportivi
+        che da lunga percorrenza) cercavo una moto che fosse comoda, si
+        potesse caricare come un mulo, senza rinunciare alla potenza e
+        al divertimento nelle uscite domenicali. Beh, la mia S1000 XR è
+        esattamente ciò che cercavo. Ha i suoi difetti ma anche
+        tantissimi pregi, e sono loro che la rendono la mia compagna di
+        viaggio perfetta, senza parlare del sound e l'estetica che fa sì
+        che tutti si girino a guardarla! (direi che non passa
+        inosservata)
       </p>
       <p style="margin-top:16px;">
-       Ho investito molto su questa moto con la consapevolezza di tenerla per un bel po', attualmente l'obiettivo è superare
-        i 100.000 km. Questo è ciò che ho montato sulla mia bestiolina:
-        - Tris di valige Givi Outback Evo nere
-        - Terminale Leovince LV10
-        - Centralina Healtech per controllo valvola di scarico
-        - Telai paramotore Givi
-        - Carpuride W702BS
-        - Quadlock 
+        Ho investito molto su questa moto con la consapevolezza di
+        tenerla per un bel po', attualmente l'obiettivo è superare i
+        100.000 km. Questo è ciò che ho montato sulla mia bestiolina:
       </p>
+
+      <ul class="accessori-list">
+        <li>Tris di valigie Givi Outback Evo nere</li>
+        <li>Terminale Leovince LV10</li>
+        <li>Centralina Healtech per controllo valvola di scarico</li>
+        <li>Telai paramotore Givi</li>
+        <li>Carpuride W702BS</li>
+        <li>Quadlock</li>
+      </ul>
     </div>
   </div>
 </section>
