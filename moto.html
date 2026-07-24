@@ -113,8 +113,12 @@
         <p class="label">Cilindrata</p>
       </div>
       <div>
-        <p class="value" style="font-size:1.3rem;">229 kg / 165 CV</p>
-        <p class="label">Peso/potenza — in ordine di marcia</p>
+        <p class="value">229 kg</p>
+        <p class="label">Peso — in ordine di marcia</p>
+      </div>
+      <div>
+        <p class="value">165 CV</p>
+        <p class="label">Potenza</p>
       </div>
       <div>
         <p class="value">Novembre 2025</p>
@@ -128,17 +132,11 @@
         <p class="value" id="km-attuali">— km</p>
         <p class="label">Km totali</p>
       </div>
-      <div>
-        <p class="value" id="km-personali">— km</p>
-        <p class="label">Km percorsi da me</p>
-      </div>
     </div>
   </div>
 </section>
 
 <script>
-  const KM_ALL_ACQUISTO = 23000;
-
   function parseKm(str){
     const digits = String(str).replace(/[^\d]/g, "");
     return parseInt(digits, 10) || 0;
@@ -148,18 +146,12 @@
     .then(res => res.json())
     .then(data => {
       const totaleNum = parseKm(data.km);
-      const personaliNum = Math.max(totaleNum - KM_ALL_ACQUISTO, 0);
-
       const elTotale = document.getElementById("km-attuali");
-      const elPersonali = document.getElementById("km-personali");
       if (elTotale) elTotale.textContent = `${totaleNum.toLocaleString("it-IT")} km`;
-      if (elPersonali) elPersonali.textContent = `${personaliNum.toLocaleString("it-IT")} km`;
     })
     .catch(() => {
       const elTotale = document.getElementById("km-attuali");
-      const elPersonali = document.getElementById("km-personali");
       if (elTotale) elTotale.textContent = "23.000 km";
-      if (elPersonali) elPersonali.textContent = "0 km";
     });
 </script>
 
