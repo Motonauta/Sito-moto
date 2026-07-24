@@ -429,7 +429,12 @@
         row.textContent = `✓ ${file.name} caricata`;
         row.classList.add("ok");
       } catch(err){
-        row.textContent = `✗ ${file.name} — errore (controlla il nome del preset)`;
+        let dettaglio = err.message;
+        try{
+          const parsed = JSON.parse(err.message);
+          dettaglio = (parsed.error && parsed.error.message) || err.message;
+        } catch(e){ /* non era JSON, va bene così com'è */ }
+        row.textContent = `✗ ${file.name} — ${dettaglio}`;
         row.classList.add("err");
       }
     }
