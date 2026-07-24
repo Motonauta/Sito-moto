@@ -205,6 +205,21 @@
   </div>
 </section>
 
+<section class="section-alt" id="panel-bike" style="display:none;">
+  <div class="wrap">
+    <p class="marker">La mia moto</p>
+    <h2>Km percorsi</h2>
+    <p style="margin-top:14px;">Aggiorna qui il valore che compare nella pagina "La mia moto" — cambia solo questo, non serve toccare codice.</p>
+
+    <div class="contact-card" style="margin-top:28px; max-width:420px;">
+      <label class="admin-label">Km attuali</label>
+      <input type="text" id="km-input" class="admin-input" placeholder="es. 24.500">
+      <button class="admin-btn" onclick="saveKm()">Salva</button>
+      <div id="km-status" class="status-list"></div>
+    </div>
+  </div>
+</section>
+
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-social">
@@ -245,6 +260,8 @@
       document.getElementById("panel-manage").style.display = "block";
       document.getElementById("panel-ideas").style.display = "block";
       loadIdeas();
+      document.getElementById("panel-bike").style.display = "block";
+      loadKm();
       sessionStorage.setItem("motonauta_admin_ok", val);
       populateAlbumSelects();
     } else {
@@ -262,6 +279,8 @@
       document.getElementById("panel-manage").style.display = "block";
       document.getElementById("panel-ideas").style.display = "block";
       loadIdeas();
+      document.getElementById("panel-bike").style.display = "block";
+      loadKm();
       populateAlbumSelects();
     }
   });
@@ -575,6 +594,42 @@
       btnEl.closest(".idea-row").remove();
     } catch(err){
       alert("Errore durante l'eliminazione: " + err.message);
+    }
+  }
+
+  // -------- km moto --------
+  async function loadKm(){
+    try{
+      const res = await fetch("/api/get-km");
+      const data = await res.json();
+      const input = document.getElementById("km-input");
+      if(input) input.value = data.km || "";
+    } catch(err){
+      // se non riesce a caricarlo, lascia il campo vuoto senza bloccare la pagina
+    }
+  }
+
+  async function saveKm(){
+    const input = document.getElementById("km-input");
+    const statusEl = document.getElementById("km-status");
+    const km = input.value.trim();
+    if(!km){
+      statusEl.innerHTML = '<div class="err">Scrivi un valore prima di salvare.</div>';
+      return;
+    }
+
+    try{
+      const res = await fetch("/api/set-km", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: sessionPassword, km })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+
+      statusEl.innerHTML = '<div class="ok">Salvato ✓ — visibile subito sulla pagina "La mia moto".</div>';
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">Errore: ${err.message}</div>`;
     }
   }
 </script>
