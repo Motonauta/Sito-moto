@@ -546,7 +546,7 @@
 
       document.getElementById("thumb-grid").innerHTML = "";
       document.getElementById("manage-reminder").innerHTML =
-        `<div class="reminder">Album "${label}" eliminato da Cloudinary. Ricordati di rimuovere da <code>galleria.html</code> su GitHub sia il pulsante filtro (<code>data-filter="${slug}"</code>) sia tutti i blocchi foto (<code>data-trip="${slug}"</code>).</div>`;
+        `<div class="reminder">Album "${label}" eliminato da Cloudinary. Foto e pin sulla mappa spariscono da soli dal sito — nessuna modifica manuale necessaria.</div>`;
     } catch(err){
       alert("Errore durante l'eliminazione dell'album: " + err.message);
     }
