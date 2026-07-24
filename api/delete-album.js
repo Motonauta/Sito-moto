@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+const { getRedisClient } = require('../lib/redis');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -26,6 +27,14 @@ module.exports = async (req, res) => {
       await cloudinary.api.delete_folder(album);
     } catch (e) {
       // la cartella potrebbe non esistere più come oggetto separato, non è un errore bloccante
+    }
+
+    // rimuove anche il pin dalla mappa, se presente
+    try {
+      const redis = await getRedisClient();
+      await redis.hDel('map_pins', album);
+    } catch (e) {
+      // se non riesce a rimuovere il pin non blocchiamo comunque l'eliminazione dell'album
     }
 
     res.status(200).json({ success: true });
