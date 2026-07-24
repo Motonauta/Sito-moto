@@ -444,6 +444,24 @@
       const doneMsg = document.getElementById("done-message");
       doneMsg.style.display = "block";
       doneMsg.textContent = `Fatto! ${results.length} foto caricate nell'album "${label}". Sono già visibili nella pagina Galleria del sito — nessun codice da incollare.`;
+
+      if(isNew){
+        try{
+          const pinRes = await fetch("/api/create-pin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password: sessionPassword, albumName: label, filtro: slug })
+          });
+          const pinData = await pinRes.json();
+          if(pinRes.ok){
+            doneMsg.textContent += ` Pin aggiunto sulla mappa in corrispondenza di "${label}" ✓`;
+          } else {
+            doneMsg.textContent += ` (Nota: ${pinData.error})`;
+          }
+        } catch(err){
+          doneMsg.textContent += ` (Non sono riuscito ad aggiungere il pin sulla mappa: ${err.message})`;
+        }
+      }
     }
   }
 
