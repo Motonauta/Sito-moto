@@ -406,6 +406,76 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
+   HERO PARALLAX
+   ========================================================== */
+.hero-parallax-frame{ position:relative; }
+.hero-parallax{ will-change:transform; }
+
+/* ==========================================================
+   COOKIE BANNER
+   ========================================================== */
+.cookie-banner{
+  position:fixed; left:0; right:0; bottom:0; z-index:150;
+  background:var(--asphalt-2);
+  border-top:var(--line);
+  padding:22px 28px;
+  display:flex; flex-wrap:wrap; gap:20px;
+  align-items:center; justify-content:space-between;
+  transform:translateY(110%);
+  transition:transform .4s ease;
+}
+.cookie-banner.visible{ transform:translateY(0); }
+.cookie-banner-text{ max-width:640px; }
+.cookie-banner-text .marker{ margin-bottom:6px; }
+.cookie-banner-text p:not(.marker){ font-size:0.88rem; }
+.cookie-banner-text a{ color:var(--gold); text-decoration:underline; }
+.cookie-banner-actions{ display:flex; gap:14px; flex-shrink:0; }
+@media (max-width:600px){
+  .cookie-banner{ padding:18px 20px; }
+  .cookie-banner-actions{ width:100%; }
+  .cookie-banner-actions .btn{ flex:1; justify-content:center; }
+}
+
+/* ==========================================================
+   PAGE TRANSITION — "moto che sfreccia"
+   ========================================================== */
+.page-transition{
+  position:fixed; inset:0; z-index:9999;
+  overflow:hidden;
+  background:var(--asphalt);
+  opacity:0;
+  pointer-events:none;
+}
+.pt-moto{
+  position:absolute; top:50%; left:-20%;
+  transform:translate(-50%, -50%);
+  font-size:3.4rem;
+  line-height:1;
+  filter:drop-shadow(0 0 14px rgba(217,164,65,0.55));
+}
+.page-transition.pt-cover{
+  opacity:1; pointer-events:all;
+}
+.page-transition.pt-cover .pt-moto{ left:50%; }
+.page-transition.pt-enter{
+  opacity:1; pointer-events:all;
+  animation:pt-fade-in .18s ease forwards;
+}
+.page-transition.pt-enter .pt-moto{
+  animation:pt-moto-in .5s cubic-bezier(.55,0,.15,1) forwards;
+}
+.page-transition.pt-reveal{
+  animation:pt-fade-out .5s ease .05s forwards;
+}
+.page-transition.pt-reveal .pt-moto{
+  animation:pt-moto-out .5s cubic-bezier(.55,0,.15,1) forwards;
+}
+@keyframes pt-fade-in{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes pt-fade-out{ from{ opacity:1; } to{ opacity:0; } }
+@keyframes pt-moto-in{ from{ left:-20%; } to{ left:50%; } }
+@keyframes pt-moto-out{ from{ left:50%; } to{ left:120%; } }
+
+/* ==========================================================
    SECTION SPACING
    ========================================================== */
 section{padding:96px 0;}

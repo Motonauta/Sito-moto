@@ -1,4 +1,77 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // parallasse leggero sulla foto hero, durante lo scroll
+  const heroParallax = document.querySelector(".hero-parallax");
+  if (heroParallax && !prefersReducedMotion) {
+    const frame = heroParallax.closest(".hero-parallax-frame") || heroParallax;
+    let ticking = false;
+
+    const updateParallax = () => {
+      const rect = frame.getBoundingClientRect();
+      if (rect.bottom > 0 && rect.top < window.innerHeight) {
+        heroParallax.style.transform = `translateY(${rect.top * 0.12}px)`;
+      }
+      ticking = false;
+    };
+
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+    updateParallax();
+  }
+
+  // transizione tra pagine: una moto attraversa lo schermo invece del cambio pagina secco
+  const TRANSITION_KEY = "motonauta-transition";
+  const overlay = document.createElement("div");
+  overlay.className = "page-transition";
+  overlay.innerHTML = '<span class="pt-moto" aria-hidden="true">🏍️</span>';
+  document.body.appendChild(overlay);
+
+  if (!prefersReducedMotion && sessionStorage.getItem(TRANSITION_KEY)) {
+    sessionStorage.removeItem(TRANSITION_KEY);
+    overlay.classList.add("pt-cover");
+    requestAnimationFrame(() => {
+      overlay.classList.remove("pt-cover");
+      overlay.classList.add("pt-reveal");
+    });
+    setTimeout(() => overlay.remove(), 600);
+  } else {
+    sessionStorage.removeItem(TRANSITION_KEY);
+    overlay.remove();
+  }
+
+  if (!prefersReducedMotion) {
+    document.querySelectorAll("a[href]").forEach((link) => {
+      const href = link.getAttribute("href");
+      if (
+        !href ||
+        href.startsWith("#") ||
+        /^https?:\/\//i.test(href) ||
+        href.startsWith("mailto:") ||
+        href.startsWith("tel:") ||
+        link.target === "_blank"
+      ) return;
+
+      link.addEventListener("click", (e) => {
+        if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+
+        const freshOverlay = document.querySelector(".page-transition") || overlay;
+        if (!document.body.contains(freshOverlay)) document.body.appendChild(freshOverlay);
+        freshOverlay.classList.add("pt-enter");
+
+        setTimeout(() => {
+          sessionStorage.setItem(TRANSITION_KEY, "1");
+          window.location.href = href;
+        }, 500);
+      });
+    });
+  }
+
   const toggle = document.querySelector(".nav-toggle");
   const links = document.querySelector(".nav-links");
 
