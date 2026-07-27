@@ -25,9 +25,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // transizione tra pagine: la moneta col logo attraversa lo schermo una sola
-  // volta (da sinistra a destra, girando su se stessa) quando lasci la pagina;
-  // sulla pagina di arrivo c'è solo una dissolvenza, senza ripetere l'animazione
+  // volta (da sinistra a destra, girando su se stessa per tutto il tragitto)
+  // quando lasci la pagina, con una scritta onomatopeica casuale ferma al
+  // centro; sulla pagina di arrivo c'è solo una dissolvenza, senza ripetere
+  // l'animazione
   const TRANSITION_KEY = "motonauta-transition";
+  const TRANSITION_SOUNDS = [
+    "Brum bruuuum",
+    "Brap braaap",
+    "Rattattattattaaaaa",
+    "Vrooom vrooom",
+    "Broppopoppoppoopp",
+    "Gorogorogorogorogoro",
+  ];
 
   if (sessionStorage.getItem(TRANSITION_KEY)) {
     sessionStorage.removeItem(TRANSITION_KEY);
@@ -56,9 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
 
+        const sound = TRANSITION_SOUNDS[Math.floor(Math.random() * TRANSITION_SOUNDS.length)];
         const overlay = document.createElement("div");
         overlay.className = "page-transition pt-leaving";
-        overlay.innerHTML = '<img class="pt-coin" alt="" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_152,h_152,c_fill/v1784625192/IMG_1429_ufj4tu.jpg">';
+        overlay.innerHTML = `
+          <img class="pt-coin" alt="" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_152,h_152,c_fill/v1784625192/IMG_1429_ufj4tu.jpg">
+          <span class="pt-sound">${sound}</span>
+        `;
         document.body.appendChild(overlay);
 
         setTimeout(() => {
