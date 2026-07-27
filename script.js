@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
           sessionStorage.setItem(TRANSITION_KEY, "1");
           window.location.href = href;
-        }, 650);
+        }, 950);
       });
     });
   }

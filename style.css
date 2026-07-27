@@ -477,10 +477,10 @@ p{color:var(--cream-dim); max-width:60ch;}
   opacity:1; pointer-events:all;
 }
 .page-transition.pt-leaving .pt-coin{
-  animation:pt-coin-sweep .65s cubic-bezier(.4,0,.2,1) forwards;
+  animation:pt-coin-sweep .95s cubic-bezier(.4,0,.2,1) forwards;
 }
 .page-transition.pt-leaving .pt-sound{
-  animation:pt-sound-fade .65s ease forwards;
+  animation:pt-sound-fade .95s ease forwards;
 }
 
 /* fase "arrivo": nessuna moneta, solo dissolvenza che rivela la pagina nuova */
