@@ -24,24 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
     updateParallax();
   }
 
-  // transizione tra pagine: una moto attraversa lo schermo invece del cambio pagina secco
+  // transizione tra pagine: la moneta col logo attraversa lo schermo una sola
+  // volta (da sinistra a destra, girando su se stessa) quando lasci la pagina;
+  // sulla pagina di arrivo c'è solo una dissolvenza, senza ripetere l'animazione
   const TRANSITION_KEY = "motonauta-transition";
-  const overlay = document.createElement("div");
-  overlay.className = "page-transition";
-  overlay.innerHTML = '<img class="pt-coin" alt="" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_152,h_152,c_fill/v1784625192/IMG_1429_ufj4tu.jpg">';
-  document.body.appendChild(overlay);
 
-  if (!prefersReducedMotion && sessionStorage.getItem(TRANSITION_KEY)) {
+  if (sessionStorage.getItem(TRANSITION_KEY)) {
     sessionStorage.removeItem(TRANSITION_KEY);
-    overlay.classList.add("pt-cover");
-    requestAnimationFrame(() => {
-      overlay.classList.remove("pt-cover");
-      overlay.classList.add("pt-reveal");
-    });
-    setTimeout(() => overlay.remove(), 600);
-  } else {
-    sessionStorage.removeItem(TRANSITION_KEY);
-    overlay.remove();
+    if (!prefersReducedMotion) {
+      const overlay = document.createElement("div");
+      overlay.className = "page-transition pt-arriving";
+      document.body.appendChild(overlay);
+      overlay.addEventListener("animationend", () => overlay.remove(), { once: true });
+      setTimeout(() => overlay.remove(), 500);
+    }
   }
 
   if (!prefersReducedMotion) {
@@ -60,14 +56,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
 
-        const freshOverlay = document.querySelector(".page-transition") || overlay;
-        if (!document.body.contains(freshOverlay)) document.body.appendChild(freshOverlay);
-        freshOverlay.classList.add("pt-enter");
+        const overlay = document.createElement("div");
+        overlay.className = "page-transition pt-leaving";
+        overlay.innerHTML = '<img class="pt-coin" alt="" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_152,h_152,c_fill/v1784625192/IMG_1429_ufj4tu.jpg">';
+        document.body.appendChild(overlay);
 
         setTimeout(() => {
           sessionStorage.setItem(TRANSITION_KEY, "1");
           window.location.href = href;
-        }, 500);
+        }, 650);
       });
     });
   }

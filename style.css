@@ -453,34 +453,31 @@ p{color:var(--cream-dim); max-width:60ch;}
   object-fit:cover;
   transform:translate(-50%, -50%) rotate(0deg);
   box-shadow:0 0 22px rgba(217,164,65,0.55), 0 0 0 3px rgba(217,164,65,0.4);
+  opacity:0;
 }
-.page-transition.pt-cover{
+
+/* fase "partenza": la moneta attraversa TUTTO lo schermo da sinistra a destra
+   in un unico movimento, girando su se stessa nella prima metà; lo schermo
+   resta coperto alla fine, prima di navigare alla pagina successiva */
+.page-transition.pt-leaving{
   opacity:1; pointer-events:all;
 }
-.page-transition.pt-cover .pt-coin{ left:50%; transform:translate(-50%, -50%) rotate(360deg); }
-.page-transition.pt-enter{
-  opacity:1; pointer-events:all;
-  animation:pt-fade-in .18s ease forwards;
+.page-transition.pt-leaving .pt-coin{
+  animation:pt-coin-sweep .65s cubic-bezier(.4,0,.2,1) forwards;
 }
-.page-transition.pt-enter .pt-coin{
-  animation:pt-coin-in .55s cubic-bezier(.45,0,.2,1) forwards;
+
+/* fase "arrivo": nessuna moneta, solo dissolvenza che rivela la pagina nuova */
+.page-transition.pt-arriving{
+  animation:pt-fade-out .4s ease forwards;
 }
-.page-transition.pt-reveal{
-  animation:pt-fade-out .5s ease .05s forwards;
+
+@keyframes pt-coin-sweep{
+  0%{ left:-15%; opacity:1; transform:translate(-50%, -50%) rotate(0deg); }
+  50%{ left:50%; opacity:1; transform:translate(-50%, -50%) rotate(360deg); }
+  92%{ left:112%; opacity:1; transform:translate(-50%, -50%) rotate(360deg); }
+  100%{ left:112%; opacity:0; transform:translate(-50%, -50%) rotate(360deg); }
 }
-.page-transition.pt-reveal .pt-coin{
-  animation:pt-coin-out .5s cubic-bezier(.55,0,.15,1) forwards;
-}
-@keyframes pt-fade-in{ from{ opacity:0; } to{ opacity:1; } }
 @keyframes pt-fade-out{ from{ opacity:1; } to{ opacity:0; } }
-@keyframes pt-coin-in{
-  from{ left:-15%; transform:translate(-50%, -50%) rotate(0deg); }
-  to{ left:50%; transform:translate(-50%, -50%) rotate(360deg); }
-}
-@keyframes pt-coin-out{
-  from{ left:50%; transform:translate(-50%, -50%) rotate(360deg); }
-  to{ left:115%; transform:translate(-50%, -50%) rotate(360deg); }
-}
 
 /* ==========================================================
    SECTION SPACING
