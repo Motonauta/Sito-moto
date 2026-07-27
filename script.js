@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const TRANSITION_KEY = "motonauta-transition";
   const overlay = document.createElement("div");
   overlay.className = "page-transition";
-  overlay.innerHTML = '<span class="pt-moto" aria-hidden="true">🏍️</span>';
+  overlay.innerHTML = '<img class="pt-coin" alt="" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_152,h_152,c_fill/v1784625192/IMG_1429_ufj4tu.jpg">';
   document.body.appendChild(overlay);
 
   if (!prefersReducedMotion && sessionStorage.getItem(TRANSITION_KEY)) {
