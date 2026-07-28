@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-546ZL2T52G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-546ZL2T52G");
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Galleria — Il Motonauta </title>
@@ -82,7 +90,6 @@
   }
   .map-popup-btn:hover{ background:var(--gold); color:var(--asphalt); }
 </style>
-<script src="cookie-consent.js" defer></script>
 </head>
 <body>
 
@@ -142,7 +149,6 @@
       <a href="contatti.html">Instagram</a>
       <a href="contatti.html">TikTok</a>
       <a href="contatti.html">YouTube</a>
-      <a href="privacy.html">Privacy &amp; Cookie</a>
     </div>
     <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
   </div>
@@ -238,15 +244,39 @@
           filtersEl.appendChild(btn);
         }
 
-        // aggiunge le foto/video alla griglia
+        // aggiunge le foto/video alla griglia (elementi creati via DOM, non
+        // HTML interpolato: così url e didascalia non possono mai "rompere"
+        // il markup, qualunque carattere contengano)
         photos.forEach(photo => {
           const item = document.createElement("div");
           item.className = "gallery-item";
           item.dataset.trip = albumName;
-          const mediaHtml = photo.type === "video"
-            ? `<video src="${optimizeUrl(photo.url, "video")}" muted loop playsinline preload="metadata"></video><div class="play-icon"></div>`
-            : `<img src="${optimizeUrl(photo.url, "image")}" alt="${photo.caption}">`;
-          item.innerHTML = `${mediaHtml}<span class="tag">${photo.caption}</span>`;
+
+          const caption = photo.caption || "";
+          let mediaEl;
+          if (photo.type === "video") {
+            mediaEl = document.createElement("video");
+            mediaEl.src = optimizeUrl(photo.url, "video");
+            mediaEl.muted = true;
+            mediaEl.loop = true;
+            mediaEl.playsInline = true;
+            mediaEl.preload = "metadata";
+            item.appendChild(mediaEl);
+            const playIcon = document.createElement("div");
+            playIcon.className = "play-icon";
+            item.appendChild(playIcon);
+          } else {
+            mediaEl = document.createElement("img");
+            mediaEl.src = optimizeUrl(photo.url, "image");
+            mediaEl.alt = caption;
+            item.appendChild(mediaEl);
+          }
+
+          const tag = document.createElement("span");
+          tag.className = "tag";
+          tag.textContent = caption;
+          item.appendChild(tag);
+
           gridEl.appendChild(item);
         });
       });

@@ -17,9 +17,13 @@ module.exports = async (req, res) => {
 
     const redis = await getRedisClient();
 
-    // individua l'IP di chi sta scrivendo
+    // individua l'IP di chi sta scrivendo: x-real-ip e l'ultimo valore di
+    // x-forwarded-for sono impostati dal proxy di Vercel, non dal client, quindi
+    // non possono essere falsificati mandando un header finto (a differenza del
+    // primo valore di x-forwarded-for, che invece il client può inventare)
     const forwarded = req.headers['x-forwarded-for'];
-    const ip = forwarded ? forwarded.split(',')[0].trim() : (req.socket && req.socket.remoteAddress) || 'unknown';
+    const forwardedIp = forwarded ? forwarded.split(',').pop().trim() : null;
+    const ip = req.headers['x-real-ip'] || forwardedIp || (req.socket && req.socket.remoteAddress) || 'unknown';
 
     // controlla se questo IP ha già mandato un'idea nelle ultime 24 ore
     const blockKey = `idea_block:${ip}`;
@@ -42,6 +46,7 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ error: 'Errore interno, riprova più tardi.' });
   }
 };

@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
     const km = await redis.get('moto:km_attuali');
     res.status(200).json({ km: km || '23.000' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ error: 'Errore interno, riprova più tardi.' });
   }
 };

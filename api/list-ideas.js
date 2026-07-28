@@ -24,6 +24,7 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ ideas });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ error: 'Errore interno, riprova più tardi.' });
   }
 };
