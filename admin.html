@@ -269,10 +269,13 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password: val })
       });
-      if(!res.ok) throw new Error();
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Password errata.");
       showPanel();
     } catch(err){
-      document.getElementById("gate-error").style.display = "block";
+      const errEl = document.getElementById("gate-error");
+      errEl.textContent = err.message;
+      errEl.style.display = "block";
     } finally {
       btn.disabled = false;
     }
