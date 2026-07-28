@@ -367,11 +367,67 @@
     });
   }
 
+  // -------- compressione immagini prima dell'upload --------
+  // riduce le foto troppo pesanti (es. scattate col telefono) prima di
+  // caricarle: upload più veloce e meno banda usata. I video non vengono
+  // toccati (ricomprimerli via browser non è affidabile).
+  const MAX_DIMENSION = 2000;
+  const JPEG_QUALITY = 0.82;
+  const SKIP_BELOW_BYTES = 700 * 1024;
+
+  function compressImage(file){
+    return new Promise((resolve) => {
+      if(!file.type.startsWith("image/") || file.type === "image/gif" || file.size < SKIP_BELOW_BYTES){
+        resolve(file);
+        return;
+      }
+
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+
+        let { width, height } = img;
+        if(width <= MAX_DIMENSION && height <= MAX_DIMENSION){
+          resolve(file);
+          return;
+        }
+
+        const scale = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          if(!blob || blob.size >= file.size){
+            resolve(file);
+            return;
+          }
+          const compressed = new File([blob], file.name, { type: "image/jpeg" });
+          resolve(compressed);
+        }, "image/jpeg", JPEG_QUALITY);
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        resolve(file);
+      };
+
+      img.src = objectUrl;
+    });
+  }
+
   // -------- upload --------
   async function uploadOne(file, folder, tag, caption){
     const isVideo = file.type.startsWith("video/");
     const resourceType = isVideo ? "video" : "image";
     const context = `caption=${caption.replace(/[|=]/g, "-")}`;
+    const uploadFile = isVideo ? file : await compressImage(file);
 
     // il preset è "signed": la firma va generata lato server (serve la
     // chiave segreta di Cloudinary, che non deve mai finire nel browser)
@@ -384,7 +440,7 @@
     if(!signRes.ok) throw new Error(signData.error || "Firma non riuscita");
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", uploadFile);
     formData.append("api_key", signData.apiKey);
     formData.append("timestamp", signData.timestamp);
     formData.append("signature", signData.signature);
