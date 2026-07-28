@@ -1,5 +1,5 @@
 const { getRedisClient } = require('../lib/redis');
-const { isAuthenticated } = require('../lib/auth');
+const { COOKIE_NAME, parseCookies } = require('../lib/auth');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -7,16 +7,12 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { id } = req.body;
-    if (!(await isAuthenticated(req))) {
-      return res.status(401).json({ error: 'Password errata' });
+    const token = parseCookies(req)[COOKIE_NAME];
+    if (token) {
+      const redis = await getRedisClient();
+      await redis.del(`admin_session:${token}`);
     }
-    if (!id) {
-      return res.status(400).json({ error: 'Manca id' });
-    }
-
-    const redis = await getRedisClient();
-    await redis.hDel('ideas', id);
+    res.setHeader('Set-Cookie', `${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`);
     res.status(200).json({ success: true });
   } catch (err) {
     console.error(err);

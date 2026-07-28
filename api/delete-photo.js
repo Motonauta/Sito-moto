@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+const { isAuthenticated } = require('../lib/auth');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -11,9 +12,9 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Metodo non consentito' });
   }
   try {
-    const { password, publicId, resourceType } = req.body;
+    const { publicId, resourceType } = req.body;
 
-    if (password !== process.env.ADMIN_PASSWORD) {
+    if (!(await isAuthenticated(req))) {
       return res.status(401).json({ error: 'Password errata' });
     }
     if (!publicId) {

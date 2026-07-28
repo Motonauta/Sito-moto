@@ -1,4 +1,5 @@
 const { getRedisClient } = require('../lib/redis');
+const { isAuthenticated } = require('../lib/auth');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -6,8 +7,8 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { password, km } = req.body;
-    if (password !== process.env.ADMIN_PASSWORD) {
+    const { km } = req.body;
+    if (!(await isAuthenticated(req))) {
       return res.status(401).json({ error: 'Password errata' });
     }
     if (!km || !km.trim()) {

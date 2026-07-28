@@ -39,14 +39,18 @@ con alcune funzioni serverless per le parti dinamiche.
 | `delete-album.js` | Elimina un intero album da Cloudinary **e il pin mappa corrispondente** |
 | `sitemap.js` | Genera la sitemap XML dinamica (pagine + foto) |
 | `submit-idea.js` | Riceve un'idea video dal box in home, blocca l'IP mittente per 24h (anti-spam) |
-| `list-ideas.js` | Elenca le idee ricevute (area riservata, richiede password) |
+| `list-ideas.js` | Elenca le idee ricevute (area riservata) |
 | `delete-idea.js` | Elimina un'idea (area riservata) |
 | `get-km.js` | Restituisce i km attuali della moto (pubblico) |
 | `set-km.js` | Aggiorna i km attuali (area riservata) |
 | `create-pin.js` | Geocodifica il nome di un nuovo album e salva il pin sulla mappa (chiamato da admin.html dopo un nuovo album) |
 | `map-pins.js` | Restituisce tutti i pin salvati per la mappa |
+| `sign-upload.js` | Genera la firma per l'upload firmato su Cloudinary (area riservata) |
+| `login.js` | Verifica la password admin e apre una sessione (cookie httpOnly su Redis) |
+| `logout.js` | Chiude la sessione admin |
+| `session-check.js` | Dice al frontend se la sessione admin è ancora valida |
 
-**Importante**: tutte le funzioni "scrittura" (`delete-*`, `set-km`, `create-pin`, `list-ideas`) controllano `password === process.env.ADMIN_PASSWORD`. La password reale è **`Olandese.10004cyl`** — deve essere identica sia nella variabile d'ambiente Vercel `ADMIN_PASSWORD`, sia nella costante `ADMIN_PASSWORD` scritta in chiaro in cima allo script di `admin.html` (usata per il controllo lato client all'accesso). **Se modifichi `admin.html`, non resettare questa password al placeholder — deve restare quella reale.**
+**Importante — autenticazione area riservata**: `admin.html` **non contiene più la password**. Il login è gestito da `api/login.js`, che verifica `password === process.env.ADMIN_PASSWORD` (confronto a tempo costante) e, se corretta, crea un token casuale salvato su Redis (`admin_session:<token>`, scadenza 7 giorni) e lo manda al browser come cookie httpOnly/Secure/SameSite=Strict. Tutte le funzioni "scrittura" (`delete-*`, `set-km`, `create-pin`, `list-ideas`, `sign-upload`) verificano quella sessione tramite `lib/auth.js` (`isAuthenticated(req)`), non più una password passata nel corpo della richiesta. `api/logout.js` invalida la sessione sia lato cookie che su Redis. Se aggiungi una nuova funzione che scrive dati, proteggila allo stesso modo con `isAuthenticated(req)`, non reintrodurre il controllo diretto della password.
 
 ## Variabili d'ambiente su Vercel
 

@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+const { isAuthenticated } = require('../lib/auth');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -12,8 +13,8 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { password, folder, tags, context } = req.body;
-    if (password !== process.env.ADMIN_PASSWORD) {
+    const { folder, tags, context } = req.body;
+    if (!(await isAuthenticated(req))) {
       return res.status(401).json({ error: 'Password errata' });
     }
     if (!folder) {

@@ -110,7 +110,7 @@
     <div class="contact-card" style="margin-top:28px; text-align:left;">
       <label class="admin-label">Password</label>
       <input type="password" id="password-input" class="admin-input" autocomplete="off">
-      <button class="admin-btn" onclick="checkPassword()">Entra</button>
+      <button class="admin-btn" id="login-btn" onclick="checkPassword()">Entra</button>
       <p id="gate-error" style="color:var(--rust); margin-top:14px; display:none;">Password errata.</p>
     </div>
   </div>
@@ -119,9 +119,14 @@
 <!-- PANNELLO ADMIN ================================================= -->
 <section id="panel" style="display:none; padding-bottom:0;">
   <div class="wrap">
-    <p class="marker">Area riservata</p>
-    <h1 style="font-size:clamp(2rem, 5vw, 2.8rem); color:var(--sand); max-width:18ch;">Carica foto in galleria</h1>
-    <p style="margin-top:14px;">Seleziona l'album, scegli le foto, scrivi una didascalia per ciascuna e carica. Alla fine ti genero il codice pronto da incollare in <code>galleria.html</code> su GitHub.</p>
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap;">
+      <div>
+        <p class="marker">Area riservata</p>
+        <h1 style="font-size:clamp(2rem, 5vw, 2.8rem); color:var(--sand); max-width:18ch;">Carica foto in galleria</h1>
+        <p style="margin-top:14px;">Seleziona l'album, scegli le foto, scrivi una didascalia per ciascuna e carica. Alla fine ti genero il codice pronto da incollare in <code>galleria.html</code> su GitHub.</p>
+      </div>
+      <button class="admin-btn outline" onclick="logout()">Esci</button>
+    </div>
   </div>
 </section>
 
@@ -233,10 +238,6 @@
 
 <script src="script.js"></script>
 <script>
-  // ⚠️ CAMBIA QUESTA PASSWORD prima di pubblicare il sito
-  // Usa la STESSA password anche come variabile d'ambiente ADMIN_PASSWORD su Vercel
-  const ADMIN_PASSWORD = "Olandese.10004cyl";
-
   const ALBUM_LABELS = {
     olanda: "Olanda",
     stelvio: "Passo dello Stelvio",
@@ -245,40 +246,50 @@
     corsica: "Corsica"
   };
 
-  let sessionPassword = "";
+  function showPanel(){
+    document.getElementById("gate").style.display = "none";
+    document.getElementById("panel").style.display = "block";
+    document.getElementById("panel-upload").style.display = "block";
+    document.getElementById("panel-manage").style.display = "block";
+    document.getElementById("panel-ideas").style.display = "block";
+    document.getElementById("panel-bike").style.display = "block";
+    loadIdeas();
+    loadKm();
+    populateAlbumSelects();
+  }
 
-  function checkPassword(){
+  async function checkPassword(){
     const val = document.getElementById("password-input").value;
-    if(val === ADMIN_PASSWORD){
-      sessionPassword = val;
-      document.getElementById("gate").style.display = "none";
-      document.getElementById("panel").style.display = "block";
-      document.getElementById("panel-upload").style.display = "block";
-      document.getElementById("panel-manage").style.display = "block";
-      document.getElementById("panel-ideas").style.display = "block";
-      loadIdeas();
-      document.getElementById("panel-bike").style.display = "block";
-      loadKm();
-      sessionStorage.setItem("motonauta_admin_ok", val);
-      populateAlbumSelects();
-    } else {
+    const btn = document.getElementById("login-btn");
+    btn.disabled = true;
+    document.getElementById("gate-error").style.display = "none";
+    try{
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: val })
+      });
+      if(!res.ok) throw new Error();
+      showPanel();
+    } catch(err){
       document.getElementById("gate-error").style.display = "block";
+    } finally {
+      btn.disabled = false;
     }
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const saved = sessionStorage.getItem("motonauta_admin_ok");
-    if(saved === ADMIN_PASSWORD){
-      sessionPassword = saved;
-      document.getElementById("gate").style.display = "none";
-      document.getElementById("panel").style.display = "block";
-      document.getElementById("panel-upload").style.display = "block";
-      document.getElementById("panel-manage").style.display = "block";
-      document.getElementById("panel-ideas").style.display = "block";
-      loadIdeas();
-      document.getElementById("panel-bike").style.display = "block";
-      loadKm();
-      populateAlbumSelects();
+  async function logout(){
+    try{ await fetch("/api/logout", { method: "POST" }); } catch(err){ /* usciamo comunque */ }
+    location.reload();
+  }
+
+  window.addEventListener("DOMContentLoaded", async () => {
+    try{
+      const res = await fetch("/api/session-check");
+      const data = await res.json();
+      if(data.authenticated) showPanel();
+    } catch(err){
+      // se il controllo fallisce resta semplicemente la schermata di accesso
     }
   });
 
@@ -364,7 +375,7 @@
     const signRes = await fetch("/api/sign-upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: sessionPassword, folder, tags: tag, context })
+      body: JSON.stringify({ folder, tags: tag, context })
     });
     const signData = await signRes.json();
     if(!signRes.ok) throw new Error(signData.error || "Firma non riuscita");
@@ -465,7 +476,7 @@
           const pinRes = await fetch("/api/create-pin", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ password: sessionPassword, albumName: label, filtro: slug })
+            body: JSON.stringify({ albumName: label, filtro: slug })
           });
           const pinData = await pinRes.json();
           if(pinRes.ok){
@@ -532,7 +543,7 @@
       const res = await fetch("/api/delete-photo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: sessionPassword, publicId, resourceType })
+        body: JSON.stringify({ publicId, resourceType })
       });
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
@@ -554,7 +565,7 @@
       const res = await fetch("/api/delete-album", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: sessionPassword, album: slug })
+        body: JSON.stringify({ album: slug })
       });
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
@@ -584,7 +595,7 @@
       const res = await fetch("/api/list-ideas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: sessionPassword })
+        body: "{}"
       });
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
@@ -620,7 +631,7 @@
       const res = await fetch("/api/delete-idea", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: sessionPassword, id })
+        body: JSON.stringify({ id })
       });
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
@@ -655,7 +666,7 @@
       const res = await fetch("/api/set-km", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: sessionPassword, km })
+        body: JSON.stringify({ km })
       });
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");

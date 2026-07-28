@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+const { isAuthenticated } = require('../lib/auth');
 const { getRedisClient } = require('../lib/redis');
 
 cloudinary.config({
@@ -12,9 +13,9 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Metodo non consentito' });
   }
   try {
-    const { password, album } = req.body;
+    const { album } = req.body;
 
-    if (password !== process.env.ADMIN_PASSWORD) {
+    if (!(await isAuthenticated(req))) {
       return res.status(401).json({ error: 'Password errata' });
     }
     if (!album) {
