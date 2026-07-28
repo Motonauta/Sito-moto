@@ -37,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "Vrooom vrooom",
     "Broppopoppoppoopp",
     "Gorogorogorogorogoro",
+    "Bum pow pow pow pow",
+    "Ninoooo ninoooo",
   ];
 
   if (sessionStorage.getItem(TRANSITION_KEY)) {
