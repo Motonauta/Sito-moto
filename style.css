@@ -32,7 +32,9 @@ body{
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  cursor:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiI+PHRleHQgeD0iMTYiIHk9IjI0IiBmb250LXNpemU9IjI2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn4+N77iPPC90ZXh0Pjwvc3ZnPg==") 16 16, auto;
 }
+input, textarea, select{ cursor:auto; }
 img{max-width:100%; display:block;}
 a{color:inherit; text-decoration:none;}
 ul{list-style:none;}
