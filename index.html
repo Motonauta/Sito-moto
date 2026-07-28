@@ -12,6 +12,59 @@
 </head>
 <body>
 
+<!-- INTRO "ACCENDI IL MOTORE" — solo in home, una volta a sessione ======= -->
+<div id="ignition-overlay" class="ignition-overlay">
+  <svg class="ignition-handlebar" viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg">
+    <!-- specchietti -->
+    <line x1="180" y1="150" x2="140" y2="55" stroke="var(--steel)" stroke-width="10" stroke-linecap="round"/>
+    <ellipse cx="128" cy="42" rx="34" ry="22" fill="#2b2f30" stroke="rgba(245,240,230,0.25)" stroke-width="2"/>
+    <line x1="720" y1="150" x2="760" y2="55" stroke="var(--steel)" stroke-width="10" stroke-linecap="round"/>
+    <ellipse cx="772" cy="42" rx="34" ry="22" fill="#2b2f30" stroke="rgba(245,240,230,0.25)" stroke-width="2"/>
+
+    <!-- barra del manubrio -->
+    <path d="M 70 210 C 70 150, 220 150, 330 165 L 570 165 C 680 150, 830 150, 830 210"
+          fill="none" stroke="var(--steel)" stroke-width="26" stroke-linecap="round"/>
+    <path d="M 70 202 C 70 148, 220 148, 330 160 L 570 160 C 680 148, 830 148, 830 202"
+          fill="none" stroke="#8f9a9b" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- manopole -->
+    <rect x="40" y="188" width="90" height="46" rx="23" fill="#1a1a1a" stroke="#000" stroke-width="2"/>
+    <rect x="770" y="188" width="90" height="46" rx="23" fill="#1a1a1a" stroke="#000" stroke-width="2"/>
+    <g stroke="#000" stroke-width="2" opacity="0.5">
+      <line x1="55" y1="192" x2="55" y2="230"/>
+      <line x1="70" y1="192" x2="70" y2="230"/>
+      <line x1="85" y1="192" x2="85" y2="230"/>
+      <line x1="785" y1="192" x2="785" y2="230"/>
+      <line x1="800" y1="192" x2="800" y2="230"/>
+      <line x1="815" y1="192" x2="815" y2="230"/>
+    </g>
+
+    <!-- leve freno / frizione -->
+    <path d="M 130 195 C 175 175, 195 165, 210 178" fill="none" stroke="var(--concrete)" stroke-width="9" stroke-linecap="round"/>
+    <path d="M 770 195 C 725 175, 705 165, 690 178" fill="none" stroke="var(--concrete)" stroke-width="9" stroke-linecap="round"/>
+
+    <!-- cruscotto centrale -->
+    <path d="M 355 90 L 545 90 C 565 90, 575 105, 575 125 L 575 165 L 325 165 L 325 125 C 325 105, 335 90, 355 90 Z"
+          fill="var(--asphalt-2)" stroke="rgba(245,240,230,0.18)" stroke-width="2"/>
+
+    <!-- tachimetro e contagiri -->
+    <circle cx="378" cy="128" r="30" fill="#141311" stroke="rgba(245,240,230,0.25)" stroke-width="2"/>
+    <line x1="378" y1="128" x2="378" y2="108" stroke="var(--gold)" stroke-width="2" transform="rotate(-40 378 128)"/>
+    <circle cx="522" cy="128" r="30" fill="#141311" stroke="rgba(245,240,230,0.25)" stroke-width="2"/>
+    <line x1="522" y1="128" x2="522" y2="108" stroke="var(--gold)" stroke-width="2" transform="rotate(25 522 128)"/>
+
+    <!-- pulsante di accensione -->
+    <g class="ignition-btn" tabindex="0" role="button" aria-label="Premi per accendere il motore ed entrare nel sito">
+      <circle class="btn-glow" cx="450" cy="128" r="46" fill="none" stroke="var(--rust)" stroke-width="2" opacity="0.35"/>
+      <circle class="btn-face" cx="450" cy="128" r="34" fill="var(--rust)" stroke="#7a3319" stroke-width="3"/>
+      <path d="M 450 108 L 450 124" stroke="var(--cream)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 435 116 A 22 22 0 1 0 465 116" fill="none" stroke="var(--cream)" stroke-width="5" stroke-linecap="round"/>
+    </g>
+  </svg>
+  <p class="ignition-hint">Premi il pulsante per accendere il motore</p>
+  <button type="button" class="ignition-skip">Salta &rarr;</button>
+</div>
+
 <header class="site-header">
   <div class="wrap">
     <a href="index.html" class="logo logo-wrap">

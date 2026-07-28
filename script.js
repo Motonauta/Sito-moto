@@ -24,6 +24,140 @@ document.addEventListener("DOMContentLoaded", () => {
     updateParallax();
   }
 
+  // intro "accendi il motore" in home: appare solo una volta a sessione
+  const ignitionOverlay = document.getElementById("ignition-overlay");
+  if (ignitionOverlay) {
+    const alreadySeen = sessionStorage.getItem("motonauta_ignition_seen");
+    if (alreadySeen || prefersReducedMotion) {
+      ignitionOverlay.remove();
+    } else {
+      const btn = ignitionOverlay.querySelector(".ignition-btn");
+      const skipBtn = ignitionOverlay.querySelector(".ignition-skip");
+      let started = false;
+
+      function makeNoiseBuffer(ctx, duration) {
+        const buffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * duration), ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+        return buffer;
+      }
+
+      function playEngineStart() {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+
+        const master = ctx.createGain();
+        master.gain.value = 0.5;
+        master.connect(ctx.destination);
+
+        // fase 1: motorino d'avviamento (cranking), a scatti
+        const crankDuration = 0.55;
+        const crankOsc = ctx.createOscillator();
+        crankOsc.type = "square";
+        crankOsc.frequency.setValueAtTime(9, now);
+        crankOsc.frequency.linearRampToValueAtTime(13, now + crankDuration);
+
+        const crankGain = ctx.createGain();
+        crankGain.gain.setValueAtTime(0.0001, now);
+        for (let t = 0; t < crankDuration; t += 1 / 11) {
+          crankGain.gain.setValueAtTime(0.35, now + t);
+          crankGain.gain.linearRampToValueAtTime(0.05, now + Math.min(t + 0.05, crankDuration));
+        }
+
+        const crankFilter = ctx.createBiquadFilter();
+        crankFilter.type = "bandpass";
+        crankFilter.frequency.value = 220;
+        crankFilter.Q.value = 4;
+
+        crankOsc.connect(crankFilter).connect(crankGain).connect(master);
+        crankOsc.start(now);
+        crankOsc.stop(now + crankDuration);
+
+        const crankNoise = ctx.createBufferSource();
+        crankNoise.buffer = makeNoiseBuffer(ctx, crankDuration);
+        const crankNoiseFilter = ctx.createBiquadFilter();
+        crankNoiseFilter.type = "bandpass";
+        crankNoiseFilter.frequency.value = 900;
+        crankNoiseFilter.Q.value = 1.2;
+        const crankNoiseGain = ctx.createGain();
+        crankNoiseGain.gain.value = 0.12;
+        crankNoise.connect(crankNoiseFilter).connect(crankNoiseGain).connect(master);
+        crankNoise.start(now);
+        crankNoise.stop(now + crankDuration);
+
+        // fase 2: il motore attacca, sale di giri un attimo e si assesta al minimo
+        const catchStart = now + crankDuration;
+        const idleDuration = 2.6;
+
+        [0, 2].forEach((detune) => {
+          const osc = ctx.createOscillator();
+          osc.type = "sawtooth";
+          osc.detune.value = detune;
+          osc.frequency.setValueAtTime(70, catchStart);
+          osc.frequency.linearRampToValueAtTime(140, catchStart + 0.25);
+          osc.frequency.linearRampToValueAtTime(48, catchStart + 1.0);
+
+          const engineFilter = ctx.createBiquadFilter();
+          engineFilter.type = "lowpass";
+          engineFilter.frequency.value = 900;
+
+          const engineGain = ctx.createGain();
+          engineGain.gain.setValueAtTime(0.0001, catchStart);
+          engineGain.gain.linearRampToValueAtTime(0.4, catchStart + 0.1);
+          engineGain.gain.linearRampToValueAtTime(0.24, catchStart + 1.0);
+          engineGain.gain.linearRampToValueAtTime(0.0001, catchStart + idleDuration);
+
+          osc.connect(engineFilter).connect(engineGain).connect(master);
+          osc.start(catchStart);
+          osc.stop(catchStart + idleDuration);
+        });
+
+        const idleNoise = ctx.createBufferSource();
+        idleNoise.buffer = makeNoiseBuffer(ctx, idleDuration);
+        const idleFilter = ctx.createBiquadFilter();
+        idleFilter.type = "lowpass";
+        idleFilter.frequency.value = 300;
+        const idleGain = ctx.createGain();
+        idleGain.gain.setValueAtTime(0.0001, catchStart);
+        idleGain.gain.linearRampToValueAtTime(0.15, catchStart + 0.15);
+        idleGain.gain.linearRampToValueAtTime(0.0001, catchStart + idleDuration);
+        idleNoise.connect(idleFilter).connect(idleGain).connect(master);
+        idleNoise.start(catchStart);
+        idleNoise.stop(catchStart + idleDuration);
+
+        setTimeout(() => ctx.close(), (crankDuration + idleDuration + 0.3) * 1000);
+      }
+
+      function reveal() {
+        ignitionOverlay.classList.add("ignition-reveal");
+        sessionStorage.setItem("motonauta_ignition_seen", "1");
+        setTimeout(() => ignitionOverlay.remove(), 1200);
+      }
+
+      function startIgnition() {
+        if (started) return;
+        started = true;
+        ignitionOverlay.classList.add("ignition-started");
+        try { playEngineStart(); } catch (err) { /* audio non disponibile: si procede comunque */ }
+        setTimeout(reveal, 550);
+      }
+
+      btn.addEventListener("click", startIgnition);
+      btn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          startIgnition();
+        }
+      });
+      skipBtn.addEventListener("click", () => {
+        sessionStorage.setItem("motonauta_ignition_seen", "1");
+        ignitionOverlay.remove();
+      });
+    }
+  }
+
   // transizione tra pagine: la moneta col logo attraversa lo schermo una sola
   // volta (da sinistra a destra, girando su se stessa per tutto il tragitto)
   // quando lasci la pagina, con una scritta onomatopeica casuale ferma al
