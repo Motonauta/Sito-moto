@@ -10,21 +10,58 @@
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
 <style>
+  .itinerari-carousel{ position:relative; margin-top:34px; }
   .itinerari-grid{
-    display:grid; grid-template-columns:1fr 1fr; gap:1px;
-    background:rgba(245,240,230,0.14); margin-top:34px;
+    display:flex; gap:22px; overflow-x:auto; scroll-snap-type:x mandatory;
+    scroll-behavior:smooth; padding:6px 6px 24px; -webkit-overflow-scrolling:touch;
   }
-  .itinerario-card{ background:var(--asphalt); padding:0; overflow:hidden; }
+  .itinerari-grid::-webkit-scrollbar{ height:8px; }
+  .itinerari-grid::-webkit-scrollbar-track{ background:rgba(245,240,230,0.08); }
+  .itinerari-grid::-webkit-scrollbar-thumb{ background:var(--rust); }
+
+  .carousel-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:46px; height:46px; border-radius:50%; z-index:3;
+    background:var(--asphalt-2); border:1px solid var(--rust); color:var(--cream);
+    font-size:1.5rem; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease;
+  }
+  .carousel-arrow:hover{ background:var(--rust); }
+  .carousel-arrow.prev{ left:-10px; }
+  .carousel-arrow.next{ right:-10px; }
+  @media (max-width:640px){
+    .carousel-arrow{ width:38px; height:38px; font-size:1.15rem; }
+    .carousel-arrow.prev{ left:-2px; }
+    .carousel-arrow.next{ right:-2px; }
+  }
+
+  .itinerario-card{
+    background:var(--asphalt); border:1px solid rgba(245,240,230,0.16);
+    flex:0 0 min(560px, 88vw); scroll-snap-align:center; overflow:hidden;
+  }
+  .card-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--asphalt-2); padding:14px 18px;
+    border-bottom:1px solid rgba(245,240,230,0.16);
+  }
+  .card-topbar .card-km, .card-topbar .card-price{
+    font-family:var(--font-mono); font-size:0.78rem; white-space:nowrap; flex-shrink:0;
+  }
+  .card-topbar .card-km{ color:var(--cream-dim); }
+  .card-topbar .card-price{ color:var(--gold); font-weight:700; }
+  .card-topbar .card-title{
+    font-family:var(--font-display); text-transform:uppercase; letter-spacing:0.02em;
+    font-size:0.95rem; color:var(--sand); text-align:center; line-height:1.25;
+    flex-grow:1; padding:0 8px;
+  }
   .itinerario-card-body{ padding:34px; }
   .itinerario-photo{ aspect-ratio:16/9; overflow:hidden; background:var(--asphalt-2); }
   .itinerario-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
   .itinerario-card-head{
     display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
   }
-  .itinerario-card .marker{ margin-bottom:10px; }
-  .itinerario-card h3{
-    font-size:1.35rem; color:var(--sand); line-height:1.15;
-  }
+  .itinerario-card .marker{ margin-bottom:0; }
   .itinerario-card p.desc{ margin-top:14px; font-size:0.95rem; }
 
   .itinerario-weather{
@@ -51,10 +88,6 @@
   .itinerario-actions a.waze{ border-color:rgba(245,240,230,0.3); }
   .itinerario-actions a.waze:hover{ background:rgba(245,240,230,0.12); }
 
-  .itinerario-fuel{
-    margin-top:14px; font-family:var(--font-mono); font-size:0.78rem; color:var(--gold);
-  }
-
   .itinerario-stops{ margin-top:22px; }
   .itinerario-stops p.label{
     font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase;
@@ -72,12 +105,9 @@
   .itinerario-stops .fun{
     margin-top:5px; font-size:0.85rem; color:var(--cream-dim); font-style:italic;
   }
-  @media (max-width:860px){
-    .itinerari-grid{ grid-template-columns:1fr; }
-  }
 
   .itinerari-note{
-    margin-top:52px; padding:22px 26px; border:1px dashed var(--gold);
+    margin-top:12px; padding:22px 26px; border:1px dashed var(--gold);
     font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
   }
   .itinerari-note strong{ color:var(--gold); }
@@ -175,7 +205,11 @@
       </p>
     </div>
 
-    <div class="itinerari-grid" id="itinerari-grid"></div>
+    <div class="itinerari-carousel">
+      <button type="button" class="carousel-arrow prev" aria-label="Miniviaggio precedente">‹</button>
+      <div class="itinerari-grid" id="itinerari-grid"></div>
+      <button type="button" class="carousel-arrow next" aria-label="Miniviaggio successivo">›</button>
+    </div>
 
     <div class="itinerari-note">
       <strong>Prima di partire:</strong> i passi di montagna sono aperti
@@ -424,15 +458,18 @@
   async function updateFuelEstimate(card, it){
     const consumo = parseFloat(document.getElementById("fuel-cc").value);
     const prezzo = parseFloat(document.getElementById("fuel-price").value) || 1.75;
-    const fuelEl = card.querySelector(".itinerario-fuel");
+    const kmEl = card.querySelector(".card-km");
+    const priceEl = card.querySelector(".card-price");
     const km = await estimateKm(it);
     if(km == null){
-      if(fuelEl) fuelEl.textContent = "⛽ Imposta un punto di partenza valido per la stima";
+      if(kmEl) kmEl.textContent = "— km";
+      if(priceEl) priceEl.textContent = "—";
       return;
     }
     const litri = km / consumo;
     const costo = litri * prezzo;
-    if(fuelEl) fuelEl.textContent = `⛽ Circa ${km} km a/r — stima carburante: €${costo.toFixed(2)}`;
+    if(kmEl) kmEl.textContent = `${km} km a/r`;
+    if(priceEl) priceEl.textContent = `€${costo.toFixed(2)}`;
   }
 
   function mapsQuery(t){ return encodeURIComponent(t.query); }
@@ -448,6 +485,11 @@
     const wazeUrl = `https://waze.com/ul?q=${mapsQuery(it.tappe[0])}&navigate=yes`;
 
     card.innerHTML = `
+      <div class="card-topbar">
+        <span class="card-km">…</span>
+        <span class="card-title">${it.titolo}</span>
+        <span class="card-price">…</span>
+      </div>
       ${it.foto ? `
       <div class="itinerario-photo">
         <img src="${it.foto}" alt="${it.zona}" loading="lazy">
@@ -455,10 +497,7 @@
       ` : ""}
       <div class="itinerario-card-body">
       <div class="itinerario-card-head">
-        <div>
-          <p class="marker">${it.zona} — ${it.km}</p>
-          <h3>${it.titolo}</h3>
-        </div>
+        <p class="marker">${it.zona} — ${it.km}</p>
         <div class="itinerario-weather">
           <select class="w-day">
             <option value="0">Oggi</option>
@@ -479,7 +518,6 @@
         <a href="${mapsUrl}" target="_blank" rel="noopener">Apri l'itinerario completo su Maps</a>
         <a class="waze" href="${wazeUrl}" target="_blank" rel="noopener">Prima tappa su Waze</a>
       </div>
-      <p class="itinerario-fuel"></p>
       <div class="itinerario-stops">
         <p class="label">Tappe consigliate</p>
         <ul>
@@ -519,6 +557,16 @@
   document.getElementById("fuel-start").addEventListener("change", () => {
     cards.forEach(({ card, it }) => updateFuelEstimate(card, it));
   });
+
+  function scrollCarousel(dir){
+    const firstCard = grid.querySelector(".itinerario-card");
+    if(!firstCard) return;
+    const gap = parseFloat(getComputedStyle(grid).columnGap || getComputedStyle(grid).gap || 22);
+    const cardWidth = firstCard.getBoundingClientRect().width + gap;
+    grid.scrollBy({ left: dir * cardWidth, behavior: "smooth" });
+  }
+  document.querySelector(".carousel-arrow.prev").addEventListener("click", () => scrollCarousel(-1));
+  document.querySelector(".carousel-arrow.next").addEventListener("click", () => scrollCarousel(1));
 </script>
 
 <script src="script.js"></script>
