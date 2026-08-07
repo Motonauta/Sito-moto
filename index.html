@@ -249,7 +249,7 @@
       submitBtn.textContent = "Invio...";
 
       try{
-        const res = await fetch("/api/submit-idea", {
+        const res = await fetch("/api/ideas", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text })
