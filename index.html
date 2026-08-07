@@ -37,8 +37,14 @@
   }
 
   .itinerario-card{
-    background:var(--asphalt); border:1px solid rgba(245,240,230,0.16);
-    flex:0 0 min(560px, 88vw); scroll-snap-align:center; overflow:hidden;
+    background:linear-gradient(155deg, var(--gold) 0%, var(--rust) 100%);
+    padding:5px;
+    flex:0 0 min(560px, 88vw); scroll-snap-align:center;
+    box-shadow:0 24px 50px -26px rgba(0,0,0,0.75);
+  }
+  .card-frame{
+    background:var(--asphalt); overflow:hidden; height:100%;
+    border:1px solid rgba(27,26,23,0.6);
   }
   .card-topbar{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -55,9 +61,18 @@
     font-size:0.95rem; color:var(--sand); text-align:center; line-height:1.25;
     flex-grow:1; padding:0 8px;
   }
-  .itinerario-card-body{ padding:34px; }
-  .itinerario-photo{ aspect-ratio:16/9; overflow:hidden; background:var(--asphalt-2); }
+  .itinerario-card-body{ padding:26px 34px 34px; }
+  .itinerario-photo{
+    position:relative; aspect-ratio:16/9; overflow:hidden;
+    background:var(--asphalt-2); margin:16px 16px 0;
+    border:1px solid rgba(217,164,65,0.45);
+  }
   .itinerario-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .itinerario-photo::before, .itinerario-photo::after{
+    content:""; position:absolute; width:16px; height:16px; z-index:1; pointer-events:none;
+  }
+  .itinerario-photo::before{ top:-1px; left:-1px; border-top:2px solid var(--gold); border-left:2px solid var(--gold); }
+  .itinerario-photo::after{ bottom:-1px; right:-1px; border-bottom:2px solid var(--gold); border-right:2px solid var(--gold); }
   .itinerario-card-head{
     display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
   }
@@ -209,11 +224,12 @@
     </div>
 
     <div class="itinerari-note">
-      <strong>Prima di partire:</strong> i km indicati sono stime approssimative
-      del giro ad anello (andata e ritorno da Roma inclusi), calcolate a
-      tavolino — controlla sempre il percorso su Google Maps il giorno
-      stesso, verifica eventuali strade chiuse o lavori in corso, e adatta
-      l'andatura alle condizioni reali dell'asfalto e al meteo.
+      <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
+      totali del giro ad anello (andata e ritorno da Roma inclusi) e ⛽ è la
+      stima del costo di benzina calcolata con i parametri qui sopra — entrambi
+      calcolati a tavolino, controlla sempre il percorso su Google Maps il
+      giorno stesso, verifica eventuali strade chiuse o lavori in corso, e
+      adatta l'andatura alle condizioni reali dell'asfalto e al meteo.
     </div>
   </div>
 </section>
@@ -627,6 +643,112 @@
         { nome: "Caprarola", query: "Palazzo Farnese Caprarola", label: "Palazzo Farnese a pianta pentagonale", fun: "Un palazzo a forma di pentagono costruito per stupire — missione riuscita, ancora oggi." },
         { nome: "Soriano nel Cimino", query: "Soriano nel Cimino VT", label: "borgo ai piedi dei Monti Cimini", fun: "Castagni ovunque: se ci passi in autunno, porta un sacchetto." }
       ]
+    },
+    {
+      zona: "Monti Ernici", km: "circa 210 km", kmNum: 210, titolo: "Le Grotte di Collepardo e la Certosa di Trisulti",
+      desc: "Un giro tra natura e spiritualità sui Monti Ernici: le Grotte di Collepardo scavate nel calcare, la millenaria Certosa di Trisulti con la sua antica farmacia monastica, e il borgo murato di Vico nel Lazio.",
+      meteoPlace: "Collepardo",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Collepardo,_Certosa_di_Trisulti_003.JPG",
+      tappe: [
+        { nome: "Collepardo", query: "Grotte di Collepardo FR", label: "Grotta dei Bambocci, stalattiti e stalagmiti", fun: "Formazioni calcaree che la natura ha impiegato millenni a scolpire — tu ci arrivi in un paio d'ore." },
+        { nome: "Certosa di Trisulti", query: "Certosa di Trisulti Collepardo", label: "monastero certosino con farmacia storica", fun: "Un'antica farmacia monastica dove i monaci preparavano liquori ed elisir — il souvenir più originale della lista." },
+        { nome: "Vico nel Lazio", query: "Vico nel Lazio FR", label: "borgo medievale ancora cinto dalle mura", fun: "Le mura sono ancora quelle originali — qui il tempo si è preso una pausa lunga otto secoli." }
+      ]
+    },
+    {
+      zona: "Vallepietra", km: "circa 220 km", kmNum: 220, titolo: "Il Santuario della Trinità, incastonato nella roccia",
+      desc: "Un giro nel cuore selvaggio dei Simbruini: l'altopiano di Arcinazzo con i resti di una villa romana, e il Santuario della Santissima Trinità di Vallepietra, letteralmente scavato in una parete rocciosa a 1337 metri.",
+      meteoPlace: "Vallepietra",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Museo_Santissima_Trinit%C3%A0_chiesa_San_Giovanni_Evangelista_Vallepietra.jpg",
+      tappe: [
+        { nome: "Arcinazzo Romano", query: "Arcinazzo Romano RM", label: "altopiano e resti della villa di Traiano", fun: "Anche gli imperatori romani venivano quassù per staccare la spina — buona compagnia." },
+        { nome: "Vallepietra", query: "Vallepietra RM", label: "Santuario della Santissima Trinità nella roccia", fun: "Un santuario incollato alla montagna — da lontano sembra un miraggio, da vicino è ancora più impressionante." },
+        { nome: "Camerata Nuova", query: "Camerata Nuova RM", label: "borgo di montagna tra i boschi dei Simbruini", fun: "Uno dei paesi più isolati del Lazio — e si sente, nel senso più bello del termine." }
+      ]
+    },
+    {
+      zona: "Arpino", km: "circa 210 km", kmNum: 210, titolo: "Arpino, la patria di Marco Tullio Cicerone",
+      desc: "Un giro in Ciociaria sulle tracce di uno dei più grandi oratori della storia romana: il borgo di Arpino, la sua Torre di Cicerone, e la vicina Sora affacciata sul fiume Liri.",
+      meteoPlace: "Arpino",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Arpino_wall.JPG",
+      tappe: [
+        { nome: "Arpino", query: "Arpino FR Torre di Cicerone", label: "centro storico e Torre di Cicerone", fun: "Nato qui l'oratore più citato nei licei classici — la Torre resiste ancora meglio delle sue versioni tradotte." },
+        { nome: "Sora", query: "Sora FR", label: "città sul fiume Liri", fun: "Il Liri attraversa la città come se avesse fretta — tu invece prenditela con calma." },
+        { nome: "Santopadre", query: "Santopadre FR", label: "piccolo borgo panoramico vicino Sora", fun: "Poche righe su Wikipedia, ma una vista che vale la deviazione." }
+      ]
+    },
+    {
+      zona: "Fiuggi", km: "circa 170 km", kmNum: 170, titolo: "Fiuggi, la città termale dell'acqua che 'scioglie i calcoli'",
+      desc: "Un giro breve tra le colline della Ciociaria settentrionale: le storiche terme di Fiuggi, i borghi tranquilli di Guarcino e Trivigliano, e Piglio, patria del Cesanese DOCG.",
+      meteoPlace: "Fiuggi",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Panorama_innevato_di_Fiuggi_Fonte.jpg",
+      tappe: [
+        { nome: "Fiuggi", query: "Fonte Bonifacio VIII Fiuggi", label: "Fonte Bonifacio VIII e il parco delle terme", fun: "L'acqua che 'scioglie i calcoli', dicono da secoli — funziona anche sulle tensioni da ufficio, promesso." },
+        { nome: "Guarcino", query: "Guarcino FR", label: "borgo tranquillo sotto il Monte Rotonaria", fun: "Un paesino che nessuna guida turistica menziona mai — ottimo motivo per andarci." },
+        { nome: "Piglio", query: "Piglio FR", label: "patria del Cesanese del Piglio DOCG", fun: "Il vino rosso più famoso della Ciociaria — la moto resta a bordo strada, l'assaggio arriva a fine giro." }
+      ]
+    },
+    {
+      zona: "Cassino", km: "circa 260 km", kmNum: 260, titolo: "L'Abbazia di Montecassino, tra fede e Seconda Guerra Mondiale",
+      desc: "Un giro carico di storia: l'Abbazia di Montecassino, fondata da San Benedetto nel 529 e ricostruita dopo i bombardamenti del 1944, con il cimitero militare polacco che racconta una delle battaglie più dure della guerra in Italia.",
+      meteoPlace: "Cassino",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Abbazia_Montecassino.jpg",
+      tappe: [
+        { nome: "Cassino", query: "Abbazia di Montecassino", label: "abbazia benedettina ricostruita dopo il 1944", fun: "Rasa al suolo dai bombardamenti e ricostruita 'dov'era, com'era' — la storia qui si legge nei muri." },
+        { nome: "Cimitero militare polacco", query: "Cimitero militare polacco Montecassino", label: "memoriale della battaglia di Montecassino", fun: "Un silenzio che vale più di qualsiasi libro di storia — fermati, anche solo cinque minuti." },
+        { nome: "Sant'Elia Fiumerapido", query: "Sant'Elia Fiumerapido FR", label: "borgo ai piedi del monte", fun: "L'ultima tappa prima di tornare, con vista sull'abbazia che hai appena lasciato alle spalle." }
+      ]
+    },
+    {
+      zona: "Norma, Ninfa e Sermoneta", km: "circa 160 km", kmNum: 160, titolo: "Il Giardino di Ninfa e i borghi della piana pontina",
+      desc: "Un giro nella provincia di Latina tra alcuni dei posti più belli del Lazio: Norma appesa sopra la valle, il Giardino di Ninfa (tra i giardini più belli del mondo, aperto solo in alcuni weekend — controlla il calendario prima di partire), e il borgo medievale di Sermoneta.",
+      meteoPlace: "Sermoneta",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Giardino_di_Ninfa,_rovine_della_citt%C3%A0..JPG",
+      tappe: [
+        { nome: "Norma", query: "Norma LT", label: "borgo panoramico sopra la valle di Ninfa", fun: "Da quassù il giardino di Ninfa sembra un plastico in miniatura — è tutto vero, promesso." },
+        { nome: "Giardino di Ninfa", query: "Giardino di Ninfa Cisterna di Latina", label: "uno dei giardini più belli del mondo", fun: "Aperto solo in alcuni weekend stagionali: controlla il calendario prima di partire, o rischi di vederlo solo dal cancello." },
+        { nome: "Sermoneta", query: "Sermoneta LT Castello Caetani", label: "borgo medievale e Castello Caetani", fun: "Un borgo così ben conservato che sembra costruito ieri per un set cinematografico — invece è lì da secoli." }
+      ]
+    },
+    {
+      zona: "Cori e i Monti Lepini", km: "circa 140 km", kmNum: 140, titolo: "Cori, tra storia romana e curve dei Lepini",
+      desc: "Il giro più breve tra le new entry: Cori, antichissima città sui Monti Lepini con un tempio romano ancora in piedi, raggiunta con un percorso di curve scorrevoli tra uliveti e boschi.",
+      meteoPlace: "Cori",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cori-Tempio_Ercole.JPG",
+      tappe: [
+        { nome: "Cori", query: "Tempio di Ercole Cori LT", label: "Tempio di Ercole e centro storico", fun: "Un tempio romano ancora in piedi da più di duemila anni — la manutenzione stradale dovrebbe prendere appunti." },
+        { nome: "Giulianello", query: "Giulianello LT", label: "borgo panoramico sui Lepini", fun: "Una frazione minuscola con una vista che non ti aspetteresti da un nome così poco pubblicizzato." }
+      ]
+    },
+    {
+      zona: "Priverno e l'Abbazia di Fossanova", km: "circa 190 km", kmNum: 190, titolo: "Priverno e la millenaria Abbazia di Fossanova",
+      desc: "Un giro tranquillo verso sud: il centro storico di Priverno e la vicina Abbazia di Fossanova, capolavoro dell'architettura cistercense e primo esempio di gotico in Italia, dove morì San Tommaso d'Aquino.",
+      meteoPlace: "Priverno",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Abbazia_di_Fossanova_(2008).jpg",
+      tappe: [
+        { nome: "Priverno", query: "Priverno LT centro storico", label: "centro storico medievale", fun: "Una cittadina tranquilla che raramente finisce negli itinerari turistici — il motivo in più per includerla qui." },
+        { nome: "Abbazia di Fossanova", query: "Abbazia di Fossanova", label: "primo esempio di gotico in Italia", fun: "Qui morì San Tommaso d'Aquino — un posto che ha fatto la storia della filosofia, oltre che dell'architettura." }
+      ]
+    },
+    {
+      zona: "Nettuno e Anzio", km: "circa 130 km", kmNum: 130, titolo: "Nettuno e Anzio, tra storia e mare",
+      desc: "Il giro più corto e rilassato: il lungomare di Anzio e Nettuno, il Forte Sangallo cinquecentesco, e le spiagge dello sbarco alleato del 1944 — perfetto anche per una mezza giornata con vista mare.",
+      meteoPlace: "Nettuno",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Forte_Sangallo.JPG",
+      tappe: [
+        { nome: "Anzio", query: "Anzio RM porto", label: "porto e lungomare", fun: "Da qui partì Nerone in fuga da Roma — tu almeno torni indietro con calma, senza congiure alle spalle." },
+        { nome: "Nettuno", query: "Forte Sangallo Nettuno", label: "Forte Sangallo e centro storico", fun: "Un forte del Cinquecento con vista sul mare — la difesa costiera non è mai stata così panoramica." }
+      ]
+    },
+    {
+      zona: "Civita Castellana e la Valle del Tevere", km: "circa 130 km", kmNum: 130, titolo: "Civita Castellana, tra forre e archeologia",
+      desc: "Un giro breve nella Tuscia orientale, diverso da quello dei laghi: il Forte Sangallo di Civita Castellana affacciato su una forra scavata dal fiume, e le rovine dell'antica città etrusca di Falerii Novi poco distante.",
+      meteoPlace: "Civita Castellana",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Forte_Sangallo_Civita_Castellana.jpg",
+      tappe: [
+        { nome: "Civita Castellana", query: "Forte Sangallo Civita Castellana", label: "Forte Sangallo sospeso su una forra", fun: "Un forte costruito sul bordo di un burrone scavato dall'acqua — l'ingegneria rinascimentale sapeva il fatto suo." },
+        { nome: "Falerii Novi", query: "Falerii Novi rovine", label: "città etrusco-romana abbandonata, cinta da mura intatte", fun: "Una città romana abbandonata quasi mille anni fa, con le mura ancora quasi tutte in piedi — e quasi nessun turista in giro." }
+      ]
     }
   ];
 
@@ -716,8 +838,8 @@
     const costo = litri * prezzo;
     const kmEl = card.querySelector(".card-km");
     const priceEl = card.querySelector(".card-price");
-    if(kmEl) kmEl.textContent = `${km} km`;
-    if(priceEl) priceEl.textContent = `€${costo.toFixed(2)}`;
+    if(kmEl) kmEl.textContent = `📍 ${km} km`;
+    if(priceEl) priceEl.textContent = `⛽ €${costo.toFixed(2)}`;
   }
 
   function mapsQuery(t){ return encodeURIComponent(t.query); }
@@ -733,10 +855,11 @@
     const wazeUrl = `https://waze.com/ul?q=${mapsQuery(it.tappe[0])}&navigate=yes`;
 
     card.innerHTML = `
+      <div class="card-frame">
       <div class="card-topbar">
-        <span class="card-km">…</span>
+        <span class="card-km" title="Km totali del giro">📍 …</span>
         <span class="card-title">${it.titolo}</span>
-        <span class="card-price">…</span>
+        <span class="card-price" title="Stima costo benzina">⛽ …</span>
       </div>
       ${it.foto ? `
       <div class="itinerario-photo">
@@ -776,6 +899,7 @@
             </li>
           `).join("")}
         </ul>
+      </div>
       </div>
       </div>
     `;

@@ -37,8 +37,14 @@
   }
 
   .itinerario-card{
-    background:var(--asphalt); border:1px solid rgba(245,240,230,0.16);
-    flex:0 0 min(560px, 88vw); scroll-snap-align:center; overflow:hidden;
+    background:linear-gradient(155deg, var(--gold) 0%, var(--rust) 100%);
+    padding:5px;
+    flex:0 0 min(560px, 88vw); scroll-snap-align:center;
+    box-shadow:0 24px 50px -26px rgba(0,0,0,0.75);
+  }
+  .card-frame{
+    background:var(--asphalt); overflow:hidden; height:100%;
+    border:1px solid rgba(27,26,23,0.6);
   }
   .card-topbar{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -55,9 +61,18 @@
     font-size:0.95rem; color:var(--sand); text-align:center; line-height:1.25;
     flex-grow:1; padding:0 8px;
   }
-  .itinerario-card-body{ padding:34px; }
-  .itinerario-photo{ aspect-ratio:16/9; overflow:hidden; background:var(--asphalt-2); }
+  .itinerario-card-body{ padding:26px 34px 34px; }
+  .itinerario-photo{
+    position:relative; aspect-ratio:16/9; overflow:hidden;
+    background:var(--asphalt-2); margin:16px 16px 0;
+    border:1px solid rgba(217,164,65,0.45);
+  }
   .itinerario-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .itinerario-photo::before, .itinerario-photo::after{
+    content:""; position:absolute; width:16px; height:16px; z-index:1; pointer-events:none;
+  }
+  .itinerario-photo::before{ top:-1px; left:-1px; border-top:2px solid var(--gold); border-left:2px solid var(--gold); }
+  .itinerario-photo::after{ bottom:-1px; right:-1px; border-bottom:2px solid var(--gold); border-right:2px solid var(--gold); }
   .itinerario-card-head{
     display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
   }
@@ -212,12 +227,14 @@
     </div>
 
     <div class="itinerari-note">
-      <strong>Prima di partire:</strong> i passi di montagna sono aperti
-      indicativamente da maggio/giugno a ottobre, meteo permettendo —
-      controlla sempre lo stato di apertura del valico e le previsioni
-      del giorno stesso, porta abbigliamento a strati (in quota le
-      temperature scendono molto rispetto alla pianura) e adatta
-      l'andatura a tornanti stretti e asfalto spesso umido o rovinato.
+      <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
+      totali andata e ritorno dal punto di partenza scelto e ⛽ è la stima del
+      costo di benzina calcolata con i parametri qui sopra. I passi di
+      montagna sono aperti indicativamente da maggio/giugno a ottobre, meteo
+      permettendo — controlla sempre lo stato di apertura del valico e le
+      previsioni del giorno stesso, porta abbigliamento a strati (in quota le
+      temperature scendono molto rispetto alla pianura) e adatta l'andatura a
+      tornanti stretti e asfalto spesso umido o rovinato.
     </div>
   </div>
 </section>
@@ -377,6 +394,72 @@
         { nome: "Campo Imperatore", query: "Campo Imperatore AQ", label: "l'altopiano a 2000 m, il 'Piccolo Tibet'", fun: "Qui hanno girato scene western — e appena arrivi capisci esattamente perché." },
         { nome: "Rocca Calascio", query: "Rocca Calascio AQ", label: "fortezza panoramica tra le più alte d'Italia", fun: "La rocca più fotografata d'Abruzzo, sullo sfondo di praticamente ogni film ambientato quassù." }
       ]
+    },
+    {
+      zona: "Dolomiti Ampezzane", km: "1-2 giorni consigliati", titolo: "Passo Giau, il balcone delle Dolomiti",
+      desc: "Uno dei passi più fotografati e più amati d'Italia, spesso tappa del Giro d'Italia: da Cortina d'Ampezzo si sale tra tornanti panoramici fino a 2236 m, con vista sul Gruppo del Nuvolau e sulla Croda da Lago.",
+      meteoPlace: "Cortina d'Ampezzo",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_di_Giau.jpg",
+      tappe: [
+        { nome: "Cortina d'Ampezzo", query: "Cortina d'Ampezzo BL", label: "la 'Regina delle Dolomiti'", fun: "Location olimpica due volte (1956 e 2026) — arrivarci in moto è comunque la medaglia migliore." },
+        { nome: "Passo Giau", query: "Passo Giau", label: "2236 m, tornanti panoramici sul Nuvolau", fun: "Uno dei passi più fotografati d'Italia — preparati a condividerlo con parecchi altri obiettivi." },
+        { nome: "Selva di Cadore", query: "Selva di Cadore BL", label: "versante opposto del passo", fun: "La discesa che ti fa capire perché i ciclisti del Giro arrivano quassù distrutti — e felici." }
+      ]
+    },
+    {
+      zona: "Valnerina", km: "1-2 giorni consigliati", titolo: "La Cascata delle Marmore e la Valnerina",
+      desc: "Una meta più vicina e accessibile delle altre, ma non meno spettacolare: la Cascata delle Marmore, tra le cascate artificiali più alte d'Europa (165 m, creata dai Romani), e la Valnerina che si snoda tra gole e borghi tra i meno turistici dell'Umbria.",
+      meteoPlace: "Terni",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cascata_delle_Marmore_2.JPG",
+      tappe: [
+        { nome: "Terni", query: "Terni centro", label: "punto di partenza umbro", fun: "Città industriale con una sorpresa naturale a due passi — non giudicarla dalla prima impressione." },
+        { nome: "Cascata delle Marmore", query: "Cascata delle Marmore", label: "165 m, tra le cascate artificiali più alte d'Europa", fun: "Costruita dai Romani più di duemila anni fa — un'opera idraulica che fa impallidire certi cantieri moderni." },
+        { nome: "Ferentillo", query: "Ferentillo TR", label: "borgo nella gola della Valnerina", fun: "Un paese diviso in due dal fiume, con vista su una delle valli più strette e verdi dell'Umbria." }
+      ]
+    },
+    {
+      zona: "Val d'Orcia", km: "2-3 giorni consigliati", titolo: "Val d'Orcia, tra strade bianche e colline UNESCO",
+      desc: "Il paesaggio toscano più fotografato al mondo, patrimonio UNESCO: cipressi solitari, colline dorate e le celebri 'strade bianche' sterrate che attraversano la Val d'Orcia tra Pienza, San Quirico e Montalcino.",
+      meteoPlace: "Pienza",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Pienza_italy.jpg",
+      tappe: [
+        { nome: "Pienza", query: "Pienza SI", label: "la città ideale rinascimentale, UNESCO", fun: "Ripensata a tavolino nel Quattrocento come 'città ideale' — oggi è ideale soprattutto per una sosta con vista." },
+        { nome: "San Quirico d'Orcia", query: "San Quirico d'Orcia SI", label: "borgo e Orti Leonini", fun: "Il cuore geografico della Val d'Orcia — e si vede, nel senso migliore possibile." },
+        { nome: "Montalcino", query: "Montalcino SI", label: "patria del Brunello", fun: "Un bicchiere di Brunello a fine giornata è quasi un obbligo morale, da queste parti." }
+      ]
+    },
+    {
+      zona: "Valle d'Itria", km: "3-4 giorni consigliati", titolo: "Valle d'Itria, il regno dei trulli",
+      desc: "Un cambio di scenario totale rispetto al resto della lista: la Puglia dei trulli, tra Alberobello (patrimonio UNESCO), le stradine bianche di Locorotondo e i muretti a secco di Cisternino, tra gli 'i borghi più belli d'Italia'.",
+      meteoPlace: "Alberobello",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Alberobello_Trulli.jpg",
+      tappe: [
+        { nome: "Alberobello", query: "Alberobello trulli", label: "i trulli, patrimonio UNESCO", fun: "Un intero quartiere di casette a cono bianche — sembra un set giocattolo, invece ci vive gente vera." },
+        { nome: "Locorotondo", query: "Locorotondo BA", label: "borgo bianco a pianta circolare", fun: "Il nome non mente: il centro storico è letteralmente un cerchio perfetto." },
+        { nome: "Cisternino", query: "Cisternino BR", label: "uno dei borghi più belli d'Italia", fun: "Vicoli bianchi, fiori ovunque, e le celebri 'fornelle' pronte per la bombetta a fine giro." }
+      ]
+    },
+    {
+      zona: "Monti Sibillini", km: "2-3 giorni consigliati", titolo: "Castelluccio di Norcia e il Piano Grande",
+      desc: "Un altopiano carsico immenso a 1450 m, che a fine giugno si colora con la celebre 'Fioritura' delle lenticchie — uno degli spettacoli naturali più fotografati d'Italia. Norcia, gravemente colpita dal sisma del 2016, è oggi in piena ricostruzione.",
+      meteoPlace: "Norcia",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Piano_Grande_-_Castelluccio.jpg",
+      tappe: [
+        { nome: "Norcia", query: "Norcia PG", label: "patria della norcineria, in ricostruzione dopo il sisma 2016", fun: "La città che ha dato il nome ai norcini di tutta Italia — merita la sosta anche solo per rispetto, come Amatrice." },
+        { nome: "Castelluccio di Norcia", query: "Castelluccio di Norcia", label: "Piano Grande, la 'Fioritura' a fine giugno", fun: "A fine giugno i campi si colorano come una tavolozza — controlla il periodo prima di partire, la fioritura dura poco." },
+        { nome: "Forca di Presta", query: "Forca di Presta", label: "valico verso le Marche", fun: "Il punto più alto del giro, e anche il confine informale tra Umbria e Marche." }
+      ]
+    },
+    {
+      zona: "Livigno", km: "1-2 giorni consigliati", titolo: "Livigno e il Passo di Foscagno",
+      desc: "La 'piccola Svizzera' italiana: Livigno, zona extra-doganale a 1800 m, raggiunta attraverso il Passo di Foscagno, meno famoso dello Stelvio ma altrettanto panoramico, con vista sulle Alpi Retiche.",
+      meteoPlace: "Livigno",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Livigno_-_Comune_di_Livigno_-_2023-09-06_00-39-00_001.JPG",
+      tappe: [
+        { nome: "Passo dell'Eira", query: "Passo dell'Eira", label: "primo valico prima di Foscagno", fun: "Il preludio del Foscagno — se ti sembra già bello qui, aspetta il prossimo passo." },
+        { nome: "Passo di Foscagno", query: "Passo di Foscagno", label: "2291 m, valico verso Livigno", fun: "Meno cartoline dello Stelvio, stessa vista da togliere il fiato — e molto meno traffico." },
+        { nome: "Livigno", query: "Livigno SO", label: "zona extra-doganale a 1800 m", fun: "Prezzi da zona franca e panorami da cartolina — un motivo in più per fermarsi almeno una notte." }
+      ]
     }
   ];
 
@@ -462,14 +545,14 @@
     const priceEl = card.querySelector(".card-price");
     const km = await estimateKm(it);
     if(km == null){
-      if(kmEl) kmEl.textContent = "— km";
-      if(priceEl) priceEl.textContent = "—";
+      if(kmEl) kmEl.textContent = "📍 — km";
+      if(priceEl) priceEl.textContent = "⛽ —";
       return;
     }
     const litri = km / consumo;
     const costo = litri * prezzo;
-    if(kmEl) kmEl.textContent = `${km} km a/r`;
-    if(priceEl) priceEl.textContent = `€${costo.toFixed(2)}`;
+    if(kmEl) kmEl.textContent = `📍 ${km} km a/r`;
+    if(priceEl) priceEl.textContent = `⛽ €${costo.toFixed(2)}`;
   }
 
   function mapsQuery(t){ return encodeURIComponent(t.query); }
@@ -485,10 +568,11 @@
     const wazeUrl = `https://waze.com/ul?q=${mapsQuery(it.tappe[0])}&navigate=yes`;
 
     card.innerHTML = `
+      <div class="card-frame">
       <div class="card-topbar">
-        <span class="card-km">…</span>
+        <span class="card-km" title="Km totali andata e ritorno">📍 …</span>
         <span class="card-title">${it.titolo}</span>
-        <span class="card-price">…</span>
+        <span class="card-price" title="Stima costo benzina">⛽ …</span>
       </div>
       ${it.foto ? `
       <div class="itinerario-photo">
@@ -528,6 +612,7 @@
             </li>
           `).join("")}
         </ul>
+      </div>
       </div>
       </div>
     `;
