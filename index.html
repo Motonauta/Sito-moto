@@ -180,15 +180,16 @@
 
   /* Desktop: cartolina larga, piena di info, niente click-to-expand (già tutto visibile) */
   @media (min-width:861px){
-    .itinerari-carousel{ max-width:min(1150px, 92vw); }
+    .itinerari-carousel{ max-width:min(800px, 64vw); }
     .itinerario-card{ cursor:default; }
     .card-compact-actions,
     .card-more-btn{ display:none; }
-    .itinerario-card-body{ display:block; padding:36px 46px 46px; }
-    .card-topbar{ padding:20px 30px; }
-    .card-topbar .card-km, .card-topbar .card-price{ font-size:0.88rem; }
-    .card-topbar .card-title{ font-size:1.15rem; }
-    .card-weather-bar{ padding:14px 30px; }
+    .itinerario-card-body{ display:block; padding:25px 32px 32px; }
+    .card-topbar{ padding:14px 21px; }
+    .card-topbar .card-km, .card-topbar .card-price{ font-size:0.7rem; }
+    .card-topbar .card-title{ font-size:0.85rem; }
+    .card-weather-bar{ padding:10px 21px; }
+    .card-frame{ max-height:78vh; overflow-y:auto; overflow-x:hidden; }
   }
 </style>
 </head>
