@@ -14,7 +14,10 @@
     display:grid; grid-template-columns:1fr 1fr; gap:1px;
     background:rgba(245,240,230,0.14); margin-top:34px;
   }
-  .itinerario-card{ background:var(--asphalt); padding:34px; }
+  .itinerario-card{ background:var(--asphalt); padding:0; overflow:hidden; }
+  .itinerario-card-body{ padding:34px; }
+  .itinerario-photo{ aspect-ratio:16/9; overflow:hidden; background:var(--asphalt-2); }
+  .itinerario-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
   .itinerario-card-head{
     display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
   }
@@ -453,6 +456,7 @@
       zona: "Castelli Romani", km: "circa 90 km", kmNum: 90, titolo: "Il classico dei due laghi",
       desc: "Il giro più breve e più gettonato per chi parte da Roma: due laghi vulcanici, borghi affacciati sul cratere e la porchetta ad Ariccia a fine giro. Perfetto anche per chi ha solo mezza giornata.",
       meteoPlace: "Ariccia",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lago_di_Albano,_a_Castel_Gandolfo_31.JPG",
       tappe: [
         { nome: "Ariccia", query: "Ariccia RM", label: "il ponte monumentale e la porchetta", fun: "Fermati per la porchetta, resta per il secondo giro — succede sempre." },
         { nome: "Castel Gandolfo", query: "Castel Gandolfo RM", label: "vista sul Lago Albano", fun: "Vista sul lago che i Papi hanno scelto per le vacanze: un motivo ci sarà." },
@@ -465,6 +469,7 @@
       zona: "Monti Simbruini", km: "circa 200 km", kmNum: 200, titolo: "Curve pure verso la montagna",
       desc: "Il giro per chi cerca solo curve: da Subiaco si sale tra i boschi fino a Filettino, il comune più alto del Lazio. Asfalto tecnico, poco traffico, aria di montagna.",
       meteoPlace: "Subiaco",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Monastero_di_Santa_Scolastica_(Subiaco).jpg",
       tappe: [
         { nome: "Subiaco", query: "Subiaco RM", label: "monastero di Santa Scolastica", fun: "Il monastero è del VI secolo, le curve per arrivarci sembrano nuove di zecca." },
         { nome: "Jenne", query: "Jenne RM", label: "borgo panoramico sull'Aniene", fun: "Un balcone sull'Aniene che nessuno ti ha mai consigliato — ora sì." },
@@ -476,6 +481,7 @@
       zona: "Litorale Pontino", km: "circa 260 km", kmNum: 260, titolo: "Mare, dune e borghi da guardare dall'alto",
       desc: "La costa che da Sabaudia scende verso sud: pineta del Circeo, promontorio con vista sul golfo, e i vicoli bianchi di Sperlonga. Il tratto più lungo dei sei, ma quasi tutto pianeggiante e veloce.",
       meteoPlace: "Sabaudia",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mt_Circeo_from_Sabaudia_Beach.jpg",
       tappe: [
         { nome: "Sabaudia", query: "Sabaudia LT", label: "Selva di Circe", fun: "Pineta, dune e un rettilineo che mette alla prova la pazienza dell'acceleratore." },
         { nome: "San Felice Circeo", query: "San Felice Circeo LT", label: "vista sulla costa dal promontorio", fun: "Da quassù il golfo sembra finto — non lo è, è solo troppo bello." },
@@ -487,6 +493,7 @@
       zona: "Laghi della Tuscia", km: "circa 140 km", kmNum: 140, titolo: "Due laghi vulcanici e un anfiteatro etrusco",
       desc: "Un anello tranquillo verso nord: il Lago di Bracciano, i borghi colorati sulle sue sponde, e il Lago di Vico circondato dal verde. Buono anche per chi va in moto da poco.",
       meteoPlace: "Bracciano",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Castello_Orsini-Odescalchi.jpg",
       tappe: [
         { nome: "Bracciano", query: "Bracciano RM castello", label: "il castello Orsini-Odescalchi", fun: "Il castello sembra uscito da una favola, il lago sotto sembra un premio." },
         { nome: "Trevignano Romano", query: "Trevignano Romano RM", label: "lungolago", fun: "Lungolago perfetto per un caffè con la moto ancora calda." },
@@ -498,6 +505,7 @@
       zona: "Sabina e Monti Lucretili", km: "circa 150 km", kmNum: 150, titolo: "Curve scorrevoli e un'abbazia millenaria",
       desc: "Meno battuto dei Castelli Romani ma altrettanto bello: colline di ulivi, la SR314 Licinese tra i tornanti del Parco dei Lucretili, e una sosta all'Abbazia di Farfa che vale il giro da sola.",
       meteoPlace: "Fara in Sabina",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Abbazia_di_Farfa_09.jpg",
       tappe: [
         { nome: "Fara in Sabina", query: "Fara in Sabina RI", label: "borgo tra i Monti Sabini", fun: "Un borgo che guarda il Tevere da lontano, un po' con l'aria di chi sta più in alto." },
         { nome: "Abbazia di Farfa", query: "Abbazia di Farfa", label: "architettura benedettina", fun: "Mille anni di storia, e tu ci arrivi con il casco integrale ancora in mano — nessun giudizio." },
@@ -509,6 +517,7 @@
       zona: "Monti della Tolfa", km: "circa 160 km", kmNum: 160, titolo: "Curve ad alto godimento sopra la costa",
       desc: "Il giro più curvoso e meno conosciuto: da Civitavecchia si sale tra pascoli e panorami sul Tirreno fino a Tolfa e Allumiere, due borghi nati dall'estrazione dell'allume nel Medioevo.",
       meteoPlace: "Civitavecchia",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Tolfa_10-080325.jpg",
       tappe: [
         { nome: "Civitavecchia", query: "Civitavecchia RM porto", label: "punto di partenza sul mare", fun: "Si parte dal mare, si punta dritti verso le curve — il porto può aspettare." },
         { nome: "Tolfa", query: "Tolfa RM", label: "piazza panoramica del borgo", fun: "Una piazza panoramica pensata apposta per farti scendere a fare foto." },
@@ -519,6 +528,7 @@
       zona: "Ciociaria", km: "circa 190 km", kmNum: 190, titolo: "Il Balcone della Ciociaria e l'Acropoli di Alatri",
       desc: "Verso sud-est, tra colline e antiche mura poligonali: Alatri con la sua Acropoli millenaria, il lago di Canterno e il borgo-fortezza di Fumone, arroccato su uno sperone roccioso visibile da tutta la valle.",
       meteoPlace: "Alatri",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Acropoli_di_Alatri.jpg",
       tappe: [
         { nome: "Alatri", query: "Acropoli Alatri FR", label: "Acropoli e mura poligonali", fun: "Mura costruite prima dei Romani: fanno sembrare recente pure la tua moto." },
         { nome: "Lago di Canterno", query: "Lago di Canterno FR", label: "specchio d'acqua tra i monti Ernici", fun: "Un lago che pochi conoscono fuori dalla provincia — motivo in più per andarci." },
@@ -530,6 +540,7 @@
       zona: "Valle di Comino", km: "circa 260 km", kmNum: 260, titolo: "Curve tra Alvito, Atina e Picinisco",
       desc: "Ai piedi delle Mainarde, al confine con l'Abruzzo: un anello tra borghi meno turistici, con curve continue e panorami sulla valle circondata dai monti. Atina è nota per l'olio, Picinisco per i formaggi di malga.",
       meteoPlace: "Alvito",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Alvito_Palazzo_Ducale,_DSC02531.JPG",
       tappe: [
         { nome: "Alvito", query: "Alvito FR", label: "borgo medievale sotto il castello", fun: "Il castello guarda la valle da secoli, tu ci arrivi in una mattinata." },
         { nome: "Atina", query: "Atina FR", label: "capitale dell'olio della Valle di Comino", fun: "Porta a casa una bottiglia d'olio, se resta spazio libero dai bagagli." },
@@ -541,6 +552,7 @@
       zona: "Tuscia Etrusca", km: "circa 270 km", kmNum: 270, titolo: "Da Orte a Civita di Bagnoregio",
       desc: "Un giro più lungo verso il confine con l'Umbria: il borgo medievale di Orte, Montefiascone panoramica sul Lago di Bolsena, e la spettacolare Civita di Bagnoregio, la 'città che muore' raggiungibile solo a piedi da un ponte sospeso.",
       meteoPlace: "Bagnoregio",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Civita_(Bagnoregio)_-_Panorama.jpg",
       tappe: [
         { nome: "Orte", query: "Orte VT centro storico", label: "borgo medievale su rupe di tufo", fun: "Un borgo su una rupe di tufo che dall'autostrada nessuno si aspetta." },
         { nome: "Montefiascone", query: "Montefiascone VT", label: "vista panoramica sul Lago di Bolsena", fun: "Vista sul lago e un vino, l'Est! Est!! Est!!!, che ha una storia da raccontare al bar." },
@@ -552,6 +564,7 @@
       zona: "Monti Prenestini", km: "circa 120 km", kmNum: 120, titolo: "Palestrina, Genazzano e Olevano Romano",
       desc: "Un giro breve verso est, buono anche per una mezza giornata: il Santuario della Fortuna Primigenia di Palestrina, i vicoli di Genazzano e i vigneti di Olevano Romano, tra i più noti del Lazio.",
       meteoPlace: "Palestrina",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Palestrina_-_Santuario_della_Fortuna_Primigenia_-_vista_della_rampa_di_sinistra.jpg",
       tappe: [
         { nome: "Palestrina", query: "Palestrina RM santuario", label: "Santuario della Fortuna Primigenia", fun: "Un santuario romano così grande che ci hanno costruito sopra mezza città." },
         { nome: "Genazzano", query: "Genazzano RM", label: "borgo medievale e Castello Colonna", fun: "Vicoli stretti, castello imponente — la moto la lasci fuori dalle mura, giurin giurello." },
@@ -562,6 +575,7 @@
       zona: "Terminillo e la Salaria", km: "circa 200 km", kmNum: 200, titolo: "Curve di montagna sopra Rieti",
       desc: "La Salaria che segue il corso del Velino fino a Rieti, poi la salita verso il Terminillo, 'la montagna di Roma': tornanti continui, aria di montagna e panorami sulla conca reatina.",
       meteoPlace: "Rieti",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Panoramica_monte_Terminillo.jpg",
       tappe: [
         { nome: "Rieti", query: "Rieti centro storico", label: "conca reatina e centro storico", fun: "Il centro esatto d'Italia, dicono — buon motivo per fermarsi a fare benzina." },
         { nome: "Terminillo", query: "Terminillo RI", label: "la 'montagna di Roma', tornanti fino a 1600 m", fun: "D'estate curve fresche, d'inverno neve — controlla il calendario prima di partire." },
@@ -572,6 +586,7 @@
       zona: "Valle dell'Aniene", km: "circa 100 km", kmNum: 100, titolo: "Tivoli, Villa Adriana e i borghi dell'Aniene",
       desc: "Il giro più corto e più semplice, perfetto per chi ha solo una mattinata: Tivoli con le sue ville UNESCO, poi risalendo la valle dell'Aniene tra Vicovaro, Arsoli e Roviano.",
       meteoPlace: "Tivoli",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Villa_d%27Este_01.jpg",
       tappe: [
         { nome: "Tivoli", query: "Villa d'Este Tivoli RM", label: "Villa d'Este e le sue fontane", fun: "Fontane che zampillano da 500 anni: la manutenzione, quella sì, fa impressione." },
         { nome: "Vicovaro", query: "Vicovaro RM", label: "borgo sull'Aniene", fun: "Un borgo che pochi romani hanno visto, a un'ora scarsa da casa." },
@@ -583,6 +598,7 @@
       zona: "Golfo di Gaeta", km: "circa 290 km", kmNum: 290, titolo: "Formia, Gaeta e la Via Flacca",
       desc: "Il giro più lungo, da fare con calma: la costa verso sud fino a Gaeta, il promontorio con vista sul golfo, e il ritorno lungo la panoramica Via Flacca scavata nella roccia sopra il mare.",
       meteoPlace: "Gaeta",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Panorama-gaeta.jpg",
       tappe: [
         { nome: "Formia", query: "Formia LT lungomare", label: "lungomare e porto", fun: "Il lungomare per il primo caffè, il resto del golfo per il resto della giornata." },
         { nome: "Gaeta", query: "Gaeta LT Montagna Spaccata", label: "Montagna Spaccata e centro storico", fun: "Una montagna 'spaccata' letteralmente in due — la leggenda dice dal terremoto della crocifissione." },
@@ -594,6 +610,7 @@
       zona: "Etruria Meridionale", km: "circa 210 km", kmNum: 210, titolo: "Le necropoli etrusche di Cerveteri e Tarquinia",
       desc: "Un giro storico-costiero verso nord: la necropoli della Banditaccia a Cerveteri, patrimonio UNESCO, e le tombe dipinte di Tarquinia, tra le testimonianze etrusche meglio conservate al mondo.",
       meteoPlace: "Tarquinia",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cerveteri,_necropoli_della_banditaccia,_via_sepolcrale_principale,_01.jpg",
       tappe: [
         { nome: "Cerveteri", query: "Necropoli della Banditaccia Cerveteri", label: "necropoli della Banditaccia (UNESCO)", fun: "Una città dei morti più organizzata di certi centri abitati moderni." },
         { nome: "Tarquinia", query: "Tarquinia VT necropoli", label: "tombe etrusche dipinte", fun: "Affreschi di 2500 anni fa più vivaci di certi filtri Instagram di oggi." },
@@ -604,6 +621,7 @@
       zona: "Monti della Laga", km: "circa 300 km", kmNum: 300, titolo: "Verso Amatrice, al confine tra tre regioni",
       desc: "Il giro più impegnativo dei venti, da affrontare con partenza presto: la Salaria fino ad Amatrice, ai piedi dei Monti della Laga, al confine tra Lazio, Abruzzo e Marche. Zona colpita dal sisma 2016, oggi in ricostruzione — un giro anche per non dimenticare.",
       meteoPlace: "Amatrice",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Amatrice.JPG",
       tappe: [
         { nome: "Antrodoco", query: "Antrodoco RI", label: "porta della Salaria verso l'Abruzzo", fun: "Da qui la Salaria comincia a salire sul serio — scalda bene i freni." },
         { nome: "Amatrice", query: "Amatrice RI", label: "borgo simbolo della ricostruzione post-sisma", fun: "La patria dell'amatriciana merita la sosta, anche solo per rispetto." },
@@ -614,6 +632,7 @@
       zona: "Valle del Liri", km: "circa 190 km", kmNum: 190, titolo: "Frosinone, la cascata di Isola del Liri e l'Abbazia di Casamari",
       desc: "Un giro tra industria antica e natura: la cascata che taglia in due il centro di Isola del Liri, e l'Abbazia cistercense di Casamari, silenziosa e ben conservata, poco fuori Veroli.",
       meteoPlace: "Isola del Liri",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Isola_del_Liri_-_Cascata_Grande_-_2007.JPG",
       tappe: [
         { nome: "Frosinone", query: "Frosinone centro", label: "centro storico su un colle", fun: "Poco raccontata, ma la vista dal centro storico ripaga il pieno di benzina." },
         { nome: "Isola del Liri", query: "Cascata grande Isola del Liri", label: "cascata nel cuore del centro cittadino", fun: "Una cascata in mezzo alla città — capita raramente di fermarsi al semaforo con questa vista." },
@@ -625,6 +644,7 @@
       zona: "Laghi Reatini", km: "circa 210 km", kmNum: 210, titolo: "Lago del Turano e Lago del Salto",
       desc: "Due laghi artificiali incastonati tra le montagne della Sabina reatina, con strade strette e panoramiche che li costeggiano quasi per intero: meno conosciuti del Trasimeno, non meno belli.",
       meteoPlace: "Rieti",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lago_del_Turano_2020.jpg",
       tappe: [
         { nome: "Rieti", query: "Rieti RI", label: "punto di partenza nella conca reatina", fun: "Si riparte da qui, stavolta verso ovest invece che verso il Terminillo." },
         { nome: "Lago del Turano", query: "Lago del Turano RI", label: "strada panoramica lungolago", fun: "Curve strette sull'acqua, con i borghi che si specchiano nel lago — vai piano, la tentazione di guardare è tanta." },
@@ -636,6 +656,7 @@
       zona: "Monti Ausoni", km: "circa 230 km", kmNum: 230, titolo: "Campodimele, Lenola e Fondi",
       desc: "Colline e monti tra Ciociaria e costa: Campodimele, il 'paese della lunga vita' cinto da mura medievali intatte, Lenola tra gli ulivi, e Fondi con il suo centro storico dal impianto urbanistico romano.",
       meteoPlace: "Campodimele",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Campodimele_2012_by-RaBoe_30.jpg",
       tappe: [
         { nome: "Fondi", query: "Fondi LT centro storico", label: "centro storico a impianto romano", fun: "Le strade sono ancora quelle tracciate dai Romani — occhio ai vicoli stretti in curva." },
         { nome: "Campodimele", query: "Campodimele LT", label: "borgo murato, il 'paese della lunga vita'", fun: "Chiamato così per la longevità dei suoi abitanti — la dieta mediterranea, dicono, qui funziona davvero." },
@@ -646,6 +667,7 @@
       zona: "Valle del Sacco", km: "circa 150 km", kmNum: 150, titolo: "Anagni e Ferentino, la 'Città dei Papi'",
       desc: "Un giro storico tra le città della Ciociaria settentrionale: Anagni con la sua Cattedrale e il celebre 'Schiaffo', e Ferentino con le imponenti mura poligonali meglio conservate del Lazio.",
       meteoPlace: "Anagni",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cattedrale_di_Santa_Maria_(Anagni)_con_campanile.JPG",
       tappe: [
         { nome: "Anagni", query: "Anagni FR cattedrale", label: "Cattedrale e la sala dello Schiaffo", fun: "Qui è successo lo 'schiaffo di Anagni' che la maestra ti raccontava alle medie — ora ci sei davvero." },
         { nome: "Ferentino", query: "Ferentino FR mura poligonali", label: "mura poligonali e acropoli", fun: "Mura costruite senza malta, in piedi da millenni — la tua moto sembra un neonato al confronto." }
@@ -655,6 +677,7 @@
       zona: "Monti Cimini", km: "circa 220 km", kmNum: 220, titolo: "Viterbo, Caprarola e il Lago di Vico",
       desc: "Un giro nella Tuscia viterbese diverso da quello dei laghi: il centro medievale di Viterbo, l'imponente Palazzo Farnese a Caprarola, e i boschi di castagni intorno al Lago di Vico.",
       meteoPlace: "Viterbo",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Palazzo_Farnese_(Caprarola).jpg",
       tappe: [
         { nome: "Viterbo", query: "Viterbo centro storico San Pellegrino", label: "quartiere medievale di San Pellegrino", fun: "Il quartiere medievale meglio conservato del centro Italia — sembra un set cinematografico, invece è vero." },
         { nome: "Caprarola", query: "Palazzo Farnese Caprarola", label: "Palazzo Farnese a pianta pentagonale", fun: "Un palazzo a forma di pentagono costruito per stupire — missione riuscita, ancora oggi." },
@@ -764,6 +787,12 @@
     const wazeUrl = `https://waze.com/ul?q=${mapsQuery(it.tappe[0])}&navigate=yes`;
 
     card.innerHTML = `
+      ${it.foto ? `
+      <div class="itinerario-photo">
+        <img src="${it.foto}" alt="${it.zona}" loading="lazy">
+      </div>
+      ` : ""}
+      <div class="itinerario-card-body">
       <div class="itinerario-card-head">
         <div>
           <p class="marker">${it.zona} — ${it.km}</p>
@@ -800,6 +829,7 @@
             </li>
           `).join("")}
         </ul>
+      </div>
       </div>
     `;
 
