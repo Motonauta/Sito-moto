@@ -3,12 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> il Motonauta — Moto & Viaggi</title>
-<meta name="description" content="Content creator che racconta viaggi in moto, strade e destinazioni.">
+<title>Il Motonauta — Itinerari in moto nel Lazio</title>
+<meta name="description" content="Giri in moto per uscite domenicali nel Lazio, sotto i 300 km: meteo in tempo reale, tappe su Maps, stima costo benzina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
+<style>
+  .itinerari-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:rgba(245,240,230,0.14); margin-top:34px;
+  }
+  .itinerario-card{ background:var(--asphalt); padding:34px; }
+  .itinerario-card-head{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
+  }
+  .itinerario-card .marker{ margin-bottom:10px; }
+  .itinerario-card h3{
+    font-size:1.35rem; color:var(--sand); line-height:1.15;
+  }
+  .itinerario-card p.desc{ margin-top:14px; font-size:0.95rem; }
+
+  .itinerario-weather{
+    flex-shrink:0; text-align:center; font-family:var(--font-mono);
+    background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+    padding:8px 10px;
+  }
+  .itinerario-weather select{
+    background:transparent; border:none; color:var(--cream-dim);
+    font-family:var(--font-mono); font-size:0.62rem; text-transform:uppercase;
+    margin-bottom:4px; width:100%;
+  }
+  .itinerario-weather .w-icon{ font-size:1.3rem; line-height:1; display:block; }
+  .itinerario-weather .w-temp{ font-size:0.78rem; color:var(--cream-dim); display:block; margin-top:4px; }
+  .itinerario-weather .w-place{ font-size:0.6rem; color:var(--cream-dim); opacity:0.7; display:block; margin-top:2px; text-transform:uppercase; }
+
+  .itinerario-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
+  .itinerario-actions a{
+    font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em;
+    padding:10px 16px; border:1px solid var(--rust); color:var(--cream);
+    transition:background .2s ease, color .2s ease;
+  }
+  .itinerario-actions a:hover{ background:var(--rust); }
+  .itinerario-actions a.waze{ border-color:rgba(245,240,230,0.3); }
+  .itinerario-actions a.waze:hover{ background:rgba(245,240,230,0.12); }
+
+  .itinerario-fuel{
+    margin-top:14px; font-family:var(--font-mono); font-size:0.78rem; color:var(--gold);
+  }
+
+  .itinerario-stops{ margin-top:22px; }
+  .itinerario-stops p.label{
+    font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); margin-bottom:12px;
+  }
+  .itinerario-stops ul{ display:flex; flex-direction:column; gap:14px; }
+  .itinerario-stops li{ border-bottom:1px dashed rgba(245,240,230,0.16); padding-bottom:12px; }
+  .itinerario-stops li:last-child{ border-bottom:none; padding-bottom:0; }
+  .itinerario-stops a.stop-link{
+    display:flex; align-items:center; gap:8px;
+    font-size:0.92rem; color:var(--cream); transition:color .2s ease;
+  }
+  .itinerario-stops a.stop-link:hover{ color:var(--gold); }
+  .itinerario-stops a.stop-link::before{ content:"📍"; font-size:0.85em; flex-shrink:0; }
+  .itinerario-stops .fun{
+    margin-top:5px; font-size:0.85rem; color:var(--cream-dim); font-style:italic;
+  }
+  @media (max-width:860px){
+    .itinerari-grid{ grid-template-columns:1fr; }
+  }
+
+  .itinerari-note{
+    margin-top:52px; padding:22px 26px; border:1px dashed var(--gold);
+    font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
+  }
+  .itinerari-note strong{ color:var(--gold); }
+
+  .fuel-calc{
+    margin-top:44px; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+    padding:28px 30px;
+  }
+  .fuel-calc-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:18px; align-items:end;
+  }
+  .fuel-calc label{
+    display:block; font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); margin-bottom:8px;
+  }
+  .fuel-calc select, .fuel-calc input{
+    width:100%; background:var(--asphalt); border:1px solid rgba(245,240,230,0.2);
+    color:var(--cream); padding:11px 12px; font-family:var(--font-body); font-size:0.92rem;
+  }
+  .fuel-calc-note{ margin-top:14px; font-size:0.8rem; color:var(--cream-dim); }
+  @media (max-width:780px){ .fuel-calc-grid{ grid-template-columns:1fr; } }
+</style>
 </head>
 <body>
 
@@ -103,6 +191,8 @@
     </a>
     <nav class="nav-links">
       <a href="index.html" class="active">Home</a>
+      <a href="chi-sono.html">Chi sono</a>
+      <a href="miniviaggi.html">Miniviaggi</a>
       <a href="sponsor.html">Partner</a>
       <a href="moto.html">La mia moto</a>
       <a href="galleria.html">Galleria</a>
@@ -114,60 +204,63 @@
   </div>
 </header>
 
-<!-- HERO ============================================================ -->
-<section style="padding-top:70px; padding-bottom:0;">
-  <div class="wrap feature-grid">
-    <div>
-      <p class="marker">41°53′35″N, 12°28′58″E — partenza</p>
-      <h1 style="font-size:clamp(2.6rem, 7vw, 5.2rem); color:var(--sand);">
-        Due ruote,<br>strade infinite<span style="color:var(--rust);">.</span>
-      </h1>
-      <p style="font-size:1.05rem; margin-top:22px; max-width:52ch;">
-        Ho rotto le scatole ad ogni mio conoscente parlando solo di moto per anni, finchè non ho pensato di sfogare il mio bisogno di documentare avventure e imprevisti nei social! Racconto viaggi in moto, strade dimenticate e destinazioni da vivere
-        d'un fiato. Sono Angelo Cori Carlitto ma mi conosci come " Motonauta ", content creator on the road —
-        questo è il diario del mio casco.
-      </p>
-      <div style="display:flex; gap:16px; margin-top:34px; flex-wrap:wrap;">
-        <a href="galleria.html" class="btn solid">Guarda la galleria</a>
-        <a href="contatti.html" class="btn">Contattami</a>
-      </div>
-    </div>
-    <div class="hero-parallax-frame" style="aspect-ratio:4/5; overflow:hidden;">
-      <img class="hero-parallax" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784825410/IMG_2754_t3n34v.jpg" alt="Angelo, il Motonauta, senza casco" style="width:100%; height:100%; object-fit:cover;">
-    </div>
+<!-- ITINERARI ======================================================== -->
+<section style="padding-top:56px; padding-bottom:0;">
+  <div class="wrap">
+    <p class="marker">Uscite domenicali</p>
+    <h1 style="font-size:clamp(2.4rem, 6vw, 4.4rem); color:var(--sand); max-width:22ch;">
+      Itinerari in moto nel Lazio
+    </h1>
+    <p style="margin-top:18px; font-size:1.02rem; max-width:70ch;">
+      Giri ad anello pensati per una domenica, tutti sotto i 300 km totali
+      partendo da Roma. Meteo aggiornato (anche per i prossimi giorni),
+      tutte le tappe aperte con un click su Maps, e una stima di quanto
+      spendi di benzina.
+    </p>
   </div>
-
-  <svg class="road-line" viewBox="0 -15 1180 210" preserveAspectRatio="none" style="margin-top:56px;">
-    <!-- superficie stradale -->
-    <path class="road-surface" d="M -50 110 C 200 10, 400 170, 650 80 C 900 -10, 1100 0, 1230 90 L 1230 110 C 1100 20, 900 10, 650 100 C 400 190, 200 30, -50 130 Z"/>
-    <!-- bordi della carreggiata -->
-    <path class="road-edge" d="M -50 110 C 200 10, 400 170, 650 80 C 900 -10, 1100 0, 1230 90"/>
-    <path class="road-edge" d="M -50 130 C 200 30, 400 190, 650 100 C 900 10, 1100 20, 1230 110"/>
-    <!-- linea di mezzeria tratteggiata, animata -->
-    <path class="road-center" d="M -50 120 C 200 20, 400 180, 650 90 C 900 0, 1100 10, 1230 100"/>
-  </svg>
 </section>
 
-<!-- CHI SONO ======================================================== -->
-<section class="section-alt">
-  <div class="wrap feature-grid">
-   <div style="aspect-ratio:4/5; overflow:hidden;">
-  <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784732942/IMG_0181_TIF_1_cnyrxh.jpg" alt="Foto profilo" style="width:100%; height:100%; object-fit:cover;">
-</div>
-    <div>
-      <p class="marker">Chi sono</p>
-      <h2>In sella da più di 10 anni,<br>on the road da sempre</h2>
-      <p style="margin-top:20px;">
-        Mi chiamo Angelo e da più di 10 anni giro l'Europa (e non solo)
-        in moto, raccontando ogni tappa tra strade panoramiche, guasti
-        imprevisti e incontri lungo il percorso. Ho iniziato in silenzio,
-        oggi documento tutto: creo contenuti su viaggi, mezzi e vita da
-        centauro per chi sogna la prossima partenza.
+<section style="padding-top:32px;">
+  <div class="wrap">
+
+    <div class="fuel-calc">
+      <p class="marker">Prima di partire</p>
+      <h2 style="font-size:1.3rem; color:var(--sand);">Quanto spendo di benzina?</h2>
+      <div class="fuel-calc-grid">
+        <div>
+          <label for="fuel-cc">Cilindrata moto</label>
+          <select id="fuel-cc">
+            <option value="28">Fino a 125 cc</option>
+            <option value="22" selected>126 – 500 cc</option>
+            <option value="18">501 – 750 cc</option>
+            <option value="15">Oltre 750 cc</option>
+          </select>
+        </div>
+        <div>
+          <label for="fuel-price">Prezzo benzina (€/litro)</label>
+          <input type="number" id="fuel-price" value="1.75" step="0.01" min="0.5" max="4">
+        </div>
+        <div>
+          <label for="fuel-start">Partenza da</label>
+          <input type="text" id="fuel-start" value="Roma" placeholder="Es. Roma">
+        </div>
+      </div>
+      <p class="fuel-calc-note">
+        Stima indicativa: consumo medio per categoria, prezzo benzina che
+        imposti tu (nessun listino in tempo reale), distanza calcolata in
+        linea d'aria con una maggiorazione per le curve reali della strada
+        — non un percorso stradale calcolato davvero.
       </p>
-      <p style="margin-top:16px;">
-        Attualmente giro con BMW S 1000 XR 2021. Ogni viaggio diventa un
-        racconto — foto, video e diari di bordo — condiviso su Instagram, Tik Tok e su questo sito.
-      </p>
+    </div>
+
+    <div class="itinerari-grid" id="itinerari-grid"></div>
+
+    <div class="itinerari-note">
+      <strong>Prima di partire:</strong> i km indicati sono stime approssimative
+      del giro ad anello (andata e ritorno da Roma inclusi), calcolate a
+      tavolino — controlla sempre il percorso su Google Maps il giorno
+      stesso, verifica eventuali strade chiuse o lavori in corso, e adatta
+      l'andatura alle condizioni reali dell'asfalto e al meteo.
     </div>
   </div>
 </section>
@@ -196,7 +289,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
 
 <!-- SUGGERISCI UN'IDEA ============================================== -->
-<section class="section-alt">
+<section class="section-alt" id="idea">
   <div class="wrap" style="max-width:560px;">
     <p class="marker">Hai un'idea?</p>
     <h2>Suggerisci un video</h2>
@@ -275,7 +368,7 @@
 </script>
 
 <!-- COSA FACCIO ===================================================== -->
-<section>
+<section class="section-alt">
   <div class="wrap">
     <p class="marker">Cosa faccio</p>
     <h2 style="max-width:16ch;">Contenuti on the road, dal casco allo schermo</h2>
@@ -301,12 +394,24 @@
 </section>
 
 <!-- MACRO CATEGORIE ================================================= -->
-<section class="section-alt">
+<section>
   <div class="wrap">
     <p class="marker">Esplora</p>
     <h2>Dove vuoi andare?</h2>
 
-    <div class="grid-cards-3" style="margin-top:44px;">
+    <div class="grid-cards-3" style="margin-top:44px; grid-template-columns:repeat(5, 1fr);">
+
+      <a href="chi-sono.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
+        <p class="marker">Il diario</p>
+        <h3 style="font-size:1.4rem; color:var(--sand);">Chi sono</h3>
+        <p style="margin-top:10px; font-size:0.92rem;">La mia storia e come è nato Il Motonauta.</p>
+      </a>
+
+      <a href="miniviaggi.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
+        <p class="marker">Passi e viaggi lunghi</p>
+        <h3 style="font-size:1.4rem; color:var(--sand);">Miniviaggi</h3>
+        <p style="margin-top:10px; font-size:0.92rem;">Stelvio, Tonale e le mete più lontane, per più giorni.</p>
+      </a>
 
       <a href="sponsor.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
         <p class="marker">Collaborazioni</p>
@@ -341,6 +446,389 @@
     <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
   </div>
 </footer>
+
+<script>
+  const ITINERARI = [
+    {
+      zona: "Castelli Romani", km: "circa 90 km", kmNum: 90, titolo: "Il classico dei due laghi",
+      desc: "Il giro più breve e più gettonato per chi parte da Roma: due laghi vulcanici, borghi affacciati sul cratere e la porchetta ad Ariccia a fine giro. Perfetto anche per chi ha solo mezza giornata.",
+      meteoPlace: "Ariccia",
+      tappe: [
+        { nome: "Ariccia", query: "Ariccia RM", label: "il ponte monumentale e la porchetta", fun: "Fermati per la porchetta, resta per il secondo giro — succede sempre." },
+        { nome: "Castel Gandolfo", query: "Castel Gandolfo RM", label: "vista sul Lago Albano", fun: "Vista sul lago che i Papi hanno scelto per le vacanze: un motivo ci sarà." },
+        { nome: "Nemi", query: "Nemi RM", label: "Terrazza degli Innamorati sul lago", fun: "La Terrazza degli Innamorati non giudica se ci arrivi da solo in sella." },
+        { nome: "Rocca di Papa", query: "Via dei Laghi SP217 RM", label: "Via dei Laghi (SP217) — il tratto più bello del giro", fun: "Curve che ti fanno dimenticare che dovevi rientrare per pranzo." },
+        { nome: "Frascati", query: "Frascati RM", label: "ville rinascimentali e vino bianco", fun: "Un bianco frizzante prima di rimettere il casco — o dopo, giurin giurello." }
+      ]
+    },
+    {
+      zona: "Monti Simbruini", km: "circa 200 km", kmNum: 200, titolo: "Curve pure verso la montagna",
+      desc: "Il giro per chi cerca solo curve: da Subiaco si sale tra i boschi fino a Filettino, il comune più alto del Lazio. Asfalto tecnico, poco traffico, aria di montagna.",
+      meteoPlace: "Subiaco",
+      tappe: [
+        { nome: "Subiaco", query: "Subiaco RM", label: "monastero di Santa Scolastica", fun: "Il monastero è del VI secolo, le curve per arrivarci sembrano nuove di zecca." },
+        { nome: "Jenne", query: "Jenne RM", label: "borgo panoramico sull'Aniene", fun: "Un balcone sull'Aniene che nessuno ti ha mai consigliato — ora sì." },
+        { nome: "Trevi nel Lazio", query: "Trevi nel Lazio FR", label: "cascata di Trevi", fun: "La cascata bagna anche l'ego di chi diceva di conoscere già tutte le strade del Lazio." },
+        { nome: "Filettino", query: "Filettino FR", label: "il comune più alto del Lazio", fun: "Qui l'aria è pulita, l'asfalto pure — porta una felpa comunque." }
+      ]
+    },
+    {
+      zona: "Litorale Pontino", km: "circa 260 km", kmNum: 260, titolo: "Mare, dune e borghi da guardare dall'alto",
+      desc: "La costa che da Sabaudia scende verso sud: pineta del Circeo, promontorio con vista sul golfo, e i vicoli bianchi di Sperlonga. Il tratto più lungo dei sei, ma quasi tutto pianeggiante e veloce.",
+      meteoPlace: "Sabaudia",
+      tappe: [
+        { nome: "Sabaudia", query: "Sabaudia LT", label: "Selva di Circe", fun: "Pineta, dune e un rettilineo che mette alla prova la pazienza dell'acceleratore." },
+        { nome: "San Felice Circeo", query: "San Felice Circeo LT", label: "vista sulla costa dal promontorio", fun: "Da quassù il golfo sembra finto — non lo è, è solo troppo bello." },
+        { nome: "Terracina", query: "Tempio di Giove Anxur Terracina", label: "Tempio di Giove Anxur", fun: "Un tempio romano con vista mare: la moto la parcheggi, il fiato resta mozzo." },
+        { nome: "Sperlonga", query: "Sperlonga LT", label: "centro storico e Grotta di Tiberio", fun: "Vicoli troppo stretti per la moto — a piedi però ne vale ogni passo." }
+      ]
+    },
+    {
+      zona: "Laghi della Tuscia", km: "circa 140 km", kmNum: 140, titolo: "Due laghi vulcanici e un anfiteatro etrusco",
+      desc: "Un anello tranquillo verso nord: il Lago di Bracciano, i borghi colorati sulle sue sponde, e il Lago di Vico circondato dal verde. Buono anche per chi va in moto da poco.",
+      meteoPlace: "Bracciano",
+      tappe: [
+        { nome: "Bracciano", query: "Bracciano RM castello", label: "il castello Orsini-Odescalchi", fun: "Il castello sembra uscito da una favola, il lago sotto sembra un premio." },
+        { nome: "Trevignano Romano", query: "Trevignano Romano RM", label: "lungolago", fun: "Lungolago perfetto per un caffè con la moto ancora calda." },
+        { nome: "Sutri", query: "Sutri VT anfiteatro", label: "anfiteatro romano scavato nel tufo", fun: "I Romani sapevano scegliere i posti panoramici pure loro." },
+        { nome: "Ronciglione", query: "Ronciglione VT", label: "Lago di Vico", fun: "Un cratere vulcanico tranquillo — tranquilli, non è più in funzione." }
+      ]
+    },
+    {
+      zona: "Sabina e Monti Lucretili", km: "circa 150 km", kmNum: 150, titolo: "Curve scorrevoli e un'abbazia millenaria",
+      desc: "Meno battuto dei Castelli Romani ma altrettanto bello: colline di ulivi, la SR314 Licinese tra i tornanti del Parco dei Lucretili, e una sosta all'Abbazia di Farfa che vale il giro da sola.",
+      meteoPlace: "Fara in Sabina",
+      tappe: [
+        { nome: "Fara in Sabina", query: "Fara in Sabina RI", label: "borgo tra i Monti Sabini", fun: "Un borgo che guarda il Tevere da lontano, un po' con l'aria di chi sta più in alto." },
+        { nome: "Abbazia di Farfa", query: "Abbazia di Farfa", label: "architettura benedettina", fun: "Mille anni di storia, e tu ci arrivi con il casco integrale ancora in mano — nessun giudizio." },
+        { nome: "Poggio Moiano", query: "Poggio Moiano RI", label: "tra gli uliveti della Sabina", fun: "Ulivi a perdita d'occhio: qui l'olio si fa, non si compra al supermercato." },
+        { nome: "Orvinio", query: "Orvinio RI", label: "uno dei borghi più belli d'Italia", fun: "Probabilmente il meno affollato di motociclisti di tutto l'elenco — approfittane." }
+      ]
+    },
+    {
+      zona: "Monti della Tolfa", km: "circa 160 km", kmNum: 160, titolo: "Curve ad alto godimento sopra la costa",
+      desc: "Il giro più curvoso e meno conosciuto: da Civitavecchia si sale tra pascoli e panorami sul Tirreno fino a Tolfa e Allumiere, due borghi nati dall'estrazione dell'allume nel Medioevo.",
+      meteoPlace: "Civitavecchia",
+      tappe: [
+        { nome: "Civitavecchia", query: "Civitavecchia RM porto", label: "punto di partenza sul mare", fun: "Si parte dal mare, si punta dritti verso le curve — il porto può aspettare." },
+        { nome: "Tolfa", query: "Tolfa RM", label: "piazza panoramica del borgo", fun: "Una piazza panoramica pensata apposta per farti scendere a fare foto." },
+        { nome: "Allumiere", query: "Allumiere RM", label: "borgo delle miniere di allume", fun: "Un nome che sa di chimica, un borgo che sa di storia mineraria vera." }
+      ]
+    },
+    {
+      zona: "Ciociaria", km: "circa 190 km", kmNum: 190, titolo: "Il Balcone della Ciociaria e l'Acropoli di Alatri",
+      desc: "Verso sud-est, tra colline e antiche mura poligonali: Alatri con la sua Acropoli millenaria, il lago di Canterno e il borgo-fortezza di Fumone, arroccato su uno sperone roccioso visibile da tutta la valle.",
+      meteoPlace: "Alatri",
+      tappe: [
+        { nome: "Alatri", query: "Acropoli Alatri FR", label: "Acropoli e mura poligonali", fun: "Mura costruite prima dei Romani: fanno sembrare recente pure la tua moto." },
+        { nome: "Lago di Canterno", query: "Lago di Canterno FR", label: "specchio d'acqua tra i monti Ernici", fun: "Un lago che pochi conoscono fuori dalla provincia — motivo in più per andarci." },
+        { nome: "Fumone", query: "Fumone FR", label: "borgo-fortezza panoramico", fun: "Da quassù, dicono, si vedono cinque regioni. Conta tu quante ne trovi." },
+        { nome: "Balcone della Ciociaria", query: "Monte Fioresta Ciociaria FR", label: "punto panoramico sulla valle", fun: "Un nome che è già una promessa, e per una volta la mantiene." }
+      ]
+    },
+    {
+      zona: "Valle di Comino", km: "circa 260 km", kmNum: 260, titolo: "Curve tra Alvito, Atina e Picinisco",
+      desc: "Ai piedi delle Mainarde, al confine con l'Abruzzo: un anello tra borghi meno turistici, con curve continue e panorami sulla valle circondata dai monti. Atina è nota per l'olio, Picinisco per i formaggi di malga.",
+      meteoPlace: "Alvito",
+      tappe: [
+        { nome: "Alvito", query: "Alvito FR", label: "borgo medievale sotto il castello", fun: "Il castello guarda la valle da secoli, tu ci arrivi in una mattinata." },
+        { nome: "Atina", query: "Atina FR", label: "capitale dell'olio della Valle di Comino", fun: "Porta a casa una bottiglia d'olio, se resta spazio libero dai bagagli." },
+        { nome: "Picinisco", query: "Picinisco FR", label: "borgo di montagna e formaggi di malga", fun: "L'aria di montagna qui si sente anche nel formaggio, giuro." },
+        { nome: "San Donato Val di Comino", query: "San Donato Val di Comino FR", label: "vista sulla valle e le Mainarde", fun: "Le Mainarde da qui sembrano una scenografia — sono verissime." }
+      ]
+    },
+    {
+      zona: "Tuscia Etrusca", km: "circa 270 km", kmNum: 270, titolo: "Da Orte a Civita di Bagnoregio",
+      desc: "Un giro più lungo verso il confine con l'Umbria: il borgo medievale di Orte, Montefiascone panoramica sul Lago di Bolsena, e la spettacolare Civita di Bagnoregio, la 'città che muore' raggiungibile solo a piedi da un ponte sospeso.",
+      meteoPlace: "Bagnoregio",
+      tappe: [
+        { nome: "Orte", query: "Orte VT centro storico", label: "borgo medievale su rupe di tufo", fun: "Un borgo su una rupe di tufo che dall'autostrada nessuno si aspetta." },
+        { nome: "Montefiascone", query: "Montefiascone VT", label: "vista panoramica sul Lago di Bolsena", fun: "Vista sul lago e un vino, l'Est! Est!! Est!!!, che ha una storia da raccontare al bar." },
+        { nome: "Bolsena", query: "Bolsena VT lago", label: "lungolago e centro storico", fun: "Il lago vulcanico più grande d'Europa, e tu ci giri intorno in moto come se niente fosse." },
+        { nome: "Civita di Bagnoregio", query: "Civita di Bagnoregio VT", label: "la 'città che muore' sul ponte sospeso", fun: "Si chiama così perché l'erosione se la sta mangiando piano — vacci prima che la moda la scopra del tutto." }
+      ]
+    },
+    {
+      zona: "Monti Prenestini", km: "circa 120 km", kmNum: 120, titolo: "Palestrina, Genazzano e Olevano Romano",
+      desc: "Un giro breve verso est, buono anche per una mezza giornata: il Santuario della Fortuna Primigenia di Palestrina, i vicoli di Genazzano e i vigneti di Olevano Romano, tra i più noti del Lazio.",
+      meteoPlace: "Palestrina",
+      tappe: [
+        { nome: "Palestrina", query: "Palestrina RM santuario", label: "Santuario della Fortuna Primigenia", fun: "Un santuario romano così grande che ci hanno costruito sopra mezza città." },
+        { nome: "Genazzano", query: "Genazzano RM", label: "borgo medievale e Castello Colonna", fun: "Vicoli stretti, castello imponente — la moto la lasci fuori dalle mura, giurin giurello." },
+        { nome: "Olevano Romano", query: "Olevano Romano RM", label: "vigneti e cantine tra le colline", fun: "Un Cesanese buono quanto le curve che ti ci hanno portato." }
+      ]
+    },
+    {
+      zona: "Terminillo e la Salaria", km: "circa 200 km", kmNum: 200, titolo: "Curve di montagna sopra Rieti",
+      desc: "La Salaria che segue il corso del Velino fino a Rieti, poi la salita verso il Terminillo, 'la montagna di Roma': tornanti continui, aria di montagna e panorami sulla conca reatina.",
+      meteoPlace: "Rieti",
+      tappe: [
+        { nome: "Rieti", query: "Rieti centro storico", label: "conca reatina e centro storico", fun: "Il centro esatto d'Italia, dicono — buon motivo per fermarsi a fare benzina." },
+        { nome: "Terminillo", query: "Terminillo RI", label: "la 'montagna di Roma', tornanti fino a 1600 m", fun: "D'estate curve fresche, d'inverno neve — controlla il calendario prima di partire." },
+        { nome: "Leonessa", query: "Leonessa RI", label: "borgo ai piedi dei Monti Reatini", fun: "Un nome altisonante per un borgo tranquillo — la fama del leone se l'è tenuta per sé." }
+      ]
+    },
+    {
+      zona: "Valle dell'Aniene", km: "circa 100 km", kmNum: 100, titolo: "Tivoli, Villa Adriana e i borghi dell'Aniene",
+      desc: "Il giro più corto e più semplice, perfetto per chi ha solo una mattinata: Tivoli con le sue ville UNESCO, poi risalendo la valle dell'Aniene tra Vicovaro, Arsoli e Roviano.",
+      meteoPlace: "Tivoli",
+      tappe: [
+        { nome: "Tivoli", query: "Villa d'Este Tivoli RM", label: "Villa d'Este e le sue fontane", fun: "Fontane che zampillano da 500 anni: la manutenzione, quella sì, fa impressione." },
+        { nome: "Vicovaro", query: "Vicovaro RM", label: "borgo sull'Aniene", fun: "Un borgo che pochi romani hanno visto, a un'ora scarsa da casa." },
+        { nome: "Arsoli", query: "Arsoli RM castello", label: "castello Massimo panoramico", fun: "Un castello ancora abitato — occhio a chi saluti dal cancello." },
+        { nome: "Roviano", query: "Roviano RM", label: "borgo panoramico sulla valle", fun: "L'ultima tappa prima di tornare, giusto il tempo per un caffè con vista." }
+      ]
+    },
+    {
+      zona: "Golfo di Gaeta", km: "circa 290 km", kmNum: 290, titolo: "Formia, Gaeta e la Via Flacca",
+      desc: "Il giro più lungo, da fare con calma: la costa verso sud fino a Gaeta, il promontorio con vista sul golfo, e il ritorno lungo la panoramica Via Flacca scavata nella roccia sopra il mare.",
+      meteoPlace: "Gaeta",
+      tappe: [
+        { nome: "Formia", query: "Formia LT lungomare", label: "lungomare e porto", fun: "Il lungomare per il primo caffè, il resto del golfo per il resto della giornata." },
+        { nome: "Gaeta", query: "Gaeta LT Montagna Spaccata", label: "Montagna Spaccata e centro storico", fun: "Una montagna 'spaccata' letteralmente in due — la leggenda dice dal terremoto della crocifissione." },
+        { nome: "Via Flacca", query: "Via Flacca SS213 LT", label: "panoramica scavata nella roccia sul mare", fun: "Gallerie, curve e mare che appare e scompare — tienti il casco integrale, gli spruzzi ci sono davvero." },
+        { nome: "Sperlonga", query: "Sperlonga LT", label: "centro storico bianco sul mare", fun: "Se non l'hai già vista nel giro del Litorale Pontino, qui è la scusa buona." }
+      ]
+    },
+    {
+      zona: "Etruria Meridionale", km: "circa 210 km", kmNum: 210, titolo: "Le necropoli etrusche di Cerveteri e Tarquinia",
+      desc: "Un giro storico-costiero verso nord: la necropoli della Banditaccia a Cerveteri, patrimonio UNESCO, e le tombe dipinte di Tarquinia, tra le testimonianze etrusche meglio conservate al mondo.",
+      meteoPlace: "Tarquinia",
+      tappe: [
+        { nome: "Cerveteri", query: "Necropoli della Banditaccia Cerveteri", label: "necropoli della Banditaccia (UNESCO)", fun: "Una città dei morti più organizzata di certi centri abitati moderni." },
+        { nome: "Tarquinia", query: "Tarquinia VT necropoli", label: "tombe etrusche dipinte", fun: "Affreschi di 2500 anni fa più vivaci di certi filtri Instagram di oggi." },
+        { nome: "Tarquinia Lido", query: "Tarquinia Lido VT", label: "litorale per una pausa sul mare", fun: "Dopo tanta storia, un po' di mare per rimettere in pari gli occhi." }
+      ]
+    },
+    {
+      zona: "Monti della Laga", km: "circa 300 km", kmNum: 300, titolo: "Verso Amatrice, al confine tra tre regioni",
+      desc: "Il giro più impegnativo dei venti, da affrontare con partenza presto: la Salaria fino ad Amatrice, ai piedi dei Monti della Laga, al confine tra Lazio, Abruzzo e Marche. Zona colpita dal sisma 2016, oggi in ricostruzione — un giro anche per non dimenticare.",
+      meteoPlace: "Amatrice",
+      tappe: [
+        { nome: "Antrodoco", query: "Antrodoco RI", label: "porta della Salaria verso l'Abruzzo", fun: "Da qui la Salaria comincia a salire sul serio — scalda bene i freni." },
+        { nome: "Amatrice", query: "Amatrice RI", label: "borgo simbolo della ricostruzione post-sisma", fun: "La patria dell'amatriciana merita la sosta, anche solo per rispetto." },
+        { nome: "Accumoli", query: "Accumoli RI", label: "borgo ai piedi della Laga", fun: "Piccolo, silenzioso, e con vista sui monti che vale la salita." }
+      ]
+    },
+    {
+      zona: "Valle del Liri", km: "circa 190 km", kmNum: 190, titolo: "Frosinone, la cascata di Isola del Liri e l'Abbazia di Casamari",
+      desc: "Un giro tra industria antica e natura: la cascata che taglia in due il centro di Isola del Liri, e l'Abbazia cistercense di Casamari, silenziosa e ben conservata, poco fuori Veroli.",
+      meteoPlace: "Isola del Liri",
+      tappe: [
+        { nome: "Frosinone", query: "Frosinone centro", label: "centro storico su un colle", fun: "Poco raccontata, ma la vista dal centro storico ripaga il pieno di benzina." },
+        { nome: "Isola del Liri", query: "Cascata grande Isola del Liri", label: "cascata nel cuore del centro cittadino", fun: "Una cascata in mezzo alla città — capita raramente di fermarsi al semaforo con questa vista." },
+        { nome: "Veroli", query: "Veroli FR", label: "borgo panoramico sulla valle del Liri", fun: "Un balcone naturale sulla valle, con meno folla dei Castelli Romani." },
+        { nome: "Abbazia di Casamari", query: "Abbazia di Casamari", label: "abbazia cistercense", fun: "Silenzio quasi sospetto per chi arriva ancora con il motore caldo." }
+      ]
+    },
+    {
+      zona: "Laghi Reatini", km: "circa 210 km", kmNum: 210, titolo: "Lago del Turano e Lago del Salto",
+      desc: "Due laghi artificiali incastonati tra le montagne della Sabina reatina, con strade strette e panoramiche che li costeggiano quasi per intero: meno conosciuti del Trasimeno, non meno belli.",
+      meteoPlace: "Rieti",
+      tappe: [
+        { nome: "Rieti", query: "Rieti RI", label: "punto di partenza nella conca reatina", fun: "Si riparte da qui, stavolta verso ovest invece che verso il Terminillo." },
+        { nome: "Lago del Turano", query: "Lago del Turano RI", label: "strada panoramica lungolago", fun: "Curve strette sull'acqua, con i borghi che si specchiano nel lago — vai piano, la tentazione di guardare è tanta." },
+        { nome: "Colle di Tora", query: "Colle di Tora RI", label: "borgo affacciato sul Turano", fun: "Un paesino minuscolo con una vista che sembra rubata a un altro lago più famoso." },
+        { nome: "Lago del Salto", query: "Lago del Salto RI", label: "secondo lago artificiale della Sabina", fun: "Il fratello meno fotografato del Turano — merita comunque una sosta." }
+      ]
+    },
+    {
+      zona: "Monti Ausoni", km: "circa 230 km", kmNum: 230, titolo: "Campodimele, Lenola e Fondi",
+      desc: "Colline e monti tra Ciociaria e costa: Campodimele, il 'paese della lunga vita' cinto da mura medievali intatte, Lenola tra gli ulivi, e Fondi con il suo centro storico dal impianto urbanistico romano.",
+      meteoPlace: "Campodimele",
+      tappe: [
+        { nome: "Fondi", query: "Fondi LT centro storico", label: "centro storico a impianto romano", fun: "Le strade sono ancora quelle tracciate dai Romani — occhio ai vicoli stretti in curva." },
+        { nome: "Campodimele", query: "Campodimele LT", label: "borgo murato, il 'paese della lunga vita'", fun: "Chiamato così per la longevità dei suoi abitanti — la dieta mediterranea, dicono, qui funziona davvero." },
+        { nome: "Lenola", query: "Lenola LT", label: "borgo tra gli uliveti dei Monti Ausoni", fun: "Uliveti a perdita d'occhio e tornanti puliti — un premio per chi si spinge fin qui." }
+      ]
+    },
+    {
+      zona: "Valle del Sacco", km: "circa 150 km", kmNum: 150, titolo: "Anagni e Ferentino, la 'Città dei Papi'",
+      desc: "Un giro storico tra le città della Ciociaria settentrionale: Anagni con la sua Cattedrale e il celebre 'Schiaffo', e Ferentino con le imponenti mura poligonali meglio conservate del Lazio.",
+      meteoPlace: "Anagni",
+      tappe: [
+        { nome: "Anagni", query: "Anagni FR cattedrale", label: "Cattedrale e la sala dello Schiaffo", fun: "Qui è successo lo 'schiaffo di Anagni' che la maestra ti raccontava alle medie — ora ci sei davvero." },
+        { nome: "Ferentino", query: "Ferentino FR mura poligonali", label: "mura poligonali e acropoli", fun: "Mura costruite senza malta, in piedi da millenni — la tua moto sembra un neonato al confronto." }
+      ]
+    },
+    {
+      zona: "Monti Cimini", km: "circa 220 km", kmNum: 220, titolo: "Viterbo, Caprarola e il Lago di Vico",
+      desc: "Un giro nella Tuscia viterbese diverso da quello dei laghi: il centro medievale di Viterbo, l'imponente Palazzo Farnese a Caprarola, e i boschi di castagni intorno al Lago di Vico.",
+      meteoPlace: "Viterbo",
+      tappe: [
+        { nome: "Viterbo", query: "Viterbo centro storico San Pellegrino", label: "quartiere medievale di San Pellegrino", fun: "Il quartiere medievale meglio conservato del centro Italia — sembra un set cinematografico, invece è vero." },
+        { nome: "Caprarola", query: "Palazzo Farnese Caprarola", label: "Palazzo Farnese a pianta pentagonale", fun: "Un palazzo a forma di pentagono costruito per stupire — missione riuscita, ancora oggi." },
+        { nome: "Soriano nel Cimino", query: "Soriano nel Cimino VT", label: "borgo ai piedi dei Monti Cimini", fun: "Castagni ovunque: se ci passi in autunno, porta un sacchetto." }
+      ]
+    }
+  ];
+
+  function weatherIcon(code){
+    if (code === 0) return "☀️";
+    if ([1,2].includes(code)) return "🌤️";
+    if (code === 3) return "☁️";
+    if ([45,48].includes(code)) return "🌫️";
+    if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return "🌧️";
+    if ([71,73,75,77,85,86].includes(code)) return "❄️";
+    if ([95,96,99].includes(code)) return "⛈️";
+    return "🌡️";
+  }
+
+  const geocodeCache = {};
+  async function geocodePlace(place){
+    if(geocodeCache[place]) return geocodeCache[place];
+    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(place)}&count=1&language=it&format=json`);
+    const data = await res.json();
+    const hit = data.results && data.results[0];
+    const coords = hit ? { lat: hit.latitude, lon: hit.longitude } : null;
+    geocodeCache[place] = coords;
+    return coords;
+  }
+
+  function isoDate(offsetDays){
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    return d.toISOString().slice(0, 10);
+  }
+
+  async function loadWeather(el, place, offsetDays){
+    try{
+      const coords = await geocodePlace(place);
+      if(!coords) throw new Error("posto non trovato");
+
+      if(offsetDays === 0){
+        const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=temperature_2m,weather_code&timezone=auto`);
+        const wData = await wRes.json();
+        el.querySelector(".w-icon").textContent = weatherIcon(wData.current.weather_code);
+        el.querySelector(".w-temp").textContent = `${Math.round(wData.current.temperature_2m)}°C`;
+      } else {
+        const date = isoDate(offsetDays);
+        const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&start_date=${date}&end_date=${date}`);
+        const wData = await wRes.json();
+        const daily = wData.daily || {};
+        const code = (daily.weather_code || daily.weathercode || [])[0];
+        const max = (daily.temperature_2m_max || [])[0];
+        const min = (daily.temperature_2m_min || [])[0];
+        el.querySelector(".w-icon").textContent = weatherIcon(code);
+        el.querySelector(".w-temp").textContent = (min != null && max != null) ? `${Math.round(min)}°/${Math.round(max)}°` : "—";
+      }
+      el.style.display = "";
+    } catch(err){
+      el.style.display = "none";
+    }
+  }
+
+  function haversineKm(lat1, lon1, lat2, lon2){
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) ** 2 + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  async function estimateKm(it){
+    const startInput = document.getElementById("fuel-start").value.trim() || "Roma";
+    if(startInput.toLowerCase() === "roma"){
+      return it.kmNum;
+    }
+    try{
+      const [startCoords, destCoords] = await Promise.all([geocodePlace(startInput), geocodePlace(it.meteoPlace)]);
+      if(!startCoords || !destCoords) return it.kmNum;
+      const oneWay = haversineKm(startCoords.lat, startCoords.lon, destCoords.lat, destCoords.lon);
+      return Math.round(oneWay * 2 * 1.3); // andata e ritorno, +30% per curve/strada reale
+    } catch(err){
+      return it.kmNum;
+    }
+  }
+
+  async function updateFuelEstimate(card, it){
+    const consumo = parseFloat(document.getElementById("fuel-cc").value);
+    const prezzo = parseFloat(document.getElementById("fuel-price").value) || 1.75;
+    const km = await estimateKm(it);
+    const litri = km / consumo;
+    const costo = litri * prezzo;
+    const fuelEl = card.querySelector(".itinerario-fuel");
+    if(fuelEl) fuelEl.textContent = `⛽ Circa ${km} km — stima carburante: €${costo.toFixed(2)}`;
+  }
+
+  function mapsQuery(t){ return encodeURIComponent(t.query); }
+
+  function buildCard(it){
+    const card = document.createElement("div");
+    card.className = "itinerario-card";
+
+    const origin = "Roma";
+    const destination = it.tappe[it.tappe.length - 1].query;
+    const waypoints = it.tappe.slice(0, -1).map(t => encodeURIComponent(t.query)).join("|");
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${waypoints}&travelmode=driving`;
+    const wazeUrl = `https://waze.com/ul?q=${mapsQuery(it.tappe[0])}&navigate=yes`;
+
+    card.innerHTML = `
+      <div class="itinerario-card-head">
+        <div>
+          <p class="marker">${it.zona} — ${it.km}</p>
+          <h3>${it.titolo}</h3>
+        </div>
+        <div class="itinerario-weather">
+          <select class="w-day">
+            <option value="0">Oggi</option>
+            <option value="1">Domani</option>
+            <option value="2">Tra 2 giorni</option>
+            <option value="3">Tra 3 giorni</option>
+            <option value="4">Tra 4 giorni</option>
+            <option value="5">Tra 5 giorni</option>
+            <option value="6">Tra 6 giorni</option>
+          </select>
+          <span class="w-icon">…</span>
+          <span class="w-temp">—</span>
+          <span class="w-place">${it.meteoPlace}</span>
+        </div>
+      </div>
+      <p class="desc">${it.desc}</p>
+      <div class="itinerario-actions">
+        <a href="${mapsUrl}" target="_blank" rel="noopener">Apri l'itinerario completo su Maps</a>
+        <a class="waze" href="${wazeUrl}" target="_blank" rel="noopener">Prima tappa su Waze</a>
+      </div>
+      <p class="itinerario-fuel"></p>
+      <div class="itinerario-stops">
+        <p class="label">Tappe consigliate</p>
+        <ul>
+          ${it.tappe.map(t => `
+            <li>
+              <a class="stop-link" href="https://www.google.com/maps/search/?api=1&query=${mapsQuery(t)}" target="_blank" rel="noopener">${t.nome} — ${t.label}</a>
+              <p class="fun">${t.fun}</p>
+            </li>
+          `).join("")}
+        </ul>
+      </div>
+    `;
+
+    const weatherEl = card.querySelector(".itinerario-weather");
+    const daySelect = card.querySelector(".w-day");
+    loadWeather(weatherEl, it.meteoPlace, 0);
+    daySelect.addEventListener("change", () => loadWeather(weatherEl, it.meteoPlace, parseInt(daySelect.value, 10)));
+
+    updateFuelEstimate(card, it);
+
+    return card;
+  }
+
+  const grid = document.getElementById("itinerari-grid");
+  const cards = ITINERARI.map(it => {
+    const card = buildCard(it);
+    grid.appendChild(card);
+    return { card, it };
+  });
+
+  ["fuel-cc", "fuel-price"].forEach(id => {
+    document.getElementById(id).addEventListener("input", () => {
+      cards.forEach(({ card, it }) => updateFuelEstimate(card, it));
+    });
+  });
+  document.getElementById("fuel-start").addEventListener("change", () => {
+    cards.forEach(({ card, it }) => updateFuelEstimate(card, it));
+  });
+</script>
 
 <script src="script.js"></script>
 </body>
