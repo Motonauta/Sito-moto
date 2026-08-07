@@ -111,10 +111,9 @@
     </a>
     <nav class="nav-links">
       <a href="index.html">Home</a>
-      <a href="chi-sono.html">Chi sono</a>
       <a href="miniviaggi.html" class="active">Miniviaggi</a>
+      <a href="about.html">About me</a>
       <a href="sponsor.html">Partner</a>
-      <a href="moto.html">La mia moto</a>
       <a href="galleria.html">Galleria</a>
       <a href="contatti.html">Contatti</a>
     </nav>
@@ -301,7 +300,7 @@
     },
     {
       zona: "Sardegna", km: "4-5 giorni consigliati", titolo: "Supramonte e la SS125 Orientale Sarda",
-      desc: "L'unica meta di questa lista che richiede un traghetto, e ne vale ogni ora di viaggio: la SS125 'Orientale Sarda' è leggendaria tra i motociclisti, tra le gole del Supramonte e la costa del golfo di Orosei. Da programmare con calma, traghetto incluso.",
+      desc: "Una delle poche mete di questa lista che richiede un traghetto, e ne vale ogni ora di viaggio: la SS125 'Orientale Sarda' è leggendaria tra i motociclisti, tra le gole del Supramonte e la costa del golfo di Orosei. Da programmare con calma, traghetto incluso.",
       meteoPlace: "Dorgali",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Supramonte_visto_da_Orgosolo.jpg",
       tappe: [
@@ -309,6 +308,40 @@
         { nome: "Dorgali", query: "Dorgali NU", label: "base per il Supramonte", fun: "Un paese tranquillo circondato da montagne che sembrano finte — non lo sono." },
         { nome: "Gola di Gorropu", query: "Gola di Su Gorropu", label: "uno dei canyon più profondi d'Europa", fun: "La moto la lasci al parcheggio, il resto si fa a piedi — ma vale la sosta." },
         { nome: "Cala Gonone", query: "Cala Gonone NU", label: "costa del golfo di Orosei", fun: "Dopo tanta montagna, il mare più bello della Sardegna come premio finale." }
+      ]
+    },
+    {
+      zona: "Val Passiria", km: "1-2 giorni consigliati", titolo: "Passo del Rombo (Timmelsjoch)",
+      desc: "Un valico spettacolare verso l'Austria, strada a pedaggio aperta solo da metà maggio a fine ottobre: da San Leonardo in Passiria si sale tra tornanti panoramici fino a 2509 m, con vista sui ghiacciai dell'Ötztal.",
+      meteoPlace: "Moso in Passiria",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Rombo_06.JPG",
+      tappe: [
+        { nome: "San Leonardo in Passiria", query: "San Leonardo in Passiria BZ", label: "ingresso nella Val Passiria", fun: "Paese natale di Andreas Hofer, eroe popolare tirolese — un pezzo di storia prima delle curve." },
+        { nome: "Moso in Passiria", query: "Moso in Passiria BZ", label: "ultimo paese prima della salita", fun: "L'ultima sosta tranquilla prima che la strada inizi a arrampicarsi sul serio." },
+        { nome: "Passo del Rombo", query: "Passo del Rombo", label: "2509 m, strada a pedaggio verso l'Austria", fun: "Si paga il pedaggio, ma per quei tornanti vale ogni centesimo." }
+      ]
+    },
+    {
+      zona: "Sicilia", km: "4-5 giorni consigliati", titolo: "Etna e Madonie",
+      desc: "Un'altra meta che richiede il traghetto (breve, da Villa San Giovanni), ma ripaga con paesaggi che cambiano ad ogni tappa: le colate laviche dell'Etna e i boschi delle Madonie, tra i parchi naturali meno battuti dai turisti del sud Italia.",
+      meteoPlace: "Nicolosi",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Etna_-_4.jpg",
+      tappe: [
+        { nome: "Catania", query: "Catania porto", label: "arrivo e punto di partenza", fun: "Il traghetto per la Sicilia dura poco più di un'ora — meno del previsto, promesso." },
+        { nome: "Nicolosi", query: "Nicolosi CT", label: "base per il versante sud dell'Etna", fun: "'La porta dell'Etna', dicono qui — e in effetti la salita inizia proprio da questo paese." },
+        { nome: "Rifugio Sapienza", query: "Rifugio Sapienza Etna", label: "quota 1900 m sull'Etna", fun: "Lava nera, neve d'inverno, panorama sul mare — l'Etna cambia scenografia ogni cento metri di salita." },
+        { nome: "Piano Battaglia", query: "Piano Battaglia PA", label: "cuore del Parco delle Madonie", fun: "Dopo il vulcano, i boschi delle Madonie sembrano un altro pianeta — stessa isola, promesso." }
+      ]
+    },
+    {
+      zona: "Gran Sasso", km: "2-3 giorni consigliati", titolo: "Campo Imperatore, il 'Piccolo Tibet' d'Italia",
+      desc: "La meta più vicina a Roma di questa lista, eppure sembra un altro continente: l'altopiano di Campo Imperatore, a 2000 m sotto il Gran Sasso, con panorami che gli hanno guadagnato il soprannome di 'Piccolo Tibet'. Perfetto anche per un weekend lungo.",
+      meteoPlace: "Campo Imperatore",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Campo_Imperatore,_Gran_Sasso.jpg",
+      tappe: [
+        { nome: "L'Aquila", query: "L'Aquila centro", label: "punto di partenza abruzzese", fun: "Una città che si sta ricostruendo pezzo per pezzo — merita la sosta anche solo per rispetto." },
+        { nome: "Campo Imperatore", query: "Campo Imperatore AQ", label: "l'altopiano a 2000 m, il 'Piccolo Tibet'", fun: "Qui hanno girato scene western — e appena arrivi capisci esattamente perché." },
+        { nome: "Rocca Calascio", query: "Rocca Calascio AQ", label: "fortezza panoramica tra le più alte d'Italia", fun: "La rocca più fotografata d'Abruzzo, sullo sfondo di praticamente ogni film ambientato quassù." }
       ]
     }
   ];
