@@ -57,6 +57,23 @@
     font-size:0.82rem; color:var(--sand); text-align:center; line-height:1.25;
     flex-grow:1; padding:0 6px;
   }
+  .card-weather-bar{
+    display:flex; align-items:center; gap:12px; font-family:var(--font-mono);
+    background:var(--asphalt-2); padding:13px 16px;
+    border-bottom:1px solid rgba(245,240,230,0.16);
+  }
+  .card-weather-bar .w-day{
+    background:transparent; border:1px solid rgba(245,240,230,0.35); color:var(--cream);
+    font-family:var(--font-mono); font-size:0.76rem; text-transform:uppercase;
+    padding:7px 9px; flex-shrink:0; cursor:pointer;
+  }
+  .card-weather-bar .w-icon{ font-size:1.6rem; line-height:1; flex-shrink:0; }
+  .card-weather-bar .w-temp{ font-size:1rem; color:var(--cream); font-weight:600; flex-shrink:0; white-space:nowrap; }
+  .card-weather-bar .w-place{
+    font-size:0.68rem; color:var(--cream-dim); opacity:0.85; text-transform:uppercase;
+    margin-left:auto; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
   .itinerario-card-body{ display:none; padding:26px 34px 34px; }
   .detail-modal-inner .itinerario-card-body{ display:block; }
   .itinerario-photo{
@@ -108,23 +125,6 @@
   }
   .detail-modal-close:hover{ background:var(--rust); }
   body.modal-open{ overflow:hidden; }
-
-  .card-weather-bar{
-    display:flex; align-items:center; gap:12px; font-family:var(--font-mono);
-    background:var(--asphalt-2); padding:10px 16px;
-    border-bottom:1px solid rgba(245,240,230,0.16);
-  }
-  .card-weather-bar .w-day{
-    background:transparent; border:1px solid rgba(245,240,230,0.25); color:var(--cream-dim);
-    font-family:var(--font-mono); font-size:0.66rem; text-transform:uppercase;
-    padding:5px 6px; flex-shrink:0; cursor:pointer;
-  }
-  .card-weather-bar .w-icon{ font-size:1.15rem; line-height:1; flex-shrink:0; }
-  .card-weather-bar .w-temp{ font-size:0.8rem; color:var(--cream-dim); flex-shrink:0; white-space:nowrap; }
-  .card-weather-bar .w-place{
-    font-size:0.6rem; color:var(--cream-dim); opacity:0.7; text-transform:uppercase;
-    margin-left:auto; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
 
   .itinerario-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
   .itinerario-actions a{
@@ -178,17 +178,18 @@
   .fuel-calc-note{ margin-top:14px; font-size:0.8rem; color:var(--cream-dim); }
   @media (max-width:780px){ .fuel-calc-grid{ grid-template-columns:1fr; } }
 
-  /* Desktop: cartolina larga, piena di info, niente click-to-expand (già tutto visibile) */
+  /* Desktop: carosello con le cartoline laterali visibili, card con tutte le info sempre in vista */
   @media (min-width:861px){
-    .itinerari-carousel{ max-width:min(800px, 64vw); }
-    .itinerario-card{ cursor:default; }
+    .itinerari-carousel{ max-width:100%; }
+    .itinerari-grid{ gap:24px; padding:4px 4px 12px; }
+    .itinerario-card{ flex:0 0 min(640px, 74vw); width:auto; cursor:default; }
     .card-compact-actions,
     .card-more-btn{ display:none; }
     .itinerario-card-body{ display:block; padding:25px 32px 32px; }
     .card-topbar{ padding:14px 21px; }
     .card-topbar .card-km, .card-topbar .card-price{ font-size:0.7rem; }
     .card-topbar .card-title{ font-size:0.85rem; }
-    .card-weather-bar{ padding:10px 21px; }
+    .card-weather-bar{ padding:11px 21px; }
     .card-frame{ max-height:78vh; overflow-y:auto; overflow-x:hidden; }
   }
 
@@ -207,16 +208,19 @@
     width:100%; background:var(--asphalt); border:1px solid rgba(245,240,230,0.2);
     color:var(--cream); padding:11px 12px; font-family:var(--font-body); font-size:0.92rem; box-sizing:border-box;
   }
+  .route-weather-grid input[type="date"]{ color-scheme:dark; }
+  .route-weather-grid input[type="date"]::-webkit-calendar-picker-indicator{ filter:invert(0.85); cursor:pointer; }
   @media (max-width:780px){ .route-weather-grid{ grid-template-columns:1fr 1fr; } }
   @media (max-width:480px){ .route-weather-grid{ grid-template-columns:1fr; } }
 
   .route-weather-results{ margin-top:22px; }
-  .route-weather-loading, .route-weather-error, .route-weather-summary{
+  .route-weather-loading, .route-weather-error, .route-weather-summary, .route-weather-note{
     font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
   }
   .route-weather-error{ color:var(--rust); }
-  .route-weather-summary{ margin-bottom:14px; color:var(--gold); }
-  .route-weather-list{ display:flex; flex-direction:column; gap:10px; }
+  .route-weather-summary{ margin-bottom:6px; color:var(--gold); }
+  .route-weather-note{ margin-bottom:14px; font-style:italic; }
+  .route-weather-list{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
   .route-weather-list li{
     display:flex; align-items:center; gap:12px;
     background:var(--asphalt); border:1px solid rgba(245,240,230,0.14);
@@ -351,15 +355,7 @@
         </div>
         <div>
           <label for="route-day">Giorno</label>
-          <select id="route-day">
-            <option value="0">Oggi</option>
-            <option value="1">Domani</option>
-            <option value="2">Tra 2 giorni</option>
-            <option value="3">Tra 3 giorni</option>
-            <option value="4">Tra 4 giorni</option>
-            <option value="5">Tra 5 giorni</option>
-            <option value="6">Tra 6 giorni</option>
-          </select>
+          <input type="date" id="route-day">
         </div>
       </div>
       <button type="button" id="route-weather-btn" class="btn solid" style="margin-top:18px;">Calcola il meteo lungo il percorso</button>
@@ -854,8 +850,9 @@
   function scrollCarousel(dir){
     const firstCard = grid.querySelector(".itinerario-card");
     if(!firstCard) return;
+    const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
     const cardWidth = firstCard.getBoundingClientRect().width;
-    grid.scrollBy({ left: dir * cardWidth, behavior: "smooth" });
+    grid.scrollBy({ left: dir * (cardWidth + gap), behavior: "smooth" });
   }
   document.querySelector(".carousel-arrow.prev").addEventListener("click", () => scrollCarousel(-1));
   document.querySelector(".carousel-arrow.next").addEventListener("click", () => scrollCarousel(1));
@@ -872,21 +869,21 @@
   }
 
   async function reverseGeocode(lat, lon){
-    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10&accept-language=it`);
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=12&accept-language=it`);
     const data = await res.json();
     const a = data.address || {};
-    return a.city || a.town || a.village || a.hamlet || a.municipality || a.county
+    return a.village || a.town || a.hamlet || a.city || a.municipality || a.county
       || (data.display_name ? data.display_name.split(",")[0] : "Zona sconosciuta");
   }
 
-  async function fetchWeatherForCoords(lat, lon, offsetDays){
-    if(offsetDays === 0){
+  async function fetchWeatherForCoords(lat, lon, dateStr){
+    const todayStr = isoDate(0);
+    if(dateStr === todayStr){
       const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`);
       const data = await res.json();
       return { icon: weatherIcon(data.current.weather_code), temp: `${Math.round(data.current.temperature_2m)}°C` };
     }
-    const date = isoDate(offsetDays);
-    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&start_date=${date}&end_date=${date}`);
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`);
     const data = await res.json();
     const daily = data.daily || {};
     const code = (daily.weather_code || daily.weathercode || [])[0];
@@ -895,11 +892,19 @@
     return { icon: weatherIcon(code), temp: (min != null && max != null) ? `${Math.round(min)}°/${Math.round(max)}°` : "—" };
   }
 
+  async function fetchRoute(startCoords, endCoords, excludeParam){
+    const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${startCoords.lon},${startCoords.lat};${endCoords.lon},${endCoords.lat}?overview=full&geometries=geojson${excludeParam}`;
+    const res = await fetch(osrmUrl);
+    const data = await res.json();
+    if(data.code !== "Ok" || !data.routes || !data.routes[0]) return null;
+    return data.routes[0];
+  }
+
   async function calculateRouteWeather(){
     const startPlace = document.getElementById("route-start").value.trim();
     const endPlace = document.getElementById("route-end").value.trim();
     const avoidTolls = document.getElementById("route-toll").value === "no";
-    const dayOffset = parseInt(document.getElementById("route-day").value, 10);
+    const dateStr = document.getElementById("route-day").value || isoDate(0);
     const resultsEl = document.getElementById("route-weather-results");
     const btn = document.getElementById("route-weather-btn");
 
@@ -916,20 +921,22 @@
       const [startCoords, endCoords] = await Promise.all([geocodePlace(startPlace), geocodePlace(endPlace)]);
       if(!startCoords || !endCoords) throw new Error("Non riesco a trovare partenza o arrivo. Controlla i nomi inseriti.");
 
-      const excludeParam = avoidTolls ? "&exclude=motorway" : "";
-      const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${startCoords.lon},${startCoords.lat};${endCoords.lon},${endCoords.lat}?overview=full&geometries=geojson${excludeParam}`;
-      const routeRes = await fetch(osrmUrl);
-      const routeData = await routeRes.json();
-      if(routeData.code !== "Ok" || !routeData.routes || !routeData.routes[0]){
-        throw new Error("Non sono riuscito a calcolare un percorso stradale tra questi due punti.");
+      let route = null;
+      let tollsAvoided = false;
+      if(avoidTolls){
+        route = await fetchRoute(startCoords, endCoords, "&exclude=motorway");
+        tollsAvoided = !!route;
       }
+      if(!route){
+        route = await fetchRoute(startCoords, endCoords, "");
+      }
+      if(!route) throw new Error("Non sono riuscito a calcolare un percorso stradale tra questi due punti.");
 
-      const route = routeData.routes[0];
       const coords = route.geometry.coordinates; // [lon, lat]
       const distanceKm = route.distance / 1000;
       const durationH = route.duration / 3600;
 
-      const count = Math.min(7, Math.max(3, Math.round(distanceKm / 60)));
+      const count = Math.min(7, Math.max(4, Math.round(distanceKm / 60)));
       const indices = sampleIndices(coords.length, count);
 
       resultsEl.innerHTML = `<p class="route-weather-loading">Percorso trovato (${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} h) — cerco le località lungo la strada...</p>`;
@@ -947,12 +954,17 @@
 
       const weatherResults = [];
       for(const s of dedup){
-        const w = await fetchWeatherForCoords(s.lat, s.lon, dayOffset);
+        const w = await fetchWeatherForCoords(s.lat, s.lon, dateStr);
         weatherResults.push({ ...s, ...w });
       }
 
+      const tollsNote = avoidTolls
+        ? (tollsAvoided ? "(percorso senza autostrade)" : "")
+        : "(percorso più veloce, autostrade incluse)";
+
       resultsEl.innerHTML = `
-        <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida ${avoidTolls ? "(percorso senza autostrade)" : "(percorso più veloce, autostrade incluse)"}</p>
+        <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida ${tollsNote}</p>
+        ${(avoidTolls && !tollsAvoided) ? `<p class="route-weather-note">Non sono riuscito a calcolare un percorso che eviti del tutto le autostrade su questa tratta: qui sotto vedi il percorso più veloce disponibile.</p>` : ""}
         <ul class="route-weather-list">
           ${weatherResults.map(w => `
             <li>
@@ -970,6 +982,16 @@
       btn.textContent = "Calcola il meteo lungo il percorso";
     }
   }
+
+  (function initRouteDayPicker(){
+    const dayInput = document.getElementById("route-day");
+    if(!dayInput) return;
+    const todayStr = isoDate(0);
+    const maxStr = isoDate(14);
+    dayInput.min = todayStr;
+    dayInput.max = maxStr;
+    dayInput.value = todayStr;
+  })();
 
   document.getElementById("route-weather-btn").addEventListener("click", calculateRouteWeather);
 </script>

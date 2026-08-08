@@ -57,6 +57,23 @@
     font-size:0.82rem; color:var(--sand); text-align:center; line-height:1.25;
     flex-grow:1; padding:0 6px;
   }
+  .card-weather-bar{
+    display:flex; align-items:center; gap:12px; font-family:var(--font-mono);
+    background:var(--asphalt-2); padding:13px 16px;
+    border-bottom:1px solid rgba(245,240,230,0.16);
+  }
+  .card-weather-bar .w-day{
+    background:transparent; border:1px solid rgba(245,240,230,0.35); color:var(--cream);
+    font-family:var(--font-mono); font-size:0.76rem; text-transform:uppercase;
+    padding:7px 9px; flex-shrink:0; cursor:pointer;
+  }
+  .card-weather-bar .w-icon{ font-size:1.6rem; line-height:1; flex-shrink:0; }
+  .card-weather-bar .w-temp{ font-size:1rem; color:var(--cream); font-weight:600; flex-shrink:0; white-space:nowrap; }
+  .card-weather-bar .w-place{
+    font-size:0.68rem; color:var(--cream-dim); opacity:0.85; text-transform:uppercase;
+    margin-left:auto; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
   .itinerario-card-body{ display:none; padding:26px 34px 34px; }
   .detail-modal-inner .itinerario-card-body{ display:block; }
   .itinerario-photo{
@@ -108,23 +125,6 @@
   }
   .detail-modal-close:hover{ background:var(--rust); }
   body.modal-open{ overflow:hidden; }
-
-  .card-weather-bar{
-    display:flex; align-items:center; gap:12px; font-family:var(--font-mono);
-    background:var(--asphalt-2); padding:10px 16px;
-    border-bottom:1px solid rgba(245,240,230,0.16);
-  }
-  .card-weather-bar .w-day{
-    background:transparent; border:1px solid rgba(245,240,230,0.25); color:var(--cream-dim);
-    font-family:var(--font-mono); font-size:0.66rem; text-transform:uppercase;
-    padding:5px 6px; flex-shrink:0; cursor:pointer;
-  }
-  .card-weather-bar .w-icon{ font-size:1.15rem; line-height:1; flex-shrink:0; }
-  .card-weather-bar .w-temp{ font-size:0.8rem; color:var(--cream-dim); flex-shrink:0; white-space:nowrap; }
-  .card-weather-bar .w-place{
-    font-size:0.6rem; color:var(--cream-dim); opacity:0.7; text-transform:uppercase;
-    margin-left:auto; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
 
   .itinerario-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
   .itinerario-actions a{
@@ -178,17 +178,18 @@
   .fuel-calc-note{ margin-top:14px; font-size:0.8rem; color:var(--cream-dim); }
   @media (max-width:780px){ .fuel-calc-grid{ grid-template-columns:1fr; } }
 
-  /* Desktop: cartolina larga, piena di info, niente click-to-expand (già tutto visibile) */
+  /* Desktop: carosello con le cartoline laterali visibili, card con tutte le info sempre in vista */
   @media (min-width:861px){
-    .itinerari-carousel{ max-width:min(800px, 64vw); }
-    .itinerario-card{ cursor:default; }
+    .itinerari-carousel{ max-width:100%; }
+    .itinerari-grid{ gap:24px; padding:4px 4px 12px; }
+    .itinerario-card{ flex:0 0 min(640px, 74vw); width:auto; cursor:default; }
     .card-compact-actions,
     .card-more-btn{ display:none; }
     .itinerario-card-body{ display:block; padding:25px 32px 32px; }
     .card-topbar{ padding:14px 21px; }
     .card-topbar .card-km, .card-topbar .card-price{ font-size:0.7rem; }
     .card-topbar .card-title{ font-size:0.85rem; }
-    .card-weather-bar{ padding:10px 21px; }
+    .card-weather-bar{ padding:11px 21px; }
     .card-frame{ max-height:78vh; overflow-y:auto; overflow-x:hidden; }
   }
 </style>
@@ -1066,8 +1067,9 @@
   function scrollCarousel(dir){
     const firstCard = grid.querySelector(".itinerario-card");
     if(!firstCard) return;
+    const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
     const cardWidth = firstCard.getBoundingClientRect().width;
-    grid.scrollBy({ left: dir * cardWidth, behavior: "smooth" });
+    grid.scrollBy({ left: dir * (cardWidth + gap), behavior: "smooth" });
   }
   document.querySelector(".carousel-arrow.prev").addEventListener("click", () => scrollCarousel(-1));
   document.querySelector(".carousel-arrow.next").addEventListener("click", () => scrollCarousel(1));
