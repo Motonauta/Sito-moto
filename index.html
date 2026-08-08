@@ -202,28 +202,28 @@
 
   /* Desktop: carosello con le cartoline laterali visibili, card con tutte le info sempre in vista */
   @media (min-width:861px){
-    /* Carosello largo (le cartoline laterali restano visibili) ma ogni
-       cartolina è un rettangolo verticale stretto, non troppo grande,
-       con tutto il contenuto impilato come su mobile — niente scroll interno. */
+    /* Carosello largo (le cartoline laterali restano visibili) e ogni
+       cartolina torna alle proporzioni "da cartolina" originali (foto 16:9
+       come su mobile, non più uno stretto rettangolo verticale), con tutto
+       il contenuto impilato — niente scroll interno. */
     .itinerari-carousel{ max-width:100%; }
     .itinerari-grid{ gap:24px; padding:4px 4px 12px; }
-    .itinerario-card{ flex:0 0 min(430px, 46vw); width:auto; cursor:default; }
+    .itinerario-card{ flex:0 0 min(520px, 54vw); width:auto; cursor:default; }
     .card-compact-actions,
     .card-more-btn{ display:none; }
     .card-topbar{ padding:13px 20px; }
-    .card-topbar .card-km, .card-topbar .card-price{ font-size:0.7rem; }
-    .card-topbar .card-title{ font-size:0.85rem; }
+    .card-topbar .card-km, .card-topbar .card-price{ font-size:0.72rem; }
+    .card-topbar .card-title{ font-size:0.9rem; }
     .card-weather-bar{ padding:10px 20px; }
-    .itinerario-photo{ aspect-ratio:2.2/1; }
-    .itinerario-card-body{ display:block; padding:18px 22px 22px; }
+    .itinerario-card-body{ display:block; padding:16px 22px 18px; }
     .itinerario-card-body p.desc{ font-size:0.85rem; line-height:1.45; margin-top:10px; }
     .itinerario-card-body .itinerario-actions{ margin-top:14px; gap:8px; }
     .itinerario-card-body .itinerario-actions a,
     .itinerario-card-body .itinerario-actions button{ font-size:0.66rem; padding:8px 12px; }
     .itinerario-card-body .itinerario-stops{ margin-top:16px; }
     .itinerario-card-body .itinerario-stops p.label{ margin-bottom:8px; font-size:0.68rem; }
-    .itinerario-card-body .itinerario-stops ul{ gap:9px; }
-    .itinerario-card-body .itinerario-stops li{ padding-bottom:7px; }
+    .itinerario-card-body .itinerario-stops ul{ gap:7px; }
+    .itinerario-card-body .itinerario-stops li{ padding-bottom:6px; }
     .itinerario-card-body .itinerario-stops a.stop-link{ font-size:0.8rem; }
     .itinerario-card-body .itinerario-stops .fun{ font-size:0.72rem; margin-top:3px; }
   }
@@ -928,7 +928,9 @@
   async function nominatimSearch(query){
     const key = query.toLowerCase();
     if(nominatimSearchCache[key]) return nominatimSearchCache[key];
-    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=0&limit=5&countrycodes=it&accept-language=it`);
+    // passa dal nostro endpoint /api/route-planner (proxy server-side) invece
+    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS
+    const res = await fetch(`/api/route-planner?action=search&q=${encodeURIComponent(query)}`);
     const data = await res.json();
     const results = (data || []).map(r => ({ label: r.display_name, lat: parseFloat(r.lat), lon: parseFloat(r.lon) }));
     nominatimSearchCache[key] = results;
@@ -1014,7 +1016,7 @@
 
   async function fetchRoute(startCoords, endCoords){
     try{
-      const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${startCoords.lon},${startCoords.lat};${endCoords.lon},${endCoords.lat}?overview=false`);
+      const res = await fetch(`/api/route-planner?action=route&startLat=${startCoords.lat}&startLon=${startCoords.lon}&endLat=${endCoords.lat}&endLon=${endCoords.lon}`);
       const data = await res.json();
       if(data.code !== "Ok" || !data.routes || !data.routes[0]) return null;
       return data.routes[0];
