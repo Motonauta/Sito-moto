@@ -206,30 +206,34 @@
 
   /* Desktop: carosello con le cartoline laterali visibili, card con tutte le info sempre in vista */
   @media (min-width:861px){
-    /* Carosello largo (le cartoline laterali restano visibili) e ogni
-       cartolina torna alle proporzioni "da cartolina" originali (foto 16:9
-       come su mobile, non più uno stretto rettangolo verticale), con tutto
-       il contenuto impilato — niente scroll interno. */
+    /* Carosello largo (le cartoline laterali restano visibili), formato
+       "da cartolina" (foto 16:9 come su mobile) ma tutta la sezione scalata
+       di circa il 20% in meno rispetto al formato base, per stare nello
+       schermo senza dover scorrere per vedere le info in basso. */
     .itinerari-carousel{ max-width:100%; }
-    .itinerari-grid{ gap:24px; padding:4px 4px 12px; }
-    .itinerario-card{ flex:0 0 min(520px, 54vw); width:auto; cursor:default; }
+    .itinerari-grid{ gap:20px; padding:4px 4px 12px; }
+    .itinerario-card{ flex:0 0 min(416px, 43vw); width:auto; cursor:default; }
     .card-compact-actions,
     .card-more-btn{ display:none; }
-    .card-topbar{ padding:13px 20px; }
-    .card-topbar .card-km, .card-topbar .card-price{ font-size:0.72rem; }
-    .card-topbar .card-title{ font-size:0.9rem; }
-    .card-weather-bar{ padding:10px 20px; }
-    .itinerario-card-body{ display:block; padding:16px 22px 18px; }
-    .itinerario-card-body p.desc{ font-size:0.85rem; line-height:1.45; margin-top:10px; }
-    .itinerario-card-body .itinerario-actions{ margin-top:14px; gap:8px; }
+    .card-topbar{ padding:10px 16px; }
+    .card-topbar .card-km, .card-topbar .card-price{ font-size:0.58rem; }
+    .card-topbar .card-title{ font-size:0.72rem; }
+    .card-weather-bar{ padding:8px 16px; }
+    .card-weather-bar .w-day{ font-size:0.61rem; padding:6px 7px; }
+    .card-weather-bar .w-icon{ font-size:1.28rem; }
+    .card-weather-bar .w-temp{ font-size:0.8rem; }
+    .card-weather-bar .w-place{ font-size:0.54rem; }
+    .itinerario-card-body{ display:block; padding:13px 18px 14px; }
+    .itinerario-card-body p.desc{ font-size:0.68rem; line-height:1.45; margin-top:8px; }
+    .itinerario-card-body .itinerario-actions{ margin-top:11px; gap:6px; }
     .itinerario-card-body .itinerario-actions a,
-    .itinerario-card-body .itinerario-actions button{ font-size:0.66rem; padding:8px 12px; }
-    .itinerario-card-body .itinerario-stops{ margin-top:16px; }
-    .itinerario-card-body .itinerario-stops p.label{ margin-bottom:8px; font-size:0.68rem; }
-    .itinerario-card-body .itinerario-stops ul{ gap:7px; }
-    .itinerario-card-body .itinerario-stops li{ padding-bottom:6px; }
-    .itinerario-card-body .itinerario-stops a.stop-link{ font-size:0.8rem; }
-    .itinerario-card-body .itinerario-stops .fun{ font-size:0.72rem; margin-top:3px; }
+    .itinerario-card-body .itinerario-actions button{ font-size:0.53rem; padding:6px 10px; }
+    .itinerario-card-body .itinerario-stops{ margin-top:13px; }
+    .itinerario-card-body .itinerario-stops p.label{ margin-bottom:6px; font-size:0.54rem; }
+    .itinerario-card-body .itinerario-stops ul{ gap:6px; }
+    .itinerario-card-body .itinerario-stops li{ padding-bottom:5px; }
+    .itinerario-card-body .itinerario-stops a.stop-link{ font-size:0.64rem; }
+    .itinerario-card-body .itinerario-stops .fun{ font-size:0.58rem; margin-top:2px; }
   }
 
   .route-weather-widget{
@@ -348,10 +352,11 @@
       </div>
       <p class="fuel-calc-note">
         Stima indicativa: consumo medio per categoria, prezzo benzina che
-        imposti tu (nessun listino in tempo reale), distanza andata e
-        ritorno calcolata in linea d'aria con una maggiorazione per le
-        curve reali della strada — per un miniviaggio, valuta anche una
-        tappa notte a metà strada invece del ritorno in giornata.
+        imposti tu (nessun listino in tempo reale), km andata e ritorno
+        calcolati sul percorso stradale reale (solo se il calcolo del
+        percorso non fosse disponibile si passa a una stima in linea d'aria
+        con una maggiorazione per le curve) — per un miniviaggio, valuta
+        anche una tappa notte a metà strada invece del ritorno in giornata.
       </p>
     </div>
 
@@ -719,10 +724,24 @@
     const key = query.toLowerCase();
     if(nominatimSearchCache[key]) return nominatimSearchCache[key];
     // passa dal nostro endpoint /api/route-planner (proxy server-side) invece
-    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS
-    const res = await fetch(`/api/route-planner?action=search&q=${encodeURIComponent(query)}`);
+    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS.
+    // Se qualcosa va storto, l'errore viene fatto risalire con un messaggio
+    // preciso (invece di sparire in silenzio) così si capisce subito se è un
+    // problema di rete, di deploy della funzione o altro.
+    let res;
+    try{
+      res = await fetch(`/api/route-planner?action=search&q=${encodeURIComponent(query)}`);
+    } catch(networkErr){
+      throw new Error("Impossibile contattare il servizio di ricerca luoghi (errore di rete).");
+    }
+    if(!res.ok){
+      throw new Error(`Servizio di ricerca luoghi non disponibile (errore ${res.status}). Se il problema persiste, verifica che il file api/route-planner.js sia stato caricato su GitHub.`);
+    }
     const data = await res.json();
-    const results = (data || []).map(r => ({ label: r.display_name, lat: parseFloat(r.lat), lon: parseFloat(r.lon) }));
+    if(!Array.isArray(data)){
+      throw new Error("Risposta inattesa dal servizio di ricerca luoghi.");
+    }
+    const results = data.map(r => ({ label: r.display_name, lat: parseFloat(r.lat), lon: parseFloat(r.lon) }));
     nominatimSearchCache[key] = results;
     return results;
   }
@@ -763,7 +782,12 @@
         try{
           const results = await nominatimSearch(q);
           if(inputEl.value.trim() === q) render(results);
-        } catch(err){ /* silenzioso: si può comunque confermare il testo scritto */ }
+        } catch(err){
+          if(inputEl.value.trim() === q){
+            listEl.innerHTML = `<div class="place-suggest-empty">${err.message || "Servizio di ricerca non disponibile al momento."}</div>`;
+            listEl.classList.add("open");
+          }
+        }
       }, 400);
     });
 
@@ -802,6 +826,20 @@
     } catch(err){
       return null;
     }
+  }
+
+  // Versione "rumorosa" di resolvePlace: usata dal meteo di percorso, dove è
+  // un'azione esplicita dell'utente e conviene mostrare l'errore vero
+  // (servizio non raggiungibile, posto non trovato...) invece di un generico
+  // "non riesco a trovare partenza o arrivo" che non aiuta a capire cosa fare.
+  async function resolvePlaceOrThrow(inputEl, label){
+    const resolved = placeResolvedCoords[inputEl.id];
+    if(resolved) return resolved;
+    const current = inputEl.value.trim();
+    if(!current) throw new Error(`Inserisci il campo "${label}".`);
+    const results = await nominatimSearch(current);
+    if(!results[0]) throw new Error(`Non ho trovato "${current}" (${label}). Scegli un suggerimento dall'elenco mentre scrivi, per essere sicuro del posto esatto.`);
+    return results[0];
   }
 
   async function fetchRoute(startCoords, endCoords, opts){
@@ -1372,11 +1410,13 @@
     try{
       // Usa la posizione esatta scelta dal menu di autocompletamento quando
       // c'è (niente più geocodifica "al buio" di nomi di paese ambigui);
-      // altrimenti prova comunque a risolvere il testo scritto.
-      const [startCoords, endCoords] = await Promise.all([resolvePlace(startInputEl), resolvePlace(endInputEl)]);
-      if(!startCoords || !endCoords){
-        throw new Error("Non riesco a trovare partenza o arrivo: scegli un suggerimento dall'elenco mentre scrivi, per essere sicuri del posto esatto.");
-      }
+      // altrimenti prova comunque a risolvere il testo scritto. Un eventuale
+      // errore (servizio non raggiungibile, posto non trovato) risale con il
+      // messaggio vero, per capire subito cosa non va.
+      const [startCoords, endCoords] = await Promise.all([
+        resolvePlaceOrThrow(startInputEl, "Partenza"),
+        resolvePlaceOrThrow(endInputEl, "Arrivo")
+      ]);
 
       resultsEl.innerHTML = `<p class="route-weather-loading">Calcolo il percorso...</p>`;
 
