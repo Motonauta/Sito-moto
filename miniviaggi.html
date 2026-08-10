@@ -1466,9 +1466,29 @@
 
       let route = null;
       let tollsAvoided = false;
+      let tollsFailReason = null;
       if(avoidTolls){
-        route = await fetchRoute(startCoords, endCoords, { exclude: "motorway", steps: true });
-        tollsAvoided = !!route;
+        // chiamata diretta (non fetchRoute) solo per questo tentativo, per
+        // poter leggere il motivo esatto del fallimento invece del generico
+        // "nessun percorso trovato" — utile per capire se il router pubblico
+        // che usiamo (OSRM demo) supporta davvero l'esclusione delle autostrade
+        const exclParams = new URLSearchParams({
+          startLat: startCoords.lat, startLon: startCoords.lon,
+          endLat: endCoords.lat, endLon: endCoords.lon,
+          steps: "1", exclude: "motorway"
+        });
+        try{
+          const exclRes = await fetch(`/api/route-planner?action=route&${exclParams.toString()}`);
+          const exclData = await exclRes.json();
+          if(exclData.code === "Ok" && exclData.routes && exclData.routes[0]){
+            route = exclData.routes[0];
+            tollsAvoided = true;
+          } else {
+            tollsFailReason = exclData.message || exclData.code || "motivo sconosciuto";
+          }
+        } catch(err){
+          tollsFailReason = err.message || "errore di rete";
+        }
       }
       if(!route){
         route = await fetchRoute(startCoords, endCoords, { steps: true });
@@ -1511,7 +1531,7 @@
       resultsEl.innerHTML = `
         <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida ${tollsNote}</p>
         <p class="route-weather-costs">${costsLine}</p>
-        ${(avoidTolls && !tollsAvoided) ? `<p class="route-weather-note">Non sono riuscito a calcolare un percorso che eviti del tutto le autostrade su questa tratta: qui sotto vedi il percorso più veloce disponibile.</p>` : ""}
+        ${(avoidTolls && !tollsAvoided) ? `<p class="route-weather-note">Non sono riuscito a calcolare un percorso che eviti del tutto le autostrade su questa tratta${tollsFailReason ? ` (motivo: ${tollsFailReason})` : ""}: qui sotto vedi il percorso più veloce disponibile.</p>` : ""}
         <ul class="route-weather-list">
           ${weatherResults.map(w => `
             <li>
