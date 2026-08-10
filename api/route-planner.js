@@ -36,16 +36,29 @@ function parseMimitCSV(text) {
 // Scarica e unisce anagrafica impianti + prezzi (dati aperti MIMIT), tenuti
 // in cache su Redis per non riscaricare/riparsare due elenchi nazionali ad
 // ogni singola ricerca di un distributore lungo il percorso.
-async function loadFuelPriceIndex() {
+async function loadFuelPriceIndex(debug) {
   const redis = await getRedisClient();
   const cached = await redis.get(FUEL_PRICE_CACHE_KEY);
-  if (cached) return JSON.parse(cached);
+  if (cached) {
+    if (debug) debug.source = 'cache';
+    return JSON.parse(cached);
+  }
 
   const [anagraficaRes, prezziRes] = await Promise.all([
     fetch('https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv'),
     fetch('https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv')
   ]);
   const [anagraficaText, prezziText] = await Promise.all([anagraficaRes.text(), prezziRes.text()]);
+
+  if (debug) {
+    debug.source = 'fresh';
+    debug.anagraficaStatus = anagraficaRes.status;
+    debug.prezziStatus = prezziRes.status;
+    debug.anagraficaLength = anagraficaText.length;
+    debug.prezziLength = prezziText.length;
+    debug.anagraficaSample = anagraficaText.slice(0, 300);
+    debug.prezziSample = prezziText.slice(0, 300);
+  }
 
   const stations = {};
   for (const row of parseMimitCSV(anagraficaText)) {
@@ -71,6 +84,11 @@ async function loadFuelPriceIndex() {
     }
   }
 
+  if (debug) {
+    debug.stationsParsed = Object.keys(stations).length;
+    debug.pricesParsed = Object.keys(prices).length;
+  }
+
   const index = [];
   for (const id in stations) {
     const st = stations[id];
@@ -78,7 +96,12 @@ async function loadFuelPriceIndex() {
     if (p) index.push({ lat: st.lat, lon: st.lon, prezzo: p.prezzo, aggiornato: p.data });
   }
 
-  await redis.set(FUEL_PRICE_CACHE_KEY, JSON.stringify(index), { EX: FUEL_PRICE_CACHE_TTL });
+  // un indice vuoto quasi certamente significa un problema di formato: non
+  // lo mettiamo in cache, altrimenti l'errore resterebbe "congelato" per
+  // un'ora invece di poter essere ridiagnosticato al tentativo successivo
+  if (index.length > 0) {
+    await redis.set(FUEL_PRICE_CACHE_KEY, JSON.stringify(index), { EX: FUEL_PRICE_CACHE_TTL });
+  }
   return index;
 }
 
@@ -216,7 +239,7 @@ async function findFuelNear(req, res) {
   const priceDebug = { indexSize: 0, nearestMatchKm: null, error: null };
 
   try {
-    const priceIndex = await loadFuelPriceIndex();
+    const priceIndex = await loadFuelPriceIndex(priceDebug);
     priceDebug.indexSize = priceIndex.length;
     let priceMatch = null, priceMatchDist = Infinity;
     for (const entry of priceIndex) {
