@@ -1368,6 +1368,7 @@
     try{
       const res = await fetch(`/api/route-planner?action=fuel-near&lat=${lat}&lon=${lon}&radius=17000`);
       const data = await res.json();
+      if(data.priceDebug) console.log("[Nostromo] prezzo benzina — diagnostica:", data.priceDebug);
       return (data.found && data.station) ? data.station : null;
     } catch(err){
       return null;
