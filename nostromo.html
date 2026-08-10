@@ -315,6 +315,36 @@
     color:var(--gold); border:1px solid var(--gold); padding:5px 12px; text-decoration:none;
   }
   .rotta-leg-links a:hover{ background:var(--gold); color:var(--asphalt); }
+
+  .print-pdf-btn{ margin-top:16px; }
+  #print-root{ display:none; }
+
+  @media print {
+    body > *:not(#print-root){ display:none !important; }
+    #print-root{ display:block !important; }
+
+    #print-root, #print-root *{
+      color:#111 !important; background:#fff !important;
+      box-shadow:none !important; border-color:#ccc !important;
+    }
+    #print-root{ font-family:"Work Sans", Arial, sans-serif; padding:0 20px; }
+    .print-header{ border-bottom:2px solid #111; padding-bottom:14px; margin-bottom:20px; }
+    .print-brand{ font-family:"JetBrains Mono", monospace; font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; margin:0; }
+    .print-header h1{ font-family:"Oswald", Arial, sans-serif; font-size:1.8rem; margin:6px 0 4px; }
+    .print-meta{ font-size:0.8rem; color:#555 !important; margin:0; }
+    .print-section{ margin-top:22px; }
+    .print-section h2{ font-family:"Oswald", Arial, sans-serif; font-size:1.1rem; border-bottom:1px solid #ccc; padding-bottom:6px; margin-bottom:12px; }
+    .print-params-list{ list-style:none; margin:0; padding:0; }
+    .print-params-list li{ padding:4px 0; font-size:0.92rem; }
+    #print-root a{ color:#111 !important; text-decoration:underline; }
+    #print-root .route-weather-list li,
+    #print-root .valigia-list li,
+    #print-root .rotta-leg{
+      border:1px solid #ccc !important; break-inside:avoid; margin-bottom:6px;
+    }
+    #print-root .rotta-leg-links a{ border:1px solid #999 !important; }
+    #print-root .print-pdf-btn{ display:none !important; }
+  }
 </style>
 </head>
 <body>
@@ -533,6 +563,10 @@
   </div>
 </footer>
 
+<div id="print-root">
+  <div id="print-content"></div>
+</div>
+
 <script>
   function weatherIcon(code){
     if (code === 0) return "☀️";
@@ -543,6 +577,32 @@
     if ([71,73,75,77,85,86].includes(code)) return "❄️";
     if ([95,96,99].includes(code)) return "⛈️";
     return "🌡️";
+  }
+
+  // ===== Salva risultato come PDF (stampa nativa del browser) ==========
+  // Nessuna libreria esterna: la finestra di stampa del browser offre già
+  // "Salva come PDF" e, stampando il DOM vero, i link (Maps/Waze/Mappe)
+  // restano cliccabili nel PDF risultante.
+  function printAssistantResult(title, paramsHTML, resultsHTML){
+    const root = document.getElementById("print-content");
+    const now = new Date();
+    const generatedAt = `${now.toLocaleDateString("it-IT")} alle ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    root.innerHTML = `
+      <div class="print-header">
+        <p class="print-brand">IL MOTONAUTA</p>
+        <h1>${title}</h1>
+        <p class="print-meta">Generato il ${generatedAt}</p>
+      </div>
+      <div class="print-section">
+        <h2>Parametri inseriti</h2>
+        ${paramsHTML}
+      </div>
+      <div class="print-section">
+        <h2>Risultato</h2>
+        ${resultsHTML}
+      </div>
+    `;
+    window.print();
   }
 
   function isoDate(offsetDays){
@@ -984,21 +1044,36 @@
       }
 
       resultsEl.innerHTML = `
-        <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida ${tollsNote}</p>
-        <p class="route-weather-costs">${costsLine}</p>
-        ${(avoidTolls && !tollsAvoided) ? `<p class="route-weather-note">Non sono riuscito a calcolare un percorso che eviti del tutto le autostrade su questa tratta${tollsFailReason ? ` (motivo: ${tollsFailReason})` : ""}: qui sotto vedi il percorso più veloce disponibile.</p>` : ""}
-        <ul class="route-weather-list">
-          ${weatherResults.map(w => `
-            <li>
-              <span class="w-icon">${w.icon}</span>
-              <span class="route-weather-place">${w.name}</span>
-              <span class="route-weather-time">ore ${w.arrivalLabel}</span>
-              <span class="w-temp">${w.temp}</span>
-            </li>
-          `).join("")}
-        </ul>
-        <p class="route-weather-note" style="margin-top:14px;">Stime indicative: orario di passaggio calcolato in proporzione ai km già percorsi rispetto alla durata totale (non tiene conto di soste), meteo orario per quell'orario esatto; carburante calcolato sulla distanza stradale reale con i parametri del calcolatore qui sopra, pedaggio su una tariffa media (non il prezzo ufficiale del casello).</p>
+        <div class="print-capture">
+          <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida ${tollsNote}</p>
+          <p class="route-weather-costs">${costsLine}</p>
+          ${(avoidTolls && !tollsAvoided) ? `<p class="route-weather-note">Non sono riuscito a calcolare un percorso che eviti del tutto le autostrade su questa tratta${tollsFailReason ? ` (motivo: ${tollsFailReason})` : ""}: qui sotto vedi il percorso più veloce disponibile.</p>` : ""}
+          <ul class="route-weather-list">
+            ${weatherResults.map(w => `
+              <li>
+                <span class="w-icon">${w.icon}</span>
+                <span class="route-weather-place">${w.name}</span>
+                <span class="route-weather-time">ore ${w.arrivalLabel}</span>
+                <span class="w-temp">${w.temp}</span>
+              </li>
+            `).join("")}
+          </ul>
+          <p class="route-weather-note" style="margin-top:14px;">Stime indicative: orario di passaggio calcolato in proporzione ai km già percorsi rispetto alla durata totale (non tiene conto di soste), meteo orario per quell'orario esatto; carburante calcolato sulla distanza stradale reale con i parametri del calcolatore qui sopra, pedaggio su una tariffa media (non il prezzo ufficiale del casello).</p>
+        </div>
+        <button type="button" class="btn print-pdf-btn" id="route-weather-pdf-btn">📄 Salva come PDF</button>
       `;
+      document.getElementById("route-weather-pdf-btn").addEventListener("click", () => {
+        const paramsHTML = `
+          <ul class="print-params-list">
+            <li><strong>Partenza:</strong> ${startPlace}</li>
+            <li><strong>Arrivo:</strong> ${endPlace}</li>
+            <li><strong>Percorso:</strong> ${avoidTolls ? "Senza autostrade/pedaggi" : "Con autostrade/pedaggi"}</li>
+            <li><strong>Giorno:</strong> ${dateStr}</li>
+            <li><strong>Orario di partenza:</strong> ${timeStr}</li>
+          </ul>
+        `;
+        printAssistantResult("Assistente di viaggio", paramsHTML, resultsEl.querySelector(".print-capture").innerHTML);
+      });
     } catch(err){
       resultsEl.innerHTML = `<p class="route-weather-error">${err.message || "Errore nel calcolo del percorso. Riprova."}</p>`;
     } finally {
@@ -1206,12 +1281,26 @@
           : `Non sono riuscito a recuperare dati meteo per questa destinazione: ho preparato una lista prudente che copre sia caldo che freddo che pioggia.`;
 
       resultsEl.innerHTML = `
-        <p class="route-weather-summary">${weatherNote}</p>
-        ${valigiaCategoryHTML("🏍️ Abbigliamento moto", motoItems)}
-        ${valigiaCategoryHTML("👕 Abbigliamento giornaliero", dailyItems)}
-        ${valigiaCategoryHTML("🎒 Accessori", accessori)}
-        <p class="route-weather-note" style="margin-top:14px;">Lista indicativa generata in base a durata del viaggio e meteo previsto — adattala alle tue abitudini e controlla sempre le previsioni aggiornate il giorno prima di partire.</p>
+        <div class="print-capture">
+          <p class="route-weather-summary">${weatherNote}</p>
+          ${valigiaCategoryHTML("🏍️ Abbigliamento moto", motoItems)}
+          ${valigiaCategoryHTML("👕 Abbigliamento giornaliero", dailyItems)}
+          ${valigiaCategoryHTML("🎒 Accessori", accessori)}
+          <p class="route-weather-note" style="margin-top:14px;">Lista indicativa generata in base a durata del viaggio e meteo previsto — adattala alle tue abitudini e controlla sempre le previsioni aggiornate il giorno prima di partire.</p>
+        </div>
+        <button type="button" class="btn print-pdf-btn" id="valigia-pdf-btn">📄 Salva come PDF</button>
       `;
+      document.getElementById("valigia-pdf-btn").addEventListener("click", () => {
+        const paramsHTML = `
+          <ul class="print-params-list">
+            <li><strong>Destinazione:</strong> ${destInputEl.value.trim()}</li>
+            <li><strong>Giorni:</strong> ${giorni}</li>
+            <li><strong>Data di partenza:</strong> ${dataStr}</li>
+            <li><strong>Bucato:</strong> ${bucato ? "Lavo a mano (porto il detersivo)" : "Vestiti per ogni giorno"}</li>
+          </ul>
+        `;
+        printAssistantResult("Assistente di valigia", paramsHTML, resultsEl.querySelector(".print-capture").innerHTML);
+      });
     } catch(err){
       resultsEl.innerHTML = `<p class="route-weather-error">${err.message || "Errore nella preparazione della valigia. Riprova."}</p>`;
     } finally {
@@ -1412,14 +1501,30 @@
       }
 
       resultsEl.innerHTML = `
-        <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida, ${allStops.length} tappe totali</p>
-        ${wasCapped ? `<p class="route-weather-note">Il link "tutto in uno" di Google Maps supporta un numero limitato di tappe: qui sotto trovi comunque il dettaglio completo di ogni tratta, ma quel link ne include solo ${MAX_WAYPOINTS_GOOGLE}.</p>` : ""}
-        <a href="${gmapsUrl}" target="_blank" rel="noopener" class="btn solid" style="margin-top:6px; display:inline-block;">🗺️ Apri il percorso completo su Google Maps</a>
-        <p class="route-weather-note" style="margin-top:14px;">Waze e Apple Maps non supportano un unico link con più tappe: qui sotto un link per ogni tratta, da aprire una alla volta man mano che arrivi.</p>
-        <ol class="rotta-legs-list">
-          ${legsHTML.join("")}
-        </ol>
+        <div class="print-capture">
+          <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida, ${allStops.length} tappe totali</p>
+          ${wasCapped ? `<p class="route-weather-note">Il link "tutto in uno" di Google Maps supporta un numero limitato di tappe: qui sotto trovi comunque il dettaglio completo di ogni tratta, ma quel link ne include solo ${MAX_WAYPOINTS_GOOGLE}.</p>` : ""}
+          <a href="${gmapsUrl}" target="_blank" rel="noopener" class="btn solid" style="margin-top:6px; display:inline-block;">🗺️ Apri il percorso completo su Google Maps</a>
+          <p class="route-weather-note" style="margin-top:14px;">Waze e Apple Maps non supportano un unico link con più tappe: qui sotto un link per ogni tratta, da aprire una alla volta man mano che arrivi.</p>
+          <ol class="rotta-legs-list">
+            ${legsHTML.join("")}
+          </ol>
+        </div>
+        <button type="button" class="btn print-pdf-btn" id="rotta-pdf-btn">📄 Salva come PDF</button>
       `;
+      document.getElementById("rotta-pdf-btn").addEventListener("click", () => {
+        const intervalLabel = intervalKm > 0 ? `ogni ${intervalKm} km` : "nessuna (solo le tappe scelte)";
+        const stopsLabel = stopInputs.map(el => el.value.trim()).filter(Boolean).join(", ") || "nessuna";
+        const paramsHTML = `
+          <ul class="print-params-list">
+            <li><strong>Partenza:</strong> ${startInputEl.value.trim()}</li>
+            <li><strong>Tappe scelte:</strong> ${stopsLabel}</li>
+            <li><strong>Arrivo:</strong> ${endInputEl.value.trim()}</li>
+            <li><strong>Tappa automatica:</strong> ${intervalLabel}</li>
+          </ul>
+        `;
+        printAssistantResult("Assistente di rotta", paramsHTML, resultsEl.querySelector(".print-capture").innerHTML);
+      });
     } catch(err){
       resultsEl.innerHTML = `<p class="route-weather-error">${err.message || "Errore nel calcolo del percorso. Riprova."}</p>`;
     } finally {
