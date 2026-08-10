@@ -288,6 +288,33 @@
   }
   .valigia-list label{ display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.9rem; color:var(--cream); }
   .valigia-list input[type="checkbox"]{ width:16px; height:16px; accent-color:var(--rust); flex-shrink:0; }
+
+  .rotta-stop-row{ display:flex; align-items:flex-start; gap:10px; margin-top:12px; }
+  .rotta-stop-row .place-field{ flex-grow:1; }
+  .rotta-remove-stop{
+    flex-shrink:0; width:40px; height:44px; background:var(--asphalt);
+    border:1px solid rgba(245,240,230,0.2); color:var(--cream-dim);
+    cursor:pointer; font-size:1rem; line-height:1;
+  }
+  .rotta-remove-stop:hover{ border-color:var(--rust); color:var(--cream); }
+
+  .rotta-legs-list{ list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .rotta-leg{
+    background:var(--asphalt); border:1px solid rgba(245,240,230,0.14);
+    padding:12px 16px;
+  }
+  .rotta-leg-label{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:0.9rem; color:var(--cream); }
+  .rotta-leg-num{
+    font-family:var(--font-mono); font-size:0.7rem; color:var(--gold);
+    border:1px solid var(--gold); border-radius:99px; padding:1px 8px; flex-shrink:0;
+  }
+  .rotta-leg-dist{ font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim); margin-left:auto; }
+  .rotta-leg-links{ display:flex; gap:10px; margin-top:10px; }
+  .rotta-leg-links a{
+    font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--gold); border:1px solid var(--gold); padding:5px 12px; text-decoration:none;
+  }
+  .rotta-leg-links a:hover{ background:var(--gold); color:var(--asphalt); }
 </style>
 </head>
 <body>
@@ -443,6 +470,53 @@
       </div>
       <button type="button" id="valigia-btn" class="btn solid" style="margin-top:18px;">Genera la valigia</button>
       <div id="valigia-results" class="route-weather-results"></div>
+    </div>
+
+    <div class="route-weather-widget">
+      <p class="marker">Pianifica le tappe</p>
+      <h2 style="font-size:1.3rem; color:var(--sand);">Assistente di rotta</h2>
+      <p style="margin-top:10px; font-size:0.92rem; color:var(--cream-dim);">
+        Partenza, arrivo e tutte le tappe intermedie che vuoi: calcolo il
+        percorso reale attraverso tutti i punti e ti do i link pronti per
+        Google Maps, Apple Maps e Waze. Se scegli anche una tappa automatica
+        ogni tot km, cerco un distributore o Autogrill vero nelle vicinanze
+        di quel punto, non una sosta a caso sulla strada.
+      </p>
+
+      <div class="route-weather-grid" style="grid-template-columns:1fr; margin-top:18px;">
+        <div>
+          <label for="rotta-start">Partenza</label>
+          <div class="place-field">
+            <input type="text" id="rotta-start" placeholder="Es. Roma" autocomplete="off">
+            <div class="place-suggest-list" id="rotta-start-suggest"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="rotta-stops-list"></div>
+      <button type="button" id="rotta-add-stop" class="btn" style="margin-top:10px;">+ Aggiungi tappa</button>
+
+      <div class="route-weather-grid" style="grid-template-columns:1fr 1fr; margin-top:18px;">
+        <div>
+          <label for="rotta-end">Arrivo</label>
+          <div class="place-field">
+            <input type="text" id="rotta-end" placeholder="Es. Bormio" autocomplete="off">
+            <div class="place-suggest-list" id="rotta-end-suggest"></div>
+          </div>
+        </div>
+        <div>
+          <label for="rotta-interval">Tappa automatica ogni</label>
+          <select id="rotta-interval">
+            <option value="0">Solo le tappe scelte da me</option>
+            <option value="50">50 km</option>
+            <option value="100" selected>100 km</option>
+            <option value="200">200 km</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="button" id="rotta-btn" class="btn solid" style="margin-top:18px;">Genera il percorso</button>
+      <div id="rotta-results" class="route-weather-results"></div>
     </div>
   </div>
 </section>
@@ -1155,6 +1229,208 @@
 
   document.getElementById("valigia-btn").addEventListener("click", calculateValigia);
   attachPlaceAutocomplete(document.getElementById("valigia-dest"), document.getElementById("valigia-dest-suggest"));
+
+  // ===== Assistente di rotta ==========================================
+  let rottaStopCounter = 0;
+
+  function addRottaStopField(){
+    rottaStopCounter++;
+    const id = `rotta-stop-${rottaStopCounter}`;
+    const row = document.createElement("div");
+    row.className = "rotta-stop-row";
+    row.innerHTML = `
+      <div class="place-field">
+        <input type="text" id="${id}" placeholder="Es. Firenze" autocomplete="off">
+        <div class="place-suggest-list" id="${id}-suggest"></div>
+      </div>
+      <button type="button" class="rotta-remove-stop" aria-label="Rimuovi questa tappa">✕</button>
+    `;
+    document.getElementById("rotta-stops-list").appendChild(row);
+    attachPlaceAutocomplete(document.getElementById(id), document.getElementById(`${id}-suggest`));
+    row.querySelector(".rotta-remove-stop").addEventListener("click", () => row.remove());
+  }
+  document.getElementById("rotta-add-stop").addEventListener("click", addRottaStopField);
+
+  // Cerca, tra i distributori/Autogrill reali restituiti da OpenStreetMap
+  // vicino a un punto, quello più vicino in linea d'aria
+  async function findNearestFuelStation(lat, lon){
+    try{
+      const res = await fetch(`/api/route-planner?action=fuel-near&lat=${lat}&lon=${lon}&radius=5000`);
+      const data = await res.json();
+      const elements = data.elements || [];
+      let best = null, bestDist = Infinity;
+      for(const el of elements){
+        const elLat = el.lat != null ? el.lat : (el.center && el.center.lat);
+        const elLon = el.lon != null ? el.lon : (el.center && el.center.lon);
+        if(elLat == null || elLon == null) continue;
+        const dist = haversineKm(lat, lon, elLat, elLon);
+        if(dist < bestDist){
+          bestDist = dist;
+          const tags = el.tags || {};
+          best = { lat: elLat, lon: elLon, name: tags.brand || tags.name || "Distributore" };
+        }
+      }
+      return best;
+    } catch(err){
+      return null;
+    }
+  }
+
+  function buildGoogleMapsUrl(stops){
+    const origin = `${stops[0].lat},${stops[0].lon}`;
+    const destination = `${stops[stops.length - 1].lat},${stops[stops.length - 1].lon}`;
+    const waypoints = stops.slice(1, -1).map(s => `${s.lat},${s.lon}`).join("|");
+    return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}${waypoints ? `&waypoints=${encodeURIComponent(waypoints)}` : ""}&travelmode=driving`;
+  }
+
+  function legMapsUrl(a, b){
+    return `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lon}&destination=${b.lat},${b.lon}&travelmode=driving`;
+  }
+  function legAppleMapsUrl(a, b){
+    return `https://maps.apple.com/?saddr=${a.lat},${a.lon}&daddr=${b.lat},${b.lon}&dirflg=d`;
+  }
+  function legWazeUrl(b){
+    // Waze naviga sempre dalla posizione attuale: quando si è alla tappa
+    // precedente il punto di partenza reale è già quello, serve solo la destinazione
+    return `https://waze.com/ul?ll=${b.lat},${b.lon}&navigate=yes`;
+  }
+
+  function rottaLegHTML(a, b, index, total){
+    const distLabel = (a.cumKm != null && b.cumKm != null) ? `${Math.round(b.cumKm - a.cumKm)} km` : "";
+    const foundNote = b.found === false ? ` <em>(nessun distributore trovato nelle vicinanze, punto approssimativo)</em>` : "";
+    return `
+      <li class="rotta-leg">
+        <div class="rotta-leg-label">
+          <span class="rotta-leg-num">${index}/${total}</span>
+          <span>${a.name} → ${b.name}${foundNote}</span>
+          ${distLabel ? `<span class="rotta-leg-dist">${distLabel}</span>` : ""}
+        </div>
+        <div class="rotta-leg-links">
+          <a href="${legMapsUrl(a, b)}" target="_blank" rel="noopener">Maps</a>
+          <a href="${legAppleMapsUrl(a, b)}" target="_blank" rel="noopener">Mappe</a>
+          <a href="${legWazeUrl(b)}" target="_blank" rel="noopener">Waze</a>
+        </div>
+      </li>
+    `;
+  }
+
+  // Il link "tutto in uno" di Google Maps regge un numero limitato di tappe:
+  // oltre una certa soglia si tengono sempre partenza e arrivo, e si
+  // campionano le tappe di mezzo distribuendole uniformemente
+  function capStopsForGoogle(stops, max){
+    if(stops.length <= max) return stops;
+    const first = stops[0];
+    const last = stops[stops.length - 1];
+    const middle = stops.slice(1, -1);
+    const keep = Math.max(0, max - 2);
+    const step = middle.length / keep;
+    const sampled = [];
+    for(let i = 0; i < keep; i++){
+      sampled.push(middle[Math.min(middle.length - 1, Math.floor(i * step))]);
+    }
+    return [first, ...sampled, last];
+  }
+
+  async function calculateRotta(){
+    const startInputEl = document.getElementById("rotta-start");
+    const endInputEl = document.getElementById("rotta-end");
+    const intervalKm = parseInt(document.getElementById("rotta-interval").value, 10) || 0;
+    const resultsEl = document.getElementById("rotta-results");
+    const btn = document.getElementById("rotta-btn");
+    const stopInputs = Array.from(document.querySelectorAll("#rotta-stops-list input[type='text']"));
+
+    if(!startInputEl.value.trim() || !endInputEl.value.trim()){
+      resultsEl.innerHTML = `<p class="route-weather-error">Inserisci almeno partenza e arrivo.</p>`;
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Calcolo in corso...";
+    resultsEl.innerHTML = `<p class="route-weather-loading">Cerco partenza, arrivo e tappe...</p>`;
+
+    try{
+      const allInputs = [startInputEl, ...stopInputs, endInputEl];
+      const resolved = await Promise.all(allInputs.map((el, i) => {
+        const label = i === 0 ? "Partenza" : (i === allInputs.length - 1 ? "Arrivo" : `Tappa ${i}`);
+        return resolvePlaceOrThrow(el, label);
+      }));
+
+      let allStops = allInputs.map((el, i) => ({
+        name: el.value.trim(),
+        lat: resolved[i].lat,
+        lon: resolved[i].lon,
+        cumKm: null
+      }));
+
+      resultsEl.innerHTML = `<p class="route-weather-loading">Calcolo il percorso attraverso ${allStops.length} punti...</p>`;
+
+      const coordsParam = allStops.map(s => `${s.lat},${s.lon}`).join(";");
+      const routeRes = await fetch(`/api/route-planner?action=route&coords=${encodeURIComponent(coordsParam)}&steps=1`);
+      const routeData = await routeRes.json();
+      if(routeData.code !== "Ok" || !routeData.routes || !routeData.routes[0]){
+        throw new Error(routeData.message || "Non sono riuscito a calcolare un percorso attraverso questi punti.");
+      }
+      const route = routeData.routes[0];
+      const distanceKm = route.distance / 1000;
+      const durationH = route.duration / 3600;
+
+      // km cumulati di ogni tappa scelta da te, sommando la distanza di ogni tratta
+      let cum = 0;
+      allStops[0].cumKm = 0;
+      (route.legs || []).forEach((leg, i) => {
+        cum += (leg.distance || 0) / 1000;
+        if(allStops[i + 1]) allStops[i + 1].cumKm = cum;
+      });
+
+      if(intervalKm > 0){
+        resultsEl.innerHTML = `<p class="route-weather-loading">Cerco distributori e Autogrill lungo il percorso...</p>`;
+        const geomSamples = sampleRouteGeometry(route, intervalKm);
+        const fuelStops = [];
+        for(const p of geomSamples){
+          // salta i punti automatici troppo vicini a una tappa già scelta da te
+          const tooClose = allStops.some(s => Math.abs(s.cumKm - p.cumKm) < intervalKm * 0.3);
+          if(tooClose) continue;
+          const station = await findNearestFuelStation(p.lat, p.lon);
+          if(station){
+            fuelStops.push({ name: station.name, lat: station.lat, lon: station.lon, cumKm: p.cumKm, found: true });
+          } else {
+            fuelStops.push({ name: `Zona km ${Math.round(p.cumKm)}`, lat: p.lat, lon: p.lon, cumKm: p.cumKm, found: false });
+          }
+          await sleep(800); // cortesia verso il servizio (dati OpenStreetMap/Overpass)
+        }
+        allStops = [...allStops, ...fuelStops].sort((a, b) => a.cumKm - b.cumKm);
+      }
+
+      const MAX_WAYPOINTS_GOOGLE = 23;
+      const wasCapped = allStops.length > MAX_WAYPOINTS_GOOGLE;
+      const stopsForGoogle = wasCapped ? capStopsForGoogle(allStops, MAX_WAYPOINTS_GOOGLE) : allStops;
+      const gmapsUrl = buildGoogleMapsUrl(stopsForGoogle);
+
+      const legsHTML = [];
+      for(let i = 0; i < allStops.length - 1; i++){
+        legsHTML.push(rottaLegHTML(allStops[i], allStops[i + 1], i + 1, allStops.length - 1));
+      }
+
+      resultsEl.innerHTML = `
+        <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida, ${allStops.length} tappe totali</p>
+        ${wasCapped ? `<p class="route-weather-note">Il link "tutto in uno" di Google Maps supporta un numero limitato di tappe: qui sotto trovi comunque il dettaglio completo di ogni tratta, ma quel link ne include solo ${MAX_WAYPOINTS_GOOGLE}.</p>` : ""}
+        <a href="${gmapsUrl}" target="_blank" rel="noopener" class="btn solid" style="margin-top:6px; display:inline-block;">🗺️ Apri il percorso completo su Google Maps</a>
+        <p class="route-weather-note" style="margin-top:14px;">Waze e Apple Maps non supportano un unico link con più tappe: qui sotto un link per ogni tratta, da aprire una alla volta man mano che arrivi.</p>
+        <ol class="rotta-legs-list">
+          ${legsHTML.join("")}
+        </ol>
+      `;
+    } catch(err){
+      resultsEl.innerHTML = `<p class="route-weather-error">${err.message || "Errore nel calcolo del percorso. Riprova."}</p>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Genera il percorso";
+    }
+  }
+
+  document.getElementById("rotta-btn").addEventListener("click", calculateRotta);
+  attachPlaceAutocomplete(document.getElementById("rotta-start"), document.getElementById("rotta-start-suggest"));
+  attachPlaceAutocomplete(document.getElementById("rotta-end"), document.getElementById("rotta-end-suggest"));
 </script>
 
 <script src="script.js"></script>

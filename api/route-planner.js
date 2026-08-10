@@ -21,7 +21,16 @@ async function reversePlace(req, res) {
 }
 
 async function computeRoute(req, res) {
-  const { startLat, startLon, endLat, endLon, steps, exclude } = req.query;
+  const { startLat, startLon, endLat, endLon, steps, exclude, coords } = req.query;
+
+  // Percorso con più tappe (Assistente di rotta): coords è una lista di
+  // "lat,lon" separati da ";" nell'ordine in cui vanno visitati. OSRM supporta
+  // nativamente più waypoint nello stesso URL e restituisce già i dati
+  // (distanza/durata) divisi per ogni singola tratta in route.legs[].
+  if (coords) {
+    return await computeMultiStopRoute(req, res, { coords, steps });
+  }
+
   if (!startLat || !startLon || !endLat || !endLon) {
     return res.status(400).json({ error: 'Mancano le coordinate' });
   }
@@ -47,6 +56,48 @@ async function computeRoute(req, res) {
   const url = `https://router.project-osrm.org/route/v1/driving/${encodeURIComponent(startLon)},${encodeURIComponent(startLat)};${encodeURIComponent(endLon)},${encodeURIComponent(endLat)}?${params.toString()}`;
   const r = await fetch(url);
   const data = await r.json();
+  res.status(200).json(data);
+}
+
+async function computeMultiStopRoute(req, res, { coords, steps }) {
+  const points = coords.split(';').map(p => {
+    const [lat, lon] = p.split(',').map(Number);
+    return { lat, lon };
+  }).filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lon));
+
+  if (points.length < 2) {
+    return res.status(400).json({ error: 'Servono almeno 2 punti' });
+  }
+
+  const params = new URLSearchParams();
+  const wantSteps = steps === '1';
+  params.set('overview', wantSteps ? 'full' : 'false');
+  if (wantSteps) {
+    params.set('geometries', 'geojson');
+    params.set('steps', 'true');
+  }
+
+  const coordStr = points.map(p => `${p.lon},${p.lat}`).join(';');
+  const url = `https://router.project-osrm.org/route/v1/driving/${coordStr}?${params.toString()}`;
+  const r = await fetch(url);
+  const data = await r.json();
+  res.status(200).json(data);
+}
+
+// Cerca distributori di benzina/Autogrill reali (dati OpenStreetMap, tag
+// amenity=fuel) entro un certo raggio da un punto, per far corrispondere le
+// tappe "ogni tot km" a una sosta vera invece che a un punto a caso sulla
+// strada.
+async function findFuelNear(req, res) {
+  const { lat, lon, radius } = req.query;
+  if (!lat || !lon) return res.status(400).json({ error: 'Mancano lat/lon' });
+  const r = Math.min(Math.max(Number(radius) || 5000, 500), 15000);
+
+  const query = `[out:json][timeout:15];(node["amenity"="fuel"](around:${r},${lat},${lon});way["amenity"="fuel"](around:${r},${lat},${lon}););out center 10;`;
+  const resp = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`, {
+    headers: { 'User-Agent': NOMINATIM_UA }
+  });
+  const data = await resp.json();
   res.status(200).json(data);
 }
 
@@ -132,6 +183,7 @@ module.exports = async (req, res) => {
     if (action === 'search') return await searchPlace(req, res);
     if (action === 'reverse') return await reversePlace(req, res);
     if (action === 'route') return await computeRoute(req, res);
+    if (action === 'fuel-near') return await findFuelNear(req, res);
     return res.status(400).json({ error: 'Azione non valida' });
   } catch (err) {
     console.error(err);
