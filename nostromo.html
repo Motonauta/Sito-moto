@@ -323,26 +323,45 @@
     body > *:not(#print-root){ display:none !important; }
     #print-root{ display:block !important; }
 
+    /* per default i browser tolgono i colori di sfondo in stampa per
+       risparmiare inchiostro: qui li vogliamo davvero, sono il tema del sito */
     #print-root, #print-root *{
-      color:#111 !important; background:#fff !important;
-      box-shadow:none !important; border-color:#ccc !important;
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
     }
-    #print-root{ font-family:"Work Sans", Arial, sans-serif; padding:0 20px; }
-    .print-header{ border-bottom:2px solid #111; padding-bottom:14px; margin-bottom:20px; }
-    .print-brand{ font-family:"JetBrains Mono", monospace; font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; margin:0; }
-    .print-header h1{ font-family:"Oswald", Arial, sans-serif; font-size:1.8rem; margin:6px 0 4px; }
-    .print-meta{ font-size:0.8rem; color:#555 !important; margin:0; }
+
+    #print-root{
+      position:relative; overflow:hidden;
+      font-family:"Work Sans", Arial, sans-serif;
+      background:var(--asphalt) !important; color:var(--cream) !important;
+      padding:34px 28px; min-height:100vh;
+    }
+
+    .print-watermark{
+      position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-22deg);
+      font-family:"Oswald", Arial, sans-serif; font-weight:700;
+      font-size:6.5rem; letter-spacing:0.06em; text-transform:uppercase;
+      white-space:nowrap; color:var(--gold) !important; opacity:0.08;
+      z-index:0; pointer-events:none;
+    }
+
+    .print-header, .print-section{ position:relative; z-index:1; }
+    .print-header{ border-bottom:2px solid var(--gold); padding-bottom:14px; margin-bottom:20px; }
+    .print-brand{ font-family:"JetBrains Mono", monospace; font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; margin:0; color:var(--gold) !important; }
+    .print-header h1{ font-family:"Oswald", Arial, sans-serif; font-size:1.8rem; margin:6px 0 4px; color:var(--sand) !important; }
+    .print-meta{ font-size:0.8rem; color:var(--cream-dim) !important; margin:0; }
     .print-section{ margin-top:22px; }
-    .print-section h2{ font-family:"Oswald", Arial, sans-serif; font-size:1.1rem; border-bottom:1px solid #ccc; padding-bottom:6px; margin-bottom:12px; }
+    .print-section h2{ font-family:"Oswald", Arial, sans-serif; font-size:1.1rem; border-bottom:1px solid rgba(245,240,230,0.25); padding-bottom:6px; margin-bottom:12px; color:var(--sand) !important; }
     .print-params-list{ list-style:none; margin:0; padding:0; }
-    .print-params-list li{ padding:4px 0; font-size:0.92rem; }
-    #print-root a{ color:#111 !important; text-decoration:underline; }
+    .print-params-list li{ padding:4px 0; font-size:0.92rem; color:var(--cream) !important; }
+    #print-root a{ color:var(--gold) !important; text-decoration:underline; }
     #print-root .route-weather-list li,
     #print-root .valigia-list li,
     #print-root .rotta-leg{
-      border:1px solid #ccc !important; break-inside:avoid; margin-bottom:6px;
+      background:var(--asphalt-2) !important; border:1px solid rgba(245,240,230,0.18) !important;
+      break-inside:avoid; margin-bottom:6px;
     }
-    #print-root .rotta-leg-links a{ border:1px solid #999 !important; }
+    #print-root .rotta-leg-links a{ border:1px solid var(--gold) !important; padding:4px 10px; }
     #print-root .print-pdf-btn{ display:none !important; }
   }
 </style>
@@ -564,6 +583,7 @@
 </footer>
 
 <div id="print-root">
+  <div class="print-watermark">Il Motonauta</div>
   <div id="print-content"></div>
 </div>
 
@@ -1343,26 +1363,29 @@
   // Cerca, tra i distributori/Autogrill reali restituiti da OpenStreetMap
   // vicino a un punto, quello più vicino in linea d'aria
   async function findNearestFuelStation(lat, lon){
-    try{
-      const res = await fetch(`/api/route-planner?action=fuel-near&lat=${lat}&lon=${lon}&radius=5000`);
-      const data = await res.json();
-      const elements = data.elements || [];
-      let best = null, bestDist = Infinity;
-      for(const el of elements){
-        const elLat = el.lat != null ? el.lat : (el.center && el.center.lat);
-        const elLon = el.lon != null ? el.lon : (el.center && el.center.lon);
-        if(elLat == null || elLon == null) continue;
-        const dist = haversineKm(lat, lon, elLat, elLon);
-        if(dist < bestDist){
-          bestDist = dist;
-          const tags = el.tags || {};
-          best = { lat: elLat, lon: elLon, name: tags.brand || tags.name || "Distributore" };
+    // prima un raggio stretto (più preciso), poi uno più largo se non trova
+    // nulla: nelle zone di montagna/rurali 5 km spesso non bastano
+    for(const radius of [5000, 15000]){
+      try{
+        const res = await fetch(`/api/route-planner?action=fuel-near&lat=${lat}&lon=${lon}&radius=${radius}`);
+        const data = await res.json();
+        const elements = data.elements || [];
+        let best = null, bestDist = Infinity;
+        for(const el of elements){
+          const elLat = el.lat != null ? el.lat : (el.center && el.center.lat);
+          const elLon = el.lon != null ? el.lon : (el.center && el.center.lon);
+          if(elLat == null || elLon == null) continue;
+          const dist = haversineKm(lat, lon, elLat, elLon);
+          if(dist < bestDist){
+            bestDist = dist;
+            const tags = el.tags || {};
+            best = { lat: elLat, lon: elLon, name: tags.brand || tags.name || "Distributore" };
+          }
         }
-      }
-      return best;
-    } catch(err){
-      return null;
+        if(best) return best;
+      } catch(err){ /* prova il raggio successivo */ }
     }
+    return null;
   }
 
   function buildGoogleMapsUrl(stops){
