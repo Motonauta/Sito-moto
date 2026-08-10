@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Il Motonauta — Nostromo, gli assistenti di viaggio</title>
+<meta name="description" content="Nostromo: gli assistenti di viaggio del Motonauta. Meteo lungo tutto il percorso e lista della valigia generata in base a destinazione, giorni e previsioni.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="cookie-consent.js" defer></script>
+<style>
+  html, body{ overflow-x:hidden; max-width:100vw; }
+
+  .itinerari-carousel{ position:relative; margin:34px auto 0; max-width:440px; }
+  .itinerari-grid{
+    display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
+    scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
+  }
+  .itinerari-grid::-webkit-scrollbar{ display:none; }
+
+  .carousel-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:40px; height:40px; border-radius:50%; z-index:3;
+    background:rgba(27,26,23,0.85); border:1px solid var(--rust); color:var(--cream);
+    font-size:1.35rem; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease;
+  }
+  .carousel-arrow:hover{ background:var(--rust); }
+  .carousel-arrow.prev{ left:8px; }
+  .carousel-arrow.next{ right:8px; }
+
+  .itinerario-card{
+    background:linear-gradient(155deg, var(--gold) 0%, var(--rust) 100%);
+    padding:5px; box-sizing:border-box;
+    flex:0 0 100%; width:100%; scroll-snap-align:center;
+    box-shadow:0 24px 50px -26px rgba(0,0,0,0.75);
+    cursor:pointer;
+  }
+  .card-frame{
+    background:var(--asphalt); overflow:hidden;
+    border:1px solid rgba(27,26,23,0.6);
+  }
+  .card-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--asphalt-2); padding:14px 16px;
+    border-bottom:1px solid rgba(245,240,230,0.16);
+  }
+  .card-topbar .card-km, .card-topbar .card-price{
+    font-family:var(--font-mono); font-size:0.72rem; white-space:nowrap; flex-shrink:0;
+  }
+  .card-topbar .card-km{ color:var(--cream-dim); }
+  .card-topbar .card-price{ color:var(--gold); font-weight:700; }
+  .card-topbar .card-title{
+    font-family:var(--font-display); text-transform:uppercase; letter-spacing:0.02em;
+    font-size:0.82rem; color:var(--sand); text-align:center; line-height:1.25;
+    flex-grow:1; padding:0 6px;
+  }
+  .card-weather-bar{
+    display:flex; align-items:center; gap:12px; font-family:var(--font-mono);
+    background:var(--asphalt-2); padding:13px 16px;
+    border-bottom:1px solid rgba(245,240,230,0.16);
+  }
+  .card-weather-bar .w-day{
+    background:transparent; border:1px solid rgba(245,240,230,0.35); color:var(--cream);
+    font-family:var(--font-mono); font-size:0.76rem; text-transform:uppercase;
+    padding:7px 9px; flex-shrink:0; cursor:pointer;
+  }
+  .card-weather-bar .w-icon{ font-size:1.6rem; line-height:1; flex-shrink:0; }
+  .card-weather-bar .w-temp{ font-size:1rem; color:var(--cream); font-weight:600; flex-shrink:0; white-space:nowrap; }
+  .card-weather-bar .w-place{
+    font-size:0.68rem; color:var(--cream-dim); opacity:0.85; text-transform:uppercase;
+    margin-left:auto; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  .itinerario-card-body{ display:none; padding:26px 34px 34px; }
+  .detail-modal-inner .itinerario-card-body{ display:block; }
+  .itinerario-photo{
+    position:relative; aspect-ratio:16/9; overflow:hidden;
+    background:var(--asphalt-2); margin:14px 14px 0;
+    border:1px solid rgba(217,164,65,0.45);
+  }
+  .itinerario-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .itinerario-photo::before, .itinerario-photo::after{
+    content:""; position:absolute; width:16px; height:16px; z-index:1; pointer-events:none;
+  }
+  .itinerario-photo::before{ top:-1px; left:-1px; border-top:2px solid var(--gold); border-left:2px solid var(--gold); }
+  .itinerario-photo::after{ bottom:-1px; right:-1px; border-bottom:2px solid var(--gold); border-right:2px solid var(--gold); }
+  .itinerario-card .marker{ margin-bottom:0; }
+  .itinerario-card p.desc{ margin-top:14px; font-size:0.95rem; }
+
+  .card-compact-actions{ display:flex; gap:1px; background:rgba(245,240,230,0.14); margin:14px; }
+  .card-compact-actions a, .card-compact-actions button.card-share-btn{
+    flex:1; text-align:center; font-family:var(--font-mono); font-size:0.68rem;
+    text-transform:uppercase; letter-spacing:0.04em; padding:12px 8px;
+    background:var(--asphalt); color:var(--cream); border:none; cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .card-compact-actions a:hover{ background:var(--rust); }
+  .card-compact-actions a.waze:hover{ background:rgba(245,240,230,0.12); }
+  .card-compact-actions button.card-share-btn:hover{ background:var(--rust); }
+  .card-compact-actions button.card-share-btn[disabled]{ opacity:0.6; cursor:wait; }
+  .card-more-btn{
+    display:block; width:100%; text-align:center; box-sizing:border-box;
+    background:transparent; border:none; border-top:1px solid rgba(245,240,230,0.14);
+    color:var(--cream-dim); font-family:var(--font-mono); font-size:0.7rem;
+    text-transform:uppercase; letter-spacing:0.05em; padding:13px; cursor:pointer;
+    transition:color .2s ease, background .2s ease;
+  }
+  .card-more-btn:hover{ color:var(--gold); background:rgba(245,240,230,0.04); }
+
+  .detail-modal{ position:fixed; inset:0; z-index:80; display:none; }
+  .detail-modal.open{ display:block; }
+  .detail-modal-backdrop{ position:absolute; inset:0; background:rgba(10,9,7,0.8); }
+  .detail-modal-panel{
+    position:relative; max-width:600px; width:calc(100% - 32px);
+    margin:4vh auto; max-height:92vh; overflow-y:auto;
+    background:linear-gradient(155deg, var(--gold) 0%, var(--rust) 100%);
+    padding:5px; box-shadow:0 34px 80px -30px rgba(0,0,0,0.9);
+  }
+  .detail-modal-inner{ background:var(--asphalt); }
+  .detail-modal-close{
+    position:absolute; top:14px; right:14px; z-index:2;
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(27,26,23,0.9); border:1px solid var(--rust); color:var(--cream);
+    font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .detail-modal-close:hover{ background:var(--rust); }
+  body.modal-open{ overflow:hidden; }
+
+  .itinerario-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
+  .itinerario-actions a, .itinerario-actions button.card-share-btn{
+    font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em;
+    padding:10px 16px; border:1px solid var(--rust); color:var(--cream); background:transparent; cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .itinerario-actions a:hover{ background:var(--rust); }
+  .itinerario-actions button.card-share-btn:hover{ background:var(--rust); }
+  .itinerario-actions button.card-share-btn[disabled]{ opacity:0.6; cursor:wait; }
+  .itinerario-actions a.waze{ border-color:rgba(245,240,230,0.3); }
+  .itinerario-actions a.waze:hover{ background:rgba(245,240,230,0.12); }
+
+  .itinerario-stops{ margin-top:22px; }
+  .itinerario-stops p.label{
+    font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); margin-bottom:12px;
+  }
+  .itinerario-stops ul{ display:flex; flex-direction:column; gap:14px; }
+  .itinerario-stops li{ border-bottom:1px dashed rgba(245,240,230,0.16); padding-bottom:12px; }
+  .itinerario-stops li:last-child{ border-bottom:none; padding-bottom:0; }
+  .itinerario-stops a.stop-link{
+    display:flex; align-items:center; gap:8px;
+    font-size:0.92rem; color:var(--cream); transition:color .2s ease;
+  }
+  .itinerario-stops a.stop-link:hover{ color:var(--gold); }
+  .itinerario-stops a.stop-link::before{ content:"📍"; font-size:0.85em; flex-shrink:0; }
+  .itinerario-stops .fun{
+    margin-top:5px; font-size:0.85rem; color:var(--cream-dim); font-style:italic;
+  }
+
+  .itinerari-note{
+    margin-top:12px; padding:22px 26px; border:1px dashed var(--gold);
+    font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
+  }
+  .itinerari-note strong{ color:var(--gold); }
+
+  .fuel-calc{
+    margin-top:44px; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+    padding:28px 30px;
+  }
+  .fuel-calc-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:18px; align-items:end;
+  }
+  .fuel-calc label{
+    display:block; font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); margin-bottom:8px;
+  }
+  .fuel-calc select, .fuel-calc input{
+    width:100%; background:var(--asphalt); border:1px solid rgba(245,240,230,0.2);
+    color:var(--cream); padding:11px 12px; font-family:var(--font-body); font-size:0.92rem;
+  }
+  .fuel-calc-note{ margin-top:14px; font-size:0.8rem; color:var(--cream-dim); }
+  @media (max-width:780px){ .fuel-calc-grid{ grid-template-columns:1fr; } }
+
+  .place-field{ position:relative; }
+  .place-suggest-list{
+    position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:20;
+    background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.25);
+    max-height:240px; overflow-y:auto; display:none;
+    box-shadow:0 14px 30px -10px rgba(0,0,0,0.6);
+  }
+  .place-suggest-list.open{ display:block; }
+  .place-suggest-list button{
+    display:block; width:100%; text-align:left; background:transparent; border:none;
+    color:var(--cream); font-family:var(--font-body); font-size:0.86rem;
+    padding:10px 12px; cursor:pointer; border-bottom:1px solid rgba(245,240,230,0.08);
+  }
+  .place-suggest-list button:last-child{ border-bottom:none; }
+  .place-suggest-list button:hover, .place-suggest-list button.active{ background:var(--rust); color:var(--cream); }
+  .place-suggest-list .place-suggest-empty{ padding:10px 12px; font-size:0.8rem; color:var(--cream-dim); cursor:default; }
+
+  .route-weather-costs{
+    font-family:var(--font-mono); font-size:0.85rem; color:var(--gold); margin-top:2px; margin-bottom:14px;
+  }
+
+  /* Desktop: carosello con le cartoline laterali visibili, card con tutte le info sempre in vista */
+  @media (min-width:861px){
+    /* Carosello largo (le cartoline laterali restano visibili), formato
+       "da cartolina" (foto 16:9 come su mobile) ma tutta la sezione scalata
+       di circa il 20% in meno rispetto al formato base, per stare nello
+       schermo senza dover scorrere per vedere le info in basso. */
+    .itinerari-carousel{ max-width:100%; }
+    .itinerari-grid{ gap:20px; padding:4px 4px 12px; }
+    .itinerario-card{ flex:0 0 min(416px, 43vw); width:auto; cursor:default; }
+    .card-compact-actions,
+    .card-more-btn{ display:none; }
+    .card-topbar{ padding:10px 16px; }
+    .card-topbar .card-km, .card-topbar .card-price{ font-size:0.58rem; }
+    .card-topbar .card-title{ font-size:0.72rem; }
+    .card-weather-bar{ padding:8px 16px; }
+    .card-weather-bar .w-day{ font-size:0.61rem; padding:6px 7px; }
+    .card-weather-bar .w-icon{ font-size:1.28rem; }
+    .card-weather-bar .w-temp{ font-size:0.8rem; }
+    .card-weather-bar .w-place{ font-size:0.54rem; }
+    .itinerario-card-body{ display:block; padding:13px 18px 14px; }
+    .itinerario-card-body p.desc{ font-size:0.68rem; line-height:1.45; margin-top:8px; }
+    .itinerario-card-body .itinerario-actions{ margin-top:11px; gap:6px; }
+    .itinerario-card-body .itinerario-actions a,
+    .itinerario-card-body .itinerario-actions button{ font-size:0.53rem; padding:6px 10px; }
+    .itinerario-card-body .itinerario-stops{ margin-top:13px; }
+    .itinerario-card-body .itinerario-stops p.label{ margin-bottom:6px; font-size:0.54rem; }
+    .itinerario-card-body .itinerario-stops ul{ gap:6px; }
+    .itinerario-card-body .itinerario-stops li{ padding-bottom:5px; }
+    .itinerario-card-body .itinerario-stops a.stop-link{ font-size:0.64rem; }
+    .itinerario-card-body .itinerario-stops .fun{ font-size:0.58rem; margin-top:2px; }
+  }
+
+  .route-weather-widget{
+    margin-top:44px; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+    padding:28px 30px;
+  }
+  .route-weather-grid{
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:18px; margin-top:18px; align-items:end;
+  }
+  .route-weather-grid label{
+    display:block; font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); margin-bottom:8px;
+  }
+  .route-weather-grid input, .route-weather-grid select{
+    width:100%; background:var(--asphalt); border:1px solid rgba(245,240,230,0.2);
+    color:var(--cream); padding:11px 12px; font-family:var(--font-body); font-size:0.92rem; box-sizing:border-box;
+  }
+  .route-weather-grid input[type="date"], .route-weather-grid input[type="time"]{ color-scheme:dark; }
+  .route-weather-grid input[type="date"]::-webkit-calendar-picker-indicator,
+  .route-weather-grid input[type="time"]::-webkit-calendar-picker-indicator{ filter:invert(0.85); cursor:pointer; }
+  @media (max-width:780px){ .route-weather-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:480px){ .route-weather-grid{ grid-template-columns:1fr; } }
+
+  .route-weather-results{ margin-top:22px; }
+  .route-weather-loading, .route-weather-error, .route-weather-summary, .route-weather-note{
+    font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
+  }
+  .route-weather-error{ color:var(--rust); }
+  .route-weather-summary{ margin-bottom:6px; color:var(--gold); }
+  .route-weather-note{ margin-bottom:14px; font-style:italic; }
+  .route-weather-list{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
+  .route-weather-list li{
+    display:flex; align-items:center; gap:12px;
+    background:var(--asphalt); border:1px solid rgba(245,240,230,0.14);
+    padding:12px 16px;
+  }
+  .route-weather-list .w-icon{ font-size:1.3rem; line-height:1; flex-shrink:0; }
+  .route-weather-place{ flex-grow:1; font-size:0.92rem; color:var(--cream); }
+  .route-weather-time{ font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim); flex-shrink:0; }
+  .route-weather-list .w-temp{ font-family:var(--font-mono); font-size:0.85rem; color:var(--gold); flex-shrink:0; }
+
+  .valigia-category{ margin-top:22px; }
+  .valigia-category:first-of-type{ margin-top:16px; }
+  .valigia-cat-title{
+    font-family:var(--font-mono); font-size:0.75rem; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--gold); margin-bottom:10px;
+  }
+  .valigia-list{ display:flex; flex-direction:column; gap:8px; list-style:none; margin:0; padding:0; }
+  .valigia-list li{
+    background:var(--asphalt); border:1px solid rgba(245,240,230,0.14);
+    padding:10px 14px;
+  }
+  .valigia-list label{ display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.9rem; color:var(--cream); }
+  .valigia-list input[type="checkbox"]{ width:16px; height:16px; accent-color:var(--rust); flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo logo-wrap">
+      <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784625152/IMG_1429_dyz5re.jpg" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;">
+      IL <span>MOTONAUTA</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="nostromo.html" class="active">Nostromo</a>
+      <a href="about.html">About me</a>
+      <a href="sponsor.html">Partner</a>
+      <a href="galleria.html">Galleria</a>
+      <a href="contatti.html">Contatti</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Apri menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- NOSTROMO ============================================================ -->
+<section style="padding-top:70px; padding-bottom:0;">
+  <div class="wrap">
+    <p class="marker">La cassetta degli attrezzi</p>
+    <h1 style="font-size:clamp(2.4rem, 6vw, 4.4rem); color:var(--sand); max-width:24ch;">
+      Nostromo: i tuoi assistenti di viaggio
+    </h1>
+    <p style="margin-top:18px; font-size:1.02rem; max-width:70ch;">
+      A bordo, il nostromo è chi si occupa di tutto il necessario perché la
+      rotta vada liscia. Qui fa lo stesso per te: piccoli assistenti pensati
+      per chi viaggia in moto, che calcolano percorsi, meteo e bagagli così
+      non devi pensarci tu. Qui sotto trovi l'assistente che pianifica il
+      meteo lungo tutta la strada e quello che prepara la
+      lista della valigia — altri arriveranno con il tempo.
+    </p>
+  </div>
+</section>
+
+<section style="padding-top:32px;">
+  <div class="wrap">
+
+    <div class="fuel-calc">
+      <p class="marker">Prima di partire</p>
+      <h2 style="font-size:1.3rem; color:var(--sand);">La tua moto</h2>
+      <div class="fuel-calc-grid" style="grid-template-columns:repeat(2, 1fr); max-width:560px;">
+        <div>
+          <label for="fuel-cc">Cilindrata moto</label>
+          <select id="fuel-cc">
+            <option value="32">50 cc</option>
+            <option value="26">125 cc</option>
+            <option value="21">250 cc</option>
+            <option value="17" selected>500 cc</option>
+            <option value="16">600 cc</option>
+            <option value="15">700 cc</option>
+            <option value="14">800 cc</option>
+            <option value="13">900 cc</option>
+            <option value="12.5">1000 cc</option>
+            <option value="12">1100 cc</option>
+            <option value="11">1250 cc</option>
+            <option value="10">1400 cc</option>
+          </select>
+        </div>
+        <div>
+          <label for="fuel-price">Prezzo benzina (€/litro)</label>
+          <input type="number" id="fuel-price" value="1.75" step="0.01" min="0.5" max="4">
+        </div>
+      </div>
+      <p class="fuel-calc-note">
+        Usati dall'Assistente di viaggio qui sotto per stimare il costo di
+        carburante — e da quelli futuri che ne avranno bisogno.
+      </p>
+    </div>
+
+    <div class="route-weather-widget">
+      <p class="marker">Pianifica il viaggio</p>
+      <h2 style="font-size:1.3rem; color:var(--sand);">Assistente di viaggio</h2>
+      <p style="margin-top:10px; font-size:0.92rem; color:var(--cream-dim);">
+        Inserisci partenza e arrivo: calcolo il percorso stradale e ti mostro il
+        meteo previsto nelle località principali che attraversi lungo la
+        strada, insieme alla stima del costo di carburante e — se scegli il
+        percorso con autostrade — anche del pedaggio.
+      </p>
+      <div class="route-weather-grid">
+        <div>
+          <label for="route-start">Partenza</label>
+          <div class="place-field">
+            <input type="text" id="route-start" placeholder="Es. Roma" autocomplete="off">
+            <div class="place-suggest-list" id="route-start-suggest"></div>
+          </div>
+        </div>
+        <div>
+          <label for="route-end">Arrivo</label>
+          <div class="place-field">
+            <input type="text" id="route-end" placeholder="Es. Bormio" autocomplete="off">
+            <div class="place-suggest-list" id="route-end-suggest"></div>
+          </div>
+        </div>
+        <div>
+          <label for="route-toll">Percorso</label>
+          <select id="route-toll">
+            <option value="si">Con autostrade/pedaggi</option>
+            <option value="no">Senza autostrade/pedaggi</option>
+          </select>
+        </div>
+        <div>
+          <label for="route-day">Giorno</label>
+          <input type="date" id="route-day">
+        </div>
+        <div>
+          <label for="route-time">Orario di partenza</label>
+          <input type="time" id="route-time">
+        </div>
+      </div>
+      <button type="button" id="route-weather-btn" class="btn solid" style="margin-top:18px;">Calcola il meteo lungo il percorso</button>
+      <div id="route-weather-results" class="route-weather-results"></div>
+    </div>
+
+    <div class="route-weather-widget">
+      <p class="marker">Prepara i bagagli</p>
+      <h2 style="font-size:1.3rem; color:var(--sand);">Assistente di valigia</h2>
+      <p style="margin-top:10px; font-size:0.92rem; color:var(--cream-dim);">
+        Destinazione e giorni di viaggio: guardo il meteo previsto e ti
+        preparo la lista di cosa portare, abbigliamento moto incluso
+        (estivo, invernale o antipioggia a seconda delle previsioni).
+      </p>
+      <div class="route-weather-grid" style="grid-template-columns:repeat(4, 1fr);">
+        <div>
+          <label for="valigia-dest">Destinazione</label>
+          <div class="place-field">
+            <input type="text" id="valigia-dest" placeholder="Es. Bormio" autocomplete="off">
+            <div class="place-suggest-list" id="valigia-dest-suggest"></div>
+          </div>
+        </div>
+        <div>
+          <label for="valigia-giorni">Giorni</label>
+          <input type="number" id="valigia-giorni" value="3" min="1" max="30">
+        </div>
+        <div>
+          <label for="valigia-data">Data di partenza</label>
+          <input type="date" id="valigia-data">
+        </div>
+        <div>
+          <label for="valigia-bucato">Bucato</label>
+          <select id="valigia-bucato">
+            <option value="no">Vestiti per ogni giorno</option>
+            <option value="si">Lavo a mano (porto il detersivo)</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" id="valigia-btn" class="btn solid" style="margin-top:18px;">Genera la valigia</button>
+      <div id="valigia-results" class="route-weather-results"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-social">
+      <a href="contatti.html">Instagram</a>
+      <a href="contatti.html">TikTok</a>
+      <a href="contatti.html">YouTube</a>
+      <a href="privacy.html">Privacy &amp; Cookie</a>
+    </div>
+    <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
+  </div>
+</footer>
+
+<script>
+  function weatherIcon(code){
+    if (code === 0) return "☀️";
+    if ([1,2].includes(code)) return "🌤️";
+    if (code === 3) return "☁️";
+    if ([45,48].includes(code)) return "🌫️";
+    if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return "🌧️";
+    if ([71,73,75,77,85,86].includes(code)) return "❄️";
+    if ([95,96,99].includes(code)) return "⛈️";
+    return "🌡️";
+  }
+
+  function isoDate(offsetDays){
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    return d.toISOString().slice(0, 10);
+  }
+
+  // ===== Ricerca luoghi con autocompletamento (Nominatim/OpenStreetMap) =====
+  // Usata al posto della sola geocodifica "al buio": mostra un elenco di
+  // luoghi reali mentre si scrive, così non si può sbagliare a interpretare
+  // un nome di paese poco conosciuto (bug corretto: prima capitava che nomi
+  // di frazioni piccole venissero geocodificati nel posto sbagliato).
+  const placeResolvedCoords = {};
+  const nominatimSearchCache = {};
+
+  async function nominatimSearch(query){
+    const key = query.toLowerCase();
+    if(nominatimSearchCache[key]) return nominatimSearchCache[key];
+    // passa dal nostro endpoint /api/route-planner (proxy server-side) invece
+    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS.
+    // Se qualcosa va storto, l'errore viene fatto risalire con un messaggio
+    // preciso (invece di sparire in silenzio) così si capisce subito se è un
+    // problema di rete, di deploy della funzione o altro.
+    let res;
+    try{
+      res = await fetch(`/api/route-planner?action=search&q=${encodeURIComponent(query)}`);
+    } catch(networkErr){
+      throw new Error("Impossibile contattare il servizio di ricerca luoghi (errore di rete).");
+    }
+    if(!res.ok){
+      throw new Error(`Servizio di ricerca luoghi non disponibile (errore ${res.status}). Se il problema persiste, verifica che il file api/route-planner.js sia stato caricato su GitHub.`);
+    }
+    const data = await res.json();
+    if(!Array.isArray(data)){
+      throw new Error("Risposta inattesa dal servizio di ricerca luoghi.");
+    }
+    const results = data.map(r => ({ label: r.display_name, lat: parseFloat(r.lat), lon: parseFloat(r.lon) }));
+    nominatimSearchCache[key] = results;
+    return results;
+  }
+
+  function attachPlaceAutocomplete(inputEl, listEl){
+    let debounceTimer = null;
+    let activeIndex = -1;
+
+    function render(results){
+      listEl.innerHTML = "";
+      if(results.length === 0){
+        listEl.innerHTML = `<div class="place-suggest-empty">Nessun risultato</div>`;
+        listEl.classList.add("open");
+        return;
+      }
+      results.forEach(r => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = r.label;
+        btn.addEventListener("click", () => {
+          inputEl.value = r.label.split(",")[0].trim();
+          placeResolvedCoords[inputEl.id] = { lat: r.lat, lon: r.lon };
+          listEl.classList.remove("open");
+          inputEl.dispatchEvent(new Event("change"));
+        });
+        listEl.appendChild(btn);
+      });
+      listEl.classList.add("open");
+      activeIndex = -1;
+    }
+
+    inputEl.addEventListener("input", () => {
+      delete placeResolvedCoords[inputEl.id];
+      const q = inputEl.value.trim();
+      clearTimeout(debounceTimer);
+      if(q.length < 3){ listEl.classList.remove("open"); return; }
+      debounceTimer = setTimeout(async () => {
+        try{
+          const results = await nominatimSearch(q);
+          if(inputEl.value.trim() === q) render(results);
+        } catch(err){
+          if(inputEl.value.trim() === q){
+            listEl.innerHTML = `<div class="place-suggest-empty">${err.message || "Servizio di ricerca non disponibile al momento."}</div>`;
+            listEl.classList.add("open");
+          }
+        }
+      }, 400);
+    });
+
+    inputEl.addEventListener("keydown", (e) => {
+      const items = listEl.querySelectorAll("button");
+      if(!listEl.classList.contains("open") || items.length === 0) return;
+      if(e.key === "ArrowDown"){
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, items.length - 1);
+        items.forEach((it, i) => it.classList.toggle("active", i === activeIndex));
+      } else if(e.key === "ArrowUp"){
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, 0);
+        items.forEach((it, i) => it.classList.toggle("active", i === activeIndex));
+      } else if(e.key === "Enter"){
+        if(activeIndex >= 0){ e.preventDefault(); items[activeIndex].click(); }
+        else { listEl.classList.remove("open"); }
+      } else if(e.key === "Escape"){
+        listEl.classList.remove("open");
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if(!listEl.contains(e.target) && e.target !== inputEl) listEl.classList.remove("open");
+    });
+  }
+
+  async function resolvePlace(inputEl){
+    const resolved = placeResolvedCoords[inputEl.id];
+    if(resolved) return resolved;
+    const current = inputEl.value.trim();
+    if(!current) return null;
+    try{
+      const results = await nominatimSearch(current);
+      return results[0] ? { lat: results[0].lat, lon: results[0].lon } : null;
+    } catch(err){
+      return null;
+    }
+  }
+
+  // Versione "rumorosa" di resolvePlace: usata dal meteo di percorso, dove è
+  // un'azione esplicita dell'utente e conviene mostrare l'errore vero
+  // (servizio non raggiungibile, posto non trovato...) invece di un generico
+  // "non riesco a trovare partenza o arrivo" che non aiuta a capire cosa fare.
+  async function resolvePlaceOrThrow(inputEl, label){
+    const resolved = placeResolvedCoords[inputEl.id];
+    if(resolved) return resolved;
+    const current = inputEl.value.trim();
+    if(!current) throw new Error(`Inserisci il campo "${label}".`);
+    const results = await nominatimSearch(current);
+    if(!results[0]) throw new Error(`Non ho trovato "${current}" (${label}). Scegli un suggerimento dall'elenco mentre scrivi, per essere sicuro del posto esatto.`);
+    return results[0];
+  }
+
+  async function fetchRoute(startCoords, endCoords, opts){
+    opts = opts || {};
+    const params = new URLSearchParams();
+    params.set("startLat", startCoords.lat);
+    params.set("startLon", startCoords.lon);
+    params.set("endLat", endCoords.lat);
+    params.set("endLon", endCoords.lon);
+    if(opts.steps) params.set("steps", "1");
+    if(opts.exclude) params.set("exclude", opts.exclude);
+    try{
+      // passa dal nostro endpoint /api/route-planner (proxy server-side)
+      // invece di chiamare OSRM direttamente dal browser: evita i problemi di CORS
+      const res = await fetch(`/api/route-planner?action=route&${params.toString()}`);
+      const data = await res.json();
+      if(data.code !== "Ok" || !data.routes || !data.routes[0]) return null;
+      return data.routes[0];
+    } catch(err){
+      return null;
+    }
+  }
+
+  // ===== Meteo lungo il percorso ====================================
+  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  async function reverseGeocode(lat, lon){
+    // passa dal nostro endpoint /api/route-planner (proxy server-side) invece
+    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS
+    const res = await fetch(`/api/route-planner?action=reverse&lat=${lat}&lon=${lon}`);
+    const data = await res.json();
+    const a = data.address || {};
+    return a.village || a.town || a.hamlet || a.city || a.municipality || a.county
+      || (data.display_name ? data.display_name.split(",")[0] : "Zona sconosciuta");
+  }
+
+  function pad2(n){ return String(n).padStart(2, "0"); }
+
+  function isoDateFromDate(dt){
+    return `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())}`;
+  }
+
+  // Meteo orario per l'orario stimato di passaggio in quel punto (non "adesso"
+  // né la media della giornata): un viaggio dura ore, quindi il meteo di una
+  // tappa a metà strada va chiesto per l'ora in cui ci si arriva davvero, non
+  // per l'ora di partenza.
+  async function fetchWeatherForCoords(lat, lon, arrivalDate){
+    const dateStr = isoDateFromDate(arrivalDate);
+    const targetHour = pad2(arrivalDate.getHours());
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weather_code&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`);
+    const data = await res.json();
+    const hourly = data.hourly || {};
+    const times = hourly.time || [];
+    // il timestamp orario è tipo "2026-08-10T14:00": confrontiamo l'ora come
+    // stringa invece di ricostruire un Date, per non reintrodurre conversioni
+    // di fuso orario (i timestamp sono già nel fuso locale del posto, grazie
+    // a timezone=auto)
+    let idx = times.findIndex(t => t.slice(11, 13) === targetHour);
+    if(idx === -1) idx = 0;
+    const temp = (hourly.temperature_2m || [])[idx];
+    const code = (hourly.weather_code || [])[idx];
+    return {
+      icon: weatherIcon(code),
+      temp: temp != null ? `${Math.round(temp)}°C` : "—",
+      arrivalLabel: `${pad2(arrivalDate.getHours())}:${pad2(arrivalDate.getMinutes())}`
+    };
+  }
+
+  // Km percorsi in autostrada (nomi via "ref"/"name" tipo A1, A24...), usati
+  // per una stima indicativa del pedaggio.
+  function estimateMotorwayKm(route){
+    let km = 0;
+    (route.legs || []).forEach(leg => (leg.steps || []).forEach(step => {
+      const ref = step.ref || "";
+      const name = step.name || "";
+      if(/^A\d/.test(ref) || /^A\d/.test(name)) km += (step.distance || 0) / 1000;
+    }));
+    return km;
+  }
+
+  // Ricava, in ordine, i punti di manovra del percorso (svolte/uscite) con la
+  // distanza percorsa cumulata in km e — quando disponibile — il nome
+  // dell'uscita autostradale, letto dai cartelli di destinazione (dati OSM).
+  function collectManeuverPoints(route){
+    const pts = [];
+    let cumKm = 0;
+    (route.legs || []).forEach(leg => {
+      (leg.steps || []).forEach(step => {
+        cumKm += (step.distance || 0) / 1000;
+        if(step.maneuver && step.maneuver.location){
+          pts.push({
+            lat: step.maneuver.location[1],
+            lon: step.maneuver.location[0],
+            cumKm,
+            isExit: step.maneuver.type === "off ramp",
+            exitLabel: step.destinations || step.name || null
+          });
+        }
+      });
+    });
+    return pts;
+  }
+
+  // Tiene solo i punti distanti almeno minKm (percorsi lungo la strada) l'uno dall'altro
+  function spaceByDistance(points, minKm){
+    const kept = [];
+    let lastKm = -Infinity;
+    for(const p of points){
+      if(p.cumKm - lastKm >= minKm){
+        kept.push(p);
+        lastKm = p.cumKm;
+      }
+    }
+    return kept;
+  }
+
+  function cleanExitLabel(label){
+    // i cartelli di uscita elencano spesso più destinazioni separate da virgola/due punti
+    return label.split(",")[0].split(":").pop().trim();
+  }
+
+  // Distanza approssimata in km tra due coordinate (formula haversine)
+  function haversineKm(lat1, lon1, lat2, lon2){
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  // Campiona la geometria reale del percorso ogni minKm km percorsi (non punti
+  // a caso: sono comunque le coordinate esatte della strada). Serve come rete
+  // di sicurezza quando il percorso ha pochissime manovre "off ramp" segnalate
+  // da OSRM (es. un tragitto quasi tutto dritto, con o senza autostrada), caso
+  // in cui affidarsi ai soli punti di svolta lascia grandi tratti senza tappe.
+  function sampleRouteGeometry(route, minKm){
+    const coords = (route.geometry && route.geometry.coordinates) || [];
+    const pts = [];
+    let cumKm = 0;
+    let nextTarget = minKm;
+    for(let i = 1; i < coords.length; i++){
+      const [lon1, lat1] = coords[i - 1];
+      const [lon2, lat2] = coords[i];
+      cumKm += haversineKm(lat1, lon1, lat2, lon2);
+      if(cumKm >= nextTarget){
+        pts.push({ lat: lat2, lon: lon2, cumKm });
+        nextTarget += minKm;
+      }
+    }
+    return pts;
+  }
+
+  async function buildRouteStops(route, startPlace, startCoords, endPlace, endCoords){
+    const pts = collectManeuverPoints(route);
+    // uscite autostradali nominate (dai cartelli di destinazione OSM), con la
+    // loro posizione lungo il percorso
+    const exits = pts
+      .filter(p => p.isExit && p.exitLabel)
+      .map(p => ({ name: cleanExitLabel(p.exitLabel), lat: p.lat, lon: p.lon, cumKm: p.cumKm }));
+
+    // campiona comunque la geometria reale ogni 50 km lungo TUTTO il percorso:
+    // le uscite autostradali, quando ci sono, coprono spesso solo un tratto
+    // del viaggio (es. un'unica uscita finale su un percorso quasi tutto
+    // autostrada), quindi da sole non bastano a garantire tappe intermedie su
+    // tutto il tragitto. Dove un'uscita nominata è già vicina si scarta il
+    // campione generico e si tiene il nome reale del cartello.
+    const geomSamples = sampleRouteGeometry(route, 50)
+      .filter(gp => !exits.some(ep => Math.abs(ep.cumKm - gp.cumKm) < 40));
+
+    const candidates = [...exits, ...geomSamples].sort((a, b) => a.cumKm - b.cumKm);
+    const spaced = spaceByDistance(candidates, 50);
+
+    const middle = [];
+    for(const p of spaced){
+      if(p.name){
+        middle.push({ name: p.name, lat: p.lat, lon: p.lon, cumKm: p.cumKm });
+        continue;
+      }
+      // se il reverse-geocoding di UN punto fallisce (rete lenta, posto non
+      // trovato), si salta solo quel punto invece di far fallire tutto il
+      // calcolo del meteo di percorso
+      try{
+        const name = await reverseGeocode(p.lat, p.lon);
+        middle.push({ name, lat: p.lat, lon: p.lon, cumKm: p.cumKm });
+      } catch(err){ /* punto saltato */ }
+      await sleep(1100); // rispetta il rate limit di Nominatim (max 1 richiesta/sec)
+    }
+
+    const all = [
+      { name: startPlace, lat: startCoords.lat, lon: startCoords.lon, cumKm: 0 },
+      ...middle,
+      { name: endPlace, lat: endCoords.lat, lon: endCoords.lon, cumKm: route.distance / 1000 }
+    ];
+    return all.filter((s, i) => i === 0 || s.name.toLowerCase() !== all[i - 1].name.toLowerCase()).slice(0, 15);
+  }
+
+  async function calculateRouteWeather(){
+    const startInputEl = document.getElementById("route-start");
+    const endInputEl = document.getElementById("route-end");
+    const startPlace = startInputEl.value.trim();
+    const endPlace = endInputEl.value.trim();
+    const avoidTolls = document.getElementById("route-toll").value === "no";
+    const dateStr = document.getElementById("route-day").value || isoDate(0);
+    const timeStr = document.getElementById("route-time").value || "08:00";
+    const resultsEl = document.getElementById("route-weather-results");
+    const btn = document.getElementById("route-weather-btn");
+
+    if(!startPlace || !endPlace){
+      resultsEl.innerHTML = `<p class="route-weather-error">Inserisci partenza e arrivo.</p>`;
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Calcolo in corso...";
+    resultsEl.innerHTML = `<p class="route-weather-loading">Cerco partenza e arrivo...</p>`;
+
+    try{
+      // Usa la posizione esatta scelta dal menu di autocompletamento quando
+      // c'è (niente più geocodifica "al buio" di nomi di paese ambigui);
+      // altrimenti prova comunque a risolvere il testo scritto. Un eventuale
+      // errore (servizio non raggiungibile, posto non trovato) risale con il
+      // messaggio vero, per capire subito cosa non va.
+      const [startCoords, endCoords] = await Promise.all([
+        resolvePlaceOrThrow(startInputEl, "Partenza"),
+        resolvePlaceOrThrow(endInputEl, "Arrivo")
+      ]);
+
+      resultsEl.innerHTML = `<p class="route-weather-loading">Calcolo il percorso...</p>`;
+
+      let route = null;
+      let tollsAvoided = false;
+      let tollsFailReason = null;
+      if(avoidTolls){
+        // chiamata diretta (non fetchRoute) solo per questo tentativo, per
+        // poter leggere il motivo esatto di un eventuale fallimento invece del
+        // generico "nessun percorso trovato" (es. se anche il router usato
+        // lato server per evitare le autostrade non trova un percorso valido
+        // per questa tratta specifica)
+        const exclParams = new URLSearchParams({
+          startLat: startCoords.lat, startLon: startCoords.lon,
+          endLat: endCoords.lat, endLon: endCoords.lon,
+          steps: "1", exclude: "motorway"
+        });
+        try{
+          const exclRes = await fetch(`/api/route-planner?action=route&${exclParams.toString()}`);
+          const exclData = await exclRes.json();
+          if(exclData.code === "Ok" && exclData.routes && exclData.routes[0]){
+            route = exclData.routes[0];
+            tollsAvoided = true;
+          } else {
+            tollsFailReason = exclData.message || exclData.code || "motivo sconosciuto";
+          }
+        } catch(err){
+          tollsFailReason = err.message || "errore di rete";
+        }
+      }
+      if(!route){
+        route = await fetchRoute(startCoords, endCoords, { steps: true });
+      }
+      if(!route) throw new Error("Non sono riuscito a calcolare un percorso stradale tra questi due punti.");
+
+      const distanceKm = route.distance / 1000;
+      const durationH = route.duration / 3600;
+
+      resultsEl.innerHTML = `<p class="route-weather-loading">Percorso trovato (${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} h) — cerco le località lungo la strada...</p>`;
+
+      const stops = await buildRouteStops(route, startPlace, startCoords, endPlace, endCoords);
+
+      resultsEl.innerHTML = `<p class="route-weather-loading">Scarico il meteo per ${stops.length} tappe...</p>`;
+
+      // orario stimato di passaggio in ogni tappa: partenza + una quota
+      // dell'intera durata del viaggio proporzionale ai km già percorsi a
+      // quel punto (stima indicativa, non tiene conto di soste)
+      const [depY, depM, depD] = dateStr.split("-").map(Number);
+      const [depH, depMin] = timeStr.split(":").map(Number);
+      const departureDate = new Date(depY, depM - 1, depD, depH, depMin);
+
+      const weatherResults = [];
+      for(const s of stops){
+        const offsetHours = distanceKm > 0 ? (s.cumKm / distanceKm) * durationH : 0;
+        const arrivalDate = new Date(departureDate.getTime() + offsetHours * 3600000);
+        const w = await fetchWeatherForCoords(s.lat, s.lon, arrivalDate);
+        weatherResults.push({ ...s, ...w });
+      }
+
+      const tollsNote = avoidTolls
+        ? (tollsAvoided ? "(percorso senza autostrade)" : "")
+        : "(percorso più veloce, autostrade incluse)";
+
+      // Costo carburante (sola andata, con i parametri del calcolatore benzina qui sopra)
+      const consumo = parseFloat(document.getElementById("fuel-cc").value) || 17;
+      const prezzoBenzina = parseFloat(document.getElementById("fuel-price").value) || 1.75;
+      const fuelCost = (distanceKm / consumo) * prezzoBenzina;
+
+      let costsLine = `⛽ Carburante stimato: <strong>€${fuelCost.toFixed(2)}</strong> (sola andata)`;
+      if(!avoidTolls){
+        const motorwayKm = estimateMotorwayKm(route);
+        if(motorwayKm > 1){
+          const tollCost = motorwayKm * 0.075; // tariffa media indicativa autostrade italiane, €/km
+          costsLine += ` &nbsp;·&nbsp; 🛣️ Pedaggio stimato: <strong>€${tollCost.toFixed(2)}</strong>`;
+        }
+      }
+
+      resultsEl.innerHTML = `
+        <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida ${tollsNote}</p>
+        <p class="route-weather-costs">${costsLine}</p>
+        ${(avoidTolls && !tollsAvoided) ? `<p class="route-weather-note">Non sono riuscito a calcolare un percorso che eviti del tutto le autostrade su questa tratta${tollsFailReason ? ` (motivo: ${tollsFailReason})` : ""}: qui sotto vedi il percorso più veloce disponibile.</p>` : ""}
+        <ul class="route-weather-list">
+          ${weatherResults.map(w => `
+            <li>
+              <span class="w-icon">${w.icon}</span>
+              <span class="route-weather-place">${w.name}</span>
+              <span class="route-weather-time">ore ${w.arrivalLabel}</span>
+              <span class="w-temp">${w.temp}</span>
+            </li>
+          `).join("")}
+        </ul>
+        <p class="route-weather-note" style="margin-top:14px;">Stime indicative: orario di passaggio calcolato in proporzione ai km già percorsi rispetto alla durata totale (non tiene conto di soste), meteo orario per quell'orario esatto; carburante calcolato sulla distanza stradale reale con i parametri del calcolatore qui sopra, pedaggio su una tariffa media (non il prezzo ufficiale del casello).</p>
+      `;
+    } catch(err){
+      resultsEl.innerHTML = `<p class="route-weather-error">${err.message || "Errore nel calcolo del percorso. Riprova."}</p>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Calcola il meteo lungo il percorso";
+    }
+  }
+
+  (function initRouteDayPicker(){
+    const dayInput = document.getElementById("route-day");
+    if(!dayInput) return;
+    const todayStr = isoDate(0);
+    const maxStr = isoDate(14);
+    dayInput.min = todayStr;
+    dayInput.max = maxStr;
+    dayInput.value = todayStr;
+
+    const timeInput = document.getElementById("route-time");
+    if(timeInput){
+      const now = new Date();
+      timeInput.value = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    }
+  })();
+
+  document.getElementById("route-weather-btn").addEventListener("click", calculateRouteWeather);
+  attachPlaceAutocomplete(document.getElementById("route-start"), document.getElementById("route-start-suggest"));
+  attachPlaceAutocomplete(document.getElementById("route-end"), document.getElementById("route-end-suggest"));
+
+  // ===== Assistente di valigia ========================================
+  const RAIN_CODES = new Set([51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99]);
+
+  function valigiaCategoryHTML(title, items){
+    if(!items.length) return "";
+    return `
+      <div class="valigia-category">
+        <p class="valigia-cat-title">${title}</p>
+        <ul class="valigia-list">
+          ${items.map(i => `<li><label><input type="checkbox"><span>${i}</span></label></li>`).join("")}
+        </ul>
+      </div>
+    `;
+  }
+
+  async function calculateValigia(){
+    const destInputEl = document.getElementById("valigia-dest");
+    const giorniEl = document.getElementById("valigia-giorni");
+    const dataEl = document.getElementById("valigia-data");
+    const bucato = document.getElementById("valigia-bucato").value === "si";
+    const resultsEl = document.getElementById("valigia-results");
+    const btn = document.getElementById("valigia-btn");
+
+    if(!destInputEl.value.trim()){
+      resultsEl.innerHTML = `<p class="route-weather-error">Inserisci una destinazione.</p>`;
+      return;
+    }
+
+    const giorni = Math.min(30, Math.max(1, parseInt(giorniEl.value, 10) || 1));
+    const dataStr = dataEl.value || isoDate(0);
+
+    btn.disabled = true;
+    btn.textContent = "Preparo la valigia...";
+    resultsEl.innerHTML = `<p class="route-weather-loading">Cerco la destinazione...</p>`;
+
+    try{
+      const destCoords = await resolvePlaceOrThrow(destInputEl, "Destinazione");
+
+      resultsEl.innerHTML = `<p class="route-weather-loading">Guardo il meteo previsto...</p>`;
+
+      // il meteo dettagliato copre solo i prossimi ~15 giorni: oltre
+      // quell'orizzonte la valigia si basa su una lista prudente (copre sia
+      // caldo che freddo che pioggia) invece che su dati meteo inventati
+      const [y, m, d] = dataStr.split("-").map(Number);
+      const startDate = new Date(y, m - 1, d);
+      const maxForecastDate = new Date();
+      maxForecastDate.setDate(maxForecastDate.getDate() + 15);
+
+      let hasRain = false, minTemp = null, maxTemp = null, weatherAvailable = false;
+
+      if(startDate <= maxForecastDate){
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + giorni - 1);
+        const cappedEnd = endDate > maxForecastDate ? maxForecastDate : endDate;
+        const startStr = isoDateFromDate(startDate);
+        const endStr = isoDateFromDate(cappedEnd);
+
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${destCoords.lat}&longitude=${destCoords.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=auto&start_date=${startStr}&end_date=${endStr}`);
+        const data = await res.json();
+        const daily = data.daily || {};
+        const codes = daily.weather_code || [];
+        const probs = daily.precipitation_probability_max || [];
+        const maxs = daily.temperature_2m_max || [];
+        const mins = daily.temperature_2m_min || [];
+        if(maxs.length){
+          weatherAvailable = true;
+          hasRain = codes.some(c => RAIN_CODES.has(c)) || probs.some(p => p >= 40);
+          minTemp = Math.min(...mins);
+          maxTemp = Math.max(...maxs);
+        }
+      }
+
+      // --- Abbigliamento moto ---
+      const motoItems = ["Casco", "Guanti da moto", "Stivali o scarpe da moto", "Protezioni (schiena/ginocchia)"];
+      if(!weatherAvailable){
+        motoItems.push("Giacca e pantaloni moto con inserto termico removibile (copre sia caldo che freddo)");
+      } else {
+        if(maxTemp >= 24) motoItems.push("Giacca moto estiva/traforata");
+        if(minTemp <= 14 || maxTemp < 24) motoItems.push("Giacca moto con inserto termico (o giacca invernale)");
+        if(minTemp <= 8) motoItems.push("Sottogiacca/pile termico e collo paravento");
+        motoItems.push(maxTemp >= 24 ? "Pantaloni moto estivi" : "Pantaloni moto con inserto termico");
+      }
+      if(hasRain || !weatherAvailable){
+        motoItems.push("Tuta o giacca-pantaloni antipioggia");
+        motoItems.push("Copri-stivali impermeabili");
+        motoItems.push("Guanti impermeabili di ricambio");
+      }
+
+      // --- Abbigliamento giornaliero ---
+      const capiPerGiorno = bucato ? Math.max(2, Math.ceil(giorni / 2)) : giorni;
+      const pantaloni = Math.max(1, Math.ceil(giorni / 3));
+      const dailyItems = [
+        `${capiPerGiorno} magliette${bucato ? " (lavi a mano ogni 2 giorni circa)" : ""}`,
+        `${capiPerGiorno} cambi di intimo e calzini`,
+        `${pantaloni} pantaloni/bermuda casual`,
+        giorni > 4 ? "2 felpe o maglioni leggeri" : "1 felpa o maglione leggero",
+        "Pigiama",
+        "Scarpe comode per la sera"
+      ];
+      if(bucato){
+        dailyItems.push("Detersivo da bucato (formato da viaggio) e qualche molletta/cordicella per stendere");
+      }
+      if(minTemp !== null && minTemp <= 5){
+        dailyItems.push("Un giubbotto o piumino leggero per la sera (temperature vicine o sotto lo zero previste)");
+      }
+
+      // --- Accessori ---
+      const accessori = [
+        "Documenti (patente, libretto, assicurazione)",
+        "Caricabatterie e power bank",
+        "Kit attrezzi base e kit gonfia/ripara gomme",
+        "Lucchetto o catena antifurto",
+        "Kit di primo soccorso",
+        "Contanti (non ovunque si paga con carta)"
+      ];
+
+      const weatherNote = weatherAvailable
+        ? `Meteo previsto: ${Math.round(minTemp)}°/${Math.round(maxTemp)}°C${hasRain ? ", possibile pioggia in uno o più giorni." : ", nessuna pioggia significativa prevista."}`
+        : `Le previsioni dettagliate coprono solo i prossimi ~15 giorni: per questa data ho preparato una lista prudente che copre sia caldo che freddo che pioggia.`;
+
+      resultsEl.innerHTML = `
+        <p class="route-weather-summary">${weatherNote}</p>
+        ${valigiaCategoryHTML("🏍️ Abbigliamento moto", motoItems)}
+        ${valigiaCategoryHTML("👕 Abbigliamento giornaliero", dailyItems)}
+        ${valigiaCategoryHTML("🎒 Accessori", accessori)}
+        <p class="route-weather-note" style="margin-top:14px;">Lista indicativa generata in base a durata del viaggio e meteo previsto — adattala alle tue abitudini e controlla sempre le previsioni aggiornate il giorno prima di partire.</p>
+      `;
+    } catch(err){
+      resultsEl.innerHTML = `<p class="route-weather-error">${err.message || "Errore nella preparazione della valigia. Riprova."}</p>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Genera la valigia";
+    }
+  }
+
+  (function initValigiaDatePicker(){
+    const dataEl = document.getElementById("valigia-data");
+    if(!dataEl) return;
+    dataEl.min = isoDate(0);
+    dataEl.value = isoDate(0);
+  })();
+
+  document.getElementById("valigia-btn").addEventListener("click", calculateValigia);
+  attachPlaceAutocomplete(document.getElementById("valigia-dest"), document.getElementById("valigia-dest-suggest"));
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>

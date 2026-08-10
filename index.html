@@ -243,7 +243,7 @@
     </a>
     <nav class="nav-links">
       <a href="index.html" class="active">Home</a>
-      <a href="miniviaggi.html">Miniviaggi</a>
+      <a href="nostromo.html">Nostromo</a>
       <a href="about.html">About me</a>
       <a href="sponsor.html">Partner</a>
       <a href="galleria.html">Galleria</a>
@@ -337,6 +337,46 @@
       calcolati a tavolino, controlla sempre il percorso su Google Maps il
       giorno stesso, verifica eventuali strade chiuse o lavori in corso, e
       adatta l'andatura alle condizioni reali dell'asfalto e al meteo.
+    </div>
+  </div>
+</section>
+
+<!-- MINIVIAGGI ======================================================== -->
+<section id="miniviaggi" style="padding-top:56px; padding-bottom:0;">
+  <div class="wrap">
+    <p class="marker">Passi alpini e mete lontane</p>
+    <h2 style="font-size:clamp(2rem, 5vw, 3.2rem); color:var(--sand); max-width:24ch;">
+      Miniviaggi: quando una domenica non basta
+    </h2>
+    <p style="margin-top:18px; font-size:1.02rem; max-width:70ch;">
+      Le mete troppo lontane per un'uscita in giornata: i grandi passi
+      alpini del nord Italia, la costiera più famosa d'Italia, la Sardegna
+      in traghetto — tutto da vivere con calma su due o più giorni. Stesso
+      meteo aggiornato, stessa possibilità di aprire il percorso su Maps e
+      la stima di quanto spendi di benzina — partendo da dove vuoi tu (usa
+      il calcolatore qui sopra).
+    </p>
+  </div>
+</section>
+
+<section style="padding-top:32px;">
+  <div class="wrap">
+
+    <div class="itinerari-carousel">
+      <button type="button" class="carousel-arrow prev" aria-label="Miniviaggio precedente">‹</button>
+      <div class="itinerari-grid" id="miniviaggi-grid"></div>
+      <button type="button" class="carousel-arrow next" aria-label="Miniviaggio successivo">›</button>
+    </div>
+
+    <div class="itinerari-note">
+      <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
+      totali andata e ritorno dal punto di partenza scelto nel calcolatore
+      qui sopra e ⛽ è la stima del costo di benzina. I passi di montagna
+      sono aperti indicativamente da maggio/giugno a ottobre, meteo
+      permettendo — controlla sempre lo stato di apertura del valico e le
+      previsioni del giorno stesso, porta abbigliamento a strati (in quota le
+      temperature scendono molto rispetto alla pianura) e adatta l'andatura a
+      tornanti stretti e asfalto spesso umido o rovinato.
     </div>
   </div>
 </section>
@@ -859,6 +899,217 @@
     }
   ];
 
+  const MINIVIAGGI = [
+    {
+      zona: "Alta Valtellina", km: "2-3 giorni consigliati", titolo: "Passo dello Stelvio e Passo di Gavia",
+      desc: "Il valico più alto d'Italia (2758 m): 48 tornanti sul versante altoatesino, 36 su quello lombardo. Da Bormio si può abbinare anche il vicino Passo di Gavia, più stretto e selvaggio, tra i preferiti di chi cerca strada vera più che traffico turistico. Aperto indicativamente da giugno a ottobre.",
+      meteoPlace: "Bormio",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Stelvio_tornanti.JPG",
+      tappe: [
+        { nome: "Bormio", query: "Bormio SO", label: "base ideale per esplorare l'Alta Valtellina", fun: "Terme calde alla sera per le braccia indolenzite da tutti quei tornanti." },
+        { nome: "Passo dello Stelvio", query: "Passo dello Stelvio", label: "2758 m, 48 tornanti numerati sul versante altoatesino", fun: "Ogni tornante ha il suo numero su un cartello — arrivare al primo è già una vittoria personale." },
+        { nome: "Passo di Gavia", query: "Passo di Gavia", label: "strada stretta senza guardrail in alcuni tratti", fun: "Meno turisti dello Stelvio, più adrenalina: qui la strada non perdona le distrazioni." },
+        { nome: "Prato allo Stelvio", query: "Prato allo Stelvio BZ", label: "borgo altoatesino ai piedi del passo", fun: "Il paesaggio cambia lingua e stile: benvenuti in Alto Adige." }
+      ]
+    },
+    {
+      zona: "Alta Val Camonica", km: "1-2 giorni consigliati", titolo: "Passo del Tonale",
+      desc: "Un classico meno estremo dello Stelvio ma altrettanto scenico: da Ponte di Legno si sale tra prati d'alta quota fino al valico a 1883 m, con vista sull'Adamello, per poi scendere verso Vermiglio in Val di Sole.",
+      meteoPlace: "Ponte di Legno",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Tonale.jpg",
+      tappe: [
+        { nome: "Ponte di Legno", query: "Ponte di Legno BS", label: "porta d'accesso all'Alta Val Camonica", fun: "L'ultimo caffè vero prima che la strada cominci a fare sul serio." },
+        { nome: "Passo del Tonale", query: "Passo del Tonale", label: "1883 m, vista sul massiccio dell'Adamello", fun: "Meno tornanti dello Stelvio, stesso identico languorino di fermarti ogni due minuti per una foto." },
+        { nome: "Vermiglio", query: "Vermiglio TN", label: "Val di Sole, versante trentino", fun: "Si scende in Trentino e il paesaggio si addolcisce, un po' come i tuoi polsi dopo la salita." },
+        { nome: "Madonna di Campiglio", query: "Madonna di Campiglio TN", label: "una delle mete più note del Trentino", fun: "Vetrine da salotto buono e parcheggi moto pieni — un buon posto per farsi vedere." }
+      ]
+    },
+    {
+      zona: "Dolomiti", km: "3-4 giorni consigliati", titolo: "La Grande Strada delle Dolomiti",
+      desc: "Il tour dei passi dolomitici per eccellenza: Pordoi, Sella, Gardena e Falzarego collegano il Gruppo del Sella alla Marmolada tra tornanti panoramici e rifugi di quota. Da fare con calma, dormendo lungo il percorso.",
+      meteoPlace: "Canazei",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_pordoi.jpg",
+      tappe: [
+        { nome: "Canazei", query: "Canazei TN", label: "base ideale in Val di Fassa", fun: "Il punto di partenza di quasi ogni giro dolomitico che si rispetti." },
+        { nome: "Passo Pordoi", query: "Passo Pordoi", label: "2239 m, tra Gruppo del Sella e Marmolada", fun: "Vista sulla Marmolada che vale ogni singolo tornante per arrivarci." },
+        { nome: "Passo Sella", query: "Passo Sella", label: "tra le pareti verticali del Gruppo del Sella", fun: "Pareti di roccia che sembrano chiudersi sopra la testa — sensazione unica, promesso." },
+        { nome: "Passo Gardena", query: "Passo Gardena", label: "curve tra le più fotografate delle Dolomiti", fun: "Se non hai già mille foto di questo passo sui social, sei l'eccezione." },
+        { nome: "Passo Falzarego", query: "Passo Falzarego", label: "teatro di battaglie della Grande Guerra", fun: "Sotto l'asfalto ci sono ancora le gallerie scavate durante la Prima Guerra Mondiale." }
+      ]
+    },
+    {
+      zona: "Valtellina", km: "1-2 giorni consigliati", titolo: "Passo del Mortirolo",
+      desc: "Non il più alto, ma tra i più duri: pendenze fino al 18%, reso leggendario dal ciclismo (la salita di Marco Pantani). In moto è un saliscendi tecnico tra boschi, con molto meno traffico dei passi vicini.",
+      meteoPlace: "Mazzo di Valtellina",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Mortirolo.JPG",
+      tappe: [
+        { nome: "Mazzo di Valtellina", query: "Mazzo di Valtellina SO", label: "punto di partenza della salita", fun: "Da qui parte una salita che i ciclisti nominano con rispetto quasi religioso." },
+        { nome: "Passo del Mortirolo", query: "Passo del Mortirolo", label: "pendenze fino al 18%, tra boschi stretti", fun: "Meno cartoline dello Stelvio, molto più braccio — qui si guida, non si passeggia." },
+        { nome: "Monno", query: "Monno BS", label: "borgo sul versante camuno", fun: "Un paesino tranquillo per riprendere fiato dopo tanta pendenza." },
+        { nome: "Edolo", query: "Edolo BS", label: "centro della Val Camonica per la sosta", fun: "Buon punto per un pranzo vero prima di rimettersi in sella." }
+      ]
+    },
+    {
+      zona: "Valle d'Aosta", km: "2-3 giorni consigliati", titolo: "Piccolo e Grande San Bernardo",
+      desc: "Due valichi storici ai confini con Francia e Svizzera, entrambi carichi di storia (da qui passò anche Napoleone). Da Aosta si può salire a entrambi in giorni diversi, con soste a Courmayeur sotto il Monte Bianco.",
+      meteoPlace: "Aosta",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Piccolo_S_Bernardo.jpg",
+      tappe: [
+        { nome: "Aosta", query: "Aosta centro", label: "base romana ai piedi delle Alpi", fun: "Una città romana incastonata tra le montagne più alte d'Europa — location d'eccezione." },
+        { nome: "Colle del Piccolo San Bernardo", query: "Colle del Piccolo San Bernardo", label: "confine con la Francia, 2188 m", fun: "Di qua l'Italia, di là la Francia: cambi Paese senza nemmeno spegnere il motore." },
+        { nome: "Courmayeur", query: "Courmayeur AO", label: "ai piedi del Monte Bianco", fun: "Il Monte Bianco visto da qui fa sembrare piccola anche la moto più grossa." },
+        { nome: "Colle del Gran San Bernardo", query: "Colle del Gran San Bernardo", label: "confine con la Svizzera, storico ospizio", fun: "Qui sono nati i cani San Bernardo — occhio a non tornare a casa con l'idea di adottarne uno." }
+      ]
+    },
+    {
+      zona: "Alta Valchiavenna", km: "1-2 giorni consigliati", titolo: "Passo dello Spluga",
+      desc: "Un valico storico verso la Svizzera, meno affollato dei 'big three' lombardi: da Chiavenna si sale tra tornanti stretti fino al passo a 2113 m, con vista sul lago artificiale del Truzzo. Aperto tutto l'anno lato italiano, spesso chiuso in inverno oltre confine.",
+      meteoPlace: "Campodolcino",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_dello_spluga_in_inverno.JPG",
+      tappe: [
+        { nome: "Chiavenna", query: "Chiavenna SO", label: "porta della Valchiavenna", fun: "Ultima città vera prima che la valle si stringa sul serio." },
+        { nome: "Campodolcino", query: "Campodolcino SO", label: "base per la salita al passo", fun: "Da qui in poi la strada inizia a fare sul serio, tornante dopo tornante." },
+        { nome: "Passo dello Spluga", query: "Passo dello Spluga", label: "2113 m, confine con la Svizzera", fun: "Meno foto su Instagram dello Stelvio, stessa identica soddisfazione ad arrivarci." },
+        { nome: "Madesimo", query: "Madesimo SO", label: "stazione sciistica con cascate nei dintorni", fun: "D'estate le cascate del Dies, d'inverno la neve — qui non ci si annoia mai." }
+      ]
+    },
+    {
+      zona: "Val Varaita", km: "1-2 giorni consigliati", titolo: "Colle dell'Agnello",
+      desc: "Uno dei valichi asfaltati più alti d'Europa (2744 m), al confine con la Francia. Da Sampeyre si sale lungo una valle stretta tra pascoli d'alta quota, con tornanti che si arrampicano quasi a strapiombo negli ultimi chilometri.",
+      meteoPlace: "Pontechianale",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Colleagnello001.jpg",
+      tappe: [
+        { nome: "Sampeyre", query: "Sampeyre CN", label: "ingresso nella Val Varaita", fun: "Da qui la valle si stringe e le curve iniziano a farsi serie." },
+        { nome: "Pontechianale", query: "Pontechianale CN", label: "ultimo paese prima della salita finale", fun: "L'ultimo caffè vero prima dei tornanti che ti portano quasi a 2750 metri." },
+        { nome: "Colle dell'Agnello", query: "Colle dell'Agnello", label: "2744 m, uno dei valichi più alti d'Europa", fun: "L'aria qui è così sottile che pure il bracket del casco sembra più leggero." }
+      ]
+    },
+    {
+      zona: "Costiera Amalfitana", km: "2-3 giorni consigliati", titolo: "La SS163 tra Positano e Ravello",
+      desc: "La costiera più fotografata d'Italia, curva dopo curva a picco sul mare: Positano, Amalfi e Ravello sospese tra scogliere e limoneti. Non è un giro veloce — la SS163 è stretta e trafficata d'estate — ma va vissuta con calma, meglio in bassa stagione.",
+      meteoPlace: "Amalfi",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Positano-Amalfi_Coast-Italy.jpg",
+      tappe: [
+        { nome: "Sorrento", query: "Sorrento NA", label: "punto di partenza sulla penisola sorrentina", fun: "L'ultimo pieno tranquillo prima che la strada inizi a stringersi sul serio." },
+        { nome: "Positano", query: "Positano SA", label: "case a picco sul mare", fun: "Un paese verticale che sembra sfidare la gravità — parcheggiare la moto è un'impresa a parte." },
+        { nome: "Amalfi", query: "Amalfi SA", label: "Duomo e centro storico", fun: "La Repubblica Marinara più antica d'Italia, e tu ci arrivi in sella invece che via mare — va bene comunque." },
+        { nome: "Ravello", query: "Ravello SA", label: "terrazze panoramiche sopra la costiera", fun: "La vista da quassù rende ogni tornante stretto della salita improvvisamente perdonabile." }
+      ]
+    },
+    {
+      zona: "Sardegna", km: "4-5 giorni consigliati", titolo: "Supramonte e la SS125 Orientale Sarda",
+      desc: "Una delle poche mete di questa lista che richiede un traghetto, e ne vale ogni ora di viaggio: la SS125 'Orientale Sarda' è leggendaria tra i motociclisti, tra le gole del Supramonte e la costa del golfo di Orosei. Da programmare con calma, traghetto incluso.",
+      meteoPlace: "Dorgali",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Supramonte_visto_da_Orgosolo.jpg",
+      tappe: [
+        { nome: "Olbia", query: "Olbia porto", label: "arrivo traghetto e punto di partenza", fun: "Si scende dal traghetto e si sente già che qui l'asfalto promette bene." },
+        { nome: "Dorgali", query: "Dorgali NU", label: "base per il Supramonte", fun: "Un paese tranquillo circondato da montagne che sembrano finte — non lo sono." },
+        { nome: "Gola di Gorropu", query: "Gola di Su Gorropu", label: "uno dei canyon più profondi d'Europa", fun: "La moto la lasci al parcheggio, il resto si fa a piedi — ma vale la sosta." },
+        { nome: "Cala Gonone", query: "Cala Gonone NU", label: "costa del golfo di Orosei", fun: "Dopo tanta montagna, il mare più bello della Sardegna come premio finale." }
+      ]
+    },
+    {
+      zona: "Val Passiria", km: "1-2 giorni consigliati", titolo: "Passo del Rombo (Timmelsjoch)",
+      desc: "Un valico spettacolare verso l'Austria, strada a pedaggio aperta solo da metà maggio a fine ottobre: da San Leonardo in Passiria si sale tra tornanti panoramici fino a 2509 m, con vista sui ghiacciai dell'Ötztal.",
+      meteoPlace: "Moso in Passiria",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Rombo_06.JPG",
+      tappe: [
+        { nome: "San Leonardo in Passiria", query: "San Leonardo in Passiria BZ", label: "ingresso nella Val Passiria", fun: "Paese natale di Andreas Hofer, eroe popolare tirolese — un pezzo di storia prima delle curve." },
+        { nome: "Moso in Passiria", query: "Moso in Passiria BZ", label: "ultimo paese prima della salita", fun: "L'ultima sosta tranquilla prima che la strada inizi a arrampicarsi sul serio." },
+        { nome: "Passo del Rombo", query: "Passo del Rombo", label: "2509 m, strada a pedaggio verso l'Austria", fun: "Si paga il pedaggio, ma per quei tornanti vale ogni centesimo." }
+      ]
+    },
+    {
+      zona: "Sicilia", km: "4-5 giorni consigliati", titolo: "Etna e Madonie",
+      desc: "Un'altra meta che richiede il traghetto (breve, da Villa San Giovanni), ma ripaga con paesaggi che cambiano ad ogni tappa: le colate laviche dell'Etna e i boschi delle Madonie, tra i parchi naturali meno battuti dai turisti del sud Italia.",
+      meteoPlace: "Nicolosi",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Etna_-_4.jpg",
+      tappe: [
+        { nome: "Catania", query: "Catania porto", label: "arrivo e punto di partenza", fun: "Il traghetto per la Sicilia dura poco più di un'ora — meno del previsto, promesso." },
+        { nome: "Nicolosi", query: "Nicolosi CT", label: "base per il versante sud dell'Etna", fun: "'La porta dell'Etna', dicono qui — e in effetti la salita inizia proprio da questo paese." },
+        { nome: "Rifugio Sapienza", query: "Rifugio Sapienza Etna", label: "quota 1900 m sull'Etna", fun: "Lava nera, neve d'inverno, panorama sul mare — l'Etna cambia scenografia ogni cento metri di salita." },
+        { nome: "Piano Battaglia", query: "Piano Battaglia PA", label: "cuore del Parco delle Madonie", fun: "Dopo il vulcano, i boschi delle Madonie sembrano un altro pianeta — stessa isola, promesso." }
+      ]
+    },
+    {
+      zona: "Gran Sasso", km: "2-3 giorni consigliati", titolo: "Campo Imperatore, il 'Piccolo Tibet' d'Italia",
+      desc: "La meta più vicina a Roma di questa lista, eppure sembra un altro continente: l'altopiano di Campo Imperatore, a 2000 m sotto il Gran Sasso, con panorami che gli hanno guadagnato il soprannome di 'Piccolo Tibet'. Perfetto anche per un weekend lungo.",
+      meteoPlace: "Campo Imperatore",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Campo_Imperatore,_Gran_Sasso.jpg",
+      tappe: [
+        { nome: "L'Aquila", query: "L'Aquila centro", label: "punto di partenza abruzzese", fun: "Una città che si sta ricostruendo pezzo per pezzo — merita la sosta anche solo per rispetto." },
+        { nome: "Campo Imperatore", query: "Campo Imperatore AQ", label: "l'altopiano a 2000 m, il 'Piccolo Tibet'", fun: "Qui hanno girato scene western — e appena arrivi capisci esattamente perché." },
+        { nome: "Rocca Calascio", query: "Rocca Calascio AQ", label: "fortezza panoramica tra le più alte d'Italia", fun: "La rocca più fotografata d'Abruzzo, sullo sfondo di praticamente ogni film ambientato quassù." }
+      ]
+    },
+    {
+      zona: "Dolomiti Ampezzane", km: "1-2 giorni consigliati", titolo: "Passo Giau, il balcone delle Dolomiti",
+      desc: "Uno dei passi più fotografati e più amati d'Italia, spesso tappa del Giro d'Italia: da Cortina d'Ampezzo si sale tra tornanti panoramici fino a 2236 m, con vista sul Gruppo del Nuvolau e sulla Croda da Lago.",
+      meteoPlace: "Cortina d'Ampezzo",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_di_Giau.jpg",
+      tappe: [
+        { nome: "Cortina d'Ampezzo", query: "Cortina d'Ampezzo BL", label: "la 'Regina delle Dolomiti'", fun: "Location olimpica due volte (1956 e 2026) — arrivarci in moto è comunque la medaglia migliore." },
+        { nome: "Passo Giau", query: "Passo Giau", label: "2236 m, tornanti panoramici sul Nuvolau", fun: "Uno dei passi più fotografati d'Italia — preparati a condividerlo con parecchi altri obiettivi." },
+        { nome: "Selva di Cadore", query: "Selva di Cadore BL", label: "versante opposto del passo", fun: "La discesa che ti fa capire perché i ciclisti del Giro arrivano quassù distrutti — e felici." }
+      ]
+    },
+    {
+      zona: "Valnerina", km: "1-2 giorni consigliati", titolo: "La Cascata delle Marmore e la Valnerina",
+      desc: "Una meta più vicina e accessibile delle altre, ma non meno spettacolare: la Cascata delle Marmore, tra le cascate artificiali più alte d'Europa (165 m, creata dai Romani), e la Valnerina che si snoda tra gole e borghi tra i meno turistici dell'Umbria.",
+      meteoPlace: "Terni",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cascata_delle_Marmore_2.JPG",
+      tappe: [
+        { nome: "Terni", query: "Terni centro", label: "punto di partenza umbro", fun: "Città industriale con una sorpresa naturale a due passi — non giudicarla dalla prima impressione." },
+        { nome: "Cascata delle Marmore", query: "Cascata delle Marmore", label: "165 m, tra le cascate artificiali più alte d'Europa", fun: "Costruita dai Romani più di duemila anni fa — un'opera idraulica che fa impallidire certi cantieri moderni." },
+        { nome: "Ferentillo", query: "Ferentillo TR", label: "borgo nella gola della Valnerina", fun: "Un paese diviso in due dal fiume, con vista su una delle valli più strette e verdi dell'Umbria." }
+      ]
+    },
+    {
+      zona: "Val d'Orcia", km: "2-3 giorni consigliati", titolo: "Val d'Orcia, tra strade bianche e colline UNESCO",
+      desc: "Il paesaggio toscano più fotografato al mondo, patrimonio UNESCO: cipressi solitari, colline dorate e le celebri 'strade bianche' sterrate che attraversano la Val d'Orcia tra Pienza, San Quirico e Montalcino.",
+      meteoPlace: "Pienza",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Pienza_italy.jpg",
+      tappe: [
+        { nome: "Pienza", query: "Pienza SI", label: "la città ideale rinascimentale, UNESCO", fun: "Ripensata a tavolino nel Quattrocento come 'città ideale' — oggi è ideale soprattutto per una sosta con vista." },
+        { nome: "San Quirico d'Orcia", query: "San Quirico d'Orcia SI", label: "borgo e Orti Leonini", fun: "Il cuore geografico della Val d'Orcia — e si vede, nel senso migliore possibile." },
+        { nome: "Montalcino", query: "Montalcino SI", label: "patria del Brunello", fun: "Un bicchiere di Brunello a fine giornata è quasi un obbligo morale, da queste parti." }
+      ]
+    },
+    {
+      zona: "Valle d'Itria", km: "3-4 giorni consigliati", titolo: "Valle d'Itria, il regno dei trulli",
+      desc: "Un cambio di scenario totale rispetto al resto della lista: la Puglia dei trulli, tra Alberobello (patrimonio UNESCO), le stradine bianche di Locorotondo e i muretti a secco di Cisternino, tra gli 'i borghi più belli d'Italia'.",
+      meteoPlace: "Alberobello",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Alberobello_Trulli.jpg",
+      tappe: [
+        { nome: "Alberobello", query: "Alberobello trulli", label: "i trulli, patrimonio UNESCO", fun: "Un intero quartiere di casette a cono bianche — sembra un set giocattolo, invece ci vive gente vera." },
+        { nome: "Locorotondo", query: "Locorotondo BA", label: "borgo bianco a pianta circolare", fun: "Il nome non mente: il centro storico è letteralmente un cerchio perfetto." },
+        { nome: "Cisternino", query: "Cisternino BR", label: "uno dei borghi più belli d'Italia", fun: "Vicoli bianchi, fiori ovunque, e le celebri 'fornelle' pronte per la bombetta a fine giro." }
+      ]
+    },
+    {
+      zona: "Monti Sibillini", km: "2-3 giorni consigliati", titolo: "Castelluccio di Norcia e il Piano Grande",
+      desc: "Un altopiano carsico immenso a 1450 m, che a fine giugno si colora con la celebre 'Fioritura' delle lenticchie — uno degli spettacoli naturali più fotografati d'Italia. Norcia, gravemente colpita dal sisma del 2016, è oggi in piena ricostruzione.",
+      meteoPlace: "Norcia",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Piano_Grande_-_Castelluccio.jpg",
+      tappe: [
+        { nome: "Norcia", query: "Norcia PG", label: "patria della norcineria, in ricostruzione dopo il sisma 2016", fun: "La città che ha dato il nome ai norcini di tutta Italia — merita la sosta anche solo per rispetto, come Amatrice." },
+        { nome: "Castelluccio di Norcia", query: "Castelluccio di Norcia", label: "Piano Grande, la 'Fioritura' a fine giugno", fun: "A fine giugno i campi si colorano come una tavolozza — controlla il periodo prima di partire, la fioritura dura poco." },
+        { nome: "Forca di Presta", query: "Forca di Presta", label: "valico verso le Marche", fun: "Il punto più alto del giro, e anche il confine informale tra Umbria e Marche." }
+      ]
+    },
+    {
+      zona: "Livigno", km: "1-2 giorni consigliati", titolo: "Livigno e il Passo di Foscagno",
+      desc: "La 'piccola Svizzera' italiana: Livigno, zona extra-doganale a 1800 m, raggiunta attraverso il Passo di Foscagno, meno famoso dello Stelvio ma altrettanto panoramico, con vista sulle Alpi Retiche.",
+      meteoPlace: "Livigno",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Livigno_-_Comune_di_Livigno_-_2023-09-06_00-39-00_001.JPG",
+      tappe: [
+        { nome: "Passo dell'Eira", query: "Passo dell'Eira", label: "primo valico prima di Foscagno", fun: "Il preludio del Foscagno — se ti sembra già bello qui, aspetta il prossimo passo." },
+        { nome: "Passo di Foscagno", query: "Passo di Foscagno", label: "2291 m, valico verso Livigno", fun: "Meno cartoline dello Stelvio, stessa vista da togliere il fiato — e molto meno traffico." },
+        { nome: "Livigno", query: "Livigno SO", label: "zona extra-doganale a 1800 m", fun: "Prezzi da zona franca e panorami da cartolina — un motivo in più per fermarsi almeno una notte." }
+      ]
+    }
+  ];
+
   function weatherIcon(code){
     if (code === 0) return "☀️";
     if ([1,2].includes(code)) return "🌤️";
@@ -1115,6 +1366,69 @@
     return { mapsUrl, wazeUrl };
   }
 
+  // ===== Versioni per i Miniviaggi (viaggi di più giorni, non partono per
+  // forza da Roma: a differenza degli Itinerari qui non c'è una "distanza di
+  // base" precalcolata, il percorso parte sempre dalla prima tappa reale) ===
+  function routeUrlsMV(it){
+    const origin = it.tappe[0].query;
+    const destination = it.tappe[it.tappe.length - 1].query;
+    const waypoints = it.tappe.slice(1, -1).map(t => encodeURIComponent(t.query)).join("|");
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${waypoints}&travelmode=driving`;
+    const wazeUrl = `https://waze.com/ul?q=${mapsQuery(it.tappe[0])}&navigate=yes`;
+    return { mapsUrl, wazeUrl };
+  }
+
+  const routeKmCacheMV = {};
+  async function estimateKmMV(it){
+    const startInputEl = document.getElementById("fuel-start");
+    const startInput = startInputEl.value.trim() || "Roma";
+    const cacheKey = `${startInput.toLowerCase()}|${it.zona}`;
+    if(routeKmCacheMV[cacheKey] !== undefined) return routeKmCacheMV[cacheKey];
+    try{
+      const [startCoords, destCoords] = await Promise.all([resolvePlace(startInputEl), geocodePlace(it.meteoPlace)]);
+      if(!startCoords || !destCoords) return null;
+      const route = await fetchRoute(startCoords, destCoords);
+      let km;
+      if(route){
+        km = Math.round((route.distance / 1000) * 2); // andata e ritorno, distanza stradale reale
+      } else {
+        const oneWay = haversineKm(startCoords.lat, startCoords.lon, destCoords.lat, destCoords.lon);
+        km = Math.round(oneWay * 2 * 1.3); // fallback se il calcolo del percorso stradale non è disponibile
+      }
+      routeKmCacheMV[cacheKey] = km;
+      return km;
+    } catch(err){
+      return null;
+    }
+  }
+
+  async function computeFuelMV(it){
+    const consumo = parseFloat(document.getElementById("fuel-cc").value);
+    const prezzo = parseFloat(document.getElementById("fuel-price").value) || 1.75;
+    const km = await estimateKmMV(it);
+    if(km == null) return { km: null, costo: null };
+    const litri = km / consumo;
+    const costo = litri * prezzo;
+    return { km, costo };
+  }
+
+  const fuelRequestTokenMV = new WeakMap();
+  async function updateFuelEstimateMV(container, it){
+    const myToken = (fuelRequestTokenMV.get(container) || 0) + 1;
+    fuelRequestTokenMV.set(container, myToken);
+    const { km, costo } = await computeFuelMV(it);
+    if(fuelRequestTokenMV.get(container) !== myToken) return;
+    const kmEl = container.querySelector(".card-km");
+    const priceEl = container.querySelector(".card-price");
+    if(km == null){
+      if(kmEl) kmEl.textContent = "📍 — km";
+      if(priceEl) priceEl.textContent = "⛽ —";
+      return;
+    }
+    if(kmEl) kmEl.textContent = `📍 ${km} km a/r`;
+    if(priceEl) priceEl.textContent = `⛽ €${costo.toFixed(2)}`;
+  }
+
   function weatherBarHTML(){
     return `
       <div class="card-weather-bar">
@@ -1342,8 +1656,8 @@
     daySelect.addEventListener("change", () => loadWeather(weatherBar, it.meteoPlace, parseInt(daySelect.value, 10)));
   }
 
-  function buildCard(it){
-    const { mapsUrl, wazeUrl } = routeUrls(it);
+  function buildCard(it, routeUrlsFn, updateFuelFn, openDetailFn){
+    const { mapsUrl, wazeUrl } = routeUrlsFn(it);
     const card = document.createElement("div");
     card.className = "itinerario-card";
 
@@ -1377,16 +1691,16 @@
       if(e.target.closest("a")) return;
       if(e.target.closest(".card-weather-bar")) return;
       if(window.matchMedia("(min-width: 861px)").matches) return;
-      openDetail(it);
+      openDetailFn(it);
     });
 
-    updateFuelEstimate(card, it);
+    updateFuelFn(card, it);
 
     return card;
   }
 
-  function buildDetailHTML(it){
-    const { mapsUrl, wazeUrl } = routeUrls(it);
+  function buildDetailHTML(it, routeUrlsFn){
+    const { mapsUrl, wazeUrl } = routeUrlsFn(it);
     return `
       <div class="card-topbar">
         <span class="card-km" title="Km totali del giro">📍 …</span>
@@ -1405,12 +1719,19 @@
   const modal = document.getElementById("detail-modal");
   const modalInner = document.getElementById("detail-modal-inner");
   let currentModalIt = null;
+  let currentModalRouteUrlsFn = null;
+  let currentModalFuelFn = null;
 
-  function openDetail(it){
+  // routeUrlsFn/updateFuelFn cambiano a seconda che la scheda aperta sia un
+  // Itinerario (parte sempre da Roma, km precalcolato) o un Miniviaggio
+  // (parte dalla sua prima tappa, km sempre calcolato al volo)
+  function openDetail(it, routeUrlsFn, updateFuelFn){
     currentModalIt = it;
-    modalInner.innerHTML = buildDetailHTML(it);
+    currentModalRouteUrlsFn = routeUrlsFn;
+    currentModalFuelFn = updateFuelFn;
+    modalInner.innerHTML = buildDetailHTML(it, routeUrlsFn);
 
-    updateFuelEstimate(modalInner, it);
+    updateFuelFn(modalInner, it);
     bindShareButtons(modalInner, it);
 
     modal.classList.add("open");
@@ -1427,32 +1748,45 @@
   document.querySelector(".detail-modal-close").addEventListener("click", closeDetail);
   document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeDetail(); });
 
-  const grid = document.getElementById("itinerari-grid");
-  const cards = ITINERARI.map(it => {
-    const card = buildCard(it);
-    grid.appendChild(card);
-    return { card, it };
-  });
+  // Costruisce un intero carousel (schede + frecce, scoperte a partire dal
+  // proprio contenitore così due caroselli sulla stessa pagina non si
+  // rubano a vicenda le frecce) per un dataset (Itinerari o Miniviaggi)
+  function initCarousel(data, gridId, routeUrlsFn, updateFuelFn){
+    const grid = document.getElementById(gridId);
+    const wrapper = grid.closest(".itinerari-carousel");
+    const cardsList = data.map(it => {
+      const card = buildCard(it, routeUrlsFn, updateFuelFn, (item) => openDetail(item, routeUrlsFn, updateFuelFn));
+      grid.appendChild(card);
+      return { card, it, updateFuelFn };
+    });
+
+    function scrollThis(dir){
+      const firstCard = grid.querySelector(".itinerario-card");
+      if(!firstCard) return;
+      const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+      const cardWidth = firstCard.getBoundingClientRect().width;
+      grid.scrollBy({ left: dir * (cardWidth + gap), behavior: "smooth" });
+    }
+    wrapper.querySelector(".carousel-arrow.prev").addEventListener("click", () => scrollThis(-1));
+    wrapper.querySelector(".carousel-arrow.next").addEventListener("click", () => scrollThis(1));
+
+    return cardsList;
+  }
+
+  const allCards = [
+    ...initCarousel(ITINERARI, "itinerari-grid", routeUrls, updateFuelEstimate),
+    ...initCarousel(MINIVIAGGI, "miniviaggi-grid", routeUrlsMV, updateFuelEstimateMV)
+  ];
 
   function refreshAllFuel(){
-    cards.forEach(({ card, it }) => updateFuelEstimate(card, it));
-    if(currentModalIt) updateFuelEstimate(modalInner, currentModalIt);
+    allCards.forEach(({ card, it, updateFuelFn }) => updateFuelFn(card, it));
+    if(currentModalIt) currentModalFuelFn(modalInner, currentModalIt);
   }
   ["fuel-cc", "fuel-price"].forEach(id => {
     document.getElementById(id).addEventListener("input", refreshAllFuel);
   });
   document.getElementById("fuel-start").addEventListener("change", refreshAllFuel);
   attachPlaceAutocomplete(document.getElementById("fuel-start"), document.getElementById("fuel-start-suggest"));
-
-  function scrollCarousel(dir){
-    const firstCard = grid.querySelector(".itinerario-card");
-    if(!firstCard) return;
-    const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
-    const cardWidth = firstCard.getBoundingClientRect().width;
-    grid.scrollBy({ left: dir * (cardWidth + gap), behavior: "smooth" });
-  }
-  document.querySelector(".carousel-arrow.prev").addEventListener("click", () => scrollCarousel(-1));
-  document.querySelector(".carousel-arrow.next").addEventListener("click", () => scrollCarousel(1));
 </script>
 
 <script src="script.js"></script>
