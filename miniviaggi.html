@@ -1356,6 +1356,38 @@
     return label.split(",")[0].split(":").pop().trim();
   }
 
+  // Distanza approssimata in km tra due coordinate (formula haversine)
+  function haversineKm(lat1, lon1, lat2, lon2){
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  // Campiona la geometria reale del percorso ogni minKm km percorsi (non punti
+  // a caso: sono comunque le coordinate esatte della strada). Serve come rete
+  // di sicurezza quando il percorso ha pochissime manovre "off ramp" segnalate
+  // da OSRM (es. un tragitto quasi tutto dritto, con o senza autostrada), caso
+  // in cui affidarsi ai soli punti di svolta lascia grandi tratti senza tappe.
+  function sampleRouteGeometry(route, minKm){
+    const coords = (route.geometry && route.geometry.coordinates) || [];
+    const pts = [];
+    let cumKm = 0;
+    let nextTarget = minKm;
+    for(let i = 1; i < coords.length; i++){
+      const [lon1, lat1] = coords[i - 1];
+      const [lon2, lat2] = coords[i];
+      cumKm += haversineKm(lat1, lon1, lat2, lon2);
+      if(cumKm >= nextTarget){
+        pts.push({ lat: lat2, lon: lon2, cumKm });
+        nextTarget += minKm;
+      }
+    }
+    return pts;
+  }
+
   async function buildRouteStops(route, startPlace, startCoords, endPlace, endCoords){
     const pts = collectManeuverPoints(route);
     const exits = pts.filter(p => p.isExit && p.exitLabel);
@@ -1366,9 +1398,10 @@
       // con autostrada: nomi reali delle uscite autostradali, dai cartelli OSM
       middle = spacedExits.map(p => ({ name: cleanExitLabel(p.exitLabel), lat: p.lat, lon: p.lon }));
     } else {
-      // senza autostrada: le città che si attraversano davvero, individuate sui
-      // punti di manovra reali del percorso (non su punti a caso della geometria)
-      const spacedPts = spaceByDistance(pts.filter(p => p.cumKm > 3), 50);
+      // nessuna uscita autostradale segnalata (percorso senza autostrada, o con
+      // pochissime manovre intermedie): campiona la geometria reale ogni 50 km,
+      // così le città attraversate si vedono sempre lungo tutto il tragitto
+      const spacedPts = sampleRouteGeometry(route, 50);
       middle = [];
       for(const p of spacedPts){
         // se il reverse-geocoding di UN punto fallisce (rete lenta, posto non
