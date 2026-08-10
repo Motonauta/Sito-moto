@@ -955,6 +955,50 @@
 
   // ===== Assistente di valigia ========================================
   const RAIN_CODES = new Set([51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99]);
+  const VALIGIA_HIST_YEARS = 5;
+
+  // Per date troppo lontane per una previsione vera (oltre ~15 giorni), usa
+  // la media storica dello stesso periodo (stesso mm-gg, stessa durata) negli
+  // ultimi VALIGIA_HIST_YEARS anni, invece di inventare un meteo che non c'è.
+  async function fetchHistoricalAverage(lat, lon, startDate, giorni){
+    const thisYear = new Date().getFullYear();
+    const years = [];
+    for(let i = 1; i <= VALIGIA_HIST_YEARS; i++) years.push(thisYear - i);
+
+    const requests = years.map(async (year) => {
+      const histStart = new Date(year, startDate.getMonth(), startDate.getDate());
+      const histEnd = new Date(histStart);
+      histEnd.setDate(histEnd.getDate() + giorni - 1);
+      try{
+        const res = await fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&start_date=${isoDateFromDate(histStart)}&end_date=${isoDateFromDate(histEnd)}`);
+        const data = await res.json();
+        const daily = data.daily || {};
+        return {
+          maxs: (daily.temperature_2m_max || []).filter(v => v != null),
+          mins: (daily.temperature_2m_min || []).filter(v => v != null),
+          codes: (daily.weather_code || []).filter(v => v != null)
+        };
+      } catch(err){
+        return null;
+      }
+    });
+
+    const results = (await Promise.all(requests)).filter(Boolean);
+    const allMaxs = results.flatMap(r => r.maxs);
+    const allMins = results.flatMap(r => r.mins);
+    const allCodes = results.flatMap(r => r.codes);
+    if(!allMaxs.length || !allMins.length) return null;
+
+    const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+    const rainDays = allCodes.filter(c => RAIN_CODES.has(c)).length;
+
+    return {
+      minTemp: avg(allMins),
+      maxTemp: avg(allMaxs),
+      hasRain: allCodes.length > 0 && (rainDays / allCodes.length) >= 0.25,
+      yearsUsed: results.length
+    };
+  }
 
   function valigiaCategoryHTML(title, items){
     if(!items.length) return "";
@@ -991,19 +1035,21 @@
     try{
       const destCoords = await resolvePlaceOrThrow(destInputEl, "Destinazione");
 
-      resultsEl.innerHTML = `<p class="route-weather-loading">Guardo il meteo previsto...</p>`;
-
-      // il meteo dettagliato copre solo i prossimi ~15 giorni: oltre
-      // quell'orizzonte la valigia si basa su una lista prudente (copre sia
-      // caldo che freddo che pioggia) invece che su dati meteo inventati
+      // il meteo dettagliato copre solo i prossimi ~15 giorni: entro quel
+      // limite si usa la previsione reale, oltre si usa la media storica
+      // (ultimi anni) dello stesso periodo, invece di inventare un meteo che
+      // non c'è ancora
       const [y, m, d] = dataStr.split("-").map(Number);
       const startDate = new Date(y, m - 1, d);
       const maxForecastDate = new Date();
       maxForecastDate.setDate(maxForecastDate.getDate() + 15);
+      const useForecast = startDate <= maxForecastDate;
 
-      let hasRain = false, minTemp = null, maxTemp = null, weatherAvailable = false;
+      resultsEl.innerHTML = `<p class="route-weather-loading">${useForecast ? "Guardo il meteo previsto..." : "Calcolo la media storica del periodo..."}</p>`;
 
-      if(startDate <= maxForecastDate){
+      let hasRain = false, minTemp = null, maxTemp = null, weatherAvailable = false, weatherSource = null;
+
+      if(useForecast){
         const endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + giorni - 1);
         const cappedEnd = endDate > maxForecastDate ? maxForecastDate : endDate;
@@ -1019,14 +1065,24 @@
         const mins = daily.temperature_2m_min || [];
         if(maxs.length){
           weatherAvailable = true;
+          weatherSource = "forecast";
           hasRain = codes.some(c => RAIN_CODES.has(c)) || probs.some(p => p >= 40);
           minTemp = Math.min(...mins);
           maxTemp = Math.max(...maxs);
         }
+      } else {
+        const hist = await fetchHistoricalAverage(destCoords.lat, destCoords.lon, startDate, giorni);
+        if(hist){
+          weatherAvailable = true;
+          weatherSource = "historical";
+          hasRain = hist.hasRain;
+          minTemp = hist.minTemp;
+          maxTemp = hist.maxTemp;
+        }
       }
 
       // --- Abbigliamento moto ---
-      const motoItems = ["Casco", "Guanti da moto", "Stivali o scarpe da moto", "Protezioni (schiena/ginocchia)"];
+      const motoItems = ["Casco", "Guanti da moto", "Stivali o scarpe da moto"];
       if(!weatherAvailable){
         motoItems.push("Giacca e pantaloni moto con inserto termico removibile (copre sia caldo che freddo)");
       } else {
@@ -1069,9 +1125,11 @@
         "Contanti (non ovunque si paga con carta)"
       ];
 
-      const weatherNote = weatherAvailable
+      const weatherNote = weatherSource === "forecast"
         ? `Meteo previsto: ${Math.round(minTemp)}°/${Math.round(maxTemp)}°C${hasRain ? ", possibile pioggia in uno o più giorni." : ", nessuna pioggia significativa prevista."}`
-        : `Le previsioni dettagliate coprono solo i prossimi ~15 giorni: per questa data ho preparato una lista prudente che copre sia caldo che freddo che pioggia.`;
+        : weatherSource === "historical"
+          ? `Data troppo lontana per una previsione vera: uso la media storica degli ultimi ${VALIGIA_HIST_YEARS} anni per questo periodo — ${Math.round(minTemp)}°/${Math.round(maxTemp)}°C${hasRain ? ", pioggia frequente in questo periodo." : ", pioggia poco frequente in questo periodo."}`
+          : `Non sono riuscito a recuperare dati meteo per questa destinazione: ho preparato una lista prudente che copre sia caldo che freddo che pioggia.`;
 
       resultsEl.innerHTML = `
         <p class="route-weather-summary">${weatherNote}</p>
