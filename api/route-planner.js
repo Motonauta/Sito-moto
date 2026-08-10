@@ -1,19 +1,4 @@
-const { getRedisClient } = require('../lib/redis');
-
 const NOMINATIM_UA = 'IlMotonautaSito/1.0 (sito personale motociclistico)';
-// v2: la v1 è rimasta in cache con un indice vuoto da un test precedente
-// (prima che smettessimo di mettere in cache i risultati vuoti) — cambiare
-// chiave scarta quella cache invece di aspettare la scadenza di un'ora
-const FUEL_PRICE_CACHE_KEY = 'mimit_fuel_prices_v2';
-const FUEL_PRICE_CACHE_TTL = 3600; // 1 ora: i prezzi ufficiali cambiano poche volte al giorno
-const FUEL_PRICE_TIMEOUT_MS = 7000; // non deve mai far scadere il tempo massimo della funzione
-
-function withTimeout(promise, ms) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error(`timeout dopo ${ms}ms`)), ms))
-  ]);
-}
 
 function haversineKmServer(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -22,98 +7,6 @@ function haversineKmServer(lat1, lon1, lat2, lon2) {
   const a = Math.sin(dLat / 2) ** 2 +
     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-// I CSV pubblici del Ministero delle Imprese hanno spesso una prima riga di
-// intestazione "tecnica" (es. data di estrazione) prima della vera riga di
-// colonne: qui si cerca la riga con "idimpianto" per essere resistenti a
-// piccole variazioni di formato.
-function parseMimitCSV(text) {
-  const lines = text.split(/\r?\n/).filter(Boolean);
-  let headerIdx = lines.findIndex(l => l.toLowerCase().includes('idimpianto'));
-  if (headerIdx === -1) headerIdx = 0;
-  const header = lines[headerIdx].split(';').map(h => h.trim().toLowerCase());
-  const rows = [];
-  for (let i = headerIdx + 1; i < lines.length; i++) {
-    const cols = lines[i].split(';');
-    if (cols.length < 2) continue;
-    const row = {};
-    header.forEach((h, idx) => { row[h] = (cols[idx] || '').trim(); });
-    rows.push(row);
-  }
-  return rows;
-}
-
-// Scarica e unisce anagrafica impianti + prezzi (dati aperti MIMIT), tenuti
-// in cache su Redis per non riscaricare/riparsare due elenchi nazionali ad
-// ogni singola ricerca di un distributore lungo il percorso.
-async function loadFuelPriceIndex(debug) {
-  const redis = await getRedisClient();
-  const cached = await redis.get(FUEL_PRICE_CACHE_KEY);
-  if (cached) {
-    if (debug) debug.source = 'cache';
-    return JSON.parse(cached);
-  }
-
-  const [anagraficaRes, prezziRes] = await Promise.all([
-    fetch('https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv'),
-    fetch('https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv')
-  ]);
-  const [anagraficaText, prezziText] = await Promise.all([anagraficaRes.text(), prezziRes.text()]);
-
-  if (debug) {
-    debug.source = 'fresh';
-    debug.anagraficaStatus = anagraficaRes.status;
-    debug.prezziStatus = prezziRes.status;
-    debug.anagraficaLength = anagraficaText.length;
-    debug.prezziLength = prezziText.length;
-    debug.anagraficaSample = anagraficaText.slice(0, 300);
-    debug.prezziSample = prezziText.slice(0, 300);
-  }
-
-  const stations = {};
-  for (const row of parseMimitCSV(anagraficaText)) {
-    const id = row['idimpianto'];
-    if (!id) continue;
-    const lat = parseFloat((row['lat'] || row['latitudine'] || '').replace(',', '.'));
-    const lon = parseFloat((row['lng'] || row['long'] || row['longitudine'] || '').replace(',', '.'));
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
-    stations[id] = { lat, lon, brand: row['bandiera'] || row['gestore'] || null };
-  }
-
-  const prices = {};
-  for (const row of parseMimitCSV(prezziText)) {
-    const id = row['idimpianto'];
-    if (!id) continue;
-    const desc = (row['desccarburante'] || '').toLowerCase();
-    if (!desc.includes('benzina')) continue; // per la moto interessa la benzina, non il gasolio
-    const prezzo = parseFloat((row['prezzo'] || '').replace(',', '.'));
-    if (!Number.isFinite(prezzo)) continue;
-    // se per lo stesso impianto ci sono più righe benzina (self/servito), tiene la più economica
-    if (!prices[id] || prezzo < prices[id].prezzo) {
-      prices[id] = { prezzo, data: row['dtcomu'] || row['data'] || null };
-    }
-  }
-
-  if (debug) {
-    debug.stationsParsed = Object.keys(stations).length;
-    debug.pricesParsed = Object.keys(prices).length;
-  }
-
-  const index = [];
-  for (const id in stations) {
-    const st = stations[id];
-    const p = prices[id];
-    if (p) index.push({ lat: st.lat, lon: st.lon, prezzo: p.prezzo, aggiornato: p.data });
-  }
-
-  // un indice vuoto quasi certamente significa un problema di formato: non
-  // lo mettiamo in cache, altrimenti l'errore resterebbe "congelato" per
-  // un'ora invece di poter essere ridiagnosticato al tentativo successivo
-  if (index.length > 0) {
-    await redis.set(FUEL_PRICE_CACHE_KEY, JSON.stringify(index), { EX: FUEL_PRICE_CACHE_TTL });
-  }
-  return index;
 }
 
 async function searchPlace(req, res) {
@@ -210,11 +103,13 @@ async function computeMultiStopRoute(req, res, { coords, steps }) {
 // Cerca il distributore di benzina/Autogrill reale più vicino a un punto
 // (dati OpenStreetMap, tag amenity=fuel) entro un certo raggio, per far
 // corrispondere le tappe "ogni tot km" a una sosta vera invece che a un
-// punto a caso sulla strada — e ci abbina, quando possibile, il prezzo
-// benzina ufficiale più recente (dati aperti MIMIT), cercando l'impianto
-// più vicino nell'anagrafica ufficiale entro poche centinaia di metri dal
-// distributore trovato su OpenStreetMap (le due banche dati non condividono
-// un id comune, si incrociano per posizione).
+// punto a caso sulla strada.
+//
+// NB: qui c'era anche un tentativo di abbinare il prezzo benzina ufficiale
+// (dati aperti MIMIT), rimosso perché scaricare/leggere i due CSV nazionali
+// del Ministero supera regolarmente il tempo massimo concesso a una
+// funzione serverless gratuita — non un bug risolvibile con altri tentativi,
+// un limite della piattaforma rispetto ai tempi di quei file.
 async function findFuelNear(req, res) {
   const { lat, lon, radius } = req.query;
   if (!lat || !lon) return res.status(400).json({ error: 'Mancano lat/lon' });
@@ -242,34 +137,7 @@ async function findFuelNear(req, res) {
   }
 
   if (!best) return res.status(200).json({ found: false });
-
-  // diagnostica sull'abbinamento del prezzo: sempre inclusa (non solo in
-  // debug) finché non è confermato che il parsing dei CSV MIMIT funziona,
-  // così da un'unica risposta si vede subito se il problema è nello scarico,
-  // nel formato delle colonne, o nella distanza dal distributore trovato
-  const priceDebug = { indexSize: 0, nearestMatchKm: null, error: null };
-
-  try {
-    const priceIndex = await withTimeout(loadFuelPriceIndex(priceDebug), FUEL_PRICE_TIMEOUT_MS);
-    priceDebug.indexSize = priceIndex.length;
-    let priceMatch = null, priceMatchDist = Infinity;
-    for (const entry of priceIndex) {
-      const d = haversineKmServer(best.lat, best.lon, entry.lat, entry.lon);
-      if (d < priceMatchDist) { priceMatchDist = d; priceMatch = entry; }
-    }
-    if (priceMatch) priceDebug.nearestMatchKm = Math.round(priceMatchDist * 1000) / 1000;
-    // entro 300 m si considera lo stesso impianto fisico
-    if (priceMatch && priceMatchDist <= 0.3) {
-      best.prezzo = priceMatch.prezzo;
-      best.prezzoAggiornato = priceMatch.aggiornato;
-    }
-  } catch (err) {
-    console.error('Prezzo carburante non disponibile:', err);
-    priceDebug.error = String((err && err.message) || err);
-    // il distributore resta comunque valido anche senza prezzo abbinato
-  }
-
-  res.status(200).json({ found: true, station: best, priceDebug });
+  res.status(200).json({ found: true, station: best });
 }
 
 async function computeRouteAvoidHighways(req, res, { startLat, startLon, endLat, endLon, steps }) {
