@@ -61,7 +61,7 @@ con alcune funzioni serverless per le parti dinamiche.
 Palette in `:root` di `style.css` — tema scuro "adventure/on-the-road":
 `--asphalt` (#1B1A17, sfondo), `--asphalt-2` (card/sezioni alternate), `--rust` (#C1502E, accento CTA),
 `--gold` (#D9A441, accento principale/link), `--sand` (titoli), `--cream`/`--cream-dim` (testo), `--steel`, `--forest-green`, `--concrete`.
-Font: Oswald (titoli), Work Sans (corpo), Space Mono (etichette/coordinate/numeri, stile "cruscotto").
+Font: Oswald (titoli), Work Sans (corpo), JetBrains Mono (etichette/coordinate/numeri, stile "cruscotto").
 Stile grafico ricorrente: eyebrow `.marker` con trattino dorato, card con bordo sottile `rgba(245,240,230,0.14)`, griglie `.grid-flat-3`/`.grid-cards-3`/`.feature-grid` responsive già pronte da riusare.
 
 ## Cose da sapere / non rompere

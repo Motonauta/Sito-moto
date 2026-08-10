@@ -6,7 +6,7 @@
 <title>Il Motonauta — Itinerari in moto nel Lazio</title>
 <meta name="description" content="Giri in moto per uscite domenicali nel Lazio, sotto i 300 km: meteo in tempo reale, tappe su Maps, stima costo benzina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
 <style>
@@ -1227,11 +1227,11 @@
 
     ctx.textAlign = "left";
     ctx.fillStyle = "#D9A441";
-    ctx.font = "700 30px 'Space Mono', monospace";
+    ctx.font = "700 30px 'JetBrains Mono', monospace";
     ctx.fillText(`📍 ${it.km}`, innerX, y);
     ctx.textAlign = "right";
     ctx.fillStyle = "#8a8578";
-    ctx.font = "700 24px 'Space Mono', monospace";
+    ctx.font = "700 24px 'JetBrains Mono', monospace";
     ctx.fillText("ILMOTONAUTA.COM", W - innerX, y);
     ctx.textAlign = "left";
 
@@ -1253,7 +1253,7 @@
     y = wrapText(ctx, it.desc, innerX, y + 20, innerW, 40, 5) + 20;
 
     ctx.fillStyle = "#D9A441";
-    ctx.font = "700 24px 'Space Mono', monospace";
+    ctx.font = "700 24px 'JetBrains Mono', monospace";
     ctx.fillText("TAPPE CONSIGLIATE", innerX, y);
     y += 14;
     ctx.fillStyle = "#EDE4D3";
