@@ -1,4 +1,86 @@
+const { getRedisClient } = require('../lib/redis');
+
 const NOMINATIM_UA = 'IlMotonautaSito/1.0 (sito personale motociclistico)';
+const FUEL_PRICE_CACHE_KEY = 'mimit_fuel_prices_v1';
+const FUEL_PRICE_CACHE_TTL = 3600; // 1 ora: i prezzi ufficiali cambiano poche volte al giorno
+
+function haversineKmServer(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// I CSV pubblici del Ministero delle Imprese hanno spesso una prima riga di
+// intestazione "tecnica" (es. data di estrazione) prima della vera riga di
+// colonne: qui si cerca la riga con "idimpianto" per essere resistenti a
+// piccole variazioni di formato.
+function parseMimitCSV(text) {
+  const lines = text.split(/\r?\n/).filter(Boolean);
+  let headerIdx = lines.findIndex(l => l.toLowerCase().includes('idimpianto'));
+  if (headerIdx === -1) headerIdx = 0;
+  const header = lines[headerIdx].split(';').map(h => h.trim().toLowerCase());
+  const rows = [];
+  for (let i = headerIdx + 1; i < lines.length; i++) {
+    const cols = lines[i].split(';');
+    if (cols.length < 2) continue;
+    const row = {};
+    header.forEach((h, idx) => { row[h] = (cols[idx] || '').trim(); });
+    rows.push(row);
+  }
+  return rows;
+}
+
+// Scarica e unisce anagrafica impianti + prezzi (dati aperti MIMIT), tenuti
+// in cache su Redis per non riscaricare/riparsare due elenchi nazionali ad
+// ogni singola ricerca di un distributore lungo il percorso.
+async function loadFuelPriceIndex() {
+  const redis = await getRedisClient();
+  const cached = await redis.get(FUEL_PRICE_CACHE_KEY);
+  if (cached) return JSON.parse(cached);
+
+  const [anagraficaRes, prezziRes] = await Promise.all([
+    fetch('https://www.mimit.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv'),
+    fetch('https://www.mimit.gov.it/images/exportCSV/prezzo_alle_8.csv')
+  ]);
+  const [anagraficaText, prezziText] = await Promise.all([anagraficaRes.text(), prezziRes.text()]);
+
+  const stations = {};
+  for (const row of parseMimitCSV(anagraficaText)) {
+    const id = row['idimpianto'];
+    if (!id) continue;
+    const lat = parseFloat((row['lat'] || row['latitudine'] || '').replace(',', '.'));
+    const lon = parseFloat((row['lng'] || row['long'] || row['longitudine'] || '').replace(',', '.'));
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+    stations[id] = { lat, lon, brand: row['bandiera'] || row['gestore'] || null };
+  }
+
+  const prices = {};
+  for (const row of parseMimitCSV(prezziText)) {
+    const id = row['idimpianto'];
+    if (!id) continue;
+    const desc = (row['desccarburante'] || '').toLowerCase();
+    if (!desc.includes('benzina')) continue; // per la moto interessa la benzina, non il gasolio
+    const prezzo = parseFloat((row['prezzo'] || '').replace(',', '.'));
+    if (!Number.isFinite(prezzo)) continue;
+    // se per lo stesso impianto ci sono più righe benzina (self/servito), tiene la più economica
+    if (!prices[id] || prezzo < prices[id].prezzo) {
+      prices[id] = { prezzo, data: row['dtcomu'] || row['data'] || null };
+    }
+  }
+
+  const index = [];
+  for (const id in stations) {
+    const st = stations[id];
+    const p = prices[id];
+    if (p) index.push({ lat: st.lat, lon: st.lon, prezzo: p.prezzo, aggiornato: p.data });
+  }
+
+  await redis.set(FUEL_PRICE_CACHE_KEY, JSON.stringify(index), { EX: FUEL_PRICE_CACHE_TTL });
+  return index;
+}
 
 async function searchPlace(req, res) {
   const { q } = req.query;
@@ -91,21 +173,60 @@ async function computeMultiStopRoute(req, res, { coords, steps }) {
   res.status(200).json(data);
 }
 
-// Cerca distributori di benzina/Autogrill reali (dati OpenStreetMap, tag
-// amenity=fuel) entro un certo raggio da un punto, per far corrispondere le
-// tappe "ogni tot km" a una sosta vera invece che a un punto a caso sulla
-// strada.
+// Cerca il distributore di benzina/Autogrill reale più vicino a un punto
+// (dati OpenStreetMap, tag amenity=fuel) entro un certo raggio, per far
+// corrispondere le tappe "ogni tot km" a una sosta vera invece che a un
+// punto a caso sulla strada — e ci abbina, quando possibile, il prezzo
+// benzina ufficiale più recente (dati aperti MIMIT), cercando l'impianto
+// più vicino nell'anagrafica ufficiale entro poche centinaia di metri dal
+// distributore trovato su OpenStreetMap (le due banche dati non condividono
+// un id comune, si incrociano per posizione).
 async function findFuelNear(req, res) {
   const { lat, lon, radius } = req.query;
   if (!lat || !lon) return res.status(400).json({ error: 'Mancano lat/lon' });
-  const r = Math.min(Math.max(Number(radius) || 5000, 500), 15000);
+  const r = Math.min(Math.max(Number(radius) || 5000, 500), 17000);
+  const latN = Number(lat), lonN = Number(lon);
 
-  const query = `[out:json][timeout:15];(node["amenity"="fuel"](around:${r},${lat},${lon});way["amenity"="fuel"](around:${r},${lat},${lon}););out center 10;`;
+  const query = `[out:json][timeout:20];(node["amenity"="fuel"](around:${r},${lat},${lon});way["amenity"="fuel"](around:${r},${lat},${lon}););out center 10;`;
   const resp = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`, {
     headers: { 'User-Agent': NOMINATIM_UA }
   });
   const data = await resp.json();
-  res.status(200).json(data);
+  const elements = data.elements || [];
+
+  let best = null, bestDist = Infinity;
+  for (const el of elements) {
+    const elLat = el.lat != null ? el.lat : (el.center && el.center.lat);
+    const elLon = el.lon != null ? el.lon : (el.center && el.center.lon);
+    if (elLat == null || elLon == null) continue;
+    const dist = haversineKmServer(latN, lonN, elLat, elLon);
+    if (dist < bestDist) {
+      bestDist = dist;
+      const tags = el.tags || {};
+      best = { lat: elLat, lon: elLon, name: tags.brand || tags.name || 'Distributore' };
+    }
+  }
+
+  if (!best) return res.status(200).json({ found: false });
+
+  try {
+    const priceIndex = await loadFuelPriceIndex();
+    let priceMatch = null, priceMatchDist = Infinity;
+    for (const entry of priceIndex) {
+      const d = haversineKmServer(best.lat, best.lon, entry.lat, entry.lon);
+      if (d < priceMatchDist) { priceMatchDist = d; priceMatch = entry; }
+    }
+    // entro 300 m si considera lo stesso impianto fisico
+    if (priceMatch && priceMatchDist <= 0.3) {
+      best.prezzo = priceMatch.prezzo;
+      best.prezzoAggiornato = priceMatch.aggiornato;
+    }
+  } catch (err) {
+    console.error('Prezzo carburante non disponibile:', err);
+    // il distributore resta comunque valido anche senza prezzo abbinato
+  }
+
+  res.status(200).json({ found: true, station: best });
 }
 
 async function computeRouteAvoidHighways(req, res, { startLat, startLon, endLat, endLon, steps }) {
