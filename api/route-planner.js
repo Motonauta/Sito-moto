@@ -4,7 +4,7 @@ async function searchPlace(req, res) {
   const { q } = req.query;
   if (!q) return res.status(400).json({ error: 'Manca il parametro q' });
 
-  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=0&limit=5&countrycodes=it&accept-language=it`;
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=0&limit=5&accept-language=it`;
   const r = await fetch(url, { headers: { 'User-Agent': NOMINATIM_UA } });
   const data = await r.json();
   res.status(200).json(data);
