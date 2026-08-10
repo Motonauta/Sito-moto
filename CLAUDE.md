@@ -16,7 +16,8 @@ con alcune funzioni serverless per le parti dinamiche.
 
 ## Struttura del sito
 
-- `index.html` — home (hero con foto + parallasse leggero, widget social, box "suggerisci un'idea", sezioni varie)
+- `index.html` — home (hero con foto + parallasse leggero, sezione Itinerari e sezione Miniviaggi con caroselli e calcolatore benzina condiviso, widget social, box "suggerisci un'idea", sezioni varie)
+- `nautagents.html` — **NautAgents**, gli assistenti di viaggio: Assistente di viaggio (meteo lungo il percorso, tappe intermedie, calcolo pedaggio/carburante) e Assistente di valigia (lista bagagli in base a destinazione/giorni/meteo previsto); altri assistenti verranno aggiunti qui in futuro
 - `sponsor.html` — partner/sponsor con loghi cliccabili
 - `moto.html` — pagina dedicata alla moto (BMW S1000XR), statistiche, galleria dedicata
 - `galleria.html` — galleria foto/video **caricata dinamicamente da Cloudinary** (nessuna foto scritta a mano nell'HTML) + mappa interattiva dei viaggi

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Il Motonauta — Miniviaggi, i passi alpini in moto</title>
-<meta name="description" content="Passo dello Stelvio, Passo del Tonale e altri passi alpini: itinerari in moto per più giorni, con meteo in tempo reale, tappe su Maps e stima costo benzina.">
+<title>Il Motonauta — NautAgents, gli assistenti di viaggio</title>
+<meta name="description" content="NautAgents: gli assistenti di viaggio del Motonauta. Meteo lungo tutto il percorso e lista della valigia generata in base a destinazione, giorni e previsioni.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -274,6 +274,20 @@
   .route-weather-place{ flex-grow:1; font-size:0.92rem; color:var(--cream); }
   .route-weather-time{ font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim); flex-shrink:0; }
   .route-weather-list .w-temp{ font-family:var(--font-mono); font-size:0.85rem; color:var(--gold); flex-shrink:0; }
+
+  .valigia-category{ margin-top:22px; }
+  .valigia-category:first-of-type{ margin-top:16px; }
+  .valigia-cat-title{
+    font-family:var(--font-mono); font-size:0.75rem; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--gold); margin-bottom:10px;
+  }
+  .valigia-list{ display:flex; flex-direction:column; gap:8px; list-style:none; margin:0; padding:0; }
+  .valigia-list li{
+    background:var(--asphalt); border:1px solid rgba(245,240,230,0.14);
+    padding:10px 14px;
+  }
+  .valigia-list label{ display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.9rem; color:var(--cream); }
+  .valigia-list input[type="checkbox"]{ width:16px; height:16px; accent-color:var(--rust); flex-shrink:0; }
 </style>
 </head>
 <body>
@@ -286,7 +300,7 @@
     </a>
     <nav class="nav-links">
       <a href="index.html">Home</a>
-      <a href="miniviaggi.html" class="active">Miniviaggi</a>
+      <a href="nautagents.html" class="active">NautAgents</a>
       <a href="about.html">About me</a>
       <a href="sponsor.html">Partner</a>
       <a href="galleria.html">Galleria</a>
@@ -298,20 +312,18 @@
   </div>
 </header>
 
-<!-- MINIVIAGGI ======================================================== -->
+<!-- NAUTAGENTS ========================================================= -->
 <section style="padding-top:70px; padding-bottom:0;">
   <div class="wrap">
-    <p class="marker">Passi alpini e mete lontane</p>
+    <p class="marker">La cassetta degli attrezzi</p>
     <h1 style="font-size:clamp(2.4rem, 6vw, 4.4rem); color:var(--sand); max-width:24ch;">
-      Miniviaggi: quando una domenica non basta
+      NautAgents: i tuoi assistenti di viaggio
     </h1>
     <p style="margin-top:18px; font-size:1.02rem; max-width:70ch;">
-      Le mete troppo lontane per un'uscita in giornata: i grandi passi
-      alpini del nord Italia, la costiera più famosa d'Italia, la Sardegna
-      in traghetto — tutto da vivere con calma su due o più giorni.
-      Stesso meteo aggiornato, stessa possibilità di aprire il percorso
-      su Maps e la stima di quanto spendi di benzina — partendo da dove
-      vuoi tu.
+      Piccoli assistenti pensati per chi viaggia in moto: calcolano percorsi,
+      meteo e bagagli così non devi pensarci tu. Qui sotto trovi l'assistente
+      che pianifica il meteo lungo tutta la strada e quello che prepara la
+      lista della valigia — altri arriveranno con il tempo.
     </p>
   </div>
 </section>
@@ -321,8 +333,8 @@
 
     <div class="fuel-calc">
       <p class="marker">Prima di partire</p>
-      <h2 style="font-size:1.3rem; color:var(--sand);">Quanto spendo di benzina?</h2>
-      <div class="fuel-calc-grid">
+      <h2 style="font-size:1.3rem; color:var(--sand);">La tua moto</h2>
+      <div class="fuel-calc-grid" style="grid-template-columns:repeat(2, 1fr); max-width:560px;">
         <div>
           <label for="fuel-cc">Cilindrata moto</label>
           <select id="fuel-cc">
@@ -344,47 +356,11 @@
           <label for="fuel-price">Prezzo benzina (€/litro)</label>
           <input type="number" id="fuel-price" value="1.75" step="0.01" min="0.5" max="4">
         </div>
-        <div>
-          <label for="fuel-start">Partenza da</label>
-          <div class="place-field">
-            <input type="text" id="fuel-start" value="Roma" placeholder="Es. Roma, Milano, Bologna..." autocomplete="off">
-            <div class="place-suggest-list" id="fuel-start-suggest"></div>
-          </div>
-        </div>
       </div>
       <p class="fuel-calc-note">
-        Stima indicativa: consumo medio per categoria, prezzo benzina che
-        imposti tu (nessun listino in tempo reale), km andata e ritorno
-        calcolati sul percorso stradale reale (solo se il calcolo del
-        percorso non fosse disponibile si passa a una stima in linea d'aria
-        con una maggiorazione per le curve) — per un miniviaggio, valuta
-        anche una tappa notte a metà strada invece del ritorno in giornata.
+        Usati dall'Assistente di viaggio qui sotto per stimare il costo di
+        carburante — e da quelli futuri che ne avranno bisogno.
       </p>
-    </div>
-
-    <div class="itinerari-carousel">
-      <button type="button" class="carousel-arrow prev" aria-label="Miniviaggio precedente">‹</button>
-      <div class="itinerari-grid" id="itinerari-grid"></div>
-      <button type="button" class="carousel-arrow next" aria-label="Miniviaggio successivo">›</button>
-    </div>
-
-    <div class="detail-modal" id="detail-modal">
-      <div class="detail-modal-backdrop"></div>
-      <div class="detail-modal-panel">
-        <button type="button" class="detail-modal-close" aria-label="Chiudi">✕</button>
-        <div class="detail-modal-inner" id="detail-modal-inner"></div>
-      </div>
-    </div>
-
-    <div class="itinerari-note">
-      <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
-      totali andata e ritorno dal punto di partenza scelto e ⛽ è la stima del
-      costo di benzina calcolata con i parametri qui sopra. I passi di
-      montagna sono aperti indicativamente da maggio/giugno a ottobre, meteo
-      permettendo — controlla sempre lo stato di apertura del valico e le
-      previsioni del giorno stesso, porta abbigliamento a strati (in quota le
-      temperature scendono molto rispetto alla pianura) e adatta l'andatura a
-      tornanti stretti e asfalto spesso umido o rovinato.
     </div>
 
     <div class="route-weather-widget">
@@ -430,6 +406,42 @@
       <button type="button" id="route-weather-btn" class="btn solid" style="margin-top:18px;">Calcola il meteo lungo il percorso</button>
       <div id="route-weather-results" class="route-weather-results"></div>
     </div>
+
+    <div class="route-weather-widget">
+      <p class="marker">Prepara i bagagli</p>
+      <h2 style="font-size:1.3rem; color:var(--sand);">Assistente di valigia</h2>
+      <p style="margin-top:10px; font-size:0.92rem; color:var(--cream-dim);">
+        Destinazione e giorni di viaggio: guardo il meteo previsto e ti
+        preparo la lista di cosa portare, abbigliamento moto incluso
+        (estivo, invernale o antipioggia a seconda delle previsioni).
+      </p>
+      <div class="route-weather-grid" style="grid-template-columns:repeat(4, 1fr);">
+        <div>
+          <label for="valigia-dest">Destinazione</label>
+          <div class="place-field">
+            <input type="text" id="valigia-dest" placeholder="Es. Bormio" autocomplete="off">
+            <div class="place-suggest-list" id="valigia-dest-suggest"></div>
+          </div>
+        </div>
+        <div>
+          <label for="valigia-giorni">Giorni</label>
+          <input type="number" id="valigia-giorni" value="3" min="1" max="30">
+        </div>
+        <div>
+          <label for="valigia-data">Data di partenza</label>
+          <input type="date" id="valigia-data">
+        </div>
+        <div>
+          <label for="valigia-bucato">Bucato</label>
+          <select id="valigia-bucato">
+            <option value="no">Vestiti per ogni giorno</option>
+            <option value="si">Lavo a mano (porto il detersivo)</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" id="valigia-btn" class="btn solid" style="margin-top:18px;">Genera la valigia</button>
+      <div id="valigia-results" class="route-weather-results"></div>
+    </div>
   </div>
 </section>
 
@@ -446,217 +458,6 @@
 </footer>
 
 <script>
-  const ITINERARI = [
-    {
-      zona: "Alta Valtellina", km: "2-3 giorni consigliati", titolo: "Passo dello Stelvio e Passo di Gavia",
-      desc: "Il valico più alto d'Italia (2758 m): 48 tornanti sul versante altoatesino, 36 su quello lombardo. Da Bormio si può abbinare anche il vicino Passo di Gavia, più stretto e selvaggio, tra i preferiti di chi cerca strada vera più che traffico turistico. Aperto indicativamente da giugno a ottobre.",
-      meteoPlace: "Bormio",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Stelvio_tornanti.JPG",
-      tappe: [
-        { nome: "Bormio", query: "Bormio SO", label: "base ideale per esplorare l'Alta Valtellina", fun: "Terme calde alla sera per le braccia indolenzite da tutti quei tornanti." },
-        { nome: "Passo dello Stelvio", query: "Passo dello Stelvio", label: "2758 m, 48 tornanti numerati sul versante altoatesino", fun: "Ogni tornante ha il suo numero su un cartello — arrivare al primo è già una vittoria personale." },
-        { nome: "Passo di Gavia", query: "Passo di Gavia", label: "strada stretta senza guardrail in alcuni tratti", fun: "Meno turisti dello Stelvio, più adrenalina: qui la strada non perdona le distrazioni." },
-        { nome: "Prato allo Stelvio", query: "Prato allo Stelvio BZ", label: "borgo altoatesino ai piedi del passo", fun: "Il paesaggio cambia lingua e stile: benvenuti in Alto Adige." }
-      ]
-    },
-    {
-      zona: "Alta Val Camonica", km: "1-2 giorni consigliati", titolo: "Passo del Tonale",
-      desc: "Un classico meno estremo dello Stelvio ma altrettanto scenico: da Ponte di Legno si sale tra prati d'alta quota fino al valico a 1883 m, con vista sull'Adamello, per poi scendere verso Vermiglio in Val di Sole.",
-      meteoPlace: "Ponte di Legno",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Tonale.jpg",
-      tappe: [
-        { nome: "Ponte di Legno", query: "Ponte di Legno BS", label: "porta d'accesso all'Alta Val Camonica", fun: "L'ultimo caffè vero prima che la strada cominci a fare sul serio." },
-        { nome: "Passo del Tonale", query: "Passo del Tonale", label: "1883 m, vista sul massiccio dell'Adamello", fun: "Meno tornanti dello Stelvio, stesso identico languorino di fermarti ogni due minuti per una foto." },
-        { nome: "Vermiglio", query: "Vermiglio TN", label: "Val di Sole, versante trentino", fun: "Si scende in Trentino e il paesaggio si addolcisce, un po' come i tuoi polsi dopo la salita." },
-        { nome: "Madonna di Campiglio", query: "Madonna di Campiglio TN", label: "una delle mete più note del Trentino", fun: "Vetrine da salotto buono e parcheggi moto pieni — un buon posto per farsi vedere." }
-      ]
-    },
-    {
-      zona: "Dolomiti", km: "3-4 giorni consigliati", titolo: "La Grande Strada delle Dolomiti",
-      desc: "Il tour dei passi dolomitici per eccellenza: Pordoi, Sella, Gardena e Falzarego collegano il Gruppo del Sella alla Marmolada tra tornanti panoramici e rifugi di quota. Da fare con calma, dormendo lungo il percorso.",
-      meteoPlace: "Canazei",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_pordoi.jpg",
-      tappe: [
-        { nome: "Canazei", query: "Canazei TN", label: "base ideale in Val di Fassa", fun: "Il punto di partenza di quasi ogni giro dolomitico che si rispetti." },
-        { nome: "Passo Pordoi", query: "Passo Pordoi", label: "2239 m, tra Gruppo del Sella e Marmolada", fun: "Vista sulla Marmolada che vale ogni singolo tornante per arrivarci." },
-        { nome: "Passo Sella", query: "Passo Sella", label: "tra le pareti verticali del Gruppo del Sella", fun: "Pareti di roccia che sembrano chiudersi sopra la testa — sensazione unica, promesso." },
-        { nome: "Passo Gardena", query: "Passo Gardena", label: "curve tra le più fotografate delle Dolomiti", fun: "Se non hai già mille foto di questo passo sui social, sei l'eccezione." },
-        { nome: "Passo Falzarego", query: "Passo Falzarego", label: "teatro di battaglie della Grande Guerra", fun: "Sotto l'asfalto ci sono ancora le gallerie scavate durante la Prima Guerra Mondiale." }
-      ]
-    },
-    {
-      zona: "Valtellina", km: "1-2 giorni consigliati", titolo: "Passo del Mortirolo",
-      desc: "Non il più alto, ma tra i più duri: pendenze fino al 18%, reso leggendario dal ciclismo (la salita di Marco Pantani). In moto è un saliscendi tecnico tra boschi, con molto meno traffico dei passi vicini.",
-      meteoPlace: "Mazzo di Valtellina",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Mortirolo.JPG",
-      tappe: [
-        { nome: "Mazzo di Valtellina", query: "Mazzo di Valtellina SO", label: "punto di partenza della salita", fun: "Da qui parte una salita che i ciclisti nominano con rispetto quasi religioso." },
-        { nome: "Passo del Mortirolo", query: "Passo del Mortirolo", label: "pendenze fino al 18%, tra boschi stretti", fun: "Meno cartoline dello Stelvio, molto più braccio — qui si guida, non si passeggia." },
-        { nome: "Monno", query: "Monno BS", label: "borgo sul versante camuno", fun: "Un paesino tranquillo per riprendere fiato dopo tanta pendenza." },
-        { nome: "Edolo", query: "Edolo BS", label: "centro della Val Camonica per la sosta", fun: "Buon punto per un pranzo vero prima di rimettersi in sella." }
-      ]
-    },
-    {
-      zona: "Valle d'Aosta", km: "2-3 giorni consigliati", titolo: "Piccolo e Grande San Bernardo",
-      desc: "Due valichi storici ai confini con Francia e Svizzera, entrambi carichi di storia (da qui passò anche Napoleone). Da Aosta si può salire a entrambi in giorni diversi, con soste a Courmayeur sotto il Monte Bianco.",
-      meteoPlace: "Aosta",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Piccolo_S_Bernardo.jpg",
-      tappe: [
-        { nome: "Aosta", query: "Aosta centro", label: "base romana ai piedi delle Alpi", fun: "Una città romana incastonata tra le montagne più alte d'Europa — location d'eccezione." },
-        { nome: "Colle del Piccolo San Bernardo", query: "Colle del Piccolo San Bernardo", label: "confine con la Francia, 2188 m", fun: "Di qua l'Italia, di là la Francia: cambi Paese senza nemmeno spegnere il motore." },
-        { nome: "Courmayeur", query: "Courmayeur AO", label: "ai piedi del Monte Bianco", fun: "Il Monte Bianco visto da qui fa sembrare piccola anche la moto più grossa." },
-        { nome: "Colle del Gran San Bernardo", query: "Colle del Gran San Bernardo", label: "confine con la Svizzera, storico ospizio", fun: "Qui sono nati i cani San Bernardo — occhio a non tornare a casa con l'idea di adottarne uno." }
-      ]
-    },
-    {
-      zona: "Alta Valchiavenna", km: "1-2 giorni consigliati", titolo: "Passo dello Spluga",
-      desc: "Un valico storico verso la Svizzera, meno affollato dei 'big three' lombardi: da Chiavenna si sale tra tornanti stretti fino al passo a 2113 m, con vista sul lago artificiale del Truzzo. Aperto tutto l'anno lato italiano, spesso chiuso in inverno oltre confine.",
-      meteoPlace: "Campodolcino",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_dello_spluga_in_inverno.JPG",
-      tappe: [
-        { nome: "Chiavenna", query: "Chiavenna SO", label: "porta della Valchiavenna", fun: "Ultima città vera prima che la valle si stringa sul serio." },
-        { nome: "Campodolcino", query: "Campodolcino SO", label: "base per la salita al passo", fun: "Da qui in poi la strada inizia a fare sul serio, tornante dopo tornante." },
-        { nome: "Passo dello Spluga", query: "Passo dello Spluga", label: "2113 m, confine con la Svizzera", fun: "Meno foto su Instagram dello Stelvio, stessa identica soddisfazione ad arrivarci." },
-        { nome: "Madesimo", query: "Madesimo SO", label: "stazione sciistica con cascate nei dintorni", fun: "D'estate le cascate del Dies, d'inverno la neve — qui non ci si annoia mai." }
-      ]
-    },
-    {
-      zona: "Val Varaita", km: "1-2 giorni consigliati", titolo: "Colle dell'Agnello",
-      desc: "Uno dei valichi asfaltati più alti d'Europa (2744 m), al confine con la Francia. Da Sampeyre si sale lungo una valle stretta tra pascoli d'alta quota, con tornanti che si arrampicano quasi a strapiombo negli ultimi chilometri.",
-      meteoPlace: "Pontechianale",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Colleagnello001.jpg",
-      tappe: [
-        { nome: "Sampeyre", query: "Sampeyre CN", label: "ingresso nella Val Varaita", fun: "Da qui la valle si stringe e le curve iniziano a farsi serie." },
-        { nome: "Pontechianale", query: "Pontechianale CN", label: "ultimo paese prima della salita finale", fun: "L'ultimo caffè vero prima dei tornanti che ti portano quasi a 2750 metri." },
-        { nome: "Colle dell'Agnello", query: "Colle dell'Agnello", label: "2744 m, uno dei valichi più alti d'Europa", fun: "L'aria qui è così sottile che pure il bracket del casco sembra più leggero." }
-      ]
-    },
-    {
-      zona: "Costiera Amalfitana", km: "2-3 giorni consigliati", titolo: "La SS163 tra Positano e Ravello",
-      desc: "La costiera più fotografata d'Italia, curva dopo curva a picco sul mare: Positano, Amalfi e Ravello sospese tra scogliere e limoneti. Non è un giro veloce — la SS163 è stretta e trafficata d'estate — ma va vissuta con calma, meglio in bassa stagione.",
-      meteoPlace: "Amalfi",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Positano-Amalfi_Coast-Italy.jpg",
-      tappe: [
-        { nome: "Sorrento", query: "Sorrento NA", label: "punto di partenza sulla penisola sorrentina", fun: "L'ultimo pieno tranquillo prima che la strada inizi a stringersi sul serio." },
-        { nome: "Positano", query: "Positano SA", label: "case a picco sul mare", fun: "Un paese verticale che sembra sfidare la gravità — parcheggiare la moto è un'impresa a parte." },
-        { nome: "Amalfi", query: "Amalfi SA", label: "Duomo e centro storico", fun: "La Repubblica Marinara più antica d'Italia, e tu ci arrivi in sella invece che via mare — va bene comunque." },
-        { nome: "Ravello", query: "Ravello SA", label: "terrazze panoramiche sopra la costiera", fun: "La vista da quassù rende ogni tornante stretto della salita improvvisamente perdonabile." }
-      ]
-    },
-    {
-      zona: "Sardegna", km: "4-5 giorni consigliati", titolo: "Supramonte e la SS125 Orientale Sarda",
-      desc: "Una delle poche mete di questa lista che richiede un traghetto, e ne vale ogni ora di viaggio: la SS125 'Orientale Sarda' è leggendaria tra i motociclisti, tra le gole del Supramonte e la costa del golfo di Orosei. Da programmare con calma, traghetto incluso.",
-      meteoPlace: "Dorgali",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Supramonte_visto_da_Orgosolo.jpg",
-      tappe: [
-        { nome: "Olbia", query: "Olbia porto", label: "arrivo traghetto e punto di partenza", fun: "Si scende dal traghetto e si sente già che qui l'asfalto promette bene." },
-        { nome: "Dorgali", query: "Dorgali NU", label: "base per il Supramonte", fun: "Un paese tranquillo circondato da montagne che sembrano finte — non lo sono." },
-        { nome: "Gola di Gorropu", query: "Gola di Su Gorropu", label: "uno dei canyon più profondi d'Europa", fun: "La moto la lasci al parcheggio, il resto si fa a piedi — ma vale la sosta." },
-        { nome: "Cala Gonone", query: "Cala Gonone NU", label: "costa del golfo di Orosei", fun: "Dopo tanta montagna, il mare più bello della Sardegna come premio finale." }
-      ]
-    },
-    {
-      zona: "Val Passiria", km: "1-2 giorni consigliati", titolo: "Passo del Rombo (Timmelsjoch)",
-      desc: "Un valico spettacolare verso l'Austria, strada a pedaggio aperta solo da metà maggio a fine ottobre: da San Leonardo in Passiria si sale tra tornanti panoramici fino a 2509 m, con vista sui ghiacciai dell'Ötztal.",
-      meteoPlace: "Moso in Passiria",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Rombo_06.JPG",
-      tappe: [
-        { nome: "San Leonardo in Passiria", query: "San Leonardo in Passiria BZ", label: "ingresso nella Val Passiria", fun: "Paese natale di Andreas Hofer, eroe popolare tirolese — un pezzo di storia prima delle curve." },
-        { nome: "Moso in Passiria", query: "Moso in Passiria BZ", label: "ultimo paese prima della salita", fun: "L'ultima sosta tranquilla prima che la strada inizi a arrampicarsi sul serio." },
-        { nome: "Passo del Rombo", query: "Passo del Rombo", label: "2509 m, strada a pedaggio verso l'Austria", fun: "Si paga il pedaggio, ma per quei tornanti vale ogni centesimo." }
-      ]
-    },
-    {
-      zona: "Sicilia", km: "4-5 giorni consigliati", titolo: "Etna e Madonie",
-      desc: "Un'altra meta che richiede il traghetto (breve, da Villa San Giovanni), ma ripaga con paesaggi che cambiano ad ogni tappa: le colate laviche dell'Etna e i boschi delle Madonie, tra i parchi naturali meno battuti dai turisti del sud Italia.",
-      meteoPlace: "Nicolosi",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Etna_-_4.jpg",
-      tappe: [
-        { nome: "Catania", query: "Catania porto", label: "arrivo e punto di partenza", fun: "Il traghetto per la Sicilia dura poco più di un'ora — meno del previsto, promesso." },
-        { nome: "Nicolosi", query: "Nicolosi CT", label: "base per il versante sud dell'Etna", fun: "'La porta dell'Etna', dicono qui — e in effetti la salita inizia proprio da questo paese." },
-        { nome: "Rifugio Sapienza", query: "Rifugio Sapienza Etna", label: "quota 1900 m sull'Etna", fun: "Lava nera, neve d'inverno, panorama sul mare — l'Etna cambia scenografia ogni cento metri di salita." },
-        { nome: "Piano Battaglia", query: "Piano Battaglia PA", label: "cuore del Parco delle Madonie", fun: "Dopo il vulcano, i boschi delle Madonie sembrano un altro pianeta — stessa isola, promesso." }
-      ]
-    },
-    {
-      zona: "Gran Sasso", km: "2-3 giorni consigliati", titolo: "Campo Imperatore, il 'Piccolo Tibet' d'Italia",
-      desc: "La meta più vicina a Roma di questa lista, eppure sembra un altro continente: l'altopiano di Campo Imperatore, a 2000 m sotto il Gran Sasso, con panorami che gli hanno guadagnato il soprannome di 'Piccolo Tibet'. Perfetto anche per un weekend lungo.",
-      meteoPlace: "Campo Imperatore",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Campo_Imperatore,_Gran_Sasso.jpg",
-      tappe: [
-        { nome: "L'Aquila", query: "L'Aquila centro", label: "punto di partenza abruzzese", fun: "Una città che si sta ricostruendo pezzo per pezzo — merita la sosta anche solo per rispetto." },
-        { nome: "Campo Imperatore", query: "Campo Imperatore AQ", label: "l'altopiano a 2000 m, il 'Piccolo Tibet'", fun: "Qui hanno girato scene western — e appena arrivi capisci esattamente perché." },
-        { nome: "Rocca Calascio", query: "Rocca Calascio AQ", label: "fortezza panoramica tra le più alte d'Italia", fun: "La rocca più fotografata d'Abruzzo, sullo sfondo di praticamente ogni film ambientato quassù." }
-      ]
-    },
-    {
-      zona: "Dolomiti Ampezzane", km: "1-2 giorni consigliati", titolo: "Passo Giau, il balcone delle Dolomiti",
-      desc: "Uno dei passi più fotografati e più amati d'Italia, spesso tappa del Giro d'Italia: da Cortina d'Ampezzo si sale tra tornanti panoramici fino a 2236 m, con vista sul Gruppo del Nuvolau e sulla Croda da Lago.",
-      meteoPlace: "Cortina d'Ampezzo",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_di_Giau.jpg",
-      tappe: [
-        { nome: "Cortina d'Ampezzo", query: "Cortina d'Ampezzo BL", label: "la 'Regina delle Dolomiti'", fun: "Location olimpica due volte (1956 e 2026) — arrivarci in moto è comunque la medaglia migliore." },
-        { nome: "Passo Giau", query: "Passo Giau", label: "2236 m, tornanti panoramici sul Nuvolau", fun: "Uno dei passi più fotografati d'Italia — preparati a condividerlo con parecchi altri obiettivi." },
-        { nome: "Selva di Cadore", query: "Selva di Cadore BL", label: "versante opposto del passo", fun: "La discesa che ti fa capire perché i ciclisti del Giro arrivano quassù distrutti — e felici." }
-      ]
-    },
-    {
-      zona: "Valnerina", km: "1-2 giorni consigliati", titolo: "La Cascata delle Marmore e la Valnerina",
-      desc: "Una meta più vicina e accessibile delle altre, ma non meno spettacolare: la Cascata delle Marmore, tra le cascate artificiali più alte d'Europa (165 m, creata dai Romani), e la Valnerina che si snoda tra gole e borghi tra i meno turistici dell'Umbria.",
-      meteoPlace: "Terni",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cascata_delle_Marmore_2.JPG",
-      tappe: [
-        { nome: "Terni", query: "Terni centro", label: "punto di partenza umbro", fun: "Città industriale con una sorpresa naturale a due passi — non giudicarla dalla prima impressione." },
-        { nome: "Cascata delle Marmore", query: "Cascata delle Marmore", label: "165 m, tra le cascate artificiali più alte d'Europa", fun: "Costruita dai Romani più di duemila anni fa — un'opera idraulica che fa impallidire certi cantieri moderni." },
-        { nome: "Ferentillo", query: "Ferentillo TR", label: "borgo nella gola della Valnerina", fun: "Un paese diviso in due dal fiume, con vista su una delle valli più strette e verdi dell'Umbria." }
-      ]
-    },
-    {
-      zona: "Val d'Orcia", km: "2-3 giorni consigliati", titolo: "Val d'Orcia, tra strade bianche e colline UNESCO",
-      desc: "Il paesaggio toscano più fotografato al mondo, patrimonio UNESCO: cipressi solitari, colline dorate e le celebri 'strade bianche' sterrate che attraversano la Val d'Orcia tra Pienza, San Quirico e Montalcino.",
-      meteoPlace: "Pienza",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Pienza_italy.jpg",
-      tappe: [
-        { nome: "Pienza", query: "Pienza SI", label: "la città ideale rinascimentale, UNESCO", fun: "Ripensata a tavolino nel Quattrocento come 'città ideale' — oggi è ideale soprattutto per una sosta con vista." },
-        { nome: "San Quirico d'Orcia", query: "San Quirico d'Orcia SI", label: "borgo e Orti Leonini", fun: "Il cuore geografico della Val d'Orcia — e si vede, nel senso migliore possibile." },
-        { nome: "Montalcino", query: "Montalcino SI", label: "patria del Brunello", fun: "Un bicchiere di Brunello a fine giornata è quasi un obbligo morale, da queste parti." }
-      ]
-    },
-    {
-      zona: "Valle d'Itria", km: "3-4 giorni consigliati", titolo: "Valle d'Itria, il regno dei trulli",
-      desc: "Un cambio di scenario totale rispetto al resto della lista: la Puglia dei trulli, tra Alberobello (patrimonio UNESCO), le stradine bianche di Locorotondo e i muretti a secco di Cisternino, tra gli 'i borghi più belli d'Italia'.",
-      meteoPlace: "Alberobello",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Alberobello_Trulli.jpg",
-      tappe: [
-        { nome: "Alberobello", query: "Alberobello trulli", label: "i trulli, patrimonio UNESCO", fun: "Un intero quartiere di casette a cono bianche — sembra un set giocattolo, invece ci vive gente vera." },
-        { nome: "Locorotondo", query: "Locorotondo BA", label: "borgo bianco a pianta circolare", fun: "Il nome non mente: il centro storico è letteralmente un cerchio perfetto." },
-        { nome: "Cisternino", query: "Cisternino BR", label: "uno dei borghi più belli d'Italia", fun: "Vicoli bianchi, fiori ovunque, e le celebri 'fornelle' pronte per la bombetta a fine giro." }
-      ]
-    },
-    {
-      zona: "Monti Sibillini", km: "2-3 giorni consigliati", titolo: "Castelluccio di Norcia e il Piano Grande",
-      desc: "Un altopiano carsico immenso a 1450 m, che a fine giugno si colora con la celebre 'Fioritura' delle lenticchie — uno degli spettacoli naturali più fotografati d'Italia. Norcia, gravemente colpita dal sisma del 2016, è oggi in piena ricostruzione.",
-      meteoPlace: "Norcia",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Piano_Grande_-_Castelluccio.jpg",
-      tappe: [
-        { nome: "Norcia", query: "Norcia PG", label: "patria della norcineria, in ricostruzione dopo il sisma 2016", fun: "La città che ha dato il nome ai norcini di tutta Italia — merita la sosta anche solo per rispetto, come Amatrice." },
-        { nome: "Castelluccio di Norcia", query: "Castelluccio di Norcia", label: "Piano Grande, la 'Fioritura' a fine giugno", fun: "A fine giugno i campi si colorano come una tavolozza — controlla il periodo prima di partire, la fioritura dura poco." },
-        { nome: "Forca di Presta", query: "Forca di Presta", label: "valico verso le Marche", fun: "Il punto più alto del giro, e anche il confine informale tra Umbria e Marche." }
-      ]
-    },
-    {
-      zona: "Livigno", km: "1-2 giorni consigliati", titolo: "Livigno e il Passo di Foscagno",
-      desc: "La 'piccola Svizzera' italiana: Livigno, zona extra-doganale a 1800 m, raggiunta attraverso il Passo di Foscagno, meno famoso dello Stelvio ma altrettanto panoramico, con vista sulle Alpi Retiche.",
-      meteoPlace: "Livigno",
-      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Livigno_-_Comune_di_Livigno_-_2023-09-06_00-39-00_001.JPG",
-      tappe: [
-        { nome: "Passo dell'Eira", query: "Passo dell'Eira", label: "primo valico prima di Foscagno", fun: "Il preludio del Foscagno — se ti sembra già bello qui, aspetta il prossimo passo." },
-        { nome: "Passo di Foscagno", query: "Passo di Foscagno", label: "2291 m, valico verso Livigno", fun: "Meno cartoline dello Stelvio, stessa vista da togliere il fiato — e molto meno traffico." },
-        { nome: "Livigno", query: "Livigno SO", label: "zona extra-doganale a 1800 m", fun: "Prezzi da zona franca e panorami da cartolina — un motivo in più per fermarsi almeno una notte." }
-      ]
-    }
-  ];
-
   function weatherIcon(code){
     if (code === 0) return "☀️";
     if ([1,2].includes(code)) return "🌤️";
@@ -668,56 +469,10 @@
     return "🌡️";
   }
 
-  const geocodeCache = {};
-  async function geocodePlace(place){
-    if(geocodeCache[place]) return geocodeCache[place];
-    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(place)}&count=1&language=it&format=json`);
-    const data = await res.json();
-    const hit = data.results && data.results[0];
-    const coords = hit ? { lat: hit.latitude, lon: hit.longitude } : null;
-    geocodeCache[place] = coords;
-    return coords;
-  }
-
   function isoDate(offsetDays){
     const d = new Date();
     d.setDate(d.getDate() + offsetDays);
     return d.toISOString().slice(0, 10);
-  }
-
-  async function loadWeather(el, place, offsetDays){
-    try{
-      const coords = await geocodePlace(place);
-      if(!coords) throw new Error("posto non trovato");
-
-      if(offsetDays === 0){
-        const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=temperature_2m,weather_code&timezone=auto`);
-        const wData = await wRes.json();
-        el.querySelector(".w-icon").textContent = weatherIcon(wData.current.weather_code);
-        el.querySelector(".w-temp").textContent = `${Math.round(wData.current.temperature_2m)}°C`;
-      } else {
-        const date = isoDate(offsetDays);
-        const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&start_date=${date}&end_date=${date}`);
-        const wData = await wRes.json();
-        const daily = wData.daily || {};
-        const code = (daily.weather_code || daily.weathercode || [])[0];
-        const max = (daily.temperature_2m_max || [])[0];
-        const min = (daily.temperature_2m_min || [])[0];
-        el.querySelector(".w-icon").textContent = weatherIcon(code);
-        el.querySelector(".w-temp").textContent = (min != null && max != null) ? `${Math.round(min)}°/${Math.round(max)}°` : "—";
-      }
-      el.style.display = "";
-    } catch(err){
-      el.style.display = "none";
-    }
-  }
-
-  function haversineKm(lat1, lon1, lat2, lon2){
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) ** 2 + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
   // ===== Ricerca luoghi con autocompletamento (Nominatim/OpenStreetMap) =====
@@ -870,415 +625,6 @@
       return null;
     }
   }
-
-  const routeKmCache = {};
-  async function estimateKm(it){
-    const startInputEl = document.getElementById("fuel-start");
-    const startInput = startInputEl.value.trim() || "Roma";
-    const cacheKey = `${startInput.toLowerCase()}|${it.zona}`;
-    if(routeKmCache[cacheKey] !== undefined) return routeKmCache[cacheKey];
-    // NB: un fallimento (posto non trovato, rete assente) NON viene messo in
-    // cache, così un tentativo successivo (es. dopo aver scelto un
-    // suggerimento corretto) può ancora andare a buon fine invece di restare
-    // bloccato sulla prima risposta negativa per tutta la sessione.
-    try{
-      const [startCoords, destCoords] = await Promise.all([resolvePlace(startInputEl), geocodePlace(it.meteoPlace)]);
-      if(!startCoords || !destCoords) return null;
-      const route = await fetchRoute(startCoords, destCoords);
-      let km;
-      if(route){
-        km = Math.round((route.distance / 1000) * 2); // andata e ritorno, distanza stradale reale
-      } else {
-        const oneWay = haversineKm(startCoords.lat, startCoords.lon, destCoords.lat, destCoords.lon);
-        km = Math.round(oneWay * 2 * 1.3); // fallback se il calcolo del percorso stradale non è disponibile
-      }
-      routeKmCache[cacheKey] = km;
-      return km;
-    } catch(err){
-      return null;
-    }
-  }
-
-  async function computeFuel(it){
-    const consumo = parseFloat(document.getElementById("fuel-cc").value);
-    const prezzo = parseFloat(document.getElementById("fuel-price").value) || 1.75;
-    const km = await estimateKm(it);
-    if(km == null) return { km: null, costo: null };
-    const litri = km / consumo;
-    const costo = litri * prezzo;
-    return { km, costo };
-  }
-
-  // Se l'utente cambia partenza/cilindrata/prezzo più volte di seguito,
-  // una richiesta lenta rimasta indietro non deve poter sovrascrivere il
-  // risultato di una richiesta più recente già arrivata: si tiene un
-  // "numero di turno" per ogni card e si scarta ogni risposta superata.
-  const fuelRequestToken = new WeakMap();
-  async function updateFuelEstimate(container, it){
-    const myToken = (fuelRequestToken.get(container) || 0) + 1;
-    fuelRequestToken.set(container, myToken);
-    const kmEl = container.querySelector(".card-km");
-    const priceEl = container.querySelector(".card-price");
-    const { km, costo } = await computeFuel(it);
-    if(fuelRequestToken.get(container) !== myToken) return;
-    if(km == null){
-      if(kmEl) kmEl.textContent = "📍 — km";
-      if(priceEl) priceEl.textContent = "⛽ —";
-      return;
-    }
-    if(kmEl) kmEl.textContent = `📍 ${km} km a/r`;
-    if(priceEl) priceEl.textContent = `⛽ €${costo.toFixed(2)}`;
-  }
-
-  function mapsQuery(t){ return encodeURIComponent(t.query); }
-
-  function routeUrls(it){
-    const origin = it.tappe[0].query;
-    const destination = it.tappe[it.tappe.length - 1].query;
-    const waypoints = it.tappe.slice(1, -1).map(t => encodeURIComponent(t.query)).join("|");
-    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${waypoints}&travelmode=driving`;
-    const wazeUrl = `https://waze.com/ul?q=${mapsQuery(it.tappe[0])}&navigate=yes`;
-    return { mapsUrl, wazeUrl };
-  }
-
-  function weatherBarHTML(){
-    return `
-      <div class="card-weather-bar">
-        <select class="w-day" aria-label="Scegli il giorno per il meteo">
-          <option value="0">Oggi</option>
-          <option value="1">Domani</option>
-          <option value="2">Tra 2 giorni</option>
-          <option value="3">Tra 3 giorni</option>
-          <option value="4">Tra 4 giorni</option>
-          <option value="5">Tra 5 giorni</option>
-          <option value="6">Tra 6 giorni</option>
-        </select>
-        <span class="w-icon">…</span>
-        <span class="w-temp">—</span>
-        <span class="w-place"></span>
-      </div>
-    `;
-  }
-
-  function bodyHTML(it, mapsUrl, wazeUrl){
-    return `
-      <div class="itinerario-card-body">
-        <p class="marker">${it.zona} — ${it.km}</p>
-        <p class="desc">${it.desc}</p>
-        <div class="itinerario-actions">
-          <a href="${mapsUrl}" target="_blank" rel="noopener">Apri l'itinerario completo su Maps</a>
-          <a class="waze" href="${wazeUrl}" target="_blank" rel="noopener">Prima tappa su Waze</a>
-          <button type="button" class="card-share-btn">📤 Condividi</button>
-        </div>
-        <div class="itinerario-stops">
-          <p class="label">Tappe consigliate</p>
-          <ul>
-            ${it.tappe.map(t => `
-              <li>
-                <a class="stop-link" href="https://www.google.com/maps/search/?api=1&query=${mapsQuery(t)}" target="_blank" rel="noopener">${t.nome} — ${t.label}</a>
-                <p class="fun">${t.fun}</p>
-              </li>
-            `).join("")}
-          </ul>
-        </div>
-      </div>
-    `;
-  }
-
-  // ===== Condividi la cartolina come immagine ========================
-  function slugify(text){
-    return text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
-      .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "miniviaggio";
-  }
-
-  function loadImageCORS(src){
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error("Immagine non caricabile"));
-      img.src = src;
-    });
-  }
-
-  function drawCover(ctx, img, x, y, w, h){
-    const ir = img.width / img.height, r = w / h;
-    let sx, sy, sw, sh;
-    if(ir > r){ sh = img.height; sw = sh * r; sx = (img.width - sw) / 2; sy = 0; }
-    else { sw = img.width; sh = sw / r; sx = 0; sy = (img.height - sh) / 2; }
-    ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
-  }
-
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines){
-    const words = String(text).split(" ");
-    let line = "";
-    const lines = [];
-    for(const w of words){
-      const test = line ? line + " " + w : w;
-      if(ctx.measureText(test).width > maxWidth && line){
-        lines.push(line);
-        line = w;
-        if(lines.length >= maxLines) break;
-      } else {
-        line = test;
-      }
-    }
-    if(lines.length < maxLines) lines.push(line);
-    if(lines.length > maxLines){
-      lines.length = maxLines;
-      lines[maxLines - 1] = lines[maxLines - 1].replace(/\s*$/, "") + "…";
-    }
-    lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
-    return y + lines.length * lineHeight;
-  }
-
-  function drawShareCanvas(it, img){
-    const W = 1080, H = 1350;
-    const canvas = document.createElement("canvas");
-    canvas.width = W; canvas.height = H;
-    const ctx = canvas.getContext("2d");
-
-    const grad = ctx.createLinearGradient(0, 0, W, H);
-    grad.addColorStop(0, "#D9A441");
-    grad.addColorStop(1, "#C1502E");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
-    const pad = 16;
-    ctx.fillStyle = "#1B1A17";
-    ctx.fillRect(pad, pad, W - pad * 2, H - pad * 2);
-
-    const innerX = pad + 44;
-    const innerW = W - innerX - (pad + 44);
-    let y = pad + 60;
-
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#D9A441";
-    ctx.font = "700 30px 'JetBrains Mono', monospace";
-    ctx.fillText(`📍 ${it.km}`, innerX, y);
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#8a8578";
-    ctx.font = "700 24px 'JetBrains Mono', monospace";
-    ctx.fillText("ILMOTONAUTA.COM", W - innerX, y);
-    ctx.textAlign = "left";
-
-    y += 36;
-    if(img){
-      const pH = 540;
-      drawCover(ctx, img, innerX, y, innerW, pH);
-      y += pH + 44;
-    } else {
-      y += 20;
-    }
-
-    ctx.fillStyle = "#F2E9D8";
-    ctx.font = "700 52px Oswald, sans-serif";
-    y = wrapText(ctx, it.titolo.toUpperCase(), innerX, y + 50, innerW, 58, 2) + 10;
-
-    ctx.fillStyle = "#EDE4D3";
-    ctx.font = "400 30px 'Work Sans', sans-serif";
-    y = wrapText(ctx, it.desc, innerX, y + 20, innerW, 40, 5) + 20;
-
-    ctx.fillStyle = "#D9A441";
-    ctx.font = "700 24px 'JetBrains Mono', monospace";
-    ctx.fillText("TAPPE CONSIGLIATE", innerX, y);
-    y += 14;
-    ctx.fillStyle = "#EDE4D3";
-    ctx.font = "400 27px 'Work Sans', sans-serif";
-    it.tappe.slice(0, 5).forEach(t => {
-      y += 40;
-      if(y > H - pad - 50) return;
-      y = wrapText(ctx, `•  ${t.nome} — ${t.label}`, innerX, y, innerW, 34, 1);
-    });
-
-    return canvas;
-  }
-
-  async function buildShareImage(it){
-    if(document.fonts && document.fonts.ready){
-      try{ await document.fonts.ready; } catch(e){ /* continua comunque */ }
-    }
-    if(it.foto){
-      try{
-        const img = await loadImageCORS(it.foto);
-        const canvas = drawShareCanvas(it, img);
-        try{
-          canvas.getContext("2d").getImageData(0, 0, 1, 1); // verifica che il canvas non sia "tainted"
-          return canvas;
-        } catch(taintErr){
-          return drawShareCanvas(it, null); // foto non riutilizzabile: cartolina solo testo
-        }
-      } catch(loadErr){
-        return drawShareCanvas(it, null);
-      }
-    }
-    return drawShareCanvas(it, null);
-  }
-
-  function canvasToBlob(canvas){
-    return new Promise(resolve => canvas.toBlob(resolve, "image/png", 0.95));
-  }
-
-  async function shareCard(it, btn){
-    const originalLabel = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = "Genero immagine...";
-    try{
-      const canvas = await buildShareImage(it);
-      const blob = await canvasToBlob(canvas);
-      if(!blob) throw new Error("Immagine non generata");
-      const file = new File([blob], `${slugify(it.titolo)}.png`, { type: "image/png" });
-
-      if(navigator.canShare && navigator.canShare({ files: [file] })){
-        await navigator.share({ files: [file], title: it.titolo, text: `${it.titolo} — Il Motonauta` });
-      } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${slugify(it.titolo)}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 4000);
-      }
-    } catch(err){
-      if(err && err.name !== "AbortError"){
-        alert("Non sono riuscito a generare l'immagine da condividere. Riprova.");
-      }
-    } finally {
-      btn.disabled = false;
-      btn.textContent = originalLabel;
-    }
-  }
-
-  function bindShareButtons(container, it){
-    container.querySelectorAll(".card-share-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        shareCard(it, btn);
-      });
-    });
-  }
-
-  function bindWeatherBar(container, it){
-    const weatherBar = container.querySelector(".card-weather-bar");
-    const daySelect = container.querySelector(".w-day");
-    weatherBar.querySelector(".w-place").textContent = it.meteoPlace;
-    loadWeather(weatherBar, it.meteoPlace, 0);
-    daySelect.addEventListener("click", (e) => e.stopPropagation());
-    daySelect.addEventListener("change", () => loadWeather(weatherBar, it.meteoPlace, parseInt(daySelect.value, 10)));
-  }
-
-  function buildCard(it){
-    const { mapsUrl, wazeUrl } = routeUrls(it);
-    const card = document.createElement("div");
-    card.className = "itinerario-card";
-
-    card.innerHTML = `
-      <div class="card-frame">
-        <div class="card-topbar">
-          <span class="card-km" title="Km totali andata e ritorno">📍 …</span>
-          <span class="card-title">${it.titolo}</span>
-          <span class="card-price" title="Stima costo benzina">⛽ …</span>
-        </div>
-        ${weatherBarHTML()}
-        ${it.foto ? `
-        <div class="itinerario-photo">
-          <img src="${it.foto}" alt="${it.zona}" loading="lazy">
-        </div>
-        ` : ""}
-        <div class="card-compact-actions">
-          <a href="${mapsUrl}" target="_blank" rel="noopener">Apri su Maps</a>
-          <a class="waze" href="${wazeUrl}" target="_blank" rel="noopener">Waze</a>
-          <button type="button" class="card-share-btn">📤 Condividi</button>
-        </div>
-        <button type="button" class="card-more-btn">Scopri tutti i dettagli ›</button>
-        ${bodyHTML(it, mapsUrl, wazeUrl)}
-      </div>
-    `;
-
-    bindWeatherBar(card, it);
-    bindShareButtons(card, it);
-
-    card.addEventListener("click", (e) => {
-      if(e.target.closest("a")) return;
-      if(e.target.closest(".card-weather-bar")) return;
-      if(window.matchMedia("(min-width: 861px)").matches) return;
-      openDetail(it);
-    });
-
-    updateFuelEstimate(card, it);
-
-    return card;
-  }
-
-  function buildDetailHTML(it){
-    const { mapsUrl, wazeUrl } = routeUrls(it);
-    return `
-      <div class="card-topbar">
-        <span class="card-km" title="Km totali andata e ritorno">📍 …</span>
-        <span class="card-title">${it.titolo}</span>
-        <span class="card-price" title="Stima costo benzina">⛽ …</span>
-      </div>
-      ${it.foto ? `
-      <div class="itinerario-photo">
-        <img src="${it.foto}" alt="${it.zona}">
-      </div>
-      ` : ""}
-      ${bodyHTML(it, mapsUrl, wazeUrl)}
-    `;
-  }
-
-  const modal = document.getElementById("detail-modal");
-  const modalInner = document.getElementById("detail-modal-inner");
-  let currentModalIt = null;
-
-  function openDetail(it){
-    currentModalIt = it;
-    modalInner.innerHTML = buildDetailHTML(it);
-
-    updateFuelEstimate(modalInner, it);
-    bindShareButtons(modalInner, it);
-
-    modal.classList.add("open");
-    document.body.classList.add("modal-open");
-  }
-
-  function closeDetail(){
-    currentModalIt = null;
-    modal.classList.remove("open");
-    document.body.classList.remove("modal-open");
-  }
-
-  document.querySelector(".detail-modal-backdrop").addEventListener("click", closeDetail);
-  document.querySelector(".detail-modal-close").addEventListener("click", closeDetail);
-  document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeDetail(); });
-
-  const grid = document.getElementById("itinerari-grid");
-  const cards = ITINERARI.map(it => {
-    const card = buildCard(it);
-    grid.appendChild(card);
-    return { card, it };
-  });
-
-  function refreshAllFuel(){
-    cards.forEach(({ card, it }) => updateFuelEstimate(card, it));
-    if(currentModalIt) updateFuelEstimate(modalInner, currentModalIt);
-  }
-  ["fuel-cc", "fuel-price"].forEach(id => {
-    document.getElementById(id).addEventListener("input", refreshAllFuel);
-  });
-  document.getElementById("fuel-start").addEventListener("change", refreshAllFuel);
-  attachPlaceAutocomplete(document.getElementById("fuel-start"), document.getElementById("fuel-start-suggest"));
-
-  function scrollCarousel(dir){
-    const firstCard = grid.querySelector(".itinerario-card");
-    if(!firstCard) return;
-    const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
-    const cardWidth = firstCard.getBoundingClientRect().width;
-    grid.scrollBy({ left: dir * (cardWidth + gap), behavior: "smooth" });
-  }
-  document.querySelector(".carousel-arrow.prev").addEventListener("click", () => scrollCarousel(-1));
-  document.querySelector(".carousel-arrow.next").addEventListener("click", () => scrollCarousel(1));
 
   // ===== Meteo lungo il percorso ====================================
   function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
@@ -1604,6 +950,151 @@
   document.getElementById("route-weather-btn").addEventListener("click", calculateRouteWeather);
   attachPlaceAutocomplete(document.getElementById("route-start"), document.getElementById("route-start-suggest"));
   attachPlaceAutocomplete(document.getElementById("route-end"), document.getElementById("route-end-suggest"));
+
+  // ===== Assistente di valigia ========================================
+  const RAIN_CODES = new Set([51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99]);
+
+  function valigiaCategoryHTML(title, items){
+    if(!items.length) return "";
+    return `
+      <div class="valigia-category">
+        <p class="valigia-cat-title">${title}</p>
+        <ul class="valigia-list">
+          ${items.map(i => `<li><label><input type="checkbox"><span>${i}</span></label></li>`).join("")}
+        </ul>
+      </div>
+    `;
+  }
+
+  async function calculateValigia(){
+    const destInputEl = document.getElementById("valigia-dest");
+    const giorniEl = document.getElementById("valigia-giorni");
+    const dataEl = document.getElementById("valigia-data");
+    const bucato = document.getElementById("valigia-bucato").value === "si";
+    const resultsEl = document.getElementById("valigia-results");
+    const btn = document.getElementById("valigia-btn");
+
+    if(!destInputEl.value.trim()){
+      resultsEl.innerHTML = `<p class="route-weather-error">Inserisci una destinazione.</p>`;
+      return;
+    }
+
+    const giorni = Math.min(30, Math.max(1, parseInt(giorniEl.value, 10) || 1));
+    const dataStr = dataEl.value || isoDate(0);
+
+    btn.disabled = true;
+    btn.textContent = "Preparo la valigia...";
+    resultsEl.innerHTML = `<p class="route-weather-loading">Cerco la destinazione...</p>`;
+
+    try{
+      const destCoords = await resolvePlaceOrThrow(destInputEl, "Destinazione");
+
+      resultsEl.innerHTML = `<p class="route-weather-loading">Guardo il meteo previsto...</p>`;
+
+      // il meteo dettagliato copre solo i prossimi ~15 giorni: oltre
+      // quell'orizzonte la valigia si basa su una lista prudente (copre sia
+      // caldo che freddo che pioggia) invece che su dati meteo inventati
+      const [y, m, d] = dataStr.split("-").map(Number);
+      const startDate = new Date(y, m - 1, d);
+      const maxForecastDate = new Date();
+      maxForecastDate.setDate(maxForecastDate.getDate() + 15);
+
+      let hasRain = false, minTemp = null, maxTemp = null, weatherAvailable = false;
+
+      if(startDate <= maxForecastDate){
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + giorni - 1);
+        const cappedEnd = endDate > maxForecastDate ? maxForecastDate : endDate;
+        const startStr = isoDateFromDate(startDate);
+        const endStr = isoDateFromDate(cappedEnd);
+
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${destCoords.lat}&longitude=${destCoords.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=auto&start_date=${startStr}&end_date=${endStr}`);
+        const data = await res.json();
+        const daily = data.daily || {};
+        const codes = daily.weather_code || [];
+        const probs = daily.precipitation_probability_max || [];
+        const maxs = daily.temperature_2m_max || [];
+        const mins = daily.temperature_2m_min || [];
+        if(maxs.length){
+          weatherAvailable = true;
+          hasRain = codes.some(c => RAIN_CODES.has(c)) || probs.some(p => p >= 40);
+          minTemp = Math.min(...mins);
+          maxTemp = Math.max(...maxs);
+        }
+      }
+
+      // --- Abbigliamento moto ---
+      const motoItems = ["Casco", "Guanti da moto", "Stivali o scarpe da moto", "Protezioni (schiena/ginocchia)"];
+      if(!weatherAvailable){
+        motoItems.push("Giacca e pantaloni moto con inserto termico removibile (copre sia caldo che freddo)");
+      } else {
+        if(maxTemp >= 24) motoItems.push("Giacca moto estiva/traforata");
+        if(minTemp <= 14 || maxTemp < 24) motoItems.push("Giacca moto con inserto termico (o giacca invernale)");
+        if(minTemp <= 8) motoItems.push("Sottogiacca/pile termico e collo paravento");
+        motoItems.push(maxTemp >= 24 ? "Pantaloni moto estivi" : "Pantaloni moto con inserto termico");
+      }
+      if(hasRain || !weatherAvailable){
+        motoItems.push("Tuta o giacca-pantaloni antipioggia");
+        motoItems.push("Copri-stivali impermeabili");
+        motoItems.push("Guanti impermeabili di ricambio");
+      }
+
+      // --- Abbigliamento giornaliero ---
+      const capiPerGiorno = bucato ? Math.max(2, Math.ceil(giorni / 2)) : giorni;
+      const pantaloni = Math.max(1, Math.ceil(giorni / 3));
+      const dailyItems = [
+        `${capiPerGiorno} magliette${bucato ? " (lavi a mano ogni 2 giorni circa)" : ""}`,
+        `${capiPerGiorno} cambi di intimo e calzini`,
+        `${pantaloni} pantaloni/bermuda casual`,
+        giorni > 4 ? "2 felpe o maglioni leggeri" : "1 felpa o maglione leggero",
+        "Pigiama",
+        "Scarpe comode per la sera"
+      ];
+      if(bucato){
+        dailyItems.push("Detersivo da bucato (formato da viaggio) e qualche molletta/cordicella per stendere");
+      }
+      if(minTemp !== null && minTemp <= 5){
+        dailyItems.push("Un giubbotto o piumino leggero per la sera (temperature vicine o sotto lo zero previste)");
+      }
+
+      // --- Accessori ---
+      const accessori = [
+        "Documenti (patente, libretto, assicurazione)",
+        "Caricabatterie e power bank",
+        "Kit attrezzi base e kit gonfia/ripara gomme",
+        "Lucchetto o catena antifurto",
+        "Kit di primo soccorso",
+        "Contanti (non ovunque si paga con carta)"
+      ];
+
+      const weatherNote = weatherAvailable
+        ? `Meteo previsto: ${Math.round(minTemp)}°/${Math.round(maxTemp)}°C${hasRain ? ", possibile pioggia in uno o più giorni." : ", nessuna pioggia significativa prevista."}`
+        : `Le previsioni dettagliate coprono solo i prossimi ~15 giorni: per questa data ho preparato una lista prudente che copre sia caldo che freddo che pioggia.`;
+
+      resultsEl.innerHTML = `
+        <p class="route-weather-summary">${weatherNote}</p>
+        ${valigiaCategoryHTML("🏍️ Abbigliamento moto", motoItems)}
+        ${valigiaCategoryHTML("👕 Abbigliamento giornaliero", dailyItems)}
+        ${valigiaCategoryHTML("🎒 Accessori", accessori)}
+        <p class="route-weather-note" style="margin-top:14px;">Lista indicativa generata in base a durata del viaggio e meteo previsto — adattala alle tue abitudini e controlla sempre le previsioni aggiornate il giorno prima di partire.</p>
+      `;
+    } catch(err){
+      resultsEl.innerHTML = `<p class="route-weather-error">${err.message || "Errore nella preparazione della valigia. Riprova."}</p>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Genera la valigia";
+    }
+  }
+
+  (function initValigiaDatePicker(){
+    const dataEl = document.getElementById("valigia-data");
+    if(!dataEl) return;
+    dataEl.min = isoDate(0);
+    dataEl.value = isoDate(0);
+  })();
+
+  document.getElementById("valigia-btn").addEventListener("click", calculateValigia);
+  attachPlaceAutocomplete(document.getElementById("valigia-dest"), document.getElementById("valigia-dest-suggest"));
 </script>
 
 <script src="script.js"></script>
