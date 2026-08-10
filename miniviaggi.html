@@ -1390,29 +1390,38 @@
 
   async function buildRouteStops(route, startPlace, startCoords, endPlace, endCoords){
     const pts = collectManeuverPoints(route);
-    const exits = pts.filter(p => p.isExit && p.exitLabel);
-    const spacedExits = spaceByDistance(exits, 50);
+    // uscite autostradali nominate (dai cartelli di destinazione OSM), con la
+    // loro posizione lungo il percorso
+    const exits = pts
+      .filter(p => p.isExit && p.exitLabel)
+      .map(p => ({ name: cleanExitLabel(p.exitLabel), lat: p.lat, lon: p.lon, cumKm: p.cumKm }));
 
-    let middle;
-    if(spacedExits.length > 0){
-      // con autostrada: nomi reali delle uscite autostradali, dai cartelli OSM
-      middle = spacedExits.map(p => ({ name: cleanExitLabel(p.exitLabel), lat: p.lat, lon: p.lon }));
-    } else {
-      // nessuna uscita autostradale segnalata (percorso senza autostrada, o con
-      // pochissime manovre intermedie): campiona la geometria reale ogni 50 km,
-      // così le città attraversate si vedono sempre lungo tutto il tragitto
-      const spacedPts = sampleRouteGeometry(route, 50);
-      middle = [];
-      for(const p of spacedPts){
-        // se il reverse-geocoding di UN punto fallisce (rete lenta, posto non
-        // trovato), si salta solo quel punto invece di far fallire tutto il
-        // calcolo del meteo di percorso
-        try{
-          const name = await reverseGeocode(p.lat, p.lon);
-          middle.push({ name, lat: p.lat, lon: p.lon });
-        } catch(err){ /* punto saltato */ }
-        await sleep(1100); // rispetta il rate limit di Nominatim (max 1 richiesta/sec)
+    // campiona comunque la geometria reale ogni 50 km lungo TUTTO il percorso:
+    // le uscite autostradali, quando ci sono, coprono spesso solo un tratto
+    // del viaggio (es. un'unica uscita finale su un percorso quasi tutto
+    // autostrada), quindi da sole non bastano a garantire tappe intermedie su
+    // tutto il tragitto. Dove un'uscita nominata è già vicina si scarta il
+    // campione generico e si tiene il nome reale del cartello.
+    const geomSamples = sampleRouteGeometry(route, 50)
+      .filter(gp => !exits.some(ep => Math.abs(ep.cumKm - gp.cumKm) < 40));
+
+    const candidates = [...exits, ...geomSamples].sort((a, b) => a.cumKm - b.cumKm);
+    const spaced = spaceByDistance(candidates, 50);
+
+    const middle = [];
+    for(const p of spaced){
+      if(p.name){
+        middle.push({ name: p.name, lat: p.lat, lon: p.lon });
+        continue;
       }
+      // se il reverse-geocoding di UN punto fallisce (rete lenta, posto non
+      // trovato), si salta solo quel punto invece di far fallire tutto il
+      // calcolo del meteo di percorso
+      try{
+        const name = await reverseGeocode(p.lat, p.lon);
+        middle.push({ name, lat: p.lat, lon: p.lon });
+      } catch(err){ /* punto saltato */ }
+      await sleep(1100); // rispetta il rate limit di Nominatim (max 1 richiesta/sec)
     }
 
     const all = [
