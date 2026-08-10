@@ -1469,9 +1469,10 @@
       let tollsFailReason = null;
       if(avoidTolls){
         // chiamata diretta (non fetchRoute) solo per questo tentativo, per
-        // poter leggere il motivo esatto del fallimento invece del generico
-        // "nessun percorso trovato" — utile per capire se il router pubblico
-        // che usiamo (OSRM demo) supporta davvero l'esclusione delle autostrade
+        // poter leggere il motivo esatto di un eventuale fallimento invece del
+        // generico "nessun percorso trovato" (es. se anche il router usato
+        // lato server per evitare le autostrade non trova un percorso valido
+        // per questa tratta specifica)
         const exclParams = new URLSearchParams({
           startLat: startCoords.lat, startLon: startCoords.lon,
           endLat: endCoords.lat, endLon: endCoords.lon,
