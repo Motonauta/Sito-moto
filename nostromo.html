@@ -1363,12 +1363,10 @@
   // Cerca, tra i distributori/Autogrill reali restituiti da OpenStreetMap
   // vicino a un punto, quello più vicino in linea d'aria
   async function findNearestFuelStation(lat, lon){
-    // il server cerca già il più vicino (e ci abbina il prezzo benzina
-    // ufficiale quando disponibile), qui basta leggere il risultato
+    // il server cerca già il più vicino, qui basta leggere il risultato
     try{
       const res = await fetch(`/api/route-planner?action=fuel-near&lat=${lat}&lon=${lon}&radius=17000`);
       const data = await res.json();
-      if(data.priceDebug) console.log("[Nostromo] prezzo benzina — diagnostica:", data.priceDebug);
       return (data.found && data.station) ? data.station : null;
     } catch(err){
       return null;
@@ -1507,11 +1505,9 @@
 
         const fuelStops = await mapWithConcurrency(geomSamples, 3, async (p) => {
           const station = await findNearestFuelStation(p.lat, p.lon);
-          if(!station){
-            return { name: `Zona km ${Math.round(p.cumKm)}`, lat: p.lat, lon: p.lon, cumKm: p.cumKm, found: false };
-          }
-          const priceLabel = station.prezzo != null ? ` — benzina ~€${Number(station.prezzo).toFixed(3)}/L` : "";
-          return { name: `${station.name}${priceLabel}`, lat: station.lat, lon: station.lon, cumKm: p.cumKm, found: true, hasPrice: station.prezzo != null };
+          return station
+            ? { name: station.name, lat: station.lat, lon: station.lon, cumKm: p.cumKm, found: true }
+            : { name: `Zona km ${Math.round(p.cumKm)}`, lat: p.lat, lon: p.lon, cumKm: p.cumKm, found: false };
         });
 
         allStops = [...allStops, ...fuelStops].sort((a, b) => a.cumKm - b.cumKm);
@@ -1526,7 +1522,6 @@
       for(let i = 0; i < allStops.length - 1; i++){
         legsHTML.push(rottaLegHTML(allStops[i], allStops[i + 1], i + 1, allStops.length - 1));
       }
-      const anyPrice = allStops.some(s => s.hasPrice);
 
       resultsEl.innerHTML = `
         <div class="print-capture">
@@ -1534,7 +1529,6 @@
           ${wasCapped ? `<p class="route-weather-note">Il link "tutto in uno" di Google Maps supporta un numero limitato di tappe: qui sotto trovi comunque il dettaglio completo di ogni tratta, ma quel link ne include solo ${MAX_WAYPOINTS_GOOGLE}.</p>` : ""}
           <a href="${gmapsUrl}" target="_blank" rel="noopener" class="btn solid" style="margin-top:6px; display:inline-block;">🗺️ Apri il percorso completo su Google Maps</a>
           <p class="route-weather-note" style="margin-top:14px;">Waze e Apple Maps non supportano un unico link con più tappe: qui sotto un link per ogni tratta, da aprire una alla volta man mano che arrivi.</p>
-          ${anyPrice ? `<p class="route-weather-note">Il prezzo benzina indicato dove disponibile è quello ufficiale del Ministero delle Imprese (MIMIT), aggiornato periodicamente durante la giornata — verifica sempre al distributore.</p>` : ""}
           <ol class="rotta-legs-list">
             ${legsHTML.join("")}
           </ol>
