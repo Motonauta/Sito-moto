@@ -1363,29 +1363,47 @@
   // Cerca, tra i distributori/Autogrill reali restituiti da OpenStreetMap
   // vicino a un punto, quello più vicino in linea d'aria
   async function findNearestFuelStation(lat, lon){
-    // prima un raggio stretto (più preciso), poi uno più largo se non trova
-    // nulla: nelle zone di montagna/rurali 5 km spesso non bastano
-    for(const radius of [5000, 15000]){
-      try{
-        const res = await fetch(`/api/route-planner?action=fuel-near&lat=${lat}&lon=${lon}&radius=${radius}`);
-        const data = await res.json();
-        const elements = data.elements || [];
-        let best = null, bestDist = Infinity;
-        for(const el of elements){
-          const elLat = el.lat != null ? el.lat : (el.center && el.center.lat);
-          const elLon = el.lon != null ? el.lon : (el.center && el.center.lon);
-          if(elLat == null || elLon == null) continue;
-          const dist = haversineKm(lat, lon, elLat, elLon);
-          if(dist < bestDist){
-            bestDist = dist;
-            const tags = el.tags || {};
-            best = { lat: elLat, lon: elLon, name: tags.brand || tags.name || "Distributore" };
-          }
+    // un'unica ricerca con raggio abbastanza ampio da coprire anche zone di
+    // montagna/rurali (prima ne facevamo due in sequenza, 5km poi 15km: il
+    // doppio giro quando il primo falliva era il principale motivo di lentezza)
+    try{
+      const res = await fetch(`/api/route-planner?action=fuel-near&lat=${lat}&lon=${lon}&radius=12000`);
+      const data = await res.json();
+      const elements = data.elements || [];
+      let best = null, bestDist = Infinity;
+      for(const el of elements){
+        const elLat = el.lat != null ? el.lat : (el.center && el.center.lat);
+        const elLon = el.lon != null ? el.lon : (el.center && el.center.lon);
+        if(elLat == null || elLon == null) continue;
+        const dist = haversineKm(lat, lon, elLat, elLon);
+        if(dist < bestDist){
+          bestDist = dist;
+          const tags = el.tags || {};
+          best = { lat: elLat, lon: elLon, name: tags.brand || tags.name || "Distributore" };
         }
-        if(best) return best;
-      } catch(err){ /* prova il raggio successivo */ }
+      }
+      return best;
+    } catch(err){
+      return null;
     }
-    return null;
+  }
+
+  // Esegue fn su ogni elemento con al massimo `limit` richieste in volo
+  // contemporaneamente, invece che una alla volta: il servizio di ricerca
+  // distributori (Overpass) regge un piccolo numero di richieste in
+  // parallelo, e questo taglia parecchio i tempi rispetto al fare tutto in
+  // sequenza con una pausa tra una tappa e l'altra
+  async function mapWithConcurrency(items, limit, fn){
+    const results = new Array(items.length);
+    let nextIndex = 0;
+    async function worker(){
+      while(nextIndex < items.length){
+        const i = nextIndex++;
+        results[i] = await fn(items[i], i);
+      }
+    }
+    await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+    return results;
   }
 
   function buildGoogleMapsUrl(stops){
@@ -1496,20 +1514,17 @@
 
       if(intervalKm > 0){
         resultsEl.innerHTML = `<p class="route-weather-loading">Cerco distributori e Autogrill lungo il percorso...</p>`;
-        const geomSamples = sampleRouteGeometry(route, intervalKm);
-        const fuelStops = [];
-        for(const p of geomSamples){
-          // salta i punti automatici troppo vicini a una tappa già scelta da te
-          const tooClose = allStops.some(s => Math.abs(s.cumKm - p.cumKm) < intervalKm * 0.3);
-          if(tooClose) continue;
+        // salta i punti automatici troppo vicini a una tappa già scelta da te
+        const geomSamples = sampleRouteGeometry(route, intervalKm)
+          .filter(p => !allStops.some(s => Math.abs(s.cumKm - p.cumKm) < intervalKm * 0.3));
+
+        const fuelStops = await mapWithConcurrency(geomSamples, 3, async (p) => {
           const station = await findNearestFuelStation(p.lat, p.lon);
-          if(station){
-            fuelStops.push({ name: station.name, lat: station.lat, lon: station.lon, cumKm: p.cumKm, found: true });
-          } else {
-            fuelStops.push({ name: `Zona km ${Math.round(p.cumKm)}`, lat: p.lat, lon: p.lon, cumKm: p.cumKm, found: false });
-          }
-          await sleep(800); // cortesia verso il servizio (dati OpenStreetMap/Overpass)
-        }
+          return station
+            ? { name: station.name, lat: station.lat, lon: station.lon, cumKm: p.cumKm, found: true }
+            : { name: `Zona km ${Math.round(p.cumKm)}`, lat: p.lat, lon: p.lon, cumKm: p.cumKm, found: false };
+        });
+
         allStops = [...allStops, ...fuelStops].sort((a, b) => a.cumKm - b.cumKm);
       }
 
