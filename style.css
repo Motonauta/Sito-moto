@@ -17,7 +17,7 @@
 
   --font-display: "Oswald", "Arial Narrow", sans-serif;
   --font-body: "Work Sans", "Segoe UI", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  --font-mono: "JetBrains Mono", monospace;
 
   --container: 1180px;
   --line: 1px solid rgba(245,240,230,0.14);
