@@ -241,7 +241,7 @@
     padding:28px 30px;
   }
   .route-weather-grid{
-    display:grid; grid-template-columns:repeat(4, 1fr); gap:18px; margin-top:18px; align-items:end;
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:18px; margin-top:18px; align-items:end;
   }
   .route-weather-grid label{
     display:block; font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;
@@ -251,8 +251,9 @@
     width:100%; background:var(--asphalt); border:1px solid rgba(245,240,230,0.2);
     color:var(--cream); padding:11px 12px; font-family:var(--font-body); font-size:0.92rem; box-sizing:border-box;
   }
-  .route-weather-grid input[type="date"]{ color-scheme:dark; }
-  .route-weather-grid input[type="date"]::-webkit-calendar-picker-indicator{ filter:invert(0.85); cursor:pointer; }
+  .route-weather-grid input[type="date"], .route-weather-grid input[type="time"]{ color-scheme:dark; }
+  .route-weather-grid input[type="date"]::-webkit-calendar-picker-indicator,
+  .route-weather-grid input[type="time"]::-webkit-calendar-picker-indicator{ filter:invert(0.85); cursor:pointer; }
   @media (max-width:780px){ .route-weather-grid{ grid-template-columns:1fr 1fr; } }
   @media (max-width:480px){ .route-weather-grid{ grid-template-columns:1fr; } }
 
@@ -271,6 +272,7 @@
   }
   .route-weather-list .w-icon{ font-size:1.3rem; line-height:1; flex-shrink:0; }
   .route-weather-place{ flex-grow:1; font-size:0.92rem; color:var(--cream); }
+  .route-weather-time{ font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim); flex-shrink:0; }
   .route-weather-list .w-temp{ font-family:var(--font-mono); font-size:0.85rem; color:var(--gold); flex-shrink:0; }
 </style>
 </head>
@@ -419,6 +421,10 @@
         <div>
           <label for="route-day">Giorno</label>
           <input type="date" id="route-day">
+        </div>
+        <div>
+          <label for="route-time">Orario di partenza</label>
+          <input type="time" id="route-time">
         </div>
       </div>
       <button type="button" id="route-weather-btn" class="btn solid" style="margin-top:18px;">Calcola il meteo lungo il percorso</button>
@@ -1287,20 +1293,36 @@
       || (data.display_name ? data.display_name.split(",")[0] : "Zona sconosciuta");
   }
 
-  async function fetchWeatherForCoords(lat, lon, dateStr){
-    const todayStr = isoDate(0);
-    if(dateStr === todayStr){
-      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`);
-      const data = await res.json();
-      return { icon: weatherIcon(data.current.weather_code), temp: `${Math.round(data.current.temperature_2m)}°C` };
-    }
-    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`);
+  function pad2(n){ return String(n).padStart(2, "0"); }
+
+  function isoDateFromDate(dt){
+    return `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())}`;
+  }
+
+  // Meteo orario per l'orario stimato di passaggio in quel punto (non "adesso"
+  // né la media della giornata): un viaggio dura ore, quindi il meteo di una
+  // tappa a metà strada va chiesto per l'ora in cui ci si arriva davvero, non
+  // per l'ora di partenza.
+  async function fetchWeatherForCoords(lat, lon, arrivalDate){
+    const dateStr = isoDateFromDate(arrivalDate);
+    const targetHour = pad2(arrivalDate.getHours());
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weather_code&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`);
     const data = await res.json();
-    const daily = data.daily || {};
-    const code = (daily.weather_code || daily.weathercode || [])[0];
-    const max = (daily.temperature_2m_max || [])[0];
-    const min = (daily.temperature_2m_min || [])[0];
-    return { icon: weatherIcon(code), temp: (min != null && max != null) ? `${Math.round(min)}°/${Math.round(max)}°` : "—" };
+    const hourly = data.hourly || {};
+    const times = hourly.time || [];
+    // il timestamp orario è tipo "2026-08-10T14:00": confrontiamo l'ora come
+    // stringa invece di ricostruire un Date, per non reintrodurre conversioni
+    // di fuso orario (i timestamp sono già nel fuso locale del posto, grazie
+    // a timezone=auto)
+    let idx = times.findIndex(t => t.slice(11, 13) === targetHour);
+    if(idx === -1) idx = 0;
+    const temp = (hourly.temperature_2m || [])[idx];
+    const code = (hourly.weather_code || [])[idx];
+    return {
+      icon: weatherIcon(code),
+      temp: temp != null ? `${Math.round(temp)}°C` : "—",
+      arrivalLabel: `${pad2(arrivalDate.getHours())}:${pad2(arrivalDate.getMinutes())}`
+    };
   }
 
   // Km percorsi in autostrada (nomi via "ref"/"name" tipo A1, A24...), usati
@@ -1411,7 +1433,7 @@
     const middle = [];
     for(const p of spaced){
       if(p.name){
-        middle.push({ name: p.name, lat: p.lat, lon: p.lon });
+        middle.push({ name: p.name, lat: p.lat, lon: p.lon, cumKm: p.cumKm });
         continue;
       }
       // se il reverse-geocoding di UN punto fallisce (rete lenta, posto non
@@ -1419,15 +1441,15 @@
       // calcolo del meteo di percorso
       try{
         const name = await reverseGeocode(p.lat, p.lon);
-        middle.push({ name, lat: p.lat, lon: p.lon });
+        middle.push({ name, lat: p.lat, lon: p.lon, cumKm: p.cumKm });
       } catch(err){ /* punto saltato */ }
       await sleep(1100); // rispetta il rate limit di Nominatim (max 1 richiesta/sec)
     }
 
     const all = [
-      { name: startPlace, lat: startCoords.lat, lon: startCoords.lon },
+      { name: startPlace, lat: startCoords.lat, lon: startCoords.lon, cumKm: 0 },
       ...middle,
-      { name: endPlace, lat: endCoords.lat, lon: endCoords.lon }
+      { name: endPlace, lat: endCoords.lat, lon: endCoords.lon, cumKm: route.distance / 1000 }
     ];
     return all.filter((s, i) => i === 0 || s.name.toLowerCase() !== all[i - 1].name.toLowerCase()).slice(0, 15);
   }
@@ -1439,6 +1461,7 @@
     const endPlace = endInputEl.value.trim();
     const avoidTolls = document.getElementById("route-toll").value === "no";
     const dateStr = document.getElementById("route-day").value || isoDate(0);
+    const timeStr = document.getElementById("route-time").value || "08:00";
     const resultsEl = document.getElementById("route-weather-results");
     const btn = document.getElementById("route-weather-btn");
 
@@ -1505,9 +1528,18 @@
 
       resultsEl.innerHTML = `<p class="route-weather-loading">Scarico il meteo per ${stops.length} tappe...</p>`;
 
+      // orario stimato di passaggio in ogni tappa: partenza + una quota
+      // dell'intera durata del viaggio proporzionale ai km già percorsi a
+      // quel punto (stima indicativa, non tiene conto di soste)
+      const [depY, depM, depD] = dateStr.split("-").map(Number);
+      const [depH, depMin] = timeStr.split(":").map(Number);
+      const departureDate = new Date(depY, depM - 1, depD, depH, depMin);
+
       const weatherResults = [];
       for(const s of stops){
-        const w = await fetchWeatherForCoords(s.lat, s.lon, dateStr);
+        const offsetHours = distanceKm > 0 ? (s.cumKm / distanceKm) * durationH : 0;
+        const arrivalDate = new Date(departureDate.getTime() + offsetHours * 3600000);
+        const w = await fetchWeatherForCoords(s.lat, s.lon, arrivalDate);
         weatherResults.push({ ...s, ...w });
       }
 
@@ -1538,11 +1570,12 @@
             <li>
               <span class="w-icon">${w.icon}</span>
               <span class="route-weather-place">${w.name}</span>
+              <span class="route-weather-time">ore ${w.arrivalLabel}</span>
               <span class="w-temp">${w.temp}</span>
             </li>
           `).join("")}
         </ul>
-        <p class="route-weather-note" style="margin-top:14px;">Stime indicative: carburante calcolato sulla distanza stradale reale con i parametri del calcolatore qui sopra, pedaggio su una tariffa media (non il prezzo ufficiale del casello).</p>
+        <p class="route-weather-note" style="margin-top:14px;">Stime indicative: orario di passaggio calcolato in proporzione ai km già percorsi rispetto alla durata totale (non tiene conto di soste), meteo orario per quell'orario esatto; carburante calcolato sulla distanza stradale reale con i parametri del calcolatore qui sopra, pedaggio su una tariffa media (non il prezzo ufficiale del casello).</p>
       `;
     } catch(err){
       resultsEl.innerHTML = `<p class="route-weather-error">${err.message || "Errore nel calcolo del percorso. Riprova."}</p>`;
@@ -1560,6 +1593,12 @@
     dayInput.min = todayStr;
     dayInput.max = maxStr;
     dayInput.value = todayStr;
+
+    const timeInput = document.getElementById("route-time");
+    if(timeInput){
+      const now = new Date();
+      timeInput.value = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    }
   })();
 
   document.getElementById("route-weather-btn").addEventListener("click", calculateRouteWeather);
