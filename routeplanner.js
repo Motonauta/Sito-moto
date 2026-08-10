@@ -66,7 +66,14 @@ async function computeMultiStopRoute(req, res, { coords, steps }) {
   }).filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lon));
 
   if (points.length < 2) {
-    return res.status(400).json({ error: 'Servono almeno 2 punti' });
+    // stesso formato { code, message } degli altri errori gestiti da questo
+    // endpoint, così il client mostra il motivo vero invece di un messaggio
+    // generico (utile qui perché "punti insufficienti" può indicare un bug
+    // nel parsing delle coordinate ricevute, non solo un input mancante)
+    return res.status(200).json({
+      code: 'InvalidPoints',
+      message: `Servono almeno 2 punti validi (ricevuti: ${points.length} su ${coords.split(';').length} coordinate passate).`
+    });
   }
 
   const params = new URLSearchParams();

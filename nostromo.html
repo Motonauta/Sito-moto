@@ -1368,7 +1368,7 @@
       const routeRes = await fetch(`/api/route-planner?action=route&coords=${encodeURIComponent(coordsParam)}&steps=1`);
       const routeData = await routeRes.json();
       if(routeData.code !== "Ok" || !routeData.routes || !routeData.routes[0]){
-        throw new Error(routeData.message || "Non sono riuscito a calcolare un percorso attraverso questi punti.");
+        throw new Error(routeData.message || (routeData.code ? `Errore (${routeData.code}) nel calcolo del percorso.` : "Non sono riuscito a calcolare un percorso attraverso questi punti."));
       }
       const route = routeData.routes[0];
       const distanceKm = route.distance / 1000;
