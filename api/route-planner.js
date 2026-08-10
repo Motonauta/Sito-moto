@@ -209,13 +209,21 @@ async function findFuelNear(req, res) {
 
   if (!best) return res.status(200).json({ found: false });
 
+  // diagnostica sull'abbinamento del prezzo: sempre inclusa (non solo in
+  // debug) finché non è confermato che il parsing dei CSV MIMIT funziona,
+  // così da un'unica risposta si vede subito se il problema è nello scarico,
+  // nel formato delle colonne, o nella distanza dal distributore trovato
+  const priceDebug = { indexSize: 0, nearestMatchKm: null, error: null };
+
   try {
     const priceIndex = await loadFuelPriceIndex();
+    priceDebug.indexSize = priceIndex.length;
     let priceMatch = null, priceMatchDist = Infinity;
     for (const entry of priceIndex) {
       const d = haversineKmServer(best.lat, best.lon, entry.lat, entry.lon);
       if (d < priceMatchDist) { priceMatchDist = d; priceMatch = entry; }
     }
+    if (priceMatch) priceDebug.nearestMatchKm = Math.round(priceMatchDist * 1000) / 1000;
     // entro 300 m si considera lo stesso impianto fisico
     if (priceMatch && priceMatchDist <= 0.3) {
       best.prezzo = priceMatch.prezzo;
@@ -223,10 +231,11 @@ async function findFuelNear(req, res) {
     }
   } catch (err) {
     console.error('Prezzo carburante non disponibile:', err);
+    priceDebug.error = String((err && err.message) || err);
     // il distributore resta comunque valido anche senza prezzo abbinato
   }
 
-  res.status(200).json({ found: true, station: best });
+  res.status(200).json({ found: true, station: best, priceDebug });
 }
 
 async function computeRouteAvoidHighways(req, res, { startLat, startLon, endLat, endLon, steps }) {
