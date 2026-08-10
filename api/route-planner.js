@@ -1,8 +1,19 @@
 const { getRedisClient } = require('../lib/redis');
 
 const NOMINATIM_UA = 'IlMotonautaSito/1.0 (sito personale motociclistico)';
-const FUEL_PRICE_CACHE_KEY = 'mimit_fuel_prices_v1';
+// v2: la v1 è rimasta in cache con un indice vuoto da un test precedente
+// (prima che smettessimo di mettere in cache i risultati vuoti) — cambiare
+// chiave scarta quella cache invece di aspettare la scadenza di un'ora
+const FUEL_PRICE_CACHE_KEY = 'mimit_fuel_prices_v2';
 const FUEL_PRICE_CACHE_TTL = 3600; // 1 ora: i prezzi ufficiali cambiano poche volte al giorno
+const FUEL_PRICE_TIMEOUT_MS = 7000; // non deve mai far scadere il tempo massimo della funzione
+
+function withTimeout(promise, ms) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`timeout dopo ${ms}ms`)), ms))
+  ]);
+}
 
 function haversineKmServer(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -239,7 +250,7 @@ async function findFuelNear(req, res) {
   const priceDebug = { indexSize: 0, nearestMatchKm: null, error: null };
 
   try {
-    const priceIndex = await loadFuelPriceIndex(priceDebug);
+    const priceIndex = await withTimeout(loadFuelPriceIndex(priceDebug), FUEL_PRICE_TIMEOUT_MS);
     priceDebug.indexSize = priceIndex.length;
     let priceMatch = null, priceMatchDist = Infinity;
     for (const entry of priceIndex) {
