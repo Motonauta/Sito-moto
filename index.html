@@ -380,7 +380,6 @@
       temperature scendono molto rispetto alla pianura) e adatta l'andatura a
       tornanti stretti e asfalto spesso umido o rovinato.
     </div>
-    <p style="margin-top:10px; font-size:0.8rem; color:var(--cream-dim);">* a/r = andata e ritorno</p>
   </div>
 </section>
 
@@ -418,7 +417,6 @@
       per l'espatrio, copertura assicurativa all'estero e — per i paesi fuori
       Unione Europea lungo il percorso — eventuali requisiti di frontiera.
     </div>
-    <p style="margin-top:10px; font-size:0.8rem; color:var(--cream-dim);">* a/r = andata e ritorno</p>
   </div>
 </section>
 
@@ -937,6 +935,39 @@
         { nome: "Civita Castellana", query: "Forte Sangallo Civita Castellana", label: "Forte Sangallo sospeso su una forra", fun: "Un forte costruito sul bordo di un burrone scavato dall'acqua — l'ingegneria rinascimentale sapeva il fatto suo." },
         { nome: "Falerii Novi", query: "Falerii Novi rovine", label: "città etrusco-romana abbandonata, cinta da mura intatte", fun: "Una città romana abbandonata quasi mille anni fa, con le mura ancora quasi tutte in piedi — e quasi nessun turista in giro." }
       ]
+    },
+    {
+      zona: "Monti Sibillini", km: "circa 340 km", kmNum: 340, titolo: "Castelluccio di Norcia in giornata",
+      desc: "Lo stesso altopiano raccontato tra i Miniviaggi, ma in versione mordi e fuggi: si può fare anche in un giorno solo, se si parte presto. Norcia e il Piano Grande, con la 'Fioritura' delle lenticchie a fine giugno tra gli spettacoli naturali più fotografati d'Italia.",
+      meteoPlace: "Norcia",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Fioritura_Castelluccio_di_Norcia.jpg",
+      tappe: [
+        { nome: "Norcia", query: "Norcia PG", label: "patria della norcineria, in ricostruzione dopo il sisma 2016", fun: "Merita la sosta anche solo per rispetto, come Amatrice — e un salume vero da qui te lo porti a casa comunque." },
+        { nome: "Castelluccio di Norcia", query: "Castelluccio di Norcia", label: "Piano Grande, la 'Fioritura' a fine giugno", fun: "Se becchi il periodo giusto, i campi sembrano dipinti — controlla online prima di partire, la fioritura dura poco." },
+        { nome: "Forca di Presta", query: "Forca di Presta", label: "valico verso le Marche", fun: "Il punto più alto della gita, e un buon posto per il panino prima di ridiscendere." }
+      ]
+    },
+    {
+      zona: "Gran Sasso", km: "circa 300 km", kmNum: 300, titolo: "Campo Imperatore in giornata",
+      desc: "L'altopiano soprannominato 'Piccolo Tibet d'Italia' raggiungibile e visitabile comodamente in una domenica, senza dover per forza fermarsi a dormire: L'Aquila, l'altopiano a 2000 metri e la Rocca di Calascio, tra le fortezze più fotografate d'Abruzzo.",
+      meteoPlace: "Campo Imperatore",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Campo_Imperatore,_Gran_Sasso.jpg",
+      tappe: [
+        { nome: "L'Aquila", query: "L'Aquila centro", label: "punto di partenza abruzzese", fun: "Una città che si sta ricostruendo pezzo per pezzo — merita la sosta anche solo per rispetto." },
+        { nome: "Campo Imperatore", query: "Campo Imperatore AQ", label: "l'altopiano a 2000 m, il 'Piccolo Tibet'", fun: "Qui hanno girato scene western — e appena arrivi capisci esattamente perché." },
+        { nome: "Rocca Calascio", query: "Rocca Calascio AQ", label: "fortezza panoramica tra le più alte d'Italia", fun: "La rocca più fotografata d'Abruzzo, sullo sfondo di praticamente ogni film ambientato quassù." }
+      ]
+    },
+    {
+      zona: "Lago di Bolsena", km: "circa 260 km", kmNum: 260, titolo: "Il giro del lago di Bolsena",
+      desc: "Il lago vulcanico più grande d'Europa, con un anello quasi interamente panoramico: Montefiascone affacciata dall'alto, Bolsena col suo centro storico e il castello, e Marta, il borgo di pescatori sulla sponda opposta.",
+      meteoPlace: "Bolsena",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lago_di_Bolsena.jpg",
+      tappe: [
+        { nome: "Montefiascone", query: "Montefiascone VT", label: "vista panoramica sul lago dall'alto", fun: "Da qui il lago si vede tutto in un colpo solo — e un bicchiere di Est! Est!! Est!!! è quasi un obbligo locale." },
+        { nome: "Bolsena", query: "Bolsena VT lago", label: "centro storico, castello e lungolago", fun: "Il lago vulcanico più grande d'Europa, e lo giri in moto come se fosse un laghetto di quartiere." },
+        { nome: "Marta", query: "Marta VT lago di Bolsena", label: "borgo di pescatori sulla sponda opposta", fun: "L'unico paese del lago che vive ancora davvero di pesca — il pesce in tavola qui non è un vezzo turistico." }
+      ]
     }
   ];
 
@@ -1153,8 +1184,8 @@
 
   const VIAGGI_RICORDARE = [
     {
-      zona: "Baviera, Ring e Olanda", km: "7 giorni consigliati", titolo: "Castelli bavaresi, Porsche, il Nürburgring e Amsterdam",
-      desc: "Un giro raccontato da chi l'ha fatto davvero: castelli tra Austria e Baviera, un museo per gli amanti delle auto, il circuito più leggendario del mondo e due giorni tra i canali di Amsterdam. Circa 3000 km reali in una settimana, con un solo giorno di sosta vera.",
+      zona: "Baviera, Ring e Olanda", km: "7 giorni consigliati", kmNum: 3996, titolo: "Castelli bavaresi, Porsche, il Nürburgring e Amsterdam",
+      desc: "Un giro raccontato da chi l'ha fatto davvero: castelli tra Austria e Baviera, un museo per gli amanti delle auto, il circuito più leggendario del mondo e due giorni tra i canali di Amsterdam. Quasi 4000 km reali (3996, per la precisione) in una settimana, con un solo giorno di sosta vera.",
       meteoPlace: "Monaco di Baviera",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Castle_Neuschwanstein.jpg",
       tappe: [
@@ -1170,7 +1201,7 @@
       ]
     },
     {
-      zona: "Costa Azzurra e Provenza", km: "7 giorni consigliati", titolo: "Costa Azzurra, Provenza e i profumi della Francia del sud",
+      zona: "Costa Azzurra e Provenza", km: "7 giorni consigliati", kmNum: 2650, titolo: "Costa Azzurra, Provenza e i profumi della Francia del sud",
       desc: "Il mito della Riviera francese visto dalla sella: curve panoramiche fino a Nizza, il glamour di Saint-Tropez, il porto vecchio di Marsiglia e i campi di lavanda della Provenza. Un giro che alterna mare, borghi e buona tavola senza mai avere fretta.",
       meteoPlace: "Nizza",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Nice_(FR-06000)_Promenade_des_anglais.jpg",
@@ -1186,12 +1217,12 @@
       ]
     },
     {
-      zona: "Svizzera, i grandi passi", km: "7 giorni consigliati", titolo: "Svizzera: il Grand Tour dei passi alpini",
+      zona: "Svizzera, i grandi passi", km: "7 giorni consigliati", kmNum: 2050, titolo: "Svizzera: il Grand Tour dei passi alpini",
       desc: "Una settimana dedicata solo a curve, tornanti e panorami da cartolina: San Gottardo, Furka e Grimsel in sequenza, poi i laghi di Interlaken e la capitale Berna. Il viaggio giusto per chi in moto cerca soprattutto la strada, non la meta.",
       meteoPlace: "Andermatt",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Belvedere_Furka.jpg",
       tappe: [
-        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Il viaggio con meno chilometri di trasferimento e più curve pure di tutta la lista — si va dritti al sodo." },
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Uno dei viaggi con meno chilometri di trasferimento e più curve pure della lista — si va dritti al sodo." },
         { nome: "Lugano", query: "Lugano centro", label: "primo assaggio di Svizzera, lago e palme", fun: "Palme sul lago a due passi dalle Alpi — la Svizzera sa sorprendere fin dal primo giorno." },
         { nome: "Passo del San Gottardo", query: "Passo del San Gottardo", label: "il valico simbolo della Svizzera, ancora acciottolato in cima", fun: "L'acciottolato in vetta va preso con rispetto — bello da vedere, meno comodo da guidare." },
         { nome: "Passo della Furka", query: "Passo della Furka", label: "tornanti scenografici e il ghiacciaio del Rodano", fun: "Il passo delle scene di inseguimento di 007 — i tornanti si riconoscono al primo sguardo." },
@@ -1202,7 +1233,7 @@
       ]
     },
     {
-      zona: "Istria e Dalmazia", km: "7 giorni consigliati", titolo: "Croazia: Istria, Plitvice e le mura di Dubrovnik",
+      zona: "Istria e Dalmazia", km: "7 giorni consigliati", kmNum: 2800, titolo: "Croazia: Istria, Plitvice e le mura di Dubrovnik",
       desc: "La costa croata da nord a sud: la 'piccola Venezia' di Rovigno, le cascate turchesi di Plitvice, il tramonto di Zara e il palazzo romano di Spalato, fino alle mura patrimonio UNESCO di Dubrovnik. Un viaggio che alterna borghi di mare e natura spettacolare.",
       meteoPlace: "Dubrovnik",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Old_City_of_Dubrovnik-108773.jpg",
@@ -1217,7 +1248,7 @@
       ]
     },
     {
-      zona: "Austria e Slovenia", km: "7 giorni consigliati", titolo: "Austria e Slovenia: Salisburgo, Vienna e il lago di Bled",
+      zona: "Austria e Slovenia", km: "7 giorni consigliati", kmNum: 2750, titolo: "Austria e Slovenia: Salisburgo, Vienna e il lago di Bled",
       desc: "Da Mozart agli Asburgo, poi la quiete del lago di Bled: un giro che unisce grandi capitali imperiali e la Slovenia più verde e tranquilla. Salisburgo, Vienna, Graz, Bled e Lubiana in una sola settimana, senza mai correre.",
       meteoPlace: "Vienna",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Bled,_Slovenia.jpg",
@@ -1232,7 +1263,7 @@
       ]
     },
     {
-      zona: "Boemia e Baviera", km: "7 giorni consigliati", titolo: "Praga e la Strada Romantica tedesca",
+      zona: "Boemia e Baviera", km: "7 giorni consigliati", kmNum: 2850, titolo: "Praga e la Strada Romantica tedesca",
       desc: "Il centro Europa più fiabesco: Rothenburg e la Strada Romantica, Norimberga, la Praga di Ponte Carlo e Città Vecchia, le terme liberty di Karlovy Vary e la medievale Ratisbona. Un giro fatto apposta per chi ama i centri storici che sembrano scenografie.",
       meteoPlace: "Praga",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Charles_Bridge_Prague.jpg",
@@ -1247,7 +1278,7 @@
       ]
     },
     {
-      zona: "Ungheria e Balcani", km: "7 giorni consigliati", titolo: "Budapest, il lago Balaton e Zagabria",
+      zona: "Ungheria e Balcani", km: "7 giorni consigliati", kmNum: 2650, titolo: "Budapest, il lago Balaton e Zagabria",
       desc: "Il Danubio, le terme di Budapest, le spiagge d'acqua dolce del Balaton e i caffè all'aperto di Zagabria: un giro più rilassato, pensato per chi vuole scoprire l'Europa centro-orientale senza inseguire troppi chilometri al giorno.",
       meteoPlace: "Budapest",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Hungarian_Parliament_Building,_Budapest.jpg",
@@ -1261,8 +1292,8 @@
       ]
     },
     {
-      zona: "Normandia e Bretagna", km: "7 giorni consigliati", titolo: "Normandia e Bretagna: scogliere, sbarchi e Mont Saint-Michel",
-      desc: "Il viaggio più lungo e ambizioso della lista, verso l'estremo nordovest della Francia: le spiagge dello sbarco in Normandia, l'abbazia sull'isola di Mont Saint-Michel e le coste fortificate della Bretagna. Giornate più impegnative in autostrada, ricompensate da paesaggi che in Italia non si trovano.",
+      zona: "Normandia e Bretagna", km: "7 giorni consigliati", kmNum: 3800, titolo: "Normandia e Bretagna: scogliere, sbarchi e Mont Saint-Michel",
+      desc: "Uno dei viaggi più lunghi e ambiziosi della lista, verso l'estremo nordovest della Francia: le spiagge dello sbarco in Normandia, l'abbazia sull'isola di Mont Saint-Michel e le coste fortificate della Bretagna. Giornate impegnative in autostrada, ricompensate da paesaggi che in Italia non si trovano.",
       meteoPlace: "Saint-Malo",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mont_Saint-Michel_France.jpg",
       tappe: [
@@ -1276,7 +1307,7 @@
       ]
     },
     {
-      zona: "Catalogna e Pirenei", km: "7 giorni consigliati", titolo: "Barcellona, Andorra e i passi dei Pirenei",
+      zona: "Catalogna e Pirenei", km: "7 giorni consigliati", kmNum: 3400, titolo: "Barcellona, Andorra e i passi dei Pirenei",
       desc: "La Catalogna vista in moto: la Sagrada Família e il lungomare di Barcellona, lo shopping in quota di Andorra e i valichi di alta montagna dei Pirenei, prima di rientrare lungo la costa francese. Città, montagna e mare nello stesso viaggio.",
       meteoPlace: "Barcellona",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/La_Sagrada_Familia_Barcelona.jpg",
@@ -1291,7 +1322,7 @@
       ]
     },
     {
-      zona: "Polonia meridionale", km: "7 giorni consigliati", titolo: "Cracovia, i Tatra e la memoria di Auschwitz",
+      zona: "Polonia meridionale", km: "7 giorni consigliati", kmNum: 3300, titolo: "Cracovia, i Tatra e la memoria di Auschwitz",
       desc: "Un viaggio che unisce la bellezza medievale di Cracovia, le montagne dei Tatra e una tappa che va oltre il turismo: il memoriale di Auschwitz-Birkenau, da visitare con rispetto e senza fretta. Un giro pensato per chi cerca anche significato, non solo panorami.",
       meteoPlace: "Cracovia",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Sukiennice_and_Main_Market_Square_Krakow_Poland.JPG",
@@ -1305,7 +1336,7 @@
       ]
     },
     {
-      zona: "Grecia centrale", km: "7 giorni consigliati", titolo: "Grecia in moto: il traghetto, Meteora e Atene",
+      zona: "Grecia centrale", km: "7 giorni consigliati", kmNum: 2050, titolo: "Grecia in moto: il traghetto, Meteora e Atene",
       desc: "Un viaggio diverso dagli altri: si arriva in Grecia in nave, moto compresa, per risparmiare due giorni di autostrada balcanica. Poi Meteora, Delfi e Atene, prima di reimbarcarsi per il rientro. Cultura antica e monasteri sospesi nel cielo.",
       meteoPlace: "Meteora",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Meteora_-_Kalambaka_-_Greece.jpg",
@@ -1321,8 +1352,8 @@
       ]
     },
     {
-      zona: "Germania del nord e Danimarca", km: "7 giorni consigliati", titolo: "Amburgo, il ponte di Øresund e Copenaghen",
-      desc: "Il viaggio più a nord della lista: il porto anseatico di Amburgo, il leggendario ponte-tunnel di Øresund e le casette colorate di Nyhavn a Copenaghen. Giornate lunghe in autostrada tedesca, ricompensate da un'atmosfera scandinava che in Italia non si trova.",
+      zona: "Germania del nord e Danimarca", km: "7 giorni consigliati", kmNum: 4100, titolo: "Amburgo, il ponte di Øresund e Copenaghen",
+      desc: "Il viaggio più a nord — e il più lungo in chilometri — di tutta la lista: il porto anseatico di Amburgo, il leggendario ponte-tunnel di Øresund e le casette colorate di Nyhavn a Copenaghen. Giornate lunghe in autostrada tedesca, ricompensate da un'atmosfera scandinava che in Italia non si trova.",
       meteoPlace: "Copenaghen",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Nyhavn-panorama.jpg",
       tappe: [
@@ -1609,6 +1640,12 @@
   async function estimateKmMV(it){
     const startInputEl = document.getElementById("fuel-start");
     const startInput = startInputEl.value.trim() || "Roma";
+    // se la scheda ha già un totale reale precalcolato (viaggi a più tappe,
+    // dove sommare km di ogni tratta al volo non sarebbe comunque preciso) e
+    // la partenza è quella di default, si usa direttamente quello
+    if(it.kmNum && startInput.toLowerCase() === "roma"){
+      return it.kmNum;
+    }
     const cacheKey = `${startInput.toLowerCase()}|${it.zona}`;
     if(routeKmCacheMV[cacheKey] !== undefined) return routeKmCacheMV[cacheKey];
     try{
@@ -1652,7 +1689,7 @@
       if(priceEl) priceEl.textContent = "⛽ —";
       return;
     }
-    if(kmEl) kmEl.textContent = `📍 ${km} km a/r`;
+    if(kmEl) kmEl.textContent = `📍 ${km} km totali`;
     if(priceEl) priceEl.textContent = `⛽ €${costo.toFixed(2)}`;
   }
 
