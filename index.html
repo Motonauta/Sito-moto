@@ -383,6 +383,43 @@
   </div>
 </section>
 
+<!-- VIAGGI DA RICORDARE ================================================ -->
+<section id="viaggi-ricordare" style="padding-top:56px; padding-bottom:0;">
+  <div class="wrap">
+    <p class="marker">Quando una settimana non basta</p>
+    <h2 style="font-size:clamp(2rem, 5vw, 3.2rem); color:var(--sand); max-width:26ch;">
+      Viaggi da ricordare
+    </h2>
+    <p style="margin-top:18px; font-size:1.02rem; max-width:70ch;">
+      Una settimana intera in moto, fuori dai confini italiani: castelli,
+      circuiti leggendari, capitali europee, passi alpini e coste che
+      lasciano il segno. Percorsi pensati per una media di circa 400 km al
+      giorno, partenza e ritorno da Roma, distanze calcolate sul percorso
+      stradale reale — non in linea d'aria.
+    </p>
+  </div>
+</section>
+
+<section style="padding-top:32px;">
+  <div class="wrap">
+
+    <div class="itinerari-carousel">
+      <button type="button" class="carousel-arrow prev" aria-label="Viaggio precedente">‹</button>
+      <div class="itinerari-grid" id="viaggi-ricordare-grid"></div>
+      <button type="button" class="carousel-arrow next" aria-label="Viaggio successivo">›</button>
+    </div>
+
+    <div class="itinerari-note">
+      <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
+      totali andata e ritorno dal punto di partenza scelto nel calcolatore
+      qui sopra e ⛽ è la stima del costo di benzina. Sono viaggi impegnativi,
+      con giornate lunghe in autostrada: controlla sempre documenti validi
+      per l'espatrio, copertura assicurativa all'estero e — per i paesi fuori
+      Unione Europea lungo il percorso — eventuali requisiti di frontiera.
+    </div>
+  </div>
+</section>
+
 <!-- SOCIAL FEEDS ==================================================== -->
 <section>
   <div class="wrap">
@@ -1112,6 +1149,192 @@
     }
   ];
 
+  const VIAGGI_RICORDARE = [
+    {
+      zona: "Baviera, Ring e Olanda", km: "7 giorni consigliati", titolo: "Castelli bavaresi, Porsche, il Nürburgring e Amsterdam",
+      desc: "Un giro raccontato da chi l'ha fatto davvero: castelli tra Austria e Baviera, un museo per gli amanti delle auto, il circuito più leggendario del mondo e due giorni tra i canali di Amsterdam. Circa 3000 km reali in una settimana, con un solo giorno di sosta vera.",
+      meteoPlace: "Monaco di Baviera",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Castle_Neuschwanstein.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Zaino, borse laterali e una settimana intera davanti — la parte più bella inizia proprio qui, in garage." },
+        { nome: "Ehrenberg e Fort Claudia", query: "Ehrenberg Reutte Austria", label: "rovine medievali e fortezza asburgica al confine austro-tedesco", fun: "Un intero complesso di rovine e fortini sopra Reutte — ci si passa un pomeriggio intero e non basta." },
+        { nome: "Castello di Neuschwanstein", query: "Schloss Neuschwanstein", label: "il castello fiabesco di Ludwig II di Baviera", fun: "Il castello che ha ispirato quello di Disney — arrivarci in moto invece che in pullman turistico è tutta un'altra storia." },
+        { nome: "Stoccarda", query: "Porsche Museum Stuttgart", label: "Museo Porsche, tappa gradita anche a chi ama solo le auto", fun: "Un piano intero di prototipi e leggende da corsa — ci si dimentica per un po' di essere arrivati in moto." },
+        { nome: "Nürburgring", query: "Nürburgring", label: "il circuito più temuto e amato al mondo", fun: "Solo a leggere 'Nordschleife' sul cartello vengono i brividi, anche restando nel parcheggio." },
+        { nome: "Amsterdam", query: "Amsterdam centro", label: "canali, biciclette e due notti di pausa dal casco", fun: "L'unica città dove la moto rischia di essere il mezzo più lento in circolazione — le bici comandano." },
+        { nome: "Norimberga", query: "Norimberga centro storico", label: "centro storico medievale ricostruito dopo la guerra", fun: "Cammini tra mura e torri che sembrano lì da sempre — invece sono rinate pezzo per pezzo dopo il 1945." },
+        { nome: "Monaco di Baviera", query: "BMW Museum München", label: "Museo BMW, moto comprese in ordine cronologico", fun: "Tutta la storia BMW moto per moto, dalla prima all'ultima — un pellegrinaggio quasi obbligato con la targa giusta in tasca." },
+        { nome: "Roma", query: "Roma", label: "ritorno diretto, senza tappe intermedie", fun: "L'ultimo giorno si guida e basta: quello in cui i chilometri si sentono tutti, ma anche quello che sa già di racconti da fare agli amici." }
+      ]
+    },
+    {
+      zona: "Costa Azzurra e Provenza", km: "7 giorni consigliati", titolo: "Costa Azzurra, Provenza e i profumi della Francia del sud",
+      desc: "Il mito della Riviera francese visto dalla sella: curve panoramiche fino a Nizza, il glamour di Saint-Tropez, il porto vecchio di Marsiglia e i campi di lavanda della Provenza. Un giro che alterna mare, borghi e buona tavola senza mai avere fretta.",
+      meteoPlace: "Nizza",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Nice_(FR-06000)_Promenade_des_anglais.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Si parte verso ovest, con il profumo di salsedine ligure già in testa." },
+        { nome: "Genova", query: "Genova centro storico", label: "sosta panoramica lungo la costa ligure", fun: "L'ultima vera curva italiana prima del confine — da qui in poi si parla francese." },
+        { nome: "Nizza", query: "Nice Promenade des Anglais", label: "la Promenade e il blu della Costa Azzurra", fun: "La Promenade des Anglais va percorsa piano, non per il traffico ma perché nessuno ha davvero fretta qui." },
+        { nome: "Cannes e Saint-Tropez", query: "Saint-Tropez", label: "yacht, vetrine e il mito della Dolce Vita francese", fun: "Parcheggiare la moto tra gli yacht da dieci milioni è probabilmente il momento più fotografato del viaggio." },
+        { nome: "Marsiglia", query: "Marsiglia Vieux Port", label: "il porto vecchio e la Provenza affacciata sul mare", fun: "Il Vieux Port profuma di pesce alla griglia dalla mattina — la bouillabaisse qui è quasi un rito." },
+        { nome: "Avignone", query: "Avignone Palazzo dei Papi", label: "il Palazzo dei Papi e i campi di lavanda nei dintorni (giugno-luglio)", fun: "Se ci passi tra giugno e luglio, i campi color viola intorno valgono da soli la deviazione." },
+        { nome: "Torino", query: "Torino centro", label: "ultima notte prima di rientrare, tra Mole e caffè storici", fun: "Un aperitivo sabaudo come premio finale prima delle ultime ore di autostrada verso casa." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Si rientra con la pelle più scura e la lista delle spese decisamente più leggera." }
+      ]
+    },
+    {
+      zona: "Svizzera, i grandi passi", km: "7 giorni consigliati", titolo: "Svizzera: il Grand Tour dei passi alpini",
+      desc: "Una settimana dedicata solo a curve, tornanti e panorami da cartolina: San Gottardo, Furka e Grimsel in sequenza, poi i laghi di Interlaken e la capitale Berna. Il viaggio giusto per chi in moto cerca soprattutto la strada, non la meta.",
+      meteoPlace: "Andermatt",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Belvedere_Furka.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Il viaggio con meno chilometri di trasferimento e più curve pure di tutta la lista — si va dritti al sodo." },
+        { nome: "Lugano", query: "Lugano centro", label: "primo assaggio di Svizzera, lago e palme", fun: "Palme sul lago a due passi dalle Alpi — la Svizzera sa sorprendere fin dal primo giorno." },
+        { nome: "Passo del San Gottardo", query: "Passo del San Gottardo", label: "il valico simbolo della Svizzera, ancora acciottolato in cima", fun: "L'acciottolato in vetta va preso con rispetto — bello da vedere, meno comodo da guidare." },
+        { nome: "Passo della Furka", query: "Passo della Furka", label: "tornanti scenografici e il ghiacciaio del Rodano", fun: "Il passo delle scene di inseguimento di 007 — i tornanti si riconoscono al primo sguardo." },
+        { nome: "Passo del Grimsel", query: "Passo del Grimsel", label: "laghi artificiali turchesi incastonati tra le rocce", fun: "L'acqua turchese dei bacini sembra ritoccata al computer — non lo è, è solo la Svizzera che esagera." },
+        { nome: "Interlaken", query: "Interlaken", label: "tra i laghi di Thun e Brienz, ai piedi dell'Eiger", fun: "Il nome dice tutto: 'tra i laghi' — e infatti da qualunque lato ti giri, ce n'è uno." },
+        { nome: "Berna", query: "Berna centro storico", label: "la capitale con gli orsi e il centro storico UNESCO", fun: "Gli orsi veri della fossa cittadina sono l'ultima cosa che ti aspetti di trovare in una capitale europea." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Il rientro più breve del gruppo — un motivo in più per allungare la sosta a ogni passo lungo la strada." }
+      ]
+    },
+    {
+      zona: "Istria e Dalmazia", km: "7 giorni consigliati", titolo: "Croazia: Istria, Plitvice e le mura di Dubrovnik",
+      desc: "La costa croata da nord a sud: la 'piccola Venezia' di Rovigno, le cascate turchesi di Plitvice, il tramonto di Zara e il palazzo romano di Spalato, fino alle mura patrimonio UNESCO di Dubrovnik. Un viaggio che alterna borghi di mare e natura spettacolare.",
+      meteoPlace: "Dubrovnik",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Old_City_of_Dubrovnik-108773.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Si punta a nordest, verso un mare che cambia colore appena si passa il confine." },
+        { nome: "Rovigno", query: "Rovigno Croazia", label: "la 'piccola Venezia' d'Istria", fun: "Vicoli stretti e campanile veneziano — per un attimo sembra di non aver mai lasciato l'Italia." },
+        { nome: "Laghi di Plitvice", query: "Parco nazionale di Plitvice", label: "cascate e laghi turchesi, patrimonio UNESCO", fun: "La moto resta al parcheggio e si cammina per ore — ma con questi colori nessuno si lamenta." },
+        { nome: "Zara", query: "Zara centro storico", label: "il tramonto più bello del mondo, secondo Alfred Hitchcock", fun: "Fu proprio Hitchcock a definirlo così — e sull'organo marino, ad ascoltarlo cantare, gli si crede subito." },
+        { nome: "Spalato", query: "Spalato Palazzo di Diocleziano", label: "un palazzo imperiale romano diventato città vera e vissuta", fun: "Bar, negozi e case dentro le mura di un palazzo romano di 1700 anni fa — l'imperatore Diocleziano non se lo sarebbe immaginato." },
+        { nome: "Dubrovnik", query: "Dubrovnik mura", label: "le mura della 'Perla dell'Adriatico'", fun: "Un giro completo sulle mura regala una vista che spiega da sola perché la chiamano così." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Si torna con la pelle salata e la certezza che l'Adriatico, dall'altra sponda, sa essere ancora più bello." }
+      ]
+    },
+    {
+      zona: "Austria e Slovenia", km: "7 giorni consigliati", titolo: "Austria e Slovenia: Salisburgo, Vienna e il lago di Bled",
+      desc: "Da Mozart agli Asburgo, poi la quiete del lago di Bled: un giro che unisce grandi capitali imperiali e la Slovenia più verde e tranquilla. Salisburgo, Vienna, Graz, Bled e Lubiana in una sola settimana, senza mai correre.",
+      meteoPlace: "Vienna",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Bled,_Slovenia.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Direzione nordest, con l'idea di passare da tre capitali (imperiali, quasi) in una settimana sola." },
+        { nome: "Salisburgo", query: "Salisburgo centro storico", label: "la città di Mozart, tra fortezza e centro barocco", fun: "Da qualunque angolo del centro storico si senta una melodia, è quasi sempre colpa di Mozart." },
+        { nome: "Vienna", query: "Vienna centro", label: "palazzi imperiali, caffè storici e Ring da percorrere in moto", fun: "Percorrere il Ring in moto tra i palazzi imperiali è come sfogliare un libro di storia a 50 all'ora." },
+        { nome: "Graz", query: "Graz centro storico", label: "seconda città austriaca, meno turistica e piena di sorprese", fun: "Meno cartoline di Vienna, molto più vissuta — la Austria che pochi turisti italiani si fermano a vedere." },
+        { nome: "Lago di Bled", query: "Lago di Bled", label: "l'isolotto con la chiesetta in mezzo al lago", fun: "La campana della chiesetta sull'isola si suona per fortuna — la leggenda dice che chi ci riesce vede un desiderio avverarsi." },
+        { nome: "Lubiana", query: "Lubiana centro", label: "capitale slovena a misura di due ruote", fun: "Una delle poche capitali europee dove si respira ancora aria di paese — nel senso più bello del termine." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Ultimo tratto d'autostrada, con la sveglia degli Asburgo ancora negli occhi." }
+      ]
+    },
+    {
+      zona: "Boemia e Baviera", km: "7 giorni consigliati", titolo: "Praga e la Strada Romantica tedesca",
+      desc: "Il centro Europa più fiabesco: Rothenburg e la Strada Romantica, Norimberga, la Praga di Ponte Carlo e Città Vecchia, le terme liberty di Karlovy Vary e la medievale Ratisbona. Un giro fatto apposta per chi ama i centri storici che sembrano scenografie.",
+      meteoPlace: "Praga",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Charles_Bridge_Prague.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Rotta verso la Baviera, con la Boemia come vera destinazione della settimana." },
+        { nome: "Rothenburg ob der Tauber", query: "Rothenburg ob der Tauber", label: "il borgo medievale simbolo della Strada Romantica", fun: "Un centro storico così integro che sembra costruito apposta per un film in costume — invece è tutto vero." },
+        { nome: "Norimberga", query: "Norimberga centro storico", label: "castello imperiale e centro storico ricostruito", fun: "Dal castello imperiale la vista sui tetti rossi vale la salita a piedi con gli stivali da moto." },
+        { nome: "Praga", query: "Praga Ponte Carlo", label: "il Ponte Carlo, il Castello e la Città Vecchia", fun: "Attraversare il Ponte Carlo all'alba, prima dei pullman turistici, è tutto un altro Ponte Carlo." },
+        { nome: "Karlovy Vary", query: "Karlovy Vary", label: "terme storiche e palazzine liberty color pastello", fun: "Le facciate color pastello sembrano una torta a più piani — le terme invece sono maledettamente serie da secoli." },
+        { nome: "Ratisbona", query: "Ratisbona centro storico", label: "una delle città medievali meglio conservate di Germania", fun: "Il ponte di pietra su cui cammini ha quasi 900 anni e regge ancora meglio di certe strade italiane." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Il casco si toglie a casa con la sensazione di aver attraversato tre epoche diverse in una settimana." }
+      ]
+    },
+    {
+      zona: "Ungheria e Balcani", km: "7 giorni consigliati", titolo: "Budapest, il lago Balaton e Zagabria",
+      desc: "Il Danubio, le terme di Budapest, le spiagge d'acqua dolce del Balaton e i caffè all'aperto di Zagabria: un giro più rilassato, pensato per chi vuole scoprire l'Europa centro-orientale senza inseguire troppi chilometri al giorno.",
+      meteoPlace: "Budapest",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Hungarian_Parliament_Building,_Budapest.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Direzione Pannonia, con calma: qui il ritmo è più rilassato del solito." },
+        { nome: "Lubiana", query: "Lubiana centro", label: "tappa di passaggio tra Alpi e pianura pannonica", fun: "Una sosta che è già di per sé una piccola vacanza, non solo un punto di passaggio." },
+        { nome: "Budapest", query: "Budapest Parlamento", label: "il Parlamento sul Danubio e le terme storiche", fun: "Un bagno nelle terme di Széchenyi dopo ore di sella è il miglior antidolorifico che esista." },
+        { nome: "Lago Balaton", query: "Lago Balaton", label: "il 'mare degli ungheresi', spiagge d'acqua dolce", fun: "Gli ungheresi lo chiamano affettuosamente 'mare' — e in effetti, da riva a riva, ci vuole un bel po' per vederci chiaro." },
+        { nome: "Zagabria", query: "Zagabria centro storico", label: "città alta, mercato coperto e caffè all'aperto", fun: "La città alta si gira comodamente a piedi — la moto, per una volta, resta volentieri parcheggiata." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Un rientro senza fretta, proprio come è stato il viaggio." }
+      ]
+    },
+    {
+      zona: "Normandia e Bretagna", km: "7 giorni consigliati", titolo: "Normandia e Bretagna: scogliere, sbarchi e Mont Saint-Michel",
+      desc: "Il viaggio più lungo e ambizioso della lista, verso l'estremo nordovest della Francia: le spiagge dello sbarco in Normandia, l'abbazia sull'isola di Mont Saint-Michel e le coste fortificate della Bretagna. Giornate più impegnative in autostrada, ricompensate da paesaggi che in Italia non si trovano.",
+      meteoPlace: "Saint-Malo",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mont_Saint-Michel_France.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Il viaggio con più autostrada di tutti — le prime due giornate sono da veri macinatori di chilometri." },
+        { nome: "Digione", query: "Digione centro", label: "tappa di passaggio in Borgogna", fun: "Un pieno di senape vera prima di rimettersi il casco — qui è quasi un souvenir obbligato." },
+        { nome: "Parigi", query: "Tour Eiffel Parigi", label: "una sosta veloce, anche solo per la Tour Eiffel", fun: "Anche solo un caffè all'ombra della Tour Eiffel vale la deviazione dal percorso più diretto." },
+        { nome: "Spiagge dello sbarco", query: "Omaha Beach Normandia", label: "le spiagge del D-Day, un pezzo di storia da vivere in silenzio", fun: "Non c'è aneddoto scherzoso che tenga: qui ci si ferma, si legge qualche nome sulle croci, e si riparte più leggeri e più consapevoli." },
+        { nome: "Mont Saint-Michel", query: "Mont Saint-Michel", label: "l'abbazia sull'isola che cambia aspetto con la marea", fun: "Con l'alta marea diventa davvero un'isola — capita il momento giusto e sembra di guardare un miraggio." },
+        { nome: "Saint-Malo", query: "Saint-Malo", label: "città corsara fortificata sull'Atlantico", fun: "Le mura furono costruite per tenere fuori i nemici — oggi tengono fuori solo il vento atlantico, e nemmeno sempre." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Il rientro più lungo del gruppo: due giorni buoni di autostrada, ma con l'Atlantico ancora negli occhi." }
+      ]
+    },
+    {
+      zona: "Catalogna e Pirenei", km: "7 giorni consigliati", titolo: "Barcellona, Andorra e i passi dei Pirenei",
+      desc: "La Catalogna vista in moto: la Sagrada Família e il lungomare di Barcellona, lo shopping in quota di Andorra e i valichi di alta montagna dei Pirenei, prima di rientrare lungo la costa francese. Città, montagna e mare nello stesso viaggio.",
+      meteoPlace: "Barcellona",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/La_Sagrada_Familia_Barcelona.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Si punta dritti verso la Catalogna, con la Costa Azzurra come antipasto lungo la strada." },
+        { nome: "Genova", query: "Genova centro", label: "sosta lungo la costa prima del confine francese", fun: "Ultimo caffè italiano prima di due giorni tra Francia e Spagna." },
+        { nome: "Montpellier", query: "Montpellier centro", label: "tappa di passaggio nel sud della Francia", fun: "Una città universitaria vivace, perfetta per una sosta serale tra studenti e terrazzini." },
+        { nome: "Barcellona", query: "Sagrada Familia Barcellona", label: "la Sagrada Família e il lungomare della Barceloneta", fun: "La Sagrada Família è in costruzione da oltre 140 anni — probabilmente finirà dopo la tua prossima moto." },
+        { nome: "Andorra la Vella", query: "Andorra la Vella", label: "shopping duty-free tra le montagne, di passaggio", fun: "Un intero micro-stato che vive di duty-free tra due catene montuose — un po' surreale, molto divertente." },
+        { nome: "Port d'Envalira", query: "Port d'Envalira", label: "il valico stradale più alto dei Pirenei", fun: "Il tetto stradale dei Pirenei, oltre 2400 metri — l'aria si fa sottile e la vista pure." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Si rientra dalla stessa costa dell'andata, ma con lo sguardo di chi ha appena valicato i Pirenei." }
+      ]
+    },
+    {
+      zona: "Polonia meridionale", km: "7 giorni consigliati", titolo: "Cracovia, i Tatra e la memoria di Auschwitz",
+      desc: "Un viaggio che unisce la bellezza medievale di Cracovia, le montagne dei Tatra e una tappa che va oltre il turismo: il memoriale di Auschwitz-Birkenau, da visitare con rispetto e senza fretta. Un giro pensato per chi cerca anche significato, non solo panorami.",
+      meteoPlace: "Cracovia",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Sukiennice_and_Main_Market_Square_Krakow_Poland.JPG",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Direzione nordest attraverso l'Austria, con la Polonia come meta poco battuta ma che ripaga alla grande." },
+        { nome: "Vienna", query: "Vienna centro", label: "tappa di passaggio verso la Polonia", fun: "Una sosta di una notte, giusto il tempo di uno strudel prima di ripartire." },
+        { nome: "Cracovia", query: "Cracovia Rynek Główny", label: "la piazza del mercato medievale più grande d'Europa", fun: "La tromba che suona ogni ora dalla torre di Santa Maria si interrompe sempre a metà nota — un omaggio a una leggenda locale che vale la pena farsi raccontare." },
+        { nome: "Auschwitz-Birkenau", query: "Auschwitz-Birkenau Memorial", label: "il memoriale del campo di concentramento nazista", fun: "Qui non ci sono aneddoti da raccontare: solo una visita silenziosa, i binari e i nomi, e la consapevolezza di portarsi via qualcosa di importante." },
+        { nome: "Zakopane", query: "Zakopane Polonia", label: "la 'capitale invernale' polacca ai piedi dei Tatra", fun: "Architettura in legno tipica delle montagne polacche e l'aria dei Tatra: il modo giusto per schiarirsi i pensieri dopo la tappa precedente." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Un rientro lungo, con più di un pensiero a cui pensare lungo l'autostrada." }
+      ]
+    },
+    {
+      zona: "Grecia centrale", km: "7 giorni consigliati", titolo: "Grecia in moto: il traghetto, Meteora e Atene",
+      desc: "Un viaggio diverso dagli altri: si arriva in Grecia in nave, moto compresa, per risparmiare due giorni di autostrada balcanica. Poi Meteora, Delfi e Atene, prima di reimbarcarsi per il rientro. Cultura antica e monasteri sospesi nel cielo.",
+      meteoPlace: "Meteora",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Meteora_-_Kalambaka_-_Greece.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Si parte verso Ancona: qui il viaggio vero comincia in porto, non in autostrada." },
+        { nome: "Ancona", query: "Porto di Ancona", label: "imbarco sul traghetto notturno per la Grecia, moto compresa", fun: "Si lega la moto in stiva, ci si sistema in cabina, e la traversata sostituisce due giorni di autostrada balcanica." },
+        { nome: "Igoumenitsa", query: "Igoumenitsa porto", label: "sbarco in Grecia con il sole già alto", fun: "Si scende dalla rampa del traghetto e in pochi minuti si è già sull'asfalto greco — cambio di scenario istantaneo." },
+        { nome: "Meteora", query: "Meteora Kalambaka", label: "monasteri bizantini in bilico su pilastri di roccia", fun: "I monaci salivano un tempo con reti e carrucole — oggi per fortuna ci sono le scale, ma l'effetto vertigine resta intatto." },
+        { nome: "Delfi", query: "Delfi sito archeologico", label: "l'oracolo più famoso dell'antichità, tra gli ulivi", fun: "Anche senza credere agli oracoli, stare al centro del 'ombelico del mondo' antico un brivido lo regala comunque." },
+        { nome: "Atene", query: "Acropoli Atene", label: "l'Acropoli e il centro storico ai piedi del Partenone", fun: "Vedere il Partenone illuminato di sera dai vicoli di Plaka è uno dei motivi per cui vale la pena il traghetto." },
+        { nome: "Ancona", query: "Porto di Ancona", label: "rientro in traghetto: moto e gambe finalmente a riposo", fun: "Un'intera nottata di traversata per riposare le braccia prima delle ultime ore di strada verso casa." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Si torna con la moto salata di salsedine due volte e un alfabeto nuovo mezzo imparato." }
+      ]
+    },
+    {
+      zona: "Germania del nord e Danimarca", km: "7 giorni consigliati", titolo: "Amburgo, il ponte di Øresund e Copenaghen",
+      desc: "Il viaggio più a nord della lista: il porto anseatico di Amburgo, il leggendario ponte-tunnel di Øresund e le casette colorate di Nyhavn a Copenaghen. Giornate lunghe in autostrada tedesca, ricompensate da un'atmosfera scandinava che in Italia non si trova.",
+      meteoPlace: "Copenaghen",
+      foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Nyhavn-panorama.jpg",
+      tappe: [
+        { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Il viaggio con più latitudine da guadagnare di tutti — si punta dritti verso il Mare del Nord." },
+        { nome: "Norimberga", query: "Norimberga centro storico", label: "tappa di passaggio verso il nord Europa", fun: "Una sosta già vista da altri itinerari della lista — segno che è un crocevia quasi obbligato verso il nord." },
+        { nome: "Amburgo", query: "Amburgo porto", label: "il porto e i magazzini della Speicherstadt, patrimonio UNESCO", fun: "Il quartiere dei magazzini in mattoni rossi sembra scolpito apposta per le foto — ed è tutto vero, non scenografia." },
+        { nome: "Ponte di Øresund", query: "Øresund Bridge", label: "il ponte-tunnel che collega Danimarca e Svezia sul mare", fun: "A metà attraversamento diventa tunnel sott'acqua: un capolavoro di ingegneria che sembra uscito da un film di fantascienza." },
+        { nome: "Copenaghen", query: "Nyhavn Copenaghen", label: "le case colorate di Nyhavn e le biciclette ovunque", fun: "A Copenaghen le biciclette hanno letteralmente la precedenza su tutto — la moto, per una volta, si adegua rispettosa." },
+        { nome: "Monaco di Baviera", query: "Monaco di Baviera centro", label: "sosta di ritorno prima dell'ultimo tratto verso l'Italia", fun: "Una birra bavarese come premio di metà rientro, prima delle ultime ore che riportano dritti a casa." },
+        { nome: "Roma", query: "Roma", label: "ritorno", fun: "Il viaggio che porta più a nord di tutti si chiude, come sempre, tra il traffico romano — un rientro alla realtà in tutti i sensi." }
+      ]
+    }
+  ];
+
   function weatherIcon(code){
     if (code === 0) return "☀️";
     if ([1,2].includes(code)) return "🌤️";
@@ -1777,7 +2000,8 @@
 
   const allCards = [
     ...initCarousel(ITINERARI, "itinerari-grid", routeUrls, updateFuelEstimate),
-    ...initCarousel(MINIVIAGGI, "miniviaggi-grid", routeUrlsMV, updateFuelEstimateMV)
+    ...initCarousel(MINIVIAGGI, "miniviaggi-grid", routeUrlsMV, updateFuelEstimateMV),
+    ...initCarousel(VIAGGI_RICORDARE, "viaggi-ricordare-grid", routeUrlsMV, updateFuelEstimateMV)
   ];
 
   function refreshAllFuel(){
