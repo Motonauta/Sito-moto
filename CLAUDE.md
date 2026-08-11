@@ -32,26 +32,22 @@ con alcune funzioni serverless per le parti dinamiche.
 
 ## Funzioni serverless (`api/`)
 
-| File | Cosa fa |
-|---|---|
-| `gallery.js` | Elenca album e foto/video da Cloudinary per la galleria pubblica |
-| `list-photos.js` | Elenca foto di un album per l'area riservata (gestione/cancellazione) |
-| `delete-photo.js` | Elimina una singola foto/video da Cloudinary |
-| `delete-album.js` | Elimina un intero album da Cloudinary **e il pin mappa corrispondente** |
-| `sitemap.js` | Genera la sitemap XML dinamica (pagine + foto) |
-| `submit-idea.js` | Riceve un'idea video dal box in home, blocca l'IP mittente per 24h (anti-spam) |
-| `list-ideas.js` | Elenca le idee ricevute (area riservata) |
-| `delete-idea.js` | Elimina un'idea (area riservata) |
-| `get-km.js` | Restituisce i km attuali della moto (pubblico) |
-| `set-km.js` | Aggiorna i km attuali (area riservata) |
-| `create-pin.js` | Geocodifica il nome di un nuovo album e salva il pin sulla mappa (chiamato da admin.html dopo un nuovo album) |
-| `map-pins.js` | Restituisce tutti i pin salvati per la mappa |
-| `sign-upload.js` | Genera la firma per l'upload firmato su Cloudinary (area riservata) |
-| `login.js` | Verifica la password admin e apre una sessione (cookie httpOnly su Redis) |
-| `logout.js` | Chiude la sessione admin |
-| `session-check.js` | Dice al frontend se la sessione admin è ancora valida |
+Il piano Vercel Hobby permette **massimo 12 funzioni serverless**. Per restare
+ben sotto il limite, ogni file multiplexa più azioni tramite il parametro
+`?action=` (stesso schema per tutti), invece di avere un file per azione.
+Attualmente sono solo **5 file**:
 
-**Importante — autenticazione area riservata**: `admin.html` **non contiene più la password**. Il login è gestito da `api/login.js`, che verifica `password === process.env.ADMIN_PASSWORD` (confronto a tempo costante) e, se corretta, crea un token casuale salvato su Redis (`admin_session:<token>`, scadenza 7 giorni) e lo manda al browser come cookie httpOnly/Secure/SameSite=Strict. Tutte le funzioni "scrittura" (`delete-*`, `set-km`, `create-pin`, `list-ideas`, `sign-upload`) verificano quella sessione tramite `lib/auth.js` (`isAuthenticated(req)`), non più una password passata nel corpo della richiesta. `api/logout.js` invalida la sessione sia lato cookie che su Redis. Se aggiungi una nuova funzione che scrive dati, proteggila allo stesso modo con `isAuthenticated(req)`, non reintrodurre il controllo diretto della password.
+| File | Azioni (`?action=`) | Cosa fa |
+|---|---|---|
+| `gallery.js` | `list` (default), `list-admin`, `pins`, `delete-photo`, `delete-album`, `sign-upload`, `create-pin` | Tutto ciò che riguarda foto/video/album su Cloudinary e i pin sulla mappa: elenco pubblico per la galleria, elenco per l'area riservata, eliminazione foto/album (**e il pin mappa corrispondente** quando si elimina un album), firma per l'upload firmato, geocodifica di un nuovo album e salvataggio del pin |
+| `ideas.js` | (GET = elenco, POST = invio, DELETE = cancellazione) | Riceve un'idea video dal box in home (blocca l'IP mittente per 24h, anti-spam), elenca le idee ricevute e le elimina (area riservata) |
+| `km.js` | (GET = lettura, POST = scrittura) | Restituisce i km attuali della moto (pubblico) e li aggiorna (area riservata) |
+| `auth.js` | `login`, `logout`, `check` | Login area riservata (password a confronto a tempo costante, token di sessione su Redis), logout, verifica sessione |
+| `route-planner.js` | `search`, `reverse`, `route`, `fuel-near` | Proxy server-side per Nominatim (ricerca/geocodifica), OSRM/Valhalla (calcolo percorso) e Overpass (ricerca distributori), usato da Nostromo |
+
+**Importante — autenticazione area riservata**: `admin.html` **non contiene più la password**. Il login è gestito da `api/auth.js?action=login`, che verifica la password admin a confronto a tempo costante e, se corretta, crea un token casuale salvato su Redis (`admin_session:<token>`, scadenza 7 giorni) e lo manda al browser come cookie httpOnly/Secure/SameSite=Strict. Tutte le funzioni "scrittura" (cancellazioni, `create-pin`, `sign-upload`, salvataggio km, elenco/cancellazione idee) verificano quella sessione tramite `lib/auth.js` (`isAuthenticated(req)`), non più una password passata nel corpo della richiesta. `api/auth.js?action=logout` invalida la sessione sia lato cookie che su Redis. Se aggiungi una nuova funzione che scrive dati, proteggila allo stesso modo con `isAuthenticated(req)`, non reintrodurre il controllo diretto della password.
+
+**Se aggiungi una nuova funzione**: prima controlla se può diventare un'azione (`?action=...`) di un file già esistente invece di crearne uno nuovo — resta più margine sotto il tetto delle 12 funzioni.
 
 ## Variabili d'ambiente su Vercel
 

@@ -198,7 +198,7 @@
   }
 
   // unisce i pin di base con quelli salvati automaticamente (questi ultimi vincono in caso di doppioni)
-  fetch("/api/map-pins")
+  fetch("/api/gallery?action=pins")
     .then(res => res.json())
     .then(data => {
       const pinsSalvati = data.pins || [];
