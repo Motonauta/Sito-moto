@@ -433,7 +433,7 @@
 
     // il preset è "signed": la firma va generata lato server (serve la
     // chiave segreta di Cloudinary, che non deve mai finire nel browser)
-    const signRes = await fetch("/api/sign-upload", {
+    const signRes = await fetch("/api/gallery?action=sign-upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ folder, tags: tag, context })
@@ -534,7 +534,7 @@
 
       if(isNew){
         try{
-          const pinRes = await fetch("/api/create-pin", {
+          const pinRes = await fetch("/api/gallery?action=create-pin", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ albumName: label, filtro: slug })
@@ -573,7 +573,7 @@
     statusEl.innerHTML = "<div>Carico le foto dell'album...</div>";
 
     try{
-      const res = await fetch(`/api/list-photos?album=${slug}`);
+      const res = await fetch(`/api/gallery?action=list-admin&album=${slug}`);
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
 
@@ -601,7 +601,7 @@
   async function deleteOnePhoto(publicId, resourceType, btnEl){
     if(!confirm("Eliminare questo file da Cloudinary?")) return;
     try{
-      const res = await fetch("/api/delete-photo", {
+      const res = await fetch("/api/gallery?action=delete-photo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ publicId, resourceType })
@@ -623,7 +623,7 @@
     if(!confirm(`Eliminare TUTTE le foto dell'album "${label}" da Cloudinary? Non si può annullare.`)) return;
 
     try{
-      const res = await fetch("/api/delete-album", {
+      const res = await fetch("/api/gallery?action=delete-album", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ album: slug })
