@@ -90,8 +90,10 @@ const STYLE = `<style>
   }
   .manuale-tip-img img{ width:100%; height:100%; object-fit:cover; display:block; }
   .manuale-tip-img-caption{
-    margin-top:8px; font-size:0.82rem; color:var(--cream-dim); font-style:italic;
+    margin-top:10px; padding:10px 14px; border:1px dashed rgba(245,240,230,0.25);
+    font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim);
   }
+  .manuale-tip-img-caption::before{ content:"* "; color:var(--gold); }
 </style>`;
 
 function render404() {
