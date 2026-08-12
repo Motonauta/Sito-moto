@@ -8,10 +8,19 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// album che esistono su Cloudinary solo come "magazzino" di foto per altre
+// sezioni del sito (es. le immagini degli articoli del Manuale di bordo) e
+// non devono comparire come categoria filtrabile nella Galleria pubblica;
+// restano comunque visibili nell'area riservata per poterle gestire
+const HIDDEN_FROM_PUBLIC_GALLERY = ['manuale di bordo'];
+
 async function handleList(req, res) {
   try {
+    const isAdmin = await isAuthenticated(req);
     const folderResult = await cloudinary.api.root_folders();
-    const albums = folderResult.folders.map(f => f.name);
+    const albums = folderResult.folders
+      .map(f => f.name)
+      .filter(name => isAdmin || !HIDDEN_FROM_PUBLIC_GALLERY.includes(name.toLowerCase()));
 
     const data = {};
     for (const album of albums) {
