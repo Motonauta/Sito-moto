@@ -847,6 +847,16 @@
 
   function mapsQuery(t){ return encodeURIComponent(t.query); }
 
+  // Le foto di Itinerari/Miniviaggi/Viaggi da ricordare arrivano da Wikimedia
+  // Commons come file originali, spesso da diversi MB anche se sullo schermo
+  // occupano un rettangolo piccolo: Special:FilePath supporta un parametro
+  // "width" che fa reindirizzare a una miniatura già ridimensionata, senza
+  // bisogno di nessun servizio esterno in più.
+  function wikiThumb(url, width){
+    if(!url) return url;
+    return url + (url.includes("?") ? "&" : "?") + "width=" + width;
+  }
+
   function routeUrls(it){
     const origin = "Roma";
     const destination = it.tappe[it.tappe.length - 1].query;
@@ -1168,7 +1178,7 @@
         ${weatherBarHTML()}
         ${it.foto ? `
         <div class="itinerario-photo">
-          <img src="${it.foto}" alt="${it.zona}" loading="lazy">
+          <img src="${wikiThumb(it.foto, 700)}" alt="${it.zona}" loading="lazy">
         </div>
         ` : ""}
         <div class="card-compact-actions">
@@ -1206,7 +1216,7 @@
       </div>
       ${it.foto ? `
       <div class="itinerario-photo">
-        <img src="${it.foto}" alt="${it.zona}">
+        <img src="${wikiThumb(it.foto, 1000)}" alt="${it.zona}" loading="lazy">
       </div>
       ` : ""}
       ${bodyHTML(it, mapsUrl, wazeUrl)}
