@@ -23,10 +23,57 @@ function routeMapsUrl(tappe) {
 }
 
 const SECTION_INFO = {
-  itinerario: { eyebrow: 'Uscite domenicali', anchor: '/index.html' },
-  miniviaggio: { eyebrow: 'Passi alpini e mete lontane', anchor: '/index.html#miniviaggi' },
-  ricordare: { eyebrow: 'Quando una settimana non basta', anchor: '/index.html#viaggi-ricordare' },
+  itinerario: { eyebrow: 'Uscite domenicali', anchor: '/index.html', titleSuffix: 'Itinerario in moto' },
+  miniviaggio: { eyebrow: 'Passi alpini e mete lontane', anchor: '/index.html#miniviaggi', titleSuffix: 'Viaggio in moto' },
+  ricordare: { eyebrow: 'Quando una settimana non basta', anchor: '/index.html#viaggi-ricordare', titleSuffix: 'Viaggio in moto' },
 };
+
+// giorni consigliati ricavati dal campo km ("7 giorni consigliati", "2-3
+// giorni consigliati", "circa 90 km"...) per precompilare l'Assistente di
+// valigia; se il testo non lo dice esplicitamente, si assume 1 giorno per
+// gli itinerari (uscite in giornata) e 2 per gli altri
+function parseGiorni(kmStr, tipo) {
+  const match = String(kmStr).match(/(\d+)(?:-(\d+))?\s*giorni/);
+  if (match) {
+    return match[2] ? Math.round((Number(match[1]) + Number(match[2])) / 2) : Number(match[1]);
+  }
+  return tipo === 'itinerario' ? 1 : 2;
+}
+
+function qs(params) {
+  return Object.entries(params)
+    .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+    .join('&');
+}
+
+// costruisce i 3 link verso Nostromo, già precompilati con partenza/arrivo/
+// tappe di questo viaggio: itinerario e giro ad anello, quindi partenza e
+// arrivo impliciti sono sempre Roma; miniviaggio e viaggio da ricordare
+// hanno già partenza/arrivo reali nella prima e ultima tappa
+function buildNostromoLinks(tipo, it) {
+  const names = it.tappe.map(t => t.nome);
+  const isLoop = tipo === 'itinerario';
+
+  const rottaStart = isLoop ? 'Roma' : names[0];
+  const rottaEnd = isLoop ? 'Roma' : names[names.length - 1];
+  const rottaStops = isLoop ? names : names.slice(1, -1);
+
+  const viaggioStart = isLoop ? 'Roma' : names[0];
+  // per default punta alla tappa finale reale (utile soprattutto per i
+  // miniviaggi, dove spesso è diversa dalla partenza); nei giri ad anello
+  // e nei viaggi da ricordare partenza e arrivo coincidono (Roma), quindi
+  // in quel caso si usa meteoPlace come destinazione rappresentativa
+  const viaggioEnd = (rottaEnd && rottaEnd.toLowerCase() !== viaggioStart.toLowerCase())
+    ? rottaEnd
+    : (it.meteoPlace || rottaEnd);
+  const giorni = parseGiorni(it.km, tipo);
+
+  return {
+    viaggio: `/nostromo.html?${qs({ tool: 'viaggio', start: viaggioStart, end: viaggioEnd })}`,
+    valigia: `/nostromo.html?${qs({ tool: 'valigia', dest: it.meteoPlace || viaggioEnd, giorni })}`,
+    rotta: `/nostromo.html?${qs({ tool: 'rotta', start: rottaStart, end: rottaEnd, stops: rottaStops.join('|') })}`,
+  };
+}
 
 const HEAD_COMMON = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -102,8 +149,9 @@ module.exports = async (req, res) => {
   const { tipo, it } = entry;
   const section = SECTION_INFO[tipo] || SECTION_INFO.itinerario;
   const siteUrl = `https://ilmotonauta.com/viaggi/${slug}`;
-  const pageTitle = `${it.titolo} — Il Motonauta`;
+  const pageTitle = `${it.titolo} — ${section.titleSuffix} | Il Motonauta`;
   const description = it.desc.length > 160 ? `${it.desc.slice(0, 157)}...` : it.desc;
+  const nostromoLinks = buildNostromoLinks(tipo, it);
 
   const tappeHTML = it.tappe.map(t => `
       <li>
@@ -157,6 +205,11 @@ ${HEAD_COMMON}
   .viaggio-stops a.stop-link:hover{ color:var(--gold); }
   .viaggio-stops a.stop-link::before{ content:"📍"; font-size:0.9em; flex-shrink:0; }
   .viaggio-stops .fun{ margin-top:6px; font-size:0.92rem; color:var(--cream-dim); font-style:italic; }
+  .nostromo-cta{
+    margin-top:44px; max-width:720px; background:var(--asphalt-2);
+    border:1px solid rgba(245,240,230,0.14); padding:28px 30px;
+  }
+  .nostromo-cta-buttons{ display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
 </style>
 </head>
 <body>
@@ -184,6 +237,19 @@ ${HEADER_HTML}
       <p class="label">Tappe consigliate</p>
       <ul>${tappeHTML}
       </ul>
+    </div>
+
+    <div class="nostromo-cta">
+      <p class="marker">Organizza il viaggio</p>
+      <h2 style="font-size:1.3rem; color:var(--sand);">Fatti aiutare dal Nostromo</h2>
+      <p style="margin-top:10px; font-size:0.92rem; color:var(--cream-dim);">
+        Apri direttamente l'assistente che ti serve: parte già con partenza, arrivo e tappe di questo viaggio precompilati.
+      </p>
+      <div class="nostromo-cta-buttons">
+        <a href="${nostromoLinks.viaggio}" class="btn">🌦️ Meteo lungo il percorso</a>
+        <a href="${nostromoLinks.valigia}" class="btn">🧳 Prepara la valigia</a>
+        <a href="${nostromoLinks.rotta}" class="btn solid">🗺️ Genera il percorso e le tappe</a>
+      </div>
     </div>
 
     <p style="margin-top:44px;"><a href="${section.anchor}" style="color:var(--gold);">← Torna a tutti i viaggi</a></p>
