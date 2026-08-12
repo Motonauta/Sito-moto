@@ -128,8 +128,8 @@ function renderBlocco(b) {
     return `
     <div class="manuale-tip-img">
       <img src="${escapeHtml(wikiThumb(b.src, 1000))}" alt="${escapeHtml(b.caption || b.alt || '')}" loading="lazy">
-      ${b.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.caption)}</p>` : ''}
-    </div>`;
+    </div>
+    ${b.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.caption)}</p>` : ''}`;
   }
   if (b.tipo === 'consiglio') {
     return `
@@ -142,8 +142,8 @@ function renderBlocco(b) {
       ${b.immagine ? `
       <div class="manuale-tip-img">
         <img src="${escapeHtml(wikiThumb(b.immagine.src, 1000))}" alt="${escapeHtml(b.immagine.caption || b.titolo)}" loading="lazy">
-        ${b.immagine.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.immagine.caption)}</p>` : ''}
-      </div>` : ''}
+      </div>
+      ${b.immagine.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.immagine.caption)}</p>` : ''}` : ''}
       ${b.link ? `<a class="manuale-tip-link" href="${escapeHtml(b.link.url)}" target="_blank" rel="noopener sponsored">${escapeHtml(b.link.label)} →</a>` : ''}
     </div>`;
   }
