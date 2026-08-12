@@ -41,6 +41,21 @@
   .status-list div.err{ color:var(--rust); }
 
   #output-wrap{ display:none; margin-top:28px; }
+  .uploaded-link-row{
+    display:flex; align-items:center; gap:10px; padding:8px 0;
+    border-bottom:1px solid rgba(245,240,230,0.14);
+  }
+  .uploaded-link-row:last-child{ border-bottom:none; }
+  .uploaded-link-url{
+    flex:1; font-family:var(--font-mono); font-size:0.72rem; color:var(--cream-dim);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .uploaded-link-copy{
+    flex-shrink:0; font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;
+    padding:6px 12px; background:transparent; border:1px solid var(--gold); color:var(--gold); cursor:pointer;
+  }
+  .uploaded-link-copy:hover{ background:var(--gold); color:var(--asphalt); }
+  .uploaded-link-copy.copied{ background:var(--gold); color:var(--asphalt); }
   #output-code, #output-filter{
     width:100%; min-height:220px; background:var(--asphalt);
     color:var(--sand); font-family:var(--font-mono); font-size:0.8rem;
@@ -164,6 +179,7 @@
     <div id="output-wrap">
       <p class="marker">Fatto</p>
       <div id="done-message" class="reminder" style="display:none;"></div>
+      <div id="uploaded-links" style="display:none; margin-top:16px;"></div>
       <textarea id="output-code" readonly style="display:none;"></textarea>
       <div id="filter-btn-wrap" style="display:none;">
         <textarea id="output-filter" readonly style="min-height:60px;"></textarea>
@@ -533,6 +549,8 @@
       doneMsg.style.display = "block";
       doneMsg.textContent = `Fatto! ${results.length} foto caricate nell'album "${label}". Sono già visibili nella pagina Galleria del sito — nessun codice da incollare.`;
 
+      renderUploadedLinks(results);
+
       if(isNew){
         try{
           const pinRes = await fetch("/api/gallery?action=create-pin", {
@@ -561,6 +579,68 @@
     const confirmEl = document.getElementById(confirmId);
     confirmEl.style.display = "inline";
     setTimeout(() => confirmEl.style.display = "none", 2000);
+  }
+
+  // -------- link diretti dopo l'upload (per incollarli negli articoli del Manuale di bordo) --------
+  async function copyText(text, btnEl, originalLabel){
+    try{
+      await navigator.clipboard.writeText(text);
+    } catch(err){
+      // fallback per browser/contesti senza Clipboard API
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+    btnEl.textContent = "Copiato ✓";
+    btnEl.classList.add("copied");
+    setTimeout(() => {
+      btnEl.textContent = originalLabel;
+      btnEl.classList.remove("copied");
+    }, 2000);
+  }
+
+  function renderUploadedLinks(results){
+    const wrap = document.getElementById("uploaded-links");
+    wrap.innerHTML = "";
+    if(!results.length){
+      wrap.style.display = "none";
+      return;
+    }
+    wrap.style.display = "block";
+
+    const copyAllBtn = document.createElement("button");
+    copyAllBtn.type = "button";
+    copyAllBtn.className = "admin-btn outline";
+    copyAllBtn.style.marginBottom = "12px";
+    copyAllBtn.textContent = "Copia tutti i link";
+    copyAllBtn.addEventListener("click", () => {
+      const allText = results.map(r => `${r.caption}: ${r.url}`).join("\n");
+      copyText(allText, copyAllBtn, "Copia tutti i link");
+    });
+    wrap.appendChild(copyAllBtn);
+
+    results.forEach(r => {
+      const row = document.createElement("div");
+      row.className = "uploaded-link-row";
+
+      const urlSpan = document.createElement("span");
+      urlSpan.className = "uploaded-link-url";
+      urlSpan.textContent = r.url;
+      urlSpan.title = r.url;
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "uploaded-link-copy";
+      btn.textContent = "Copia";
+      btn.addEventListener("click", () => copyText(r.url, btn, "Copia"));
+
+      row.appendChild(urlSpan);
+      row.appendChild(btn);
+      wrap.appendChild(row);
+    });
   }
 
   // -------- gestione / cancellazione --------
