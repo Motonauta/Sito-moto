@@ -441,7 +441,7 @@
       </p>
     </div>
 
-    <div class="route-weather-widget">
+    <div class="route-weather-widget" id="widget-viaggio">
       <p class="marker">Pianifica il viaggio</p>
       <h2 style="font-size:1.3rem; color:var(--sand);">Assistente di viaggio</h2>
       <p style="margin-top:10px; font-size:0.92rem; color:var(--cream-dim);">
@@ -485,7 +485,7 @@
       <div id="route-weather-results" class="route-weather-results"></div>
     </div>
 
-    <div class="route-weather-widget">
+    <div class="route-weather-widget" id="widget-valigia">
       <p class="marker">Prepara i bagagli</p>
       <h2 style="font-size:1.3rem; color:var(--sand);">Assistente di valigia</h2>
       <p style="margin-top:10px; font-size:0.92rem; color:var(--cream-dim);">
@@ -521,7 +521,7 @@
       <div id="valigia-results" class="route-weather-results"></div>
     </div>
 
-    <div class="route-weather-widget">
+    <div class="route-weather-widget" id="widget-rotta">
       <p class="marker">Pianifica le tappe</p>
       <h2 style="font-size:1.3rem; color:var(--sand);">Assistente di rotta</h2>
       <p style="margin-top:10px; font-size:0.92rem; color:var(--cream-dim);">
@@ -1559,6 +1559,44 @@
   document.getElementById("rotta-btn").addEventListener("click", calculateRotta);
   attachPlaceAutocomplete(document.getElementById("rotta-start"), document.getElementById("rotta-start-suggest"));
   attachPlaceAutocomplete(document.getElementById("rotta-end"), document.getElementById("rotta-end-suggest"));
+
+  // ===== Precompilazione da un link "Fatti aiutare dal Nostromo" =====
+  // arrivo da una pagina di un viaggio (/viaggi/<slug>), che passa
+  // ?tool=viaggio|valigia|rotta più i campi già noti del viaggio, così
+  // l'assistente giusto si apre già pronto invece di far ricopiare tutto a mano
+  (function initFromViaggioLink(){
+    const params = new URLSearchParams(location.search);
+    const tool = params.get("tool");
+    if(!tool) return;
+
+    function setVal(id, value){
+      const el = document.getElementById(id);
+      if(el && value) el.value = value;
+    }
+
+    if(tool === "viaggio"){
+      setVal("route-start", params.get("start"));
+      setVal("route-end", params.get("end"));
+      document.getElementById("widget-viaggio").scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if(tool === "valigia"){
+      setVal("valigia-dest", params.get("dest"));
+      setVal("valigia-giorni", params.get("giorni"));
+      document.getElementById("widget-valigia").scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if(tool === "rotta"){
+      setVal("rotta-start", params.get("start"));
+      setVal("rotta-end", params.get("end"));
+      const stopsParam = params.get("stops");
+      if(stopsParam){
+        stopsParam.split("|").filter(Boolean).forEach(stopName => {
+          addRottaStopField();
+          const rows = document.querySelectorAll("#rotta-stops-list .rotta-stop-row input[type='text']");
+          const lastInput = rows[rows.length - 1];
+          if(lastInput) lastInput.value = stopName;
+        });
+      }
+      document.getElementById("widget-rotta").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  })();
 </script>
 
 <script src="script.js"></script>
