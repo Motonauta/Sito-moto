@@ -3,65 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About me — Il Motonauta</title>
-<meta name="description" content="Angelo, il Motonauta: content creator che racconta viaggi in moto, strade dimenticate e destinazioni da vivere d'un fiato. E la sua BMW S1000XR.">
+<title>Chi sono — Il Motonauta</title>
+<meta name="description" content="Angelo, il Motonauta: content creator che racconta viaggi in moto, strade dimenticate e destinazioni da vivere d'un fiato.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
-<style>
-  .bike-stats{
-    display:grid; grid-template-columns:repeat(4, 1fr); gap:1px;
-    background:rgba(245,240,230,0.14); margin-top:44px;
-  }
-  .bike-stats > div{ background:var(--asphalt); padding:26px 20px; }
-  .bike-stats .value{
-    font-family:var(--font-display); font-size:1.6rem; color:var(--gold);
-    text-transform:uppercase; line-height:1;
-  }
-  .bike-stats .label{
-    font-family:var(--font-mono); font-size:0.7rem; color:var(--cream-dim);
-    text-transform:uppercase; letter-spacing:0.05em; margin-top:8px;
-  }
-  @media (max-width:860px){ .bike-stats{ grid-template-columns:repeat(2, 1fr); } }
-
-  .bike-gallery{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:24px;
-  }
-  .bike-gallery .gallery-item{
-    aspect-ratio:4/3; position:relative; overflow:hidden;
-    border:1px dashed rgba(245,240,230,0.22);
-    display:flex; align-items:flex-end;
-  }
-  .bike-gallery img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .bike-gallery .tag{
-    padding:16px; font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase;
-    letter-spacing:0.05em; color:var(--cream-dim); position:relative; z-index:1;
-  }
-  @media (max-width:780px){ .bike-gallery{ grid-template-columns:repeat(2, 1fr); } }
-  @media (max-width:520px){ .bike-gallery{ grid-template-columns:1fr; } }
-
-  .accessori-list{
-    list-style:none;
-    margin-top:22px;
-  }
-  .accessori-list li{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:13px 0;
-    border-bottom:1px solid rgba(245,240,230,0.14);
-    font-size:0.95rem;
-    color:var(--cream-dim);
-  }
-  .accessori-list li:last-child{ border-bottom:none; }
-  .accessori-list li::before{
-    content:"—";
-    font-family:var(--font-mono);
-    color:var(--gold);
-    flex-shrink:0;
-  }
-</style>
 </head>
 <body>
 
@@ -73,10 +20,11 @@
     </a>
     <nav class="nav-links">
       <a href="index.html">Rotte</a>
+      <a href="chi-sono.html" class="active">Chi sono</a>
       <a href="nostromo.html">Nostromo</a>
       <a href="manuale.html">Manuale di bordo</a>
-      <a href="about.html" class="active">Il Motonauta</a>
       <a href="sponsor.html">Alleati</a>
+      <a href="moto.html">La mia moto</a>
       <a href="galleria.html">Diario di bordo</a>
       <a href="contatti.html">Canale aperto</a>
     </nav>
@@ -144,133 +92,8 @@
   </div>
 </section>
 
-<!-- LA MIA MOTO ====================================================== -->
-<section style="padding-bottom:0;">
-  <div class="wrap">
-    <p class="marker">Il mio mezzo</p>
-    <h2 style="font-size:clamp(2.2rem, 5vw, 3.6rem); color:var(--sand); max-width:20ch;">
-      La mia moto
-    </h2>
-    <p style="margin-top:18px; font-size:1.02rem;">
-      La mia compagna di viaggio, di ogni imprevisto e di ogni strada
-      dimenticata di cui parlo qui. Ecco i numeri e la storia
-      dietro la muccona che mi porta in giro.
-    </p>
-
-    <div class="bike-stats">
-      <div>
-        <p class="value">BMW S1000XR</p>
-        <p class="label">Modello</p>
-      </div>
-      <div>
-        <p class="value">2021</p>
-        <p class="label">Anno</p>
-      </div>
-      <div>
-        <p class="value">999 cc</p>
-        <p class="label">Cilindrata</p>
-      </div>
-      <div>
-        <p class="value">229 kg</p>
-        <p class="label">Peso — in ordine di marcia</p>
-      </div>
-      <div>
-        <p class="value">165 CV</p>
-        <p class="label">Potenza</p>
-      </div>
-      <div>
-        <p class="value">Novembre 2025</p>
-        <p class="label">Data di acquisto</p>
-      </div>
-      <div>
-        <p class="value">23.000 km</p>
-        <p class="label">Km all'acquisto</p>
-      </div>
-      <div>
-        <p class="value" id="km-attuali">— km</p>
-        <p class="label">Km attuali</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<script>
-  function parseKm(str){
-    const digits = String(str).replace(/[^\d]/g, "");
-    return parseInt(digits, 10) || 0;
-  }
-
-  fetch("/api/km")
-    .then(res => res.json())
-    .then(data => {
-      const totaleNum = parseKm(data.km);
-      const elTotale = document.getElementById("km-attuali");
-      if (elTotale) elTotale.textContent = `${totaleNum.toLocaleString("it-IT")} km`;
-    })
-    .catch(() => {
-      const elTotale = document.getElementById("km-attuali");
-      if (elTotale) elTotale.textContent = "23.000 km";
-    });
-</script>
-
-<section class="section-alt">
-  <div class="wrap feature-grid">
-    <div style="aspect-ratio:4/5; overflow:hidden;">
-      <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896613/IMG_4693_s0ipoz.jpg" alt="La mia BMW S1000XR" style="width:100%; height:100%; object-fit:cover;">
-    </div>
-    <div>
-      <p class="marker">Perché questa moto</p>
-      <h2>Una mangiacurve nata per correre, riprogettata per andare lontano</h2>
-      <p style="margin-top:20px;">
-        Dopo centinaia di migliaia di km su mezzi scomodi (più sportivi
-        che da lunga percorrenza) cercavo una moto che fosse comoda, si
-        potesse caricare come un mulo, senza rinunciare alla potenza e
-        al divertimento nelle uscite domenicali. Beh, la mia S1000 XR è
-        esattamente ciò che cercavo. Ha i suoi difetti ma anche
-        tantissimi pregi, e sono loro che la rendono la mia compagna di
-        viaggio perfetta, senza parlare del sound e l'estetica che fa sì
-        che tutti si girino a guardarla! (direi che non passa
-        inosservata)
-      </p>
-      <p style="margin-top:16px;">
-        Ho investito molto su questa moto con la consapevolezza di
-        tenerla per un bel po', attualmente l'obiettivo è superare i
-        100.000 km. Questo è ciò che ho montato sulla mia bestiolina:
-      </p>
-
-      <ul class="accessori-list">
-        <li>Tris di valigie Givi Outback Evo nere</li>
-        <li>Terminale Leovince LV10</li>
-        <li>Centralina Healtech per controllo valvola di scarico</li>
-        <li>Telai paramotore Givi</li>
-        <li>Carpuride W702BS</li>
-        <li>Quadlock</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="marker">In giro con lei</p>
-    <h2 style="max-width:18ch;">Qualche scatto della mia moto</h2>
-
-    <div class="bike-gallery">
-      <div class="gallery-item">
-        <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896612/IMG_0242_TIF_qfhllm.jpg" alt="La mia BMW S1000XR">
-      </div>
-      <div class="gallery-item">
-        <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896612/IMG_3359_t4jlvx.jpg" alt="La mia BMW S1000XR">
-      </div>
-      <div class="gallery-item">
-        <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896611/IMG_2359_z8mixo.jpg" alt="La mia BMW S1000XR">
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- SOCIAL FEEDS ==================================================== -->
-<section class="section-alt">
+<section>
   <div class="wrap">
     <p class="marker">Seguimi</p>
     <h2>Ultimi contenuti social</h2>
@@ -293,7 +116,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
 
 <!-- COSA FACCIO ===================================================== -->
-<section>
+<section class="section-alt">
   <div class="wrap">
     <p class="marker">Cosa faccio</p>
     <h2 style="max-width:16ch;">Contenuti on the road, dal casco allo schermo</h2>
@@ -319,17 +142,23 @@
 </section>
 
 <!-- MACRO CATEGORIE ================================================= -->
-<section class="section-alt">
+<section>
   <div class="wrap">
     <p class="marker">Esplora</p>
     <h2>Dove vuoi andare?</h2>
 
-    <div class="grid-cards-3" style="margin-top:44px;">
+    <div class="grid-cards-3" style="margin-top:44px; grid-template-columns:repeat(4, 1fr);">
 
       <a href="index.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
         <p class="marker">Uscite domenicali</p>
         <h3 style="font-size:1.4rem; color:var(--sand);">Itinerari</h3>
         <p style="margin-top:10px; font-size:0.92rem;">Giri consigliati intorno a Roma, sotto i 300 km.</p>
+      </a>
+
+      <a href="index.html#miniviaggi" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
+        <p class="marker">Passi e viaggi lunghi</p>
+        <h3 style="font-size:1.4rem; color:var(--sand);">Miniviaggi</h3>
+        <p style="margin-top:10px; font-size:0.92rem;">Stelvio, Tonale e le mete più lontane, per più giorni.</p>
       </a>
 
       <a href="galleria.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
