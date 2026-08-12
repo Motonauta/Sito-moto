@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/viaggi/:slug", "destination": "/api/viaggio?slug=:slug" },
-    { "source": "/manuale/:slug", "destination": "/api/manuale?slug=:slug" }
-  ]
-}
