@@ -13,6 +13,14 @@ function mapsSearchUrl(query) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
+// stesso helper usato in index.html: Special:FilePath di Wikimedia Commons
+// supporta un parametro "width" che fa reindirizzare a una miniatura già
+// ridimensionata invece del file originale (spesso diversi MB)
+function wikiThumb(url, width) {
+  if (!url) return url;
+  return url + (url.includes('?') ? '&' : '?') + 'width=' + width;
+}
+
 // stesso schema di routeUrls/routeUrlsMV in index.html: la tappa finale è la
 // destinazione, tutte le altre sono waypoint intermedi
 function routeMapsUrl(tappe) {
@@ -173,7 +181,7 @@ module.exports = async (req, res) => {
 <meta property="og:type" content="article">
 <meta property="og:title" content="${escapeHtml(it.titolo)}">
 <meta property="og:description" content="${escapeHtml(description)}">
-<meta property="og:image" content="${escapeHtml(it.foto)}">
+<meta property="og:image" content="${escapeHtml(wikiThumb(it.foto, 1200))}">
 <meta property="og:url" content="${siteUrl}">
 ${HEAD_COMMON}
 <style>
@@ -225,7 +233,7 @@ ${HEADER_HTML}
     <p style="margin-top:22px; font-size:1.05rem; max-width:70ch;">${escapeHtml(it.desc)}</p>
 
     <div class="viaggio-photo">
-      <img src="${escapeHtml(it.foto)}" alt="${escapeHtml(it.titolo)}">
+      <img src="${escapeHtml(wikiThumb(it.foto, 1200))}" alt="${escapeHtml(it.titolo)}">
     </div>
 
     <div class="viaggio-actions">
