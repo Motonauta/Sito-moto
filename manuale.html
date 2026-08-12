@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-546ZL2T52G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-546ZL2T52G");
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale di bordo — Il Motonauta</title>
+<meta name="description" content="Guide e consigli pratici per chi viaggia in moto: equipaggiamento, manutenzione, bagagli e trucchi imparati sul campo, viaggio dopo viaggio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="cookie-consent.js" defer></script>
+<style>
+  .manuale-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; margin-top:44px;
+  }
+  .manuale-card{
+    display:block; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+    overflow:hidden; transition:border-color .25s ease, transform .25s ease;
+  }
+  .manuale-card:hover{ border-color:var(--rust); transform:translateY(-4px); }
+  .manuale-card-photo{
+    aspect-ratio:16/9; background:linear-gradient(155deg, rgba(217,164,65,0.18) 0%, rgba(193,80,46,0.18) 100%);
+    overflow:hidden; display:flex; align-items:center; justify-content:center;
+  }
+  .manuale-card-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .manuale-card-photo .placeholder-icon{ font-size:2.4rem; opacity:0.5; }
+  .manuale-card-body{ padding:22px 24px; }
+  .manuale-card-body .marker{ margin-bottom:0; }
+  .manuale-card-body h3{ font-size:1.1rem; color:var(--sand); margin-top:10px; }
+  .manuale-card-body p{ margin-top:10px; font-size:0.88rem; color:var(--cream-dim); }
+  .manuale-card-meta{
+    margin-top:14px; font-family:var(--font-mono); font-size:0.7rem; color:var(--cream-dim);
+    text-transform:uppercase; letter-spacing:0.04em;
+  }
+  @media (max-width:900px){ .manuale-grid{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:600px){ .manuale-grid{ grid-template-columns:1fr; } }
+  #manuale-empty{
+    margin-top:44px; font-family:var(--font-mono); font-size:0.9rem; color:var(--cream-dim);
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo logo-wrap">
+      <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784625152/IMG_1429_dyz5re.jpg" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;">
+      IL <span>MOTONAUTA</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Rotte</a>
+      <a href="nostromo.html">Nostromo</a>
+      <a href="manuale.html" class="active">Manuale di bordo</a>
+      <a href="about.html">Il Motonauta</a>
+      <a href="sponsor.html">Alleati</a>
+      <a href="galleria.html">Diario di bordo</a>
+      <a href="contatti.html">Canale aperto</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Apri menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section style="padding-top:56px; padding-bottom:0;">
+  <div class="wrap">
+    <p class="marker">Guide e consigli pratici</p>
+    <h1 style="font-size:clamp(2.2rem, 5vw, 3.6rem); color:var(--sand); max-width:24ch;">
+      Manuale di bordo
+    </h1>
+    <p style="margin-top:18px; font-size:1.02rem; max-width:70ch;">
+      Equipaggiamento, bagagli, manutenzione e trucchi imparati sul campo,
+      viaggio dopo viaggio — tutto quello che serve sapere prima di partire,
+      raccontato come lo spiegherei a un amico.
+    </p>
+  </div>
+</section>
+
+<section style="padding-top:32px;">
+  <div class="wrap">
+    <div class="manuale-grid" id="manuale-grid"></div>
+    <p id="manuale-empty" style="display:none;">Le prime guide arrivano a breve — torna a trovarci.</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-social">
+      <a href="contatti.html">Instagram</a>
+      <a href="contatti.html">TikTok</a>
+      <a href="contatti.html">YouTube</a>
+      <a href="privacy.html">Privacy &amp; Cookie</a>
+    </div>
+    <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
+  </div>
+</footer>
+
+<script src="data/manuale-data.js"></script>
+<script>
+  const { GUIDE, getSlug } = window.MANUALE_DATA;
+
+  function wikiThumb(url, width){
+    if(!url) return url;
+    return url + (url.includes("?") ? "&" : "?") + "width=" + width;
+  }
+
+  const grid = document.getElementById("manuale-grid");
+  const emptyMsg = document.getElementById("manuale-empty");
+
+  if(!GUIDE.length){
+    emptyMsg.style.display = "block";
+  } else {
+    GUIDE.forEach(guida => {
+      const card = document.createElement("a");
+      card.className = "manuale-card";
+      card.href = `manuale/${getSlug(guida)}`;
+
+      const dataLeggibile = new Date(guida.data).toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
+
+      card.innerHTML = `
+        <div class="manuale-card-photo">
+          ${guida.copertina
+            ? `<img src="${wikiThumb(guida.copertina, 600)}" alt="${guida.titolo}" loading="lazy">`
+            : `<span class="placeholder-icon">📖</span>`}
+        </div>
+        <div class="manuale-card-body">
+          <p class="marker">${guida.categoria}</p>
+          <h3>${guida.titolo}</h3>
+          <p>${guida.excerpt}</p>
+          <p class="manuale-card-meta">${guida.autore} — ${dataLeggibile}</p>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+</script>
+<script src="script.js"></script>
+</body>
+</html>
