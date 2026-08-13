@@ -750,7 +750,11 @@
         row.className = "idea-row";
         row.style.cssText = "border-bottom:1px solid rgba(245,240,230,0.14); padding:16px 0;";
         const date = new Date(idea.date).toLocaleString("it-IT");
+        const tipoBadge = idea.tipo === "manuale"
+          ? `<span style="font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--gold); border:1px solid var(--gold); padding:3px 8px;">📖 Manuale</span>`
+          : `<span style="font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--cream-dim); border:1px solid rgba(245,240,230,0.25); padding:3px 8px;">🎬 Video</span>`;
         row.innerHTML = `
+          <div style="margin-bottom:8px;">${tipoBadge}</div>
           <p style="font-size:0.95rem; color:var(--sand);">${escapeHtml(idea.text)}</p>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; gap:10px; flex-wrap:wrap;">
             <span style="font-family:var(--font-mono); font-size:0.72rem; color:var(--cream-dim);">${date}</span>
