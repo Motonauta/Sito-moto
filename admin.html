@@ -338,7 +338,7 @@
 
   async function populateAlbumSelects(){
     try{
-      const res = await fetch("/api/gallery");
+      const res = await fetch("/api/gallery?includeHidden=1");
       const data = await res.json();
       if(!res.ok) return;
       PAESI_CITTA = data.countries || {};
