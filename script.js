@@ -425,4 +425,155 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.classList.remove("copied");
     }, 2000);
   });
+
+  // ricerca globale (itinerari, viaggi da ricordare e guide del Manuale di
+  // bordo): pulsante iniettato nell'header di ogni pagina, dati caricati al
+  // primo utilizzo da data/viaggi-data.js e data/manuale-data.js se non già
+  // presenti nella pagina corrente
+  (function initSiteSearch(){
+    const headerWrap = document.querySelector(".site-header .wrap");
+    if (!headerWrap) return;
+
+    const trigger = document.createElement("button");
+    trigger.id = "site-search-trigger";
+    trigger.type = "button";
+    trigger.setAttribute("aria-label", "Cerca nel sito");
+    trigger.innerHTML = "🔍";
+    const navToggle = headerWrap.querySelector(".nav-toggle");
+    if (navToggle) {
+      headerWrap.insertBefore(trigger, navToggle);
+    } else {
+      headerWrap.appendChild(trigger);
+    }
+
+    const overlay = document.createElement("div");
+    overlay.id = "site-search-overlay";
+    overlay.innerHTML = `
+      <div class="site-search-box">
+        <div class="site-search-input-row">
+          <span>🔍</span>
+          <input type="text" id="site-search-input" placeholder="Cerca un itinerario, un viaggio o una guida..." autocomplete="off">
+          <button type="button" class="site-search-close" aria-label="Chiudi ricerca">&times;</button>
+        </div>
+        <p class="site-search-hint">Scrivi almeno 2 lettere per cercare tra itinerari, viaggi e guide del Manuale di bordo.</p>
+        <div class="site-search-results" id="site-search-results"></div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const input = overlay.querySelector("#site-search-input");
+    const resultsEl = overlay.querySelector("#site-search-results");
+    const closeBtn = overlay.querySelector(".site-search-close");
+
+    function loadScript(src){
+      return new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    let dataPromise = null;
+    function loadSearchData(){
+      if (!dataPromise) {
+        dataPromise = Promise.all([
+          window.VIAGGI_DATA ? Promise.resolve() : loadScript("/data/viaggi-data.js"),
+          window.MANUALE_DATA ? Promise.resolve() : loadScript("/data/manuale-data.js"),
+        ]);
+      }
+      return dataPromise;
+    }
+
+    function escapeSearchHtml(str){
+      return String(str)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    }
+
+    let searchIndex = null;
+    function buildSearchIndex(){
+      const items = [];
+      if (window.VIAGGI_DATA) {
+        const { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE, getSlug } = window.VIAGGI_DATA;
+        const groups = [
+          ["Itinerario", ITINERARI],
+          ["Miniviaggio", MINIVIAGGI],
+          ["Viaggio da ricordare", VIAGGI_RICORDARE],
+        ];
+        groups.forEach(([cat, list]) => {
+          list.forEach(it => {
+            items.push({
+              cat, title: it.titolo, desc: it.desc,
+              href: `/viaggi/${getSlug(it)}`,
+              haystack: `${it.titolo} ${it.zona} ${it.desc}`.toLowerCase(),
+            });
+          });
+        });
+      }
+      if (window.MANUALE_DATA) {
+        const { GUIDE, getSlug } = window.MANUALE_DATA;
+        GUIDE.forEach(g => {
+          items.push({
+            cat: "Manuale di bordo", title: g.titolo, desc: g.excerpt,
+            href: `/manuale/${getSlug(g)}`,
+            haystack: `${g.titolo} ${g.categoria} ${g.excerpt}`.toLowerCase(),
+          });
+        });
+      }
+      return items;
+    }
+
+    function runSearch(query){
+      const q = query.trim().toLowerCase();
+      if (q.length < 2) {
+        resultsEl.innerHTML = "";
+        return;
+      }
+      if (!searchIndex) searchIndex = buildSearchIndex();
+      const matches = searchIndex.filter(item => item.haystack.includes(q)).slice(0, 20);
+      if (!matches.length) {
+        resultsEl.innerHTML = `<p class="site-search-hint" style="padding:16px 0;">Nessun risultato per "${escapeSearchHtml(query.trim())}".</p>`;
+        return;
+      }
+      resultsEl.innerHTML = matches.map(m => `
+        <a class="site-search-result" href="${m.href}">
+          <p class="site-search-result-cat">${escapeSearchHtml(m.cat)}</p>
+          <p class="site-search-result-title">${escapeSearchHtml(m.title)}</p>
+          <p class="site-search-result-desc">${escapeSearchHtml(m.desc)}</p>
+        </a>
+      `).join("");
+    }
+
+    let searchDebounceTimer = null;
+    input.addEventListener("input", () => {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => runSearch(input.value), 150);
+    });
+
+    function openSearch(){
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+      loadSearchData().then(() => {
+        if (input.value.trim().length >= 2) runSearch(input.value);
+      }).catch(() => {
+        resultsEl.innerHTML = `<p class="site-search-hint" style="padding:16px 0;">Ricerca non disponibile al momento. Riprova più tardi.</p>`;
+      });
+      setTimeout(() => input.focus(), 50);
+    }
+    function closeSearch(){
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    trigger.addEventListener("click", openSearch);
+    closeBtn.addEventListener("click", closeSearch);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeSearch();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("open")) closeSearch();
+    });
+  })();
 });

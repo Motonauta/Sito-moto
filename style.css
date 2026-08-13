@@ -139,6 +139,62 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
+   RICERCA (iniettata da script.js, disponibile su tutte le pagine)
+   ========================================================== */
+#site-search-trigger{
+  flex-shrink:0; margin-left:18px;
+  width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+  background:transparent; border:1px solid rgba(245,240,230,0.25); color:var(--cream-dim);
+  font-size:1rem; cursor:pointer; transition:all .2s ease;
+}
+#site-search-trigger:hover{ border-color:var(--gold); color:var(--gold); }
+@media (max-width:780px){
+  #site-search-trigger{ margin-left:auto; margin-right:12px; }
+}
+
+#site-search-overlay{
+  display:none; position:fixed; inset:0; z-index:300;
+  background:rgba(10,9,7,0.94); padding:8vh 20px 20px;
+}
+#site-search-overlay.open{ display:block; }
+.site-search-box{
+  max-width:640px; margin:0 auto;
+}
+.site-search-input-row{
+  display:flex; align-items:center; gap:12px;
+  background:var(--asphalt-2); border:1px solid var(--gold); padding:6px 6px 6px 18px;
+}
+.site-search-input-row span{ color:var(--gold); font-size:1.1rem; }
+#site-search-input{
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--cream); font-family:var(--font-body); font-size:1.05rem; padding:12px 0;
+}
+.site-search-close{
+  flex-shrink:0; width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+  background:transparent; border:none; color:var(--cream-dim); font-size:1.3rem; cursor:pointer;
+}
+.site-search-close:hover{ color:var(--gold); }
+.site-search-hint{
+  margin-top:12px; font-family:var(--font-mono); font-size:0.76rem; color:var(--cream-dim);
+}
+.site-search-results{
+  margin-top:24px; max-height:60vh; overflow-y:auto;
+  display:flex; flex-direction:column; gap:1px; background:rgba(245,240,230,0.14);
+}
+.site-search-result{
+  display:block; background:var(--asphalt); padding:16px 18px; transition:background .15s ease;
+}
+.site-search-result:hover{ background:var(--asphalt-2); }
+.site-search-result-cat{
+  font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--gold);
+}
+.site-search-result-title{ margin-top:4px; font-size:1rem; color:var(--sand); }
+.site-search-result-desc{
+  margin-top:4px; font-size:0.85rem; color:var(--cream-dim);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+/* ==========================================================
    HEADER / NAV
    ========================================================== */
 .site-header{
