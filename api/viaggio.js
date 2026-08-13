@@ -1,4 +1,4 @@
-const { findBySlug } = require('../data/viaggi-data');
+const { findBySlug, ULTIMO_AGGIORNAMENTO_DATI } = require('../data/viaggi-data');
 
 function escapeHtml(str) {
   return String(str)
@@ -250,7 +250,7 @@ ${HEADER_HTML}
     <h1 style="font-size:clamp(2.2rem, 5vw, 3.6rem); color:var(--sand); max-width:26ch;">
       ${escapeHtml(it.titolo)}
     </h1>
-    <p style="margin-top:14px; font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);">${escapeHtml(it.km)}</p>
+    <p style="margin-top:14px; font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);">${escapeHtml(it.km)} — dati aggiornati al ${escapeHtml(new Date(ULTIMO_AGGIORNAMENTO_DATI).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }))}</p>
     <p style="margin-top:22px; font-size:1.05rem; max-width:70ch;">${escapeHtml(it.desc)}</p>
 
     <div class="viaggio-photo">
