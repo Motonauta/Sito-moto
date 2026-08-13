@@ -243,6 +243,39 @@
     .itinerario-card-body .itinerario-stops .fun{ font-size:0.58rem; margin-top:2px; }
   }
 
+  .nostromo-history-box{
+    margin-top:44px; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+    padding:24px 28px;
+  }
+  .nostromo-history-head{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;
+  }
+  .nostromo-history-clear{
+    flex-shrink:0; font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.04em;
+    padding:8px 14px; border:1px solid rgba(245,240,230,0.25); background:transparent; color:var(--cream-dim);
+    cursor:pointer; transition:all .2s ease;
+  }
+  .nostromo-history-clear:hover{ border-color:var(--rust); color:var(--sand); }
+  .nostromo-history-list{ margin-top:16px; display:flex; flex-direction:column; gap:1px; background:rgba(245,240,230,0.14); }
+  .nostromo-history-item{
+    display:flex; justify-content:space-between; align-items:center; gap:14px; background:var(--asphalt); padding:14px 16px;
+  }
+  .nostromo-history-item-main{ min-width:0; }
+  .nostromo-history-item-label{ font-size:0.92rem; color:var(--cream); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .nostromo-history-item-meta{ margin-top:3px; font-family:var(--font-mono); font-size:0.68rem; color:var(--cream-dim); text-transform:uppercase; letter-spacing:0.04em; }
+  .nostromo-history-item-actions{ flex-shrink:0; display:flex; gap:8px; }
+  .nostromo-history-reopen, .nostromo-history-remove{
+    font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.04em;
+    padding:8px 12px; border:1px solid var(--gold); color:var(--gold); background:transparent; cursor:pointer;
+  }
+  .nostromo-history-reopen:hover{ background:var(--gold); color:var(--asphalt); }
+  .nostromo-history-remove{ border-color:rgba(245,240,230,0.25); color:var(--cream-dim); }
+  .nostromo-history-remove:hover{ border-color:var(--rust); color:var(--rust); }
+  @media (max-width:600px){
+    .nostromo-history-item{ flex-direction:column; align-items:flex-start; }
+    .nostromo-history-item-label{ white-space:normal; }
+  }
+
   .route-weather-widget{
     margin-top:44px; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
     padding:28px 30px;
@@ -411,6 +444,21 @@
       meteo lungo tutta la strada e quello che prepara la
       lista della valigia — altri arriveranno con il tempo.
     </p>
+  </div>
+</section>
+
+<section style="padding-top:32px; display:none;" id="nostromo-history-section">
+  <div class="wrap">
+    <div class="nostromo-history-box">
+      <div class="nostromo-history-head">
+        <div>
+          <p class="marker">Le tue ultime ricerche</p>
+          <h2 style="font-size:1.1rem; color:var(--sand);">Cronologia (salvata solo su questo browser)</h2>
+        </div>
+        <button type="button" class="nostromo-history-clear" id="nostromo-history-clear">Cancella tutto</button>
+      </div>
+      <div class="nostromo-history-list" id="nostromo-history-list"></div>
+    </div>
   </div>
 </section>
 
@@ -632,6 +680,124 @@
     `;
     window.print();
   }
+
+  function escapeHtml(str){
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  // ===== Cronologia Nostromo (salvata solo in localStorage, su questo
+  // browser: nessun dato lascia il dispositivo) =========================
+  const NOSTROMO_HISTORY_KEY = "motonauta_nostromo_history";
+  const NOSTROMO_HISTORY_MAX = 12;
+  const NOSTROMO_TOOL_LABELS = {
+    viaggio: "🌦️ Meteo lungo il percorso",
+    valigia: "🧳 Valigia",
+    rotta: "🗺️ Rotta",
+  };
+
+  function loadNostromoHistory(){
+    try {
+      const stored = JSON.parse(localStorage.getItem(NOSTROMO_HISTORY_KEY));
+      return Array.isArray(stored) ? stored : [];
+    } catch(err){
+      return [];
+    }
+  }
+
+  function saveNostromoHistoryEntry(tool, label, params){
+    const history = loadNostromoHistory();
+    history.unshift({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      tool, label, params,
+      date: new Date().toISOString(),
+    });
+    localStorage.setItem(NOSTROMO_HISTORY_KEY, JSON.stringify(history.slice(0, NOSTROMO_HISTORY_MAX)));
+    renderNostromoHistory();
+  }
+
+  function removeNostromoHistoryEntry(id){
+    localStorage.setItem(NOSTROMO_HISTORY_KEY, JSON.stringify(loadNostromoHistory().filter(e => e.id !== id)));
+    renderNostromoHistory();
+  }
+
+  function reopenNostromoHistoryEntry(entry){
+    const p = entry.params;
+    if(entry.tool === "viaggio"){
+      document.getElementById("route-start").value = p.start || "";
+      document.getElementById("route-end").value = p.end || "";
+      document.getElementById("route-toll").value = p.avoidTolls ? "no" : "si";
+      if(p.dateStr) document.getElementById("route-day").value = p.dateStr;
+      if(p.timeStr) document.getElementById("route-time").value = p.timeStr;
+      document.getElementById("widget-viaggio").scrollIntoView({ behavior: "smooth", block: "start" });
+      calculateRouteWeather();
+    } else if(entry.tool === "valigia"){
+      document.getElementById("valigia-dest").value = p.dest || "";
+      document.getElementById("valigia-giorni").value = p.giorni || 1;
+      if(p.dataStr) document.getElementById("valigia-data").value = p.dataStr;
+      document.getElementById("valigia-bucato").value = p.bucato ? "si" : "no";
+      document.getElementById("widget-valigia").scrollIntoView({ behavior: "smooth", block: "start" });
+      calculateValigia();
+    } else if(entry.tool === "rotta"){
+      document.getElementById("rotta-start").value = p.start || "";
+      document.getElementById("rotta-end").value = p.end || "";
+      document.getElementById("rotta-stops-list").innerHTML = "";
+      (p.stops || []).forEach(stopValue => {
+        addRottaStopField();
+        const inputs = document.querySelectorAll("#rotta-stops-list input[type='text']");
+        inputs[inputs.length - 1].value = stopValue;
+      });
+      document.getElementById("rotta-interval").value = p.intervalKm || 0;
+      document.getElementById("widget-rotta").scrollIntoView({ behavior: "smooth", block: "start" });
+      calculateRotta();
+    }
+  }
+
+  function renderNostromoHistory(){
+    const section = document.getElementById("nostromo-history-section");
+    const list = document.getElementById("nostromo-history-list");
+    const history = loadNostromoHistory();
+
+    if(!history.length){
+      section.style.display = "none";
+      return;
+    }
+    section.style.display = "block";
+    list.innerHTML = history.map(entry => `
+      <div class="nostromo-history-item">
+        <div class="nostromo-history-item-main">
+          <p class="nostromo-history-item-label">${escapeHtml(entry.label)}</p>
+          <p class="nostromo-history-item-meta">${NOSTROMO_TOOL_LABELS[entry.tool] || escapeHtml(entry.tool)} — ${new Date(entry.date).toLocaleDateString("it-IT")}</p>
+        </div>
+        <div class="nostromo-history-item-actions">
+          <button type="button" class="nostromo-history-reopen" data-id="${entry.id}">Riapri</button>
+          <button type="button" class="nostromo-history-remove" data-id="${entry.id}" aria-label="Rimuovi dalla cronologia">✕</button>
+        </div>
+      </div>
+    `).join("");
+
+    list.querySelectorAll(".nostromo-history-reopen").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const entry = loadNostromoHistory().find(e => e.id === btn.dataset.id);
+        if(entry) reopenNostromoHistoryEntry(entry);
+      });
+    });
+    list.querySelectorAll(".nostromo-history-remove").forEach(btn => {
+      btn.addEventListener("click", () => removeNostromoHistoryEntry(btn.dataset.id));
+    });
+  }
+
+  document.getElementById("nostromo-history-clear").addEventListener("click", () => {
+    if(!confirm("Cancellare tutta la cronologia?")) return;
+    localStorage.removeItem(NOSTROMO_HISTORY_KEY);
+    renderNostromoHistory();
+  });
+
+  renderNostromoHistory();
 
   function isoDate(offsetDays){
     const d = new Date();
@@ -1090,6 +1256,9 @@
         </div>
         <button type="button" class="btn print-pdf-btn" id="route-weather-pdf-btn">📄 Salva come PDF</button>
       `;
+      saveNostromoHistoryEntry("viaggio", `${startPlace} → ${endPlace}`, {
+        start: startPlace, end: endPlace, avoidTolls, dateStr, timeStr,
+      });
       document.getElementById("route-weather-pdf-btn").addEventListener("click", () => {
         const paramsHTML = `
           <ul class="print-params-list">
@@ -1318,6 +1487,9 @@
         </div>
         <button type="button" class="btn print-pdf-btn" id="valigia-pdf-btn">📄 Salva come PDF</button>
       `;
+      saveNostromoHistoryEntry("valigia", `Valigia per ${destInputEl.value.trim()} (${giorni} gg)`, {
+        dest: destInputEl.value.trim(), giorni, dataStr, bucato,
+      });
       document.getElementById("valigia-pdf-btn").addEventListener("click", () => {
         const paramsHTML = `
           <ul class="print-params-list">
@@ -1543,6 +1715,14 @@
         </div>
         <button type="button" class="btn print-pdf-btn" id="rotta-pdf-btn">📄 Salva come PDF</button>
       `;
+      {
+        const rottaStopsValues = stopInputs.map(el => el.value.trim()).filter(Boolean);
+        saveNostromoHistoryEntry(
+          "rotta",
+          `${startInputEl.value.trim()} → ${endInputEl.value.trim()}${rottaStopsValues.length ? ` (+${rottaStopsValues.length} tappe)` : ""}`,
+          { start: startInputEl.value.trim(), end: endInputEl.value.trim(), stops: rottaStopsValues, intervalKm }
+        );
+      }
       document.getElementById("rotta-pdf-btn").addEventListener("click", () => {
         const intervalLabel = intervalKm > 0 ? `ogni ${intervalKm} km` : "nessuna (solo le tappe scelte)";
         const stopsLabel = stopInputs.map(el => el.value.trim()).filter(Boolean).join(", ") || "nessuna";
