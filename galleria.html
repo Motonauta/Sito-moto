@@ -70,6 +70,12 @@
   #gallery-loading{
     font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim); margin-top:44px;
   }
+  .gallery-city-heading{
+    grid-column:1 / -1; margin-top:28px; font-family:var(--font-mono); font-size:0.8rem;
+    text-transform:uppercase; letter-spacing:0.05em; color:var(--gold);
+    padding-bottom:8px; border-bottom:1px solid rgba(245,240,230,0.16);
+  }
+  .gallery-city-heading:first-child{ margin-top:0; }
 
   #travel-map{
     height:440px; width:100%; margin-top:36px;
@@ -134,7 +140,6 @@
 
     <div class="filters" id="filters-container">
       <button class="filter-btn active" data-filter="all">Tutti i viaggi</button>
-      <button class="filter-btn" data-filter="corsica">Corsica</button>
     </div>
   </div>
 </section>
@@ -142,14 +147,7 @@
 <section>
   <div class="wrap">
     <p id="gallery-loading">Carico le foto...</p>
-    <div class="gallery-grid" id="gallery-grid">
-
-      <div class="gallery-item" data-trip="corsica" style="background:var(--asphalt-2); border-style:dashed; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px;">
-        <span class="marker" style="margin:0;">Work in progress</span>
-        <span class="tag" style="padding:0;">Corsica — presto il racconto del viaggio</span>
-      </div>
-
-    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
   </div>
 </section>
 
@@ -205,14 +203,29 @@
     });
   }
 
-  // unisce i pin di base con quelli salvati automaticamente (questi ultimi vincono in caso di doppioni)
+  // unisce i pin di base con quelli salvati automaticamente. I pin salvati
+  // per città (Paese > Città) "coprono" ed escludono qualunque destinazione
+  // di base con lo stesso nome/paese, per non avere due pin sullo stesso
+  // posto (es. il vecchio pin generico "Olanda" insieme al pin preciso di
+  // "Amsterdam" dentro Olanda) — e ogni città ha il suo pin distinto, mai
+  // un pin separato per l'intero paese
   fetch("/api/gallery?action=pins")
     .then(res => res.json())
     .then(data => {
       const pinsSalvati = data.pins || [];
+
+      const copertiDaPinReali = new Set(
+        pinsSalvati.flatMap(d => [d.nome, d.paese, d.filtro].filter(Boolean).map(s => s.toLowerCase()))
+      );
+      const basiValide = DESTINAZIONI_BASE.filter(d =>
+        !copertiDaPinReali.has(d.nome.toLowerCase()) && !copertiDaPinReali.has(d.filtro.toLowerCase())
+      );
+
       const mappaFinale = {};
-      DESTINAZIONI_BASE.forEach(d => mappaFinale[d.filtro] = d);
-      pinsSalvati.forEach(d => mappaFinale[d.filtro] = d);
+      [...basiValide, ...pinsSalvati].forEach(d => {
+        const chiave = (d.paese && d.citta) ? `${d.paese}/${d.citta}` : d.filtro;
+        mappaFinale[chiave] = d;
+      });
       Object.values(mappaFinale).forEach(addPin);
     })
     .catch(() => {
@@ -220,7 +233,10 @@
     });
 </script>
 <script>
-  // carica album e foto direttamente da Cloudinary: nessun codice da scrivere a mano
+  // carica album e foto direttamente da Cloudinary: nessun codice da scrivere a mano.
+  // Le foto arrivano organizzate in due gruppi: "countries" (Paese > Città,
+  // filtrabili a livello di Paese, con un'intestazione per ogni città) e
+  // "standalone" (i vecchi album senza Paese, come prima).
   (async function loadGallery(){
     const loadingEl = document.getElementById("gallery-loading");
     const gridEl = document.getElementById("gallery-grid");
@@ -231,63 +247,86 @@
       return url.replace("/upload/", "/upload/f_auto,q_auto/");
     }
 
+    function addFilterButton(name){
+      const already = Array.from(filtersEl.querySelectorAll(".filter-btn"))
+        .some(b => b.dataset.filter === name);
+      if(already) return;
+      const btn = document.createElement("button");
+      btn.className = "filter-btn";
+      btn.dataset.filter = name;
+      btn.textContent = name;
+      filtersEl.appendChild(btn);
+    }
+
+    function addPhotoItem(photo, tripFilter, cityLabel){
+      const item = document.createElement("div");
+      item.className = "gallery-item";
+      item.dataset.trip = tripFilter;
+      if(cityLabel) item.dataset.city = cityLabel;
+
+      const caption = photo.caption || "";
+      let mediaEl;
+      if (photo.type === "video") {
+        mediaEl = document.createElement("video");
+        mediaEl.src = optimizeUrl(photo.url, "video");
+        mediaEl.muted = true;
+        mediaEl.loop = true;
+        mediaEl.playsInline = true;
+        mediaEl.preload = "metadata";
+        item.appendChild(mediaEl);
+        const playIcon = document.createElement("div");
+        playIcon.className = "play-icon";
+        item.appendChild(playIcon);
+      } else {
+        mediaEl = document.createElement("img");
+        mediaEl.src = optimizeUrl(photo.url, "image");
+        mediaEl.alt = caption;
+        item.appendChild(mediaEl);
+      }
+
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = caption;
+      item.appendChild(tag);
+
+      gridEl.appendChild(item);
+    }
+
     try{
       const res = await fetch("/api/gallery");
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
 
-      const albums = data.albums || {};
+      const countries = data.countries || {};
+      const standalone = data.standalone || {};
 
-      Object.keys(albums).forEach(albumName => {
-        const photos = albums[albumName];
-        if(!photos.length) return;
+      // Paesi: un pulsante filtro per Paese, con un'intestazione per ogni
+      // città al suo interno (così si vedono subito le città visitate,
+      // invece di un mucchio indistinto di foto)
+      Object.keys(countries).forEach(paese => {
+        const cittaMap = countries[paese];
+        const cittaConFoto = Object.keys(cittaMap).filter(c => cittaMap[c].length);
+        if(!cittaConFoto.length) return;
 
-        // aggiunge il pulsante filtro se non esiste già
-        const already = Array.from(filtersEl.querySelectorAll(".filter-btn"))
-          .some(b => b.dataset.filter === albumName);
-        if(!already){
-          const btn = document.createElement("button");
-          btn.className = "filter-btn";
-          btn.dataset.filter = albumName;
-          btn.textContent = albumName;
-          filtersEl.appendChild(btn);
-        }
+        addFilterButton(paese);
 
-        // aggiunge le foto/video alla griglia (elementi creati via DOM, non
-        // HTML interpolato: così url e didascalia non possono mai "rompere"
-        // il markup, qualunque carattere contengano)
-        photos.forEach(photo => {
-          const item = document.createElement("div");
-          item.className = "gallery-item";
-          item.dataset.trip = albumName;
+        cittaConFoto.forEach(citta => {
+          const heading = document.createElement("p");
+          heading.className = "gallery-city-heading";
+          heading.dataset.trip = paese;
+          heading.textContent = citta;
+          gridEl.appendChild(heading);
 
-          const caption = photo.caption || "";
-          let mediaEl;
-          if (photo.type === "video") {
-            mediaEl = document.createElement("video");
-            mediaEl.src = optimizeUrl(photo.url, "video");
-            mediaEl.muted = true;
-            mediaEl.loop = true;
-            mediaEl.playsInline = true;
-            mediaEl.preload = "metadata";
-            item.appendChild(mediaEl);
-            const playIcon = document.createElement("div");
-            playIcon.className = "play-icon";
-            item.appendChild(playIcon);
-          } else {
-            mediaEl = document.createElement("img");
-            mediaEl.src = optimizeUrl(photo.url, "image");
-            mediaEl.alt = caption;
-            item.appendChild(mediaEl);
-          }
-
-          const tag = document.createElement("span");
-          tag.className = "tag";
-          tag.textContent = caption;
-          item.appendChild(tag);
-
-          gridEl.appendChild(item);
+          cittaMap[citta].forEach(photo => addPhotoItem(photo, paese, citta));
         });
+      });
+
+      // Album "standalone" (senza Paese): stessa logica di sempre
+      Object.keys(standalone).forEach(albumName => {
+        const photos = standalone[albumName];
+        if(!photos.length) return;
+        addFilterButton(albumName);
+        photos.forEach(photo => addPhotoItem(photo, albumName));
       });
 
       loadingEl.style.display = "none";
