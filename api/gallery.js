@@ -98,10 +98,13 @@ async function handleListAdmin(req, res) {
 
 async function handlePins(req, res) {
   try {
+    const isAdmin = await isAuthenticated(req);
     const redis = await getRedisClient();
     const raw = await redis.hGetAll('map_pins');
     const pins = raw
-      ? Object.values(raw).map((value) => (typeof value === 'string' ? JSON.parse(value) : value))
+      ? Object.values(raw)
+          .map((value) => (typeof value === 'string' ? JSON.parse(value) : value))
+          .filter((pin) => isAdmin || !HIDDEN_FROM_PUBLIC_GALLERY.includes((pin.nome || '').toLowerCase()))
       : [];
 
     res.status(200).json({ pins });
