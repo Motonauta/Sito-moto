@@ -99,6 +99,29 @@ p{color:var(--cream-dim); max-width:60ch;}
 .btn.solid:hover{background:var(--gold); border-color:var(--gold); color:var(--asphalt);}
 
 /* ==========================================================
+   COPIA LINK (bottone riusabile, gestito da script.js)
+   ========================================================== */
+.copy-link-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
+  padding:12px 20px; border:1px solid rgba(245,240,230,0.3); color:var(--cream); background:transparent;
+  cursor:pointer; transition:background .2s ease, color .2s ease, border-color .2s ease;
+}
+.copy-link-btn:hover{ background:rgba(245,240,230,0.12); }
+.copy-link-btn.copied{
+  background:var(--gold); border-color:var(--gold); color:var(--asphalt);
+  animation:copy-link-pop .35s ease;
+}
+@media (prefers-reduced-motion: reduce){
+  .copy-link-btn.copied{ animation:none; }
+}
+@keyframes copy-link-pop{
+  0%{ transform:scale(1); }
+  40%{ transform:scale(1.06); }
+  100%{ transform:scale(1); }
+}
+
+/* ==========================================================
    TORNA SU
    ========================================================== */
 #back-to-top{

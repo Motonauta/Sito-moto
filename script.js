@@ -393,4 +393,36 @@ document.addEventListener("DOMContentLoaded", () => {
   backToTop.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
   });
+
+  // pulsante "copia link" riusabile: basta dare a un <button> la classe
+  // .copy-link-btn (e opzionalmente data-copy="URL"; senza, copia l'URL
+  // della pagina corrente) per avere copia negli appunti + conferma animata
+  // ovunque nel sito, senza bisogno di altro JS per pagina
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".copy-link-btn");
+    if (!btn) return;
+
+    const text = btn.dataset.copy || window.location.href;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+
+    if (!btn.dataset.originalLabel) {
+      btn.dataset.originalLabel = btn.innerHTML;
+    }
+    btn.innerHTML = "✓ Copiato";
+    btn.classList.add("copied");
+    clearTimeout(btn._copyResetTimer);
+    btn._copyResetTimer = setTimeout(() => {
+      btn.innerHTML = btn.dataset.originalLabel;
+      btn.classList.remove("copied");
+    }, 2000);
+  });
 });
