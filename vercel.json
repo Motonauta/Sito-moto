@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/viaggi/:slug", "destination": "/api/viaggio?slug=:slug" },
-    { "source": "/manuale/:slug", "destination": "/api/manuale?slug=:slug" }
+    { "source": "/manuale/:slug", "destination": "/api/manuale?slug=:slug" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
   ]
 }
