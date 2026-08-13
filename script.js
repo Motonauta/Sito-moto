@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filtersContainer.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       const target = btn.dataset.filter;
-      document.querySelectorAll(".gallery-item").forEach(item => {
+      document.querySelectorAll(".gallery-item, .gallery-city-heading").forEach(item => {
         const show = target === "all" || item.dataset.trip === target;
         item.style.display = show ? "" : "none";
       });

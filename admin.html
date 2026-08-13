@@ -110,7 +110,7 @@
       <a href="index.html">Rotte</a>
       <a href="nostromo.html">Nostromo</a>
       <a href="manuale.html">Manuale di bordo</a>
-      <a href="about.html">Il Motonauta</a>
+      <a href="ilmotonauta.html">Il Motonauta</a>
       <a href="sponsor.html">Alleati</a>
       <a href="galleria.html">Diario di bordo</a>
       <a href="contatti.html">Canale aperto</a>
@@ -152,19 +152,22 @@
 <section style="padding-top:32px; display:none;" id="panel-upload">
   <div class="wrap">
     <div class="contact-card">
-      <label class="admin-label">Album</label>
-      <select id="album-select" class="admin-select" onchange="onAlbumChange()">
-        <option value="olanda">Olanda</option>
-        <option value="stelvio">Passo dello Stelvio</option>
-        <option value="austria">Austria</option>
-        <option value="germania">Germania</option>
-        <option value="corsica">Corsica</option>
-        <option value="__new__">+ Nuovo album</option>
+      <label class="admin-label">Paese</label>
+      <select id="paese-select" class="admin-select" onchange="onPaeseChange()">
+        <option value="__new__">+ Nuovo paese</option>
       </select>
+      <div id="new-paese-wrap" style="display:none;">
+        <label class="admin-label">Nome nuovo paese (es. "Olanda")</label>
+        <input type="text" id="new-paese-name" class="admin-input" placeholder="Olanda">
+      </div>
 
-      <div id="new-album-wrap" style="display:none;">
-        <label class="admin-label">Nome nuovo album (es. "Toscana")</label>
-        <input type="text" id="new-album-name" class="admin-input" placeholder="Toscana">
+      <label class="admin-label">Città</label>
+      <select id="citta-select" class="admin-select" onchange="onCittaChange()">
+        <option value="__new__">+ Nuova città</option>
+      </select>
+      <div id="new-citta-wrap" style="display:none;">
+        <label class="admin-label">Nome nuova città (es. "Amsterdam")</label>
+        <input type="text" id="new-citta-name" class="admin-input" placeholder="Amsterdam">
       </div>
 
       <label class="admin-label">Foto o video da caricare</label>
@@ -197,13 +200,7 @@
 
     <div class="contact-card" style="margin-top:28px;">
       <label class="admin-label">Album da gestire</label>
-      <select id="manage-album-select" class="admin-select">
-        <option value="olanda">Olanda</option>
-        <option value="stelvio">Passo dello Stelvio</option>
-        <option value="austria">Austria</option>
-        <option value="germania">Germania</option>
-        <option value="corsica">Corsica</option>
-      </select>
+      <select id="manage-album-select" class="admin-select"></select>
       <div style="display:flex; gap:14px; flex-wrap:wrap;">
         <button class="admin-btn outline" onclick="loadAlbumPhotos()">Mostra foto dell'album</button>
         <button class="admin-btn danger" onclick="deleteWholeAlbum()">Elimina intero album</button>
@@ -212,6 +209,32 @@
       <div id="manage-status" class="status-list"></div>
       <div class="thumb-grid" id="thumb-grid"></div>
       <div id="manage-reminder"></div>
+    </div>
+
+    <div class="contact-card" style="margin-top:20px;">
+      <p class="marker">Sposta un album esistente dentro un Paese</p>
+      <p style="margin-top:10px; font-size:0.88rem; color:var(--cream-dim);">
+        Utile per gli album caricati prima di questa organizzazione (es. un vecchio
+        album "Amsterdam" da solo, senza Paese): sposta tutte le foto e video dentro
+        Paese/Città senza doverle ricaricare da capo.
+      </p>
+
+      <label class="admin-label">Album da spostare</label>
+      <select id="move-from-select" class="admin-select"></select>
+
+      <label class="admin-label">Paese di destinazione</label>
+      <select id="move-paese-select" class="admin-select" onchange="onMovePaeseChange()">
+        <option value="__new__">+ Nuovo paese</option>
+      </select>
+      <div id="move-new-paese-wrap" style="display:none;">
+        <input type="text" id="move-new-paese-name" class="admin-input" placeholder="Olanda">
+      </div>
+
+      <label class="admin-label">Nome città di destinazione</label>
+      <input type="text" id="move-citta-name" class="admin-input" placeholder="Amsterdam">
+
+      <button class="admin-btn" onclick="moveAlbum()">Sposta album</button>
+      <div id="move-status" class="status-list"></div>
     </div>
   </div>
 </section>
@@ -258,13 +281,10 @@
 
 <script src="script.js"></script>
 <script>
-  const ALBUM_LABELS = {
-    olanda: "Olanda",
-    stelvio: "Passo dello Stelvio",
-    austria: "Austria",
-    germania: "Germania",
-    corsica: "Corsica"
-  };
+  // { Paese: [Città, ...] } letto da /api/gallery ("countries"), più gli
+  // album "standalone" caricati prima di questa organizzazione a due livelli
+  let PAESI_CITTA = {};
+  let STANDALONE_ALBUMS = [];
 
   function showPanel(){
     document.getElementById("gate").style.display = "none";
@@ -321,31 +341,94 @@
       const res = await fetch("/api/gallery");
       const data = await res.json();
       if(!res.ok) return;
-      const existingAlbums = Object.keys(data.albums || {});
+      PAESI_CITTA = data.countries || {};
+      STANDALONE_ALBUMS = Object.keys(data.standalone || {});
 
-      const uploadSelect = document.getElementById("album-select");
-      const manageSelect = document.getElementById("manage-album-select");
+      const paeseSelect = document.getElementById("paese-select");
+      const movePaeseSelect = document.getElementById("move-paese-select");
+      Object.keys(PAESI_CITTA).sort().forEach(paese => {
+        const opt1 = document.createElement("option");
+        opt1.value = paese; opt1.textContent = paese;
+        paeseSelect.insertBefore(opt1, paeseSelect.querySelector('option[value="__new__"]'));
 
-      existingAlbums.forEach(name => {
-        const alreadyThere = Array.from(uploadSelect.options).some(o => o.value === name);
-        if(!alreadyThere){
-          const opt1 = document.createElement("option");
-          opt1.value = name; opt1.textContent = name;
-          uploadSelect.insertBefore(opt1, uploadSelect.querySelector('option[value="__new__"]'));
-
-          const opt2 = document.createElement("option");
-          opt2.value = name; opt2.textContent = name;
-          manageSelect.appendChild(opt2);
-        }
+        const opt2 = document.createElement("option");
+        opt2.value = paese; opt2.textContent = paese;
+        movePaeseSelect.insertBefore(opt2, movePaeseSelect.querySelector('option[value="__new__"]'));
       });
+      onPaeseChange();
+      onMovePaeseChange();
+
+      populateManageSelect();
+      populateMoveFromSelect();
     } catch(err){
-      // se le funzioni /api non sono ancora pronte, i menu restano quelli fissi
+      // se le funzioni /api non sono ancora pronte, i menu restano vuoti
     }
   }
 
-  function onAlbumChange(){
-    const val = document.getElementById("album-select").value;
-    document.getElementById("new-album-wrap").style.display = (val === "__new__") ? "block" : "none";
+  function populateManageSelect(){
+    const select = document.getElementById("manage-album-select");
+    select.innerHTML = "";
+    Object.keys(PAESI_CITTA).sort().forEach(paese => {
+      const group = document.createElement("optgroup");
+      group.label = paese;
+      PAESI_CITTA[paese].slice().sort().forEach(citta => {
+        const opt = document.createElement("option");
+        opt.value = `${paese}/${citta}`;
+        opt.textContent = citta;
+        group.appendChild(opt);
+      });
+      select.appendChild(group);
+    });
+    if(STANDALONE_ALBUMS.length){
+      const group = document.createElement("optgroup");
+      group.label = "Senza paese (da spostare)";
+      STANDALONE_ALBUMS.slice().sort().forEach(name => {
+        const opt = document.createElement("option");
+        opt.value = name; opt.textContent = name;
+        group.appendChild(opt);
+      });
+      select.appendChild(group);
+    }
+  }
+
+  function populateMoveFromSelect(){
+    const select = document.getElementById("move-from-select");
+    select.innerHTML = "";
+    if(!STANDALONE_ALBUMS.length){
+      const opt = document.createElement("option");
+      opt.value = ""; opt.textContent = "(nessun album da spostare)";
+      select.appendChild(opt);
+      return;
+    }
+    STANDALONE_ALBUMS.slice().sort().forEach(name => {
+      const opt = document.createElement("option");
+      opt.value = name; opt.textContent = name;
+      select.appendChild(opt);
+    });
+  }
+
+  function onPaeseChange(){
+    const val = document.getElementById("paese-select").value;
+    document.getElementById("new-paese-wrap").style.display = (val === "__new__") ? "block" : "none";
+
+    const cittaSelect = document.getElementById("citta-select");
+    cittaSelect.innerHTML = '<option value="__new__">+ Nuova città</option>';
+    (PAESI_CITTA[val] || []).slice().sort().forEach(citta => {
+      const opt = document.createElement("option");
+      opt.value = citta; opt.textContent = citta;
+      cittaSelect.insertBefore(opt, cittaSelect.querySelector('option[value="__new__"]'));
+    });
+    onCittaChange();
+  }
+
+  function onCittaChange(){
+    const val = document.getElementById("citta-select").value;
+    document.getElementById("new-citta-wrap").style.display = (val === "__new__") ? "block" : "none";
+  }
+
+  function onMovePaeseChange(){
+    const val = document.getElementById("move-paese-select").value;
+    document.getElementById("move-new-paese-wrap").style.display = (val === "__new__") ? "block" : "none";
   }
 
   function slugify(text){
@@ -482,23 +565,30 @@
   }
 
   async function startUpload(){
-    const selectEl = document.getElementById("album-select");
-    let slug = selectEl.value;
-    let label;
-    let isNew = false;
-
-    if(slug === "__new__"){
-      const newName = document.getElementById("new-album-name").value.trim();
-      if(!newName){
-        alert("Scrivi il nome del nuovo album.");
+    let paese = document.getElementById("paese-select").value;
+    let isNewPaese = false;
+    if(paese === "__new__"){
+      paese = document.getElementById("new-paese-name").value.trim();
+      if(!paese){
+        alert("Scrivi il nome del Paese.");
         return;
       }
-      slug = newName;
-      label = newName;
-      isNew = true;
-    } else {
-      label = ALBUM_LABELS[slug];
+      isNewPaese = true;
     }
+
+    let citta = document.getElementById("citta-select").value;
+    let isNewCitta = false;
+    if(citta === "__new__"){
+      citta = document.getElementById("new-citta-name").value.trim();
+      if(!citta){
+        alert("Scrivi il nome della città.");
+        return;
+      }
+      isNewCitta = true;
+    }
+
+    const folder = `${paese}/${citta}`;
+    const isNewAlbum = isNewPaese || isNewCitta;
 
     const files = document.getElementById("file-input").files;
     if(!files.length){
@@ -519,12 +609,12 @@
 
     for(let i = 0; i < files.length; i++){
       const file = files[i];
-      const caption = (captionFields[i] && captionFields[i].value.trim()) || label;
+      const caption = (captionFields[i] && captionFields[i].value.trim()) || citta;
       const row = document.createElement("div");
       row.textContent = `Carico ${file.name}...`;
       statusList.appendChild(row);
       try{
-        const data = await uploadOne(file, slug, slug, caption);
+        const data = await uploadOne(file, folder, citta, caption);
         results.push({ url: data.secure_url, caption });
         row.textContent = `✓ ${file.name} caricata`;
         row.classList.add("ok");
@@ -548,26 +638,30 @@
       document.getElementById("filter-btn-wrap").style.display = "none";
       const doneMsg = document.getElementById("done-message");
       doneMsg.style.display = "block";
-      doneMsg.textContent = `Fatto! ${results.length} foto caricate nell'album "${label}". Sono già visibili nella pagina Galleria del sito — nessun codice da incollare.`;
+      doneMsg.textContent = `Fatto! ${results.length} foto caricate in "${paese} / ${citta}". Sono già visibili nella pagina Galleria del sito — nessun codice da incollare.`;
 
       renderUploadedLinks(results);
 
-      if(isNew){
+      if(isNewCitta){
         try{
           const pinRes = await fetch("/api/gallery?action=create-pin", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ albumName: label, filtro: slug })
+            body: JSON.stringify({ paese, citta })
           });
           const pinData = await pinRes.json();
           if(pinRes.ok){
-            doneMsg.textContent += ` Pin aggiunto sulla mappa in corrispondenza di "${label}" ✓`;
+            doneMsg.textContent += ` Pin aggiunto sulla mappa in corrispondenza di "${citta}" ✓`;
           } else {
             doneMsg.textContent += ` (Nota: ${pinData.error})`;
           }
         } catch(err){
           doneMsg.textContent += ` (Non sono riuscito ad aggiungere il pin sulla mappa: ${err.message})`;
         }
+      }
+
+      if(isNewAlbum){
+        await populateAlbumSelects();
       }
     }
   }
@@ -655,7 +749,7 @@
     statusEl.innerHTML = "<div>Carico le foto dell'album...</div>";
 
     try{
-      const res = await fetch(`/api/gallery?action=list-admin&album=${slug}`);
+      const res = await fetch(`/api/gallery?action=list-admin&album=${encodeURIComponent(slug)}`);
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
 
@@ -701,8 +795,8 @@
 
   async function deleteWholeAlbum(){
     const slug = document.getElementById("manage-album-select").value;
-    const label = ALBUM_LABELS[slug] || slug;
-    if(!confirm(`Eliminare TUTTE le foto dell'album "${label}" da Cloudinary? Non si può annullare.`)) return;
+    const label = slug.includes("/") ? slug.split("/").join(" / ") : slug;
+    if(!confirm(`Eliminare TUTTE le foto di "${label}" da Cloudinary? Non si può annullare.`)) return;
 
     try{
       const res = await fetch("/api/gallery?action=delete-album", {
@@ -715,9 +809,55 @@
 
       document.getElementById("thumb-grid").innerHTML = "";
       document.getElementById("manage-reminder").innerHTML =
-        `<div class="reminder">Album "${label}" eliminato da Cloudinary. Foto e pin sulla mappa spariscono da soli dal sito — nessuna modifica manuale necessaria.</div>`;
+        `<div class="reminder">"${label}" eliminato da Cloudinary. Foto e pin sulla mappa spariscono da soli dal sito — nessuna modifica manuale necessaria.</div>`;
+      await populateAlbumSelects();
     } catch(err){
       alert("Errore durante l'eliminazione dell'album: " + err.message);
+    }
+  }
+
+  // -------- sposta un album "senza paese" dentro Paese/Città --------
+  async function moveAlbum(){
+    const fromAlbum = document.getElementById("move-from-select").value;
+    if(!fromAlbum){
+      alert("Non c'è nessun album da spostare al momento.");
+      return;
+    }
+
+    let paese = document.getElementById("move-paese-select").value;
+    if(paese === "__new__"){
+      paese = document.getElementById("move-new-paese-name").value.trim();
+      if(!paese){
+        alert("Scrivi il nome del Paese di destinazione.");
+        return;
+      }
+    }
+
+    const citta = document.getElementById("move-citta-name").value.trim();
+    if(!citta){
+      alert("Scrivi il nome della città di destinazione.");
+      return;
+    }
+
+    if(!confirm(`Spostare tutte le foto di "${fromAlbum}" dentro "${paese} / ${citta}"?`)) return;
+
+    const statusEl = document.getElementById("move-status");
+    statusEl.innerHTML = "<div>Sposto le foto, un attimo...</div>";
+
+    try{
+      const res = await fetch("/api/gallery?action=move-album", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fromAlbum, paese, citta })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+
+      statusEl.innerHTML = `<div class="ok">Fatto: ${data.moved} file spostati in "${paese} / ${citta}"${data.pinCreated ? ", pin aggiornato sulla mappa" : ""}.</div>`;
+      document.getElementById("move-citta-name").value = "";
+      await populateAlbumSelects();
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">Errore: ${err.message}</div>`;
     }
   }
 
