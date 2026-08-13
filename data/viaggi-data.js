@@ -9,6 +9,11 @@
     root.VIAGGI_DATA = factory();
   }
 })(typeof self !== "undefined" ? self : this, function () {
+  // data in cui i dati di itinerari/miniviaggi/viaggi da ricordare sono stati
+  // verificati/aggiornati l'ultima volta (mostrata nelle pagine dedicate) —
+  // aggiornala a mano quando modifichi voci in questo file
+  const ULTIMO_AGGIORNAMENTO_DATI = "2026-08-13";
+
   const ITINERARI = [
     {
       zona: "Castelli Romani", km: "circa 90 km", kmNum: 90, titolo: "Il classico dei due laghi",
@@ -809,5 +814,5 @@
     return all.find(entry => getSlug(entry.it) === slug) || null;
   }
 
-  return { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE, slugify, getSlug, findBySlug };
+  return { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE, ULTIMO_AGGIORNAMENTO_DATI, slugify, getSlug, findBySlug };
 });
