@@ -243,7 +243,7 @@ ${HEAD_COMMON}
   }
   .print-pdf-btn:hover{ background:rgba(245,240,230,0.12); }
   @media print {
-    .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn{ display:none !important; }
+    .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, #back-to-top{ display:none !important; }
     body{ background:#fff !important; color:#111 !important; }
     .viaggio-breadcrumb, .marker, .viaggio-stops p.label{ color:#555 !important; }
     h1, h2{ color:#111 !important; }

@@ -368,4 +368,29 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.key === "ArrowLeft") showPrev();
     });
   }
+
+  // pulsante "torna su": compare dopo un po' di scroll, su tutte le pagine
+  const backToTop = document.createElement("button");
+  backToTop.id = "back-to-top";
+  backToTop.type = "button";
+  backToTop.setAttribute("aria-label", "Torna in cima alla pagina");
+  backToTop.innerHTML = "&#8593;";
+  document.body.appendChild(backToTop);
+
+  let backToTopTicking = false;
+  const updateBackToTop = () => {
+    backToTop.classList.toggle("visible", window.scrollY > 600);
+    backToTopTicking = false;
+  };
+  window.addEventListener("scroll", () => {
+    if (!backToTopTicking) {
+      window.requestAnimationFrame(updateBackToTop);
+      backToTopTicking = true;
+    }
+  }, { passive: true });
+  updateBackToTop();
+
+  backToTop.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+  });
 });
