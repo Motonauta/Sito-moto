@@ -243,7 +243,7 @@ ${HEAD_COMMON}
   }
   .print-pdf-btn:hover{ background:rgba(245,240,230,0.12); }
   @media print {
-    .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, #back-to-top{ display:none !important; }
+    .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, .copy-link-btn, #back-to-top{ display:none !important; }
     body{ background:#fff !important; color:#111 !important; }
     .viaggio-breadcrumb, .marker, .viaggio-stops p.label{ color:#555 !important; }
     h1, h2{ color:#111 !important; }
@@ -275,7 +275,10 @@ ${HEADER_HTML}
       <a class="waze" href="${wazeUrl}" target="_blank" rel="noopener">Prima tappa su Waze</a>
     </div>
 
-    <button type="button" class="print-pdf-btn" onclick="window.print()" style="margin-top:16px;">📄 Stampa / Salva come PDF</button>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+      <button type="button" class="print-pdf-btn" onclick="window.print()">📄 Stampa / Salva come PDF</button>
+      <button type="button" class="copy-link-btn" data-copy="${siteUrl}">🔗 Copia link</button>
+    </div>
 
     <div class="viaggio-stops">
       <p class="label">Tappe consigliate</p>
