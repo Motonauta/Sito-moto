@@ -236,6 +236,19 @@ ${HEAD_COMMON}
   .viaggio-breadcrumb a{ color:var(--cream-dim); }
   .viaggio-breadcrumb a:hover{ color:var(--gold); }
   .viaggio-breadcrumb span{ margin:0 6px; color:var(--gold); }
+  .print-pdf-btn{
+    font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
+    padding:12px 20px; border:1px solid rgba(245,240,230,0.3); color:var(--cream); background:transparent;
+    cursor:pointer; transition:background .2s ease, color .2s ease;
+  }
+  .print-pdf-btn:hover{ background:rgba(245,240,230,0.12); }
+  @media print {
+    .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn{ display:none !important; }
+    body{ background:#fff !important; color:#111 !important; }
+    .viaggio-breadcrumb, .marker, .viaggio-stops p.label{ color:#555 !important; }
+    h1, h2{ color:#111 !important; }
+    a{ color:#111 !important; }
+  }
 </style>
 </head>
 <body>
@@ -261,6 +274,8 @@ ${HEADER_HTML}
       <a href="${mapsUrl}" target="_blank" rel="noopener">Apri l'itinerario completo su Maps</a>
       <a class="waze" href="${wazeUrl}" target="_blank" rel="noopener">Prima tappa su Waze</a>
     </div>
+
+    <button type="button" class="print-pdf-btn" onclick="window.print()" style="margin-top:16px;">📄 Stampa / Salva come PDF</button>
 
     <div class="viaggio-stops">
       <p class="label">Tappe consigliate</p>
