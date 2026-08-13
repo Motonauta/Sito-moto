@@ -67,6 +67,10 @@ const STYLE = `<style>
   .manuale-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
   .manuale-content{ margin-top:32px; max-width:720px; }
   .manuale-content > p{ margin-top:20px; font-size:1.02rem; line-height:1.65; }
+  .manuale-content h2{
+    margin-top:40px; font-size:1.25rem; color:var(--sand);
+    padding-bottom:8px; border-bottom:1px solid rgba(245,240,230,0.16);
+  }
   .manuale-tip{
     margin-top:28px; padding:24px 26px; background:var(--asphalt-2);
     border:1px solid rgba(245,240,230,0.14);
@@ -123,6 +127,9 @@ ${FOOTER_HTML}
 function renderBlocco(b) {
   if (b.tipo === 'paragrafo') {
     return `<p>${escapeHtml(b.testo)}</p>`;
+  }
+  if (b.tipo === 'sottotitolo') {
+    return `<h2>${escapeHtml(b.testo)}</h2>`;
   }
   if (b.tipo === 'immagine') {
     return `
