@@ -15,7 +15,7 @@
       titolo: "Come viaggiare l'estate in moto",
       categoria: "Consigli di viaggio",
       excerpt: "Il caldo estivo degli ultimi anni rende sempre più difficile viaggiare in moto senza rinunciare a giacca, guanti e protezioni. Sette consigli pratici imparati sul campo, viaggio dopo viaggio con la Capracrew.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/w_1600,h_900,c_fill,g_auto,f_auto,q_auto/v1786538784/IMG_4148_fmvzsw.jpg",
+      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/w_1600,h_900,c_fill,g_center,f_auto,q_auto/v1786538784/IMG_4148_fmvzsw.jpg",
       autore: "Il Motonauta",
       data: "2026-08-12",
       blocchi: [
