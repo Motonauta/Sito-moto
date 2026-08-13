@@ -234,6 +234,7 @@ ${HEADER_HTML}
       ${escapeHtml(guida.titolo)}
     </h1>
     <p class="manuale-meta">${escapeHtml(guida.autore)} — ${escapeHtml(dataLeggibile)}</p>
+    <button type="button" class="copy-link-btn" data-copy="${siteUrl}" style="margin-top:16px;">🔗 Copia link</button>
 
     ${guida.copertina ? `
     <div class="manuale-photo">
