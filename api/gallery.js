@@ -77,12 +77,17 @@ async function fetchFolderPhotos(prefix, fallbackCaption) {
 
 async function handleList(req, res) {
   try {
-    const isAdmin = await isAuthenticated(req);
+    // gli album nascosti si vedono SOLO se il chiamante lo chiede
+    // esplicitamente (admin.html manda ?includeHidden=1) ed è autenticato:
+    // così la Galleria pubblica non li mostra mai, nemmeno quando chi la
+    // guarda ha una sessione admin valida nello stesso browser (es. il
+    // titolare del sito loggato nell'area riservata in un'altra scheda)
+    const includeHidden = req.query.includeHidden === '1' && (await isAuthenticated(req));
     const { countries, standalone } = await discoverStructure();
 
     const countriesData = {};
     for (const [paese, cittaList] of Object.entries(countries)) {
-      if (!isAdmin && HIDDEN_FROM_PUBLIC_GALLERY.includes(paese.toLowerCase())) continue;
+      if (!includeHidden && HIDDEN_FROM_PUBLIC_GALLERY.includes(paese.toLowerCase())) continue;
       const cittaData = {};
       for (const citta of cittaList) {
         const photos = await fetchFolderPhotos(`${paese}/${citta}`, citta);
@@ -93,7 +98,7 @@ async function handleList(req, res) {
 
     const standaloneData = {};
     for (const album of standalone) {
-      if (!isAdmin && HIDDEN_FROM_PUBLIC_GALLERY.includes(album.toLowerCase())) continue;
+      if (!includeHidden && HIDDEN_FROM_PUBLIC_GALLERY.includes(album.toLowerCase())) continue;
       const photos = await fetchFolderPhotos(album, album);
       if (photos.length) standaloneData[album] = photos;
     }
@@ -144,13 +149,15 @@ async function handleListAdmin(req, res) {
 
 async function handlePins(req, res) {
   try {
-    const isAdmin = await isAuthenticated(req);
+    // i pin sulla mappa li usa solo la Galleria pubblica (admin.html non ha
+    // una mappa), quindi qui i pin nascosti restano sempre esclusi, senza
+    // eccezioni per chi è autenticato
     const redis = await getRedisClient();
     const raw = await redis.hGetAll('map_pins');
     const pins = raw
       ? Object.values(raw)
           .map((value) => (typeof value === 'string' ? JSON.parse(value) : value))
-          .filter((pin) => isAdmin || !HIDDEN_FROM_PUBLIC_GALLERY.includes((pin.nome || '').toLowerCase()))
+          .filter((pin) => !HIDDEN_FROM_PUBLIC_GALLERY.includes((pin.nome || '').toLowerCase()))
       : [];
 
     res.status(200).json({ pins });
