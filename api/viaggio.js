@@ -97,7 +97,7 @@ const HEADER_HTML = `<header class="site-header">
     <nav class="nav-links">
       <a href="/index.html">Rotte</a>
       <a href="/nostromo.html">Nostromo</a>
-      <a href="/about.html">Il Motonauta</a>
+      <a href="/ilmotonauta.html">Il Motonauta</a>
       <a href="/sponsor.html">Alleati</a>
       <a href="/galleria.html">Diario di bordo</a>
       <a href="/contatti.html">Canale aperto</a>
