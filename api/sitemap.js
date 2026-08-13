@@ -6,11 +6,10 @@ const BASE = 'https://ilmotonauta.com';
 // pagine statiche del sito, con priorità/frequenza indicative per i motori di ricerca
 const STATIC_PAGES = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
-  { path: '/chi-sono.html', changefreq: 'monthly', priority: '0.6' },
+  { path: '/ilmotonauta.html', changefreq: 'monthly', priority: '0.6' },
   { path: '/nostromo.html', changefreq: 'monthly', priority: '0.8' },
   { path: '/manuale.html', changefreq: 'weekly', priority: '0.8' },
   { path: '/sponsor.html', changefreq: 'monthly', priority: '0.4' },
-  { path: '/moto.html', changefreq: 'monthly', priority: '0.5' },
   { path: '/galleria.html', changefreq: 'weekly', priority: '0.6' },
   { path: '/contatti.html', changefreq: 'yearly', priority: '0.3' },
 ];
