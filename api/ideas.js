@@ -4,6 +4,7 @@ const { isAuthenticated } = require('../lib/auth');
 async function handleSubmit(req, res) {
   try {
     const { text } = req.body;
+    const tipo = req.body.tipo === 'manuale' ? 'manuale' : 'video';
 
     if (!text || !text.trim()) {
       return res.status(400).json({ error: 'Scrivi qualcosa prima di inviare.' });
@@ -33,6 +34,7 @@ async function handleSubmit(req, res) {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const idea = {
       text: text.trim().slice(0, 600),
+      tipo,
       date: new Date().toISOString(),
       ip,
     };
