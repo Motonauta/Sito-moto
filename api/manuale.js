@@ -98,6 +98,13 @@ const STYLE = `<style>
     font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim);
   }
   .manuale-tip-img-caption::before{ content:"* "; color:var(--gold); }
+  .manuale-breadcrumb{
+    margin-top:18px; font-family:var(--font-mono); font-size:0.76rem; color:var(--cream-dim);
+    text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .manuale-breadcrumb a{ color:var(--cream-dim); }
+  .manuale-breadcrumb a:hover{ color:var(--gold); }
+  .manuale-breadcrumb span{ margin:0 6px; color:var(--gold); }
 </style>`;
 
 function render404() {
@@ -173,6 +180,29 @@ module.exports = async (req, res) => {
 
   const contenutoHTML = guida.blocchi.map(renderBlocco).join('\n');
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: guida.titolo,
+    description: description,
+    datePublished: guida.data,
+    dateModified: guida.data,
+    author: { '@type': 'Person', name: guida.autore },
+    publisher: { '@type': 'Organization', name: 'Il Motonauta' },
+    mainEntityOfPage: siteUrl,
+    ...(guida.copertina ? { image: [wikiThumb(guida.copertina, 1200)] } : {}),
+  };
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Il Motonauta', item: 'https://ilmotonauta.com/index.html' },
+      { '@type': 'ListItem', position: 2, name: 'Manuale di bordo', item: 'https://ilmotonauta.com/manuale.html' },
+      { '@type': 'ListItem', position: 3, name: guida.titolo, item: siteUrl },
+    ],
+  };
+
   const html = `<!DOCTYPE html>
 <html lang="it">
 <head>
@@ -186,6 +216,8 @@ module.exports = async (req, res) => {
 <meta property="og:description" content="${escapeHtml(description)}">
 ${guida.copertina ? `<meta property="og:image" content="${escapeHtml(wikiThumb(guida.copertina, 1200))}">` : ''}
 <meta property="og:url" content="${siteUrl}">
+<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
 ${HEAD_COMMON}
 ${STYLE}
 </head>
@@ -194,7 +226,10 @@ ${HEADER_HTML}
 
 <section style="padding-top:56px; padding-bottom:0;">
   <div class="wrap">
-    <p class="marker">${escapeHtml(guida.categoria)}</p>
+    <p class="manuale-breadcrumb">
+      <a href="/index.html">Il Motonauta</a><span>/</span><a href="/manuale.html">Manuale di bordo</a><span>/</span>${escapeHtml(guida.titolo)}
+    </p>
+    <p class="marker" style="margin-top:18px;">${escapeHtml(guida.categoria)}</p>
     <h1 style="font-size:clamp(2.2rem, 5vw, 3.6rem); color:var(--sand); max-width:26ch;">
       ${escapeHtml(guida.titolo)}
     </h1>

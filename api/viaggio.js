@@ -170,6 +170,16 @@ module.exports = async (req, res) => {
   const mapsUrl = routeMapsUrl(it.tappe);
   const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(it.tappe[0].query)}&navigate=yes`;
 
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Il Motonauta', item: 'https://ilmotonauta.com/index.html' },
+      { '@type': 'ListItem', position: 2, name: section.eyebrow, item: `https://ilmotonauta.com${section.anchor}` },
+      { '@type': 'ListItem', position: 3, name: it.titolo, item: siteUrl },
+    ],
+  };
+
   const html = `<!DOCTYPE html>
 <html lang="it">
 <head>
@@ -183,6 +193,7 @@ module.exports = async (req, res) => {
 <meta property="og:description" content="${escapeHtml(description)}">
 <meta property="og:image" content="${escapeHtml(wikiThumb(it.foto, 1200))}">
 <meta property="og:url" content="${siteUrl}">
+<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
 ${HEAD_COMMON}
 <style>
   .viaggio-photo{
@@ -218,6 +229,13 @@ ${HEAD_COMMON}
     border:1px solid rgba(245,240,230,0.14); padding:28px 30px;
   }
   .nostromo-cta-buttons{ display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
+  .viaggio-breadcrumb{
+    margin-top:18px; font-family:var(--font-mono); font-size:0.76rem; color:var(--cream-dim);
+    text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .viaggio-breadcrumb a{ color:var(--cream-dim); }
+  .viaggio-breadcrumb a:hover{ color:var(--gold); }
+  .viaggio-breadcrumb span{ margin:0 6px; color:var(--gold); }
 </style>
 </head>
 <body>
@@ -225,7 +243,10 @@ ${HEADER_HTML}
 
 <section style="padding-top:56px; padding-bottom:0;">
   <div class="wrap">
-    <p class="marker">${escapeHtml(section.eyebrow)} — ${escapeHtml(it.zona)}</p>
+    <p class="viaggio-breadcrumb">
+      <a href="/index.html">Il Motonauta</a><span>/</span><a href="${section.anchor}">${escapeHtml(section.eyebrow)}</a><span>/</span>${escapeHtml(it.titolo)}
+    </p>
+    <p class="marker" style="margin-top:18px;">${escapeHtml(section.eyebrow)} — ${escapeHtml(it.zona)}</p>
     <h1 style="font-size:clamp(2.2rem, 5vw, 3.6rem); color:var(--sand); max-width:26ch;">
       ${escapeHtml(it.titolo)}
     </h1>
