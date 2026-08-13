@@ -240,6 +240,26 @@
     .itinerario-card-body .itinerario-stops a.stop-link{ font-size:0.64rem; }
     .itinerario-card-body .itinerario-stops .fun{ font-size:0.58rem; margin-top:2px; }
   }
+
+  .ultimi-articoli-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; margin-top:36px;
+  }
+  .ultimi-articoli-card{
+    display:block; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+    overflow:hidden; transition:border-color .25s ease, transform .25s ease;
+  }
+  .ultimi-articoli-card:hover{ border-color:var(--rust); transform:translateY(-4px); }
+  .ultimi-articoli-photo{
+    aspect-ratio:16/9; background:linear-gradient(155deg, rgba(217,164,65,0.18) 0%, rgba(193,80,46,0.18) 100%);
+    overflow:hidden;
+  }
+  .ultimi-articoli-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .ultimi-articoli-body{ padding:20px 22px; }
+  .ultimi-articoli-body .marker{ margin-bottom:0; }
+  .ultimi-articoli-body h3{ font-size:1.02rem; color:var(--sand); margin-top:8px; }
+  .ultimi-articoli-body p{ margin-top:8px; font-size:0.85rem; color:var(--cream-dim); }
+  @media (max-width:900px){ .ultimi-articoli-grid{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:600px){ .ultimi-articoli-grid{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -428,6 +448,16 @@
   </div>
 </section>
 
+<!-- ULTIMI ARTICOLI DAL MANUALE DI BORDO ============================= -->
+<section id="ultimi-articoli" style="padding-top:56px; padding-bottom:0;">
+  <div class="wrap">
+    <p class="marker">Dal Manuale di bordo</p>
+    <h2>Ultime guide e consigli</h2>
+    <div class="ultimi-articoli-grid" id="ultimi-articoli-grid"></div>
+    <p style="margin-top:28px;"><a href="manuale.html" style="color:var(--gold); font-family:var(--font-mono); font-size:0.82rem; text-transform:uppercase; letter-spacing:0.05em;">Vedi tutto il Manuale di bordo →</a></p>
+  </div>
+</section>
+
 <!-- SOCIAL FEEDS ==================================================== -->
 <section>
   <div class="wrap">
@@ -605,6 +635,7 @@
 </footer>
 
 <script src="data/viaggi-data.js"></script>
+<script src="data/manuale-data.js"></script>
 <script>
   const { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE } = window.VIAGGI_DATA;
 
@@ -1303,6 +1334,32 @@
   });
   document.getElementById("fuel-start").addEventListener("change", refreshAllFuel);
   attachPlaceAutocomplete(document.getElementById("fuel-start"), document.getElementById("fuel-start-suggest"));
+
+  // box "ultimi articoli" in home: le 3 guide più recenti del Manuale di bordo
+  const ultimiArticoliSection = document.getElementById("ultimi-articoli");
+  const ultimiArticoliGrid = document.getElementById("ultimi-articoli-grid");
+  const { GUIDE, getSlug: getGuidaSlug } = window.MANUALE_DATA;
+
+  if (!GUIDE.length) {
+    ultimiArticoliSection.style.display = "none";
+  } else {
+    [...GUIDE].sort((a, b) => new Date(b.data) - new Date(a.data)).slice(0, 3).forEach(guida => {
+      const card = document.createElement("a");
+      card.className = "ultimi-articoli-card";
+      card.href = `manuale/${getGuidaSlug(guida)}`;
+      card.innerHTML = `
+        <div class="ultimi-articoli-photo">
+          ${guida.copertina ? `<img src="${wikiThumb(guida.copertina, 500)}" alt="${guida.titolo}" loading="lazy">` : ""}
+        </div>
+        <div class="ultimi-articoli-body">
+          <p class="marker">${guida.categoria}</p>
+          <h3>${guida.titolo}</h3>
+          <p>${guida.excerpt}</p>
+        </div>
+      `;
+      ultimiArticoliGrid.appendChild(card);
+    });
+  }
 </script>
 
 <script src="script.js"></script>
