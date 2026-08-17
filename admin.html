@@ -35,6 +35,7 @@
   .admin-btn.outline{ background:transparent; }
   .admin-btn.outline:hover{ background:var(--rust); border-color:var(--rust); color:var(--cream); }
   .admin-btn.danger{ border-color:var(--rust); }
+  .upload-mode-btn.active{ background:var(--rust); border-color:var(--rust); color:var(--cream); }
 
   .status-list{ margin-top:20px; font-family:var(--font-mono); font-size:0.82rem; }
   .status-list div{ padding:6px 0; color:var(--cream-dim); }
@@ -152,22 +153,43 @@
 <section style="padding-top:32px; display:none;" id="panel-upload">
   <div class="wrap">
     <div class="contact-card">
-      <label class="admin-label">Paese</label>
-      <select id="paese-select" class="admin-select" onchange="onPaeseChange()">
-        <option value="__new__">+ Nuovo paese</option>
-      </select>
-      <div id="new-paese-wrap" style="display:none;">
-        <label class="admin-label">Nome nuovo paese (es. "Olanda")</label>
-        <input type="text" id="new-paese-name" class="admin-input" placeholder="Olanda">
+      <div style="display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap;">
+        <button type="button" class="admin-btn outline upload-mode-btn active" id="mode-viaggio-btn" onclick="setUploadMode('viaggio')">🌍 Foto di un viaggio</button>
+        <button type="button" class="admin-btn outline upload-mode-btn" id="mode-standalone-btn" onclick="setUploadMode('standalone')">📁 Album singolo (es. Manuale di bordo)</button>
       </div>
 
-      <label class="admin-label">Città</label>
-      <select id="citta-select" class="admin-select" onchange="onCittaChange()">
-        <option value="__new__">+ Nuova città</option>
-      </select>
-      <div id="new-citta-wrap" style="display:none;">
-        <label class="admin-label">Nome nuova città (es. "Amsterdam")</label>
-        <input type="text" id="new-citta-name" class="admin-input" placeholder="Amsterdam">
+      <div id="upload-mode-viaggio">
+        <label class="admin-label">Paese</label>
+        <select id="paese-select" class="admin-select" onchange="onPaeseChange()">
+          <option value="__new__">+ Nuovo paese</option>
+        </select>
+        <div id="new-paese-wrap" style="display:none;">
+          <label class="admin-label">Nome nuovo paese (es. "Olanda")</label>
+          <input type="text" id="new-paese-name" class="admin-input" placeholder="Olanda">
+        </div>
+
+        <label class="admin-label">Città</label>
+        <select id="citta-select" class="admin-select" onchange="onCittaChange()">
+          <option value="__new__">+ Nuova città</option>
+        </select>
+        <div id="new-citta-wrap" style="display:none;">
+          <label class="admin-label">Nome nuova città (es. "Amsterdam")</label>
+          <input type="text" id="new-citta-name" class="admin-input" placeholder="Amsterdam">
+        </div>
+      </div>
+
+      <div id="upload-mode-standalone" style="display:none;">
+        <label class="admin-label">Album</label>
+        <select id="standalone-select" class="admin-select" onchange="onStandaloneChange()">
+          <option value="__new__">+ Nuovo album singolo</option>
+        </select>
+        <div id="new-standalone-wrap" style="display:none;">
+          <label class="admin-label">Nome nuovo album (es. "Manuale di bordo")</label>
+          <input type="text" id="new-standalone-name" class="admin-input" placeholder="Manuale di bordo">
+        </div>
+        <p style="margin-top:-8px; margin-bottom:20px; font-size:0.82rem; color:var(--cream-dim);">
+          Usa questa modalità per depositi come "Manuale di bordo", non per un vero viaggio: qui non viene creato nessun pin sulla mappa.
+        </p>
       </div>
 
       <label class="admin-label">Foto o video da caricare</label>
@@ -360,6 +382,7 @@
 
       populateManageSelect();
       populateMoveFromSelect();
+      populateStandaloneSelect();
     } catch(err){
       // se le funzioni /api non sono ancora pronte, i menu restano vuoti
     }
@@ -381,7 +404,7 @@
     });
     if(STANDALONE_ALBUMS.length){
       const group = document.createElement("optgroup");
-      group.label = "Senza paese (da spostare)";
+      group.label = "Album senza Paese";
       STANDALONE_ALBUMS.slice().sort().forEach(name => {
         const opt = document.createElement("option");
         opt.value = name; opt.textContent = name;
@@ -389,6 +412,17 @@
       });
       select.appendChild(group);
     }
+  }
+
+  function populateStandaloneSelect(){
+    const select = document.getElementById("standalone-select");
+    select.innerHTML = '<option value="__new__">+ Nuovo album singolo</option>';
+    STANDALONE_ALBUMS.slice().sort().forEach(name => {
+      const opt = document.createElement("option");
+      opt.value = name; opt.textContent = name;
+      select.insertBefore(opt, select.querySelector('option[value="__new__"]'));
+    });
+    onStandaloneChange();
   }
 
   function populateMoveFromSelect(){
@@ -429,6 +463,22 @@
   function onMovePaeseChange(){
     const val = document.getElementById("move-paese-select").value;
     document.getElementById("move-new-paese-wrap").style.display = (val === "__new__") ? "block" : "none";
+  }
+
+  // -------- modalità di caricamento: viaggio (Paese/Città) oppure album singolo --------
+  let uploadMode = "viaggio";
+
+  function setUploadMode(mode){
+    uploadMode = mode;
+    document.getElementById("mode-viaggio-btn").classList.toggle("active", mode === "viaggio");
+    document.getElementById("mode-standalone-btn").classList.toggle("active", mode === "standalone");
+    document.getElementById("upload-mode-viaggio").style.display = mode === "viaggio" ? "block" : "none";
+    document.getElementById("upload-mode-standalone").style.display = mode === "standalone" ? "block" : "none";
+  }
+
+  function onStandaloneChange(){
+    const val = document.getElementById("standalone-select").value;
+    document.getElementById("new-standalone-wrap").style.display = (val === "__new__") ? "block" : "none";
   }
 
   function slugify(text){
@@ -565,30 +615,53 @@
   }
 
   async function startUpload(){
-    let paese = document.getElementById("paese-select").value;
-    let isNewPaese = false;
-    if(paese === "__new__"){
-      paese = document.getElementById("new-paese-name").value.trim();
-      if(!paese){
-        alert("Scrivi il nome del Paese.");
-        return;
-      }
-      isNewPaese = true;
-    }
+    let folder, captionFallback, isNewAlbum, pinPayload = null, doneLabel;
 
-    let citta = document.getElementById("citta-select").value;
-    let isNewCitta = false;
-    if(citta === "__new__"){
-      citta = document.getElementById("new-citta-name").value.trim();
-      if(!citta){
-        alert("Scrivi il nome della città.");
-        return;
+    if(uploadMode === "viaggio"){
+      let paese = document.getElementById("paese-select").value;
+      let isNewPaese = false;
+      if(paese === "__new__"){
+        paese = document.getElementById("new-paese-name").value.trim();
+        if(!paese){
+          alert("Scrivi il nome del Paese.");
+          return;
+        }
+        isNewPaese = true;
       }
-      isNewCitta = true;
-    }
 
-    const folder = `${paese}/${citta}`;
-    const isNewAlbum = isNewPaese || isNewCitta;
+      let citta = document.getElementById("citta-select").value;
+      let isNewCitta = false;
+      if(citta === "__new__"){
+        citta = document.getElementById("new-citta-name").value.trim();
+        if(!citta){
+          alert("Scrivi il nome della città.");
+          return;
+        }
+        isNewCitta = true;
+      }
+
+      folder = `${paese}/${citta}`;
+      captionFallback = citta;
+      isNewAlbum = isNewPaese || isNewCitta;
+      doneLabel = `${paese} / ${citta}`;
+      if(isNewCitta) pinPayload = { paese, citta };
+    } else {
+      let album = document.getElementById("standalone-select").value;
+      let isNewStandalone = false;
+      if(album === "__new__"){
+        album = document.getElementById("new-standalone-name").value.trim();
+        if(!album){
+          alert("Scrivi il nome dell'album.");
+          return;
+        }
+        isNewStandalone = true;
+      }
+
+      folder = album;
+      captionFallback = album;
+      isNewAlbum = isNewStandalone;
+      doneLabel = album;
+    }
 
     const files = document.getElementById("file-input").files;
     if(!files.length){
@@ -609,12 +682,12 @@
 
     for(let i = 0; i < files.length; i++){
       const file = files[i];
-      const caption = (captionFields[i] && captionFields[i].value.trim()) || citta;
+      const caption = (captionFields[i] && captionFields[i].value.trim()) || captionFallback;
       const row = document.createElement("div");
       row.textContent = `Carico ${file.name}...`;
       statusList.appendChild(row);
       try{
-        const data = await uploadOne(file, folder, citta, caption);
+        const data = await uploadOne(file, folder, captionFallback, caption);
         results.push({ url: data.secure_url, caption });
         row.textContent = `✓ ${file.name} caricata`;
         row.classList.add("ok");
@@ -638,20 +711,20 @@
       document.getElementById("filter-btn-wrap").style.display = "none";
       const doneMsg = document.getElementById("done-message");
       doneMsg.style.display = "block";
-      doneMsg.textContent = `Fatto! ${results.length} foto caricate in "${paese} / ${citta}". Sono già visibili nella pagina Galleria del sito — nessun codice da incollare.`;
+      doneMsg.textContent = `Fatto! ${results.length} foto caricate in "${doneLabel}". Sono già visibili nella pagina Galleria del sito (a meno che non sia un album nascosto come "Manuale di bordo") — nessun codice da incollare.`;
 
       renderUploadedLinks(results);
 
-      if(isNewCitta){
+      if(pinPayload){
         try{
           const pinRes = await fetch("/api/gallery?action=create-pin", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paese, citta })
+            body: JSON.stringify(pinPayload)
           });
           const pinData = await pinRes.json();
           if(pinRes.ok){
-            doneMsg.textContent += ` Pin aggiunto sulla mappa in corrispondenza di "${citta}" ✓`;
+            doneMsg.textContent += ` Pin aggiunto sulla mappa in corrispondenza di "${pinPayload.citta}" ✓`;
           } else {
             doneMsg.textContent += ` (Nota: ${pinData.error})`;
           }
