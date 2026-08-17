@@ -13,6 +13,8 @@
 <meta property="og:image" content="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784625152/IMG_1429_dyz5re.jpg">
 <meta property="og:url" content="https://ilmotonauta.com/nostromo.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
@@ -206,6 +208,15 @@
   .place-suggest-list button:last-child{ border-bottom:none; }
   .place-suggest-list button:hover, .place-suggest-list button.active{ background:var(--rust); color:var(--cream); }
   .place-suggest-list .place-suggest-empty{ padding:10px 12px; font-size:0.8rem; color:var(--cream-dim); cursor:default; }
+  input.has-geoloc-btn{ padding-right:40px; }
+  .geoloc-btn{
+    position:absolute; right:4px; top:50%; transform:translateY(-50%); z-index:5;
+    width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+    background:transparent; border:none; color:var(--cream-dim); cursor:pointer; font-size:1.05rem;
+    transition:color .2s ease;
+  }
+  .geoloc-btn:hover{ color:var(--gold); }
+  .geoloc-btn.loading{ opacity:0.5; pointer-events:none; }
 
   .route-weather-costs{
     font-family:var(--font-mono); font-size:0.85rem; color:var(--gold); margin-top:2px; margin-bottom:14px;
@@ -908,6 +919,53 @@
     });
   }
 
+  // aggiunge un pulsante "usa la mia posizione" dentro un campo di
+  // partenza: legge la posizione GPS del browser (previo consenso
+  // dell'utente), la traduce in un nome di località leggibile con
+  // reverseGeocode() e la usa direttamente come coordinate già risolte
+  function attachGeolocationButton(inputEl){
+    if(!navigator.geolocation) return;
+    const field = inputEl.closest(".place-field");
+    if(!field) return;
+
+    inputEl.classList.add("has-geoloc-btn");
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "geoloc-btn";
+    btn.title = "Usa la mia posizione attuale";
+    btn.setAttribute("aria-label", "Usa la mia posizione attuale come partenza");
+    btn.innerHTML = "📍";
+    field.appendChild(btn);
+
+    btn.addEventListener("click", () => {
+      btn.classList.add("loading");
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const { latitude, longitude } = pos.coords;
+          try{
+            const nome = await reverseGeocode(latitude, longitude);
+            inputEl.value = nome;
+            placeResolvedCoords[inputEl.id] = { lat: latitude, lon: longitude };
+            inputEl.dispatchEvent(new Event("change"));
+          } catch(err){
+            alert("Non sono riuscito a capire dove ti trovi. Scrivi la partenza a mano.");
+          } finally {
+            btn.classList.remove("loading");
+          }
+        },
+        (err) => {
+          btn.classList.remove("loading");
+          const msg = err.code === err.PERMISSION_DENIED
+            ? "Hai bloccato l'accesso alla posizione: abilitalo nelle impostazioni del browser per usare questa funzione, oppure scrivi la partenza a mano."
+            : "Non sono riuscito a usare la tua posizione. Scrivi la partenza a mano.";
+          alert(msg);
+        },
+        { timeout: 10000 }
+      );
+    });
+  }
+
   async function resolvePlace(inputEl){
     const resolved = placeResolvedCoords[inputEl.id];
     if(resolved) return resolved;
@@ -1297,6 +1355,7 @@
 
   document.getElementById("route-weather-btn").addEventListener("click", calculateRouteWeather);
   attachPlaceAutocomplete(document.getElementById("route-start"), document.getElementById("route-start-suggest"));
+  attachGeolocationButton(document.getElementById("route-start"));
   attachPlaceAutocomplete(document.getElementById("route-end"), document.getElementById("route-end-suggest"));
 
   // ===== Assistente di valigia ========================================
@@ -1746,6 +1805,7 @@
 
   document.getElementById("rotta-btn").addEventListener("click", calculateRotta);
   attachPlaceAutocomplete(document.getElementById("rotta-start"), document.getElementById("rotta-start-suggest"));
+  attachGeolocationButton(document.getElementById("rotta-start"));
   attachPlaceAutocomplete(document.getElementById("rotta-end"), document.getElementById("rotta-end-suggest"));
 
   // ===== Precompilazione da un link "Fatti aiutare dal Nostromo" =====
