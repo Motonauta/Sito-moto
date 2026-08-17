@@ -86,11 +86,12 @@
       titolo: "I 5 accessori definitivi per una mototendata compatta",
       categoria: "Equipaggiamento",
       excerpt: "Dalla GSX-R 1000 alla S1000XR: cinque accessori per dormire in tenda dopo un'escursione in moto, qualunque sia lo spazio che avete a disposizione in sella.",
-      copertina: "",
+      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786960146/Manuale%20di%20bordo/tmaxijwofymhqdnmig0w.png",
       autore: "Il Motonauta",
       data: "2026-08-17",
       blocchi: [
         { tipo: "paragrafo", testo: "Sono ormai anni che io e i miei amici, ogni volta che possiamo, andiamo in escursione in moto sul Gran Sasso o sulle Dolomiti, fermandoci a dormire lì per la notte. L'ho fatto con tre moto diverse, e ormai sono pronto a partire a prescindere dallo spazio disponibile. Come quando andai in tenda con la mia GSX-R 1000 del 2008, dove lo spazio non si poteva nemmeno definire ridotto: era praticamente inesistente." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786959647/Manuale%20di%20bordo/wnc4ier53kcy5b8kjuk5.jpg", caption: "La prima tendata con il GSX-R 1000: faticosa, dolorosa e con poco spazio disponibile." },
         { tipo: "paragrafo", testo: "Con la XSR900 le cose sono migliorate parecchio, anche se non superavo i 50 litri totali tra le borse laterali. Con la S1000XR ho smesso proprio di pormi il problema, visto che lo spazio a disposizione è praticamente infinito. Ma qui vediamo subito come dormire in tenda anche quando lo spazio è davvero risicato, magari legando pure uno zainetto sulla sella posteriore. Ecco cosa mi porto per una mototendata in solitaria." },
         {
           tipo: "consiglio", numero: 1, titolo: "Tenda Fresh&Black 3 posti",
@@ -121,7 +122,8 @@
           ]
         },
         { tipo: "paragrafo", testo: "Tutto quello che avete letto qui sopra entra tranquillamente in una borsa da 30 litri, che con un paio di cinghie potete legare insieme alla tenda sulla sella posteriore. Che abbiate una naked normale o una carenata prontopista non cambia nulla." },
-        { tipo: "paragrafo", testo: "Vi tengo a precisare che non ricavo nulla nel consigliarvi questi modelli: non ho nessuna affiliazione con Decathlon, vi parlo solo di quello che ho comprato di tasca mia. Avendo provato diversi modelli di ogni categoria, mi sento di consigliarvi i migliori per compattezza. Magari nel prossimo articolo vi parlo dei migliori per comodità vera e propria. Se avete qualcosa di più efficiente da consigliarmi, o qualcosa da aggiungere a questo articolo, scrivetemi pure su Instagram (lo trovate nella sezione Canale aperto): sarò felice di ascoltare il consiglio e di aggiungerlo qui, dandovi credito." }
+        { tipo: "paragrafo", testo: "Vi tengo a precisare che non ricavo nulla nel consigliarvi questi modelli: non ho nessuna affiliazione con Decathlon, vi parlo solo di quello che ho comprato di tasca mia. Avendo provato diversi modelli di ogni categoria, mi sento di consigliarvi i migliori per compattezza. Magari nel prossimo articolo vi parlo dei migliori per comodità vera e propria. Se avete qualcosa di più efficiente da consigliarmi, o qualcosa da aggiungere a questo articolo, scrivetemi pure su Instagram (lo trovate nella sezione Canale aperto): sarò felice di ascoltare il consiglio e di aggiungerlo qui, dandovi credito." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786959723/Manuale%20di%20bordo/rlxq0fulgj1m4ows03qt.jpg", caption: "La mia ultima tendata, la scorsa settimana: ormai porto di tutto e di più nelle valigie, lasciando sempre il bauletto vuoto per poter riporre casco e giacca durante le soste." }
       ]
     }
   ];
