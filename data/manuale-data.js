@@ -81,6 +81,50 @@
         { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786625575/Manuale%20di%20bordo/tk0dodyivp2ylsdwl1ul.jpg", caption: "Le dimensioni della moto con le valigie di alluminio: nonostante siano molto compatte come modello, restano comunque un ingombro non da poco." },
         { tipo: "paragrafo", testo: "Non sto dicendo che le valigie laterali siano uno spreco di soldi: sono il primo ad amarle, e le compro per ogni moto che ho. Dico solo che se per comprarle devi fare grossi sacrifici (ormai sotto i 500 euro non si trova niente di decente in questa categoria), forse conviene prima tirare le somme e capire quanto davvero ti servano, soprattutto se sei un lupo solitario e la sella posteriore ha già preso polvere." }
       ]
+    },
+    {
+      titolo: "I 5 accessori definitivi per una mototendata compatta",
+      categoria: "Equipaggiamento",
+      excerpt: "Dalla GSX-R 1000 alla S1000XR: cinque accessori per dormire in tenda dopo un'escursione in moto, qualunque sia lo spazio che avete a disposizione in sella.",
+      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786960146/Manuale%20di%20bordo/tmaxijwofymhqdnmig0w.png",
+      autore: "Il Motonauta",
+      data: "2026-08-17",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Sono ormai anni che io e i miei amici, ogni volta che possiamo, andiamo in escursione in moto sul Gran Sasso o sulle Dolomiti, fermandoci a dormire lì per la notte. L'ho fatto con tre moto diverse, e ormai sono pronto a partire a prescindere dallo spazio disponibile. Come quando andai in tenda con la mia GSX-R 1000 del 2008, dove lo spazio non si poteva nemmeno definire ridotto: era praticamente inesistente." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786959647/Manuale%20di%20bordo/wnc4ier53kcy5b8kjuk5.jpg", caption: "La prima tendata con il GSX-R 1000: faticosa, dolorosa e con poco spazio disponibile." },
+        { tipo: "paragrafo", testo: "Con la XSR900 le cose sono migliorate parecchio, anche se non superavo i 50 litri totali tra le borse laterali. Con la S1000XR ho smesso proprio di pormi il problema, visto che lo spazio a disposizione è praticamente infinito. Ma qui vediamo subito come dormire in tenda anche quando lo spazio è davvero risicato, magari legando pure uno zainetto sulla sella posteriore. Ecco cosa mi porto per una mototendata in solitaria." },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Tenda Fresh&Black 3 posti",
+          testo: "Partiamo dalla tenda, l'unica cosa che purtroppo bisogna legare alla moto e che resta un po' ingombrante. Vi spiego subito perché la consiglio comunque: il telo Fresh&Black sopra la tenda mantiene la temperatura ottimale anche nelle giornate più calde, e vi tiene al buio completo anche a mezzogiorno. Con i miei amici difficilmente ci svegliamo dopo le 8, ma è comunque un sollievo non doversi svegliare alle 7 con il primo raggio di sole in faccia. Costa sui 70 euro, ma fuori stagione si trova facilmente sotto i 50: io l'ho pagata 49,90. Esistono tende più compatte, ma di solito costano cifre esagerate, anche oltre i 300 euro, e sacrificano l'esperienza pur di guadagnare qualche centimetro. In più, al contrario di molte tende compatte non autoportanti (quelle che usano perlopiù i trekker), questa è semplicissima da montare: una volta presa la mano ci mettete 5 minuti a montarla e 6 a richiuderla. Il materiale poi è di ottima qualità: nonostante l'abbiamo montata centinaia di volte su sassi e radici, non ha ancora un solo buco nella base.",
+          link: { label: "La tenda Fresh&Black che uso io (Decathlon)", url: "https://www.decathlon.it/tutti-gli-sport/campeggio/tende-3-posti?pdt-highlight=313085" }
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Il pavimento stagno sottotenda",
+          testo: "Altrettanto fondamentale quanto sottovalutato: quando comprate una tenda, spesso i commessi non ve lo menzionano nemmeno. Il pavimento stagno vi isola meglio dal terreno, protegge la base della tenda da tagli e forature, e soprattutto non occupa spazio: si chiude comodamente dentro la sacca originale della tenda. Stefano, il nostro grande amico di avventure, ci ha insegnato a piegarlo insieme alla tenda come fosse un unico pezzo. Se ci riuscite alla prima tendata, dalle volte successive vi basterà tirare fuori la tenda e aprirla per trovarvelo già sotto, come fosse di serie.",
+          link: { label: "Il pavimento stagno che uso io (Decathlon)", url: "https://www.decathlon.it/tutti-gli-sport/campeggio/teli-di-ricambio?pdt-highlight=3744" }
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Sacco a pelo ultracompatto (ma economico)",
+          testo: "Scegliere un sacco a pelo non è mai facile, soprattutto quando entrate in negozio e vi trovate davanti un muro con un centinaio di modelli diversi. Vi parlo per esperienza: questo sacco a sarcofago è comodo quanto compatto. Chiuso è grande come una bomboletta del gas, perfetto per il bivacco estivo, visto che tiene la temperatura giusta anche in montagna, dove la minima notturna scende tranquillamente sotto i 15 gradi pure ad agosto. La cosa migliore di questo modello è il prezzo: di solito i sacchi a sarcofago così compatti costano sopra i 90 euro, mentre questo si trova spesso scontato anche sotto i 40.",
+          link: { label: "Il sacco a pelo che uso io (Decathlon)", url: "https://www.decathlon.it/p/sacco-a-pelo-trekking-mt500-15degc-blu/346470/c246m8799895" }
+        },
+        {
+          tipo: "consiglio", numero: 4, titolo: "Il materassino tascabile",
+          testo: "Questo materassino mi è stato utilissimo nelle prime tendate, quando dovevo far entrare tutto in uno zaino Eastpak. Al contrario di altri modelli, chiuso è davvero microscopico: entra comodamente in tasca. Non aspettatevi chissà quale comodità, perché qui non la trovate; quelli davvero comodi sono decisamente troppo ingombranti. L'ultimo modello più spazioso che ho provato mi ha fatto dormire come un bambino, ma occupava mezza borsa laterale, quasi 20 litri buttati. Quindi: se non avete problemi ad addormentarvi e vi basta l'efficienza da chiuso, questo modello non ha eguali.",
+          link: { label: "Il materassino che uso io (Decathlon)", url: "https://www.decathlon.it/p/materassino-gonfiabile-trekking-mt500-air-l-180-x-52cm/189392/c344c344m8799965" }
+        },
+        {
+          tipo: "consiglio", numero: 5, titolo: "Il fornello a gas microscopico",
+          testo: "Di solito per cucinare io e i miei amici usiamo direttamente il fuoco che accendiamo dopo il tramonto, ma ultimamente mi trovo bene a usare il fornello per un antipasto veloce mentre si prepara la brace. In realtà ci si può cucinare un'intera cena: bastano lui (il più compatto che ho trovato), una bomboletta di metano da 230g e un kit come questo, che vi dà pentola e padella, oltre a piatti, posate e bicchieri per due persone.",
+          links: [
+            { label: "Il fornello che uso io (Decathlon)", url: "https://www.decathlon.it/p/fornellino-a-gas-trekking-mt500-compact/310238/m8559534" },
+            { label: "Il kit gavetta che uso io (Decathlon)", url: "https://www.decathlon.it/p/gavetta-campeggio-500-2-persone-15-elementi/174678/c311m8901656" }
+          ]
+        },
+        { tipo: "paragrafo", testo: "Tutto quello che avete letto qui sopra entra tranquillamente in una borsa da 30 litri, che con un paio di cinghie potete legare insieme alla tenda sulla sella posteriore. Che abbiate una naked normale o una carenata prontopista non cambia nulla." },
+        { tipo: "paragrafo", testo: "Vi tengo a precisare che non ricavo nulla nel consigliarvi questi modelli: non ho nessuna affiliazione con Decathlon, vi parlo solo di quello che ho comprato di tasca mia. Avendo provato diversi modelli di ogni categoria, mi sento di consigliarvi i migliori per compattezza. Magari nel prossimo articolo vi parlo dei migliori per comodità vera e propria. Se avete qualcosa di più efficiente da consigliarmi, o qualcosa da aggiungere a questo articolo, scrivetemi pure su Instagram (lo trovate nella sezione Canale aperto): sarò felice di ascoltare il consiglio e di aggiungerlo qui, dandovi credito." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786959723/Manuale%20di%20bordo/rlxq0fulgj1m4ows03qt.jpg", caption: "La mia ultima tendata, la scorsa settimana: ormai porto di tutto e di più nelle valigie, lasciando sempre il bauletto vuoto per poter riporre casco e giacca durante le soste." }
+      ]
     }
   ];
 
