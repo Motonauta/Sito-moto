@@ -90,6 +90,7 @@
       autore: "Il Motonauta",
       data: "2026-08-17",
       blocchi: [
+        { tipo: "sottotitolo", testo: "Dal GSX-R alla S1000XR: sempre in tenda" },
         { tipo: "paragrafo", testo: "Sono ormai anni che io e i miei amici, ogni volta che possiamo, andiamo in escursione in moto sul Gran Sasso o sulle Dolomiti, fermandoci a dormire lì per la notte. L'ho fatto con tre moto diverse, e ormai sono pronto a partire a prescindere dallo spazio disponibile. Come quando andai in tenda con la mia GSX-R 1000 del 2008, dove lo spazio non si poteva nemmeno definire ridotto: era praticamente inesistente." },
         { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786959647/Manuale%20di%20bordo/wnc4ier53kcy5b8kjuk5.jpg", caption: "La prima tendata con il GSX-R 1000: faticosa, dolorosa e con poco spazio disponibile." },
         { tipo: "paragrafo", testo: "Con la XSR900 le cose sono migliorate parecchio, anche se non superavo i 50 litri totali tra le borse laterali. Con la S1000XR ho smesso proprio di pormi il problema, visto che lo spazio a disposizione è praticamente infinito. Ma qui vediamo subito come dormire in tenda anche quando lo spazio è davvero risicato, magari legando pure uno zainetto sulla sella posteriore. Ecco cosa mi porto per una mototendata in solitaria." },
