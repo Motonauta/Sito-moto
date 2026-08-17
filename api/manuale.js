@@ -84,7 +84,7 @@ const STYLE = `<style>
   .manuale-tip-title{ font-size:1.1rem; color:var(--sand); }
   .manuale-tip p{ margin-top:12px; font-size:0.98rem; line-height:1.6; }
   .manuale-tip .manuale-tip-link{
-    display:inline-block; margin-top:12px; font-family:var(--font-mono); font-size:0.78rem;
+    display:inline-block; margin-top:12px; margin-right:10px; font-family:var(--font-mono); font-size:0.78rem;
     text-transform:uppercase; letter-spacing:0.04em; color:var(--gold); border:1px solid var(--gold);
     padding:8px 14px; text-decoration:none;
   }
@@ -159,6 +159,7 @@ function renderBlocco(b) {
       </div>
       ${b.immagine.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.immagine.caption)}</p>` : ''}` : ''}
       ${b.link ? `<a class="manuale-tip-link" href="${escapeHtml(b.link.url)}" target="_blank" rel="noopener sponsored">${escapeHtml(b.link.label)} →</a>` : ''}
+      ${b.links ? b.links.map(l => `<a class="manuale-tip-link" href="${escapeHtml(l.url)}" target="_blank" rel="noopener sponsored">${escapeHtml(l.label)} →</a>`).join('') : ''}
     </div>`;
   }
   return '';
