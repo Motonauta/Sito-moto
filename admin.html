@@ -50,6 +50,10 @@
     border-bottom:1px solid rgba(245,240,230,0.14);
   }
   .uploaded-link-row:last-child{ border-bottom:none; }
+  .uploaded-link-thumb{
+    flex-shrink:0; width:44px; height:44px; object-fit:cover;
+    background:var(--asphalt); border:1px solid rgba(245,240,230,0.2);
+  }
   .uploaded-link-url{
     flex:1; font-family:var(--font-mono); font-size:0.72rem; color:var(--cream-dim);
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
@@ -796,6 +800,20 @@
       const row = document.createElement("div");
       row.className = "uploaded-link-row";
 
+      const isVideo = r.url.includes("/video/upload/");
+      let thumb;
+      if(isVideo){
+        thumb = document.createElement("video");
+        thumb.src = r.url;
+        thumb.muted = true;
+        thumb.preload = "metadata";
+      } else {
+        thumb = document.createElement("img");
+        thumb.src = r.url.replace("/upload/", "/upload/w_88,h_88,c_fill,f_auto,q_auto/");
+        thumb.alt = r.caption || "";
+      }
+      thumb.className = "uploaded-link-thumb";
+
       const urlSpan = document.createElement("span");
       urlSpan.className = "uploaded-link-url";
       urlSpan.textContent = r.url;
@@ -807,6 +825,7 @@
       btn.textContent = "Copia";
       btn.addEventListener("click", () => copyText(r.url, btn, "Copia"));
 
+      row.appendChild(thumb);
       row.appendChild(urlSpan);
       row.appendChild(btn);
       wrap.appendChild(row);
