@@ -128,6 +128,33 @@
         { tipo: "paragrafo", testo: "Vi tengo a precisare che non ricavo nulla nel consigliarvi questi modelli: non ho nessuna affiliazione con Decathlon, vi parlo solo di quello che ho comprato di tasca mia. Avendo provato diversi modelli di ogni categoria, mi sento di consigliarvi i migliori per compattezza. Magari nel prossimo articolo vi parlo dei migliori per comodità vera e propria. Se avete qualcosa di più efficiente da consigliarmi, o qualcosa da aggiungere a questo articolo, scrivetemi pure su Instagram (lo trovate nella sezione Canale aperto): sarò felice di ascoltare il consiglio e di aggiungerlo qui, dandovi credito." },
         { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786959723/Manuale%20di%20bordo/rlxq0fulgj1m4ows03qt.jpg", caption: "La mia ultima tendata, la scorsa settimana: ormai porto di tutto e di più nelle valigie, lasciando sempre il bauletto vuoto per poter riporre casco e giacca durante le soste." }
       ]
+    },
+    {
+      titolo: "Cosa ne penso del mio Tris Givi Trekker Outback EVO",
+      categoria: "Equipaggiamento",
+      excerpt: "Dopo 15.000 km con il Tris Givi Trekker Outback EVO sulla mia S1000XR: capienza, robustezza, il sistema Camside e l'unico vero difetto che ho trovato.",
+      copertina: "",
+      autore: "Il Motonauta",
+      data: "2026-08-18",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Dopo l'acquisto della mia bellissima S1000XR ho deciso di prendere il fantastico Givi Trekker Outback EVO da 56 litri, perché avevo bisogno di un bauletto di grandi dimensioni per viaggiare più comodo con i bagagli. Dopo il bauletto avevo due strade davanti: le valigie laterali originali BMW, spendendo un migliaio di euro, oppure, più o meno con la stessa cifra, le valigie della stessa famiglia Givi con il sistema Camside, che stavano decisamente meglio abbinate al bauletto e, oltre a essere in alluminio, portavano 7 litri in più rispetto alle originali per la XR." },
+        { tipo: "sottotitolo", testo: "La scelta delle valigie Camside" },
+        { tipo: "paragrafo", testo: "La scelta è ricaduta ovviamente su queste ultime, sfruttando anche il nuovo blocchetto chiavi SLB101 uscito sul mercato pochi giorni prima che lo ordinassi. Con tutti questi acquisti mi sono ritrovato con il tris completo e la possibilità di aprire bauletto e valigie con la stessa chiave originale: rispetto al modello BMW, alla fine, non c'erano più contro nella mia scelta, solo pro." },
+        { tipo: "sottotitolo", testo: "Come mi trovo in viaggio" },
+        { tipo: "paragrafo", testo: "Nei viaggi sono perfette: è difficile riempirle anche in quelli molto lunghi, e lascio sempre il bauletto vuoto per riporre casco, giacca e guanti durante le soste. La capienza è importante e si sente: nell'ultimo viaggio avevo con me anche tutti gli attrezzi miei e dei miei amici, più una piccola borsa frigo con l'acqua fredda per tutti, e nonostante questo restava spazio in entrambe le valigie al punto da poterci mettere la spesa per la cena prima di arrivare all'Airbnb." },
+        { tipo: "sottotitolo", testo: "Il sistema Camside" },
+        { tipo: "paragrafo", testo: "Il sistema Camside è progettato davvero bene: il telaio è molto compatto e fa sì che le valigie restino il più aderenti possibile alla moto. Grazie a questo, quando si aprono non sbattono contro il bauletto ma scendono verso l'esterno, e si possono caricare comodamente." },
+        { tipo: "sottotitolo", testo: "La comodità di portarle via" },
+        { tipo: "paragrafo", testo: "Una volta arrivato all'alloggio dove passare la notte, smonto entrambe le valigie e me le porto dentro, invece di usare borse o contenitori interni. Sono molto leggere e hanno i manici su entrambi i lati, che garantiscono un'ottima presa anche a pieno carico: portandomele appresso posso risistemare tutto con calma la mattina, per poi doverle solo riagganciare una volta tornato alla moto." },
+        { tipo: "sottotitolo", testo: "Robustezza" },
+        { tipo: "paragrafo", testo: "Le valigie sono molto più solide di quanto sembrino a vederle. Ho avuto la sfortuna di appoggiare la moto a terra sul lato destro: mettendo il cavalletto centrale mi è scivolato il piede, perché non mi ero accorto che l'appoggio fosse pieno di grasso della catena. Nonostante la botta a terra con tutto il peso della moto, la valigia destra (vuota) non si è né piegata né graffiata. D'altronde sono pensate per il fuoristrada, quindi una certa robustezza me l'aspettavo, e per fortuna l'ho trovata." },
+        { tipo: "sottotitolo", testo: "Gli accessori Givi" },
+        { tipo: "paragrafo", testo: "Una cosa che mi piace molto di questo marchio è la disponibilità di optional: per praticamente ogni modello esistono decine di accessori che migliorano l'esperienza. Per il mio bauletto ho preso la rete da fondo, che uso tutti i giorni per tenere ferme le cose piccole durante il viaggio, un paio di cinghie per attaccare sopra i passanti del tris gli oggetti più ingombranti (come una tenda da campeggio), e una sacca compatta che si aggancia sul coperchio del bauletto e, in caso di necessità, si trasforma in uno zainetto da 15 litri molto robusto. Ci sono svariati altri optional che mi tentano parecchio, e non credo resisterò a lungo dal comprarli." },
+        { tipo: "paragrafo", testo: "A proposito di passanti: questa ultima versione del tris ne è piena. Se si vuole attaccare qualcosa sopra il bauletto, ci sono almeno 10 punti di aggancio per le cinghie." },
+        { tipo: "sottotitolo", testo: "L'unico vero difetto" },
+        { tipo: "paragrafo", testo: "Dopo due viaggi molto lunghi e un utilizzo costante nei weekend, posso confermarvi che valgono assolutamente la spesa. L'unico difetto che ho trovato, e non è da poco, è che durante le piogge forti non ci si può affidare all'impermeabilità totale del bauletto: ancora non ho capito da dove entri l'acqua, ma quando riprendo la moto dopo un temporale trovo sempre il tappetino del bauletto impregnato. Avevo intenzione di far valere la garanzia, ma ho scoperto sui forum che in parecchi hanno lo stesso problema: mi auguro che Givi lo risolva, magari con un piccolo richiamo per chi lo ha già acquistato, perché al contrario del bauletto le valigie, anche nelle condizioni meteo peggiori, non hanno mai ceduto." },
+        { tipo: "paragrafo", testo: "Vi ricordo che questa è una recensione sincera dopo 15.000 km di utilizzo del tris: non sono affiliato in alcun modo a Givi, e tutto quello di cui vi ho parlato l'ho comprato di tasca mia." }
+      ]
     }
   ];
 
