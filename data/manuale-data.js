@@ -159,6 +159,40 @@
         { tipo: "paragrafo", testo: "Dopo due viaggi molto lunghi e un utilizzo costante nei weekend, posso confermarvi che valgono assolutamente la spesa. L'unico difetto che ho trovato, e non è da poco, è che durante le piogge forti non ci si può affidare all'impermeabilità totale del bauletto. Ancora non ho capito da dove entri l'acqua, ma quando riprendo la moto dopo un temporale trovo sempre il tappetino del bauletto impregnato. Avevo intenzione di far valere la garanzia, ma ho scoperto sui forum che in parecchi hanno lo stesso problema. Mi auguro che Givi lo risolva, magari con un piccolo richiamo per chi lo ha già acquistato. Al contrario del bauletto, le valigie non hanno mai ceduto, nemmeno nelle condizioni meteo peggiori." },
         { tipo: "paragrafo", testo: "Vi ricordo che questa è una recensione sincera dopo 15.000 km di utilizzo del tris. Non sono affiliato in alcun modo a Givi, e tutto quello di cui vi ho parlato l'ho comprato di tasca mia." }
       ]
+    },
+    {
+      titolo: "Gli attrezzi necessari da portare in viaggio",
+      categoria: "Equipaggiamento",
+      excerpt: "Dal kit per le gomme al bicomponente per le crepe: cinque attrezzi che porto sempre in viaggio, pensati per cavarsela da soli quando si resta a piedi lontano da tutto.",
+      copertina: "",
+      autore: "Il Motonauta",
+      data: "2026-08-19",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Potete avere la moto più affidabile del mondo, ma quando di mezzo ci sono migliaia di chilometri bisogna fare i conti con le probabilità. Soprattutto nei viaggi verso posti meno popolati, o comunque lontani dalle grandi città, il rischio di restare a piedi in mezzo al nulla senza nessun aiuto diventa concreto." },
+        { tipo: "paragrafo", testo: "Portare gli attrezzi giusti in viaggio è fondamentale. In certi casi puoi risolvere definitivamente il problema che ti capita davanti, in altri riesci almeno a tamponare fino all'officina più vicina, che è comunque meglio di dover pagare un carroattrezzi. Oggi vediamo insieme cosa ritengo necessario in viaggio, per potercisi affidare in caso di emergenza." },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Kit per riparare le gomme",
+          testo: "Io mi affido sempre a un kit preso in un negozio che neanche ricordo, ma tanto sono quasi tutti uguali: contengono i vermicelli da applicare al buco, il mastice per farli restare in posizione e uniformarsi allo pneumatico, la punta per allargare il buco iniziale nel punto giusto (così il vermicello entra e aderisce bene) e la punta per infilarlo. Cercate di prenderne uno di marca conosciuta: non mi affiderei troppo ai siti cinesi che offrono l'ultra risparmio. Normalmente in questi kit ci sono anche le bombolette di CO2, ma non potete affidarvi solo a quelle: servono più che altro per arrivare al benzinaio successivo e gonfiare la gomma per bene. Io preferisco portare un compressore portatile, come quello di cui vi parlo adesso."
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Compressore portatile",
+          testo: "Personalmente uso un compressore un po' ingombrante, ma oltre a gonfiare le gomme fa anche da starter in caso di problemi alla batteria. Ormai si trovano compressori portatili tascabili di tutte le marche: vi consiglio di guardare una soluzione come quella che vi mostro qui sotto. Ce ne sono decisamente di più economiche, se volete spendere meno: vi indico questa solo perché è la più compatta che si trova oggi sul mercato, ed è di una marca affidabile.",
+          link: { label: "Il compressore che uso io (Muc-Off)", url: "https://muc-off-eu.myshopify.com/it/products/airmach-electric-mini-inflator" }
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Gli attrezzi per la TUA moto",
+          testo: "Prima di un viaggio vi consiglio di studiare bene la vostra moto, e di creare un kit personale con il necessario per smontarla. La mia XR, ad esempio, con due misure di chiavi a stella e due di chiave a bussola si può smontare quasi completamente: portando anche le bussole per le ruote potrei tranquillamente farla a pezzi in mezzo alla strada. Cercate di capire quali sono gli attrezzi giusti per la vostra moto, e non fatevi mai mancare una pinza, un cacciavite a taglio e uno a croce: tornano utili in ogni caso."
+        },
+        {
+          tipo: "consiglio", numero: 4, titolo: "Bicomponente o acciaio liquido",
+          testo: "È stato fondamentale in un nostro viaggio in Calabria qualche anno fa. Per via di un piccolo incidente con una Renault 208 (guidata da una persona che al massimo potrebbe guidare il carrello della spesa), avevo crepato il carter destro della mia vecchia Zetina 750. L'ho smontato e spalmato per bene con il bicomponente, e mi ha permesso di continuare il viaggio senza perdite: l'ho venduta così mesi dopo, senza mai più sostituirlo. Il bicomponente può essere di grande aiuto in molti casi, e resta comunque compatto: è composto da due piccoli dosatori che entrano in tasca."
+        },
+        {
+          tipo: "consiglio", numero: 5, titolo: "Nastro e fascette",
+          testo: "Anche questo è assolutamente necessario, e non credo serva spiegare troppo. Soprattutto quando si parla di parti elettriche o plastiche, sono sempre la soluzione giusta."
+        },
+        { tipo: "paragrafo", testo: "Questo è ciò che ritengo fondamentale per i miei viaggi, e finora è sempre stato d'aiuto: a noi, o a persone che lungo la strada abbiamo trovato in difficoltà. Se vi viene in mente qualcos'altro di utile da portare in viaggio, non esitate a contattarmi sui social: sarò felicissimo di aggiungere il vostro consiglio a questa guida, nominandovi di conseguenza." }
+      ]
     }
   ];
 
