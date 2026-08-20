@@ -159,6 +159,52 @@
         { tipo: "paragrafo", testo: "Dopo due viaggi molto lunghi e un utilizzo costante nei weekend, posso confermarvi che valgono assolutamente la spesa. L'unico difetto che ho trovato, e non è da poco, è che durante le piogge forti non ci si può affidare all'impermeabilità totale del bauletto. Ancora non ho capito da dove entri l'acqua, ma quando riprendo la moto dopo un temporale trovo sempre il tappetino del bauletto impregnato. Avevo intenzione di far valere la garanzia, ma ho scoperto sui forum che in parecchi hanno lo stesso problema. Mi auguro che Givi lo risolva, magari con un piccolo richiamo per chi lo ha già acquistato. Al contrario del bauletto, le valigie non hanno mai ceduto, nemmeno nelle condizioni meteo peggiori." },
         { tipo: "paragrafo", testo: "Vi ricordo che questa è una recensione sincera dopo 15.000 km di utilizzo del tris. Non sono affiliato in alcun modo a Givi, e tutto quello di cui vi ho parlato l'ho comprato di tasca mia." }
       ]
+    },
+    {
+      titolo: "Gli attrezzi necessari da portare in viaggio",
+      categoria: "Equipaggiamento",
+      excerpt: "Dal kit per le gomme al bicomponente per le crepe: cinque attrezzi che porto sempre in viaggio, pensati per cavarsela da soli quando si resta a piedi lontano da tutto.",
+      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217568/Manuale%20di%20bordo/gtcwzywcl40vltll2cnc.jpg",
+      autore: "Il Motonauta",
+      data: "2026-08-19",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Potete avere la moto più affidabile del mondo, ma quando di mezzo ci sono migliaia di chilometri bisogna fare i conti con le probabilità. Soprattutto nei viaggi verso posti meno popolati, o comunque lontani dalle grandi città, il rischio di restare a piedi in mezzo al nulla senza nessun aiuto diventa concreto." },
+        { tipo: "paragrafo", testo: "Portare gli attrezzi giusti in viaggio è fondamentale. In certi casi puoi risolvere definitivamente il problema che ti capita davanti, in altri riesci almeno a tamponare fino all'officina più vicina, che è comunque meglio di dover pagare un carroattrezzi. Oggi vediamo insieme cosa ritengo necessario in viaggio, per potercisi affidare in caso di emergenza." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217570/Manuale%20di%20bordo/r9a3kt3bkfzfvtblxdzu.jpg" },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Kit per riparare le gomme",
+          testo: "Io mi affido sempre a un kit preso in un negozio che neanche ricordo, ma tanto sono quasi tutti uguali: contengono i vermicelli da applicare al buco, il mastice per farli restare in posizione e uniformarsi allo pneumatico, la punta per allargare il buco iniziale nel punto giusto (così il vermicello entra e aderisce bene) e la punta per infilarlo. Cercate di prenderne uno di marca conosciuta: non mi affiderei troppo ai siti cinesi che offrono l'ultra risparmio. Normalmente in questi kit ci sono anche le bombolette di CO2, ma non potete affidarvi solo a quelle: servono più che altro per arrivare al benzinaio successivo e gonfiare la gomma per bene. Io preferisco portare un compressore portatile, come quello di cui vi parlo adesso.",
+          immagine: { src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217577/Manuale%20di%20bordo/h44gayxswu2jwlcsgmho.png", caption: "Questo è un kit generico, sono tutti uguali e offrono sempre le stesse cose, quindi non vi fate troppi problemi a sceglierlo." }
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Compressore portatile",
+          testo: "Personalmente uso un compressore un po' ingombrante, ma oltre a gonfiare le gomme fa anche da starter in caso di problemi alla batteria. Ormai si trovano compressori portatili tascabili di tutte le marche: vi consiglio di guardare una soluzione come quella che vi mostro qui sotto. Ce ne sono decisamente di più economiche, se volete spendere meno: vi indico questa solo perché è la più compatta che si trova oggi sul mercato, ed è di una marca affidabile.",
+          link: { label: "Il compressore che uso io (Muc-Off)", url: "https://muc-off-eu.myshopify.com/it/products/airmach-electric-mini-inflator" },
+          immagine: { src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217575/Manuale%20di%20bordo/rp168ouhavpq0ht0aavx.png", caption: "Questo è esattamente il modello che uso io, ma prendetelo solo se avete molto spazio in valigia perché ne ruba parecchio." }
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Gli attrezzi per la TUA moto",
+          testo: "Prima di un viaggio vi consiglio di studiare bene la vostra moto, e di creare un kit personale con il necessario per smontarla. La mia XR, ad esempio, con due misure di chiavi a stella e due di chiave a bussola si può smontare quasi completamente: portando anche le bussole per le ruote potrei tranquillamente farla a pezzi in mezzo alla strada. Cercate di capire quali sono gli attrezzi giusti per la vostra moto, e non fatevi mai mancare una pinza, un cacciavite a taglio e uno a croce: tornano utili in ogni caso.",
+          immagine: { src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217578/Manuale%20di%20bordo/trovnx1otl85yhw7uns2.png", caption: "Se trovate un kit già pronto, compatto, e con tutto il necessario per smontare la vostra moto, prendetelo pure! Magari fate un ragionamento veloce togliendo le cose non strettamente necessarie per renderlo ancora più compatto." }
+        },
+        {
+          tipo: "consiglio", numero: 4, titolo: "Bicomponente o acciaio liquido",
+          testo: "È stato fondamentale in un nostro viaggio in Calabria qualche anno fa. Per via di un piccolo incidente con una Renault 208 (guidata da una persona che al massimo potrebbe guidare il carrello della spesa), avevo crepato il carter destro della mia vecchia Zetina 750. L'ho smontato e spalmato per bene con il bicomponente, e mi ha permesso di continuare il viaggio senza perdite: l'ho venduta così mesi dopo, senza mai più sostituirlo. Il bicomponente può essere di grande aiuto in molti casi, e resta comunque compatto: è composto da due piccoli dosatori che entrano in tasca.",
+          immagine: { src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217568/Manuale%20di%20bordo/gtcwzywcl40vltll2cnc.jpg", caption: "Noi che ripariamo il carter dalla parte interna dopo aver messo nastro americano fuori per far sì che rimanesse lì la miscela. Nel giro di 20 minuti di lavoro la moto era di nuovo perfettamente utilizzabile, e abbiamo proseguito il viaggio senza altri problemi." }
+        },
+        {
+          tipo: "consiglio", numero: 5, titolo: "Nastro e fascette",
+          testo: "Anche questo è assolutamente necessario, e non credo serva spiegare troppo. Soprattutto quando si parla di parti elettriche o plastiche, sono sempre la soluzione giusta."
+        },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217572/Manuale%20di%20bordo/b1ysbvoetanf0tkaayu6.png" },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217573/Manuale%20di%20bordo/no5ijdxxpylcnuqt1bza.png" },
+        {
+          tipo: "consiglio", numero: 6, titolo: "Cavo della frizione",
+          testo: "Ormai in qualsiasi negozio di abbigliamento moto e accessori si trovano cavi per la frizione di emergenza: kit che contengono, oltre al cavo, anche i nippli di varie misure per poterlo installare su qualsiasi modello. Insomma, il necessario per sostituire il cavo e ripartire. Vi ricordo sempre di acquistare, una volta tornati a casa, il kit cavo frizione originale per il vostro modello e di reinstallare quello: cambiando solo il cavo, è inevitabile che vi si rompa di nuovo nel giro di pochi mesi. Ve lo dico per esperienza.",
+          immagine: { src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217571/Manuale%20di%20bordo/adxcmfvezjy0cfhneabr.png", caption: "Kit generico trovato online, non importa la marca, vi basta che sia universale." }
+        },
+        { tipo: "paragrafo", testo: "Questo è ciò che ritengo fondamentale per i miei viaggi, e finora è sempre stato d'aiuto: a noi, o a persone che lungo la strada abbiamo trovato in difficoltà. Se vi viene in mente qualcos'altro di utile da portare in viaggio, non esitate a contattarmi sui social: sarò felicissimo di aggiungere il vostro consiglio a questa guida, nominandovi di conseguenza." }
+      ]
     }
   ];
 
