@@ -171,6 +171,7 @@
         { tipo: "paragrafo", testo: "Potete avere la moto più affidabile del mondo, ma quando di mezzo ci sono migliaia di chilometri bisogna fare i conti con le probabilità. Soprattutto nei viaggi verso posti meno popolati, o comunque lontani dalle grandi città, il rischio di restare a piedi in mezzo al nulla senza nessun aiuto diventa concreto." },
         { tipo: "paragrafo", testo: "Portare gli attrezzi giusti in viaggio è fondamentale. In certi casi puoi risolvere definitivamente il problema che ti capita davanti, in altri riesci almeno a tamponare fino all'officina più vicina, che è comunque meglio di dover pagare un carroattrezzi. Oggi vediamo insieme cosa ritengo necessario in viaggio, per potercisi affidare in caso di emergenza." },
         { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217570/Manuale%20di%20bordo/r9a3kt3bkfzfvtblxdzu.jpg" },
+        { tipo: "sottotitolo", testo: "Ecco cosa ritengo necessario in un viaggio:" },
         {
           tipo: "consiglio", numero: 1, titolo: "Kit per riparare le gomme",
           testo: "Io mi affido sempre a un kit preso in un negozio che neanche ricordo, ma tanto sono quasi tutti uguali: contengono i vermicelli da applicare al buco, il mastice per farli restare in posizione e uniformarsi allo pneumatico, la punta per allargare il buco iniziale nel punto giusto (così il vermicello entra e aderisce bene) e la punta per infilarlo. Cercate di prenderne uno di marca conosciuta: non mi affiderei troppo ai siti cinesi che offrono l'ultra risparmio. Normalmente in questi kit ci sono anche le bombolette di CO2, ma non potete affidarvi solo a quelle: servono più che altro per arrivare al benzinaio successivo e gonfiare la gomma per bene. Io preferisco portare un compressore portatile, come quello di cui vi parlo adesso.",
@@ -179,7 +180,7 @@
         {
           tipo: "consiglio", numero: 2, titolo: "Compressore portatile",
           testo: "Personalmente uso un compressore un po' ingombrante, ma oltre a gonfiare le gomme fa anche da starter in caso di problemi alla batteria. Ormai si trovano compressori portatili tascabili di tutte le marche: vi consiglio di guardare una soluzione come quella che vi mostro qui sotto. Ce ne sono decisamente di più economiche, se volete spendere meno: vi indico questa solo perché è la più compatta che si trova oggi sul mercato, ed è di una marca affidabile.",
-          link: { label: "Il compressore che uso io (Muc-Off)", url: "https://muc-off-eu.myshopify.com/it/products/airmach-electric-mini-inflator" },
+          link: { label: "Un esempio di compressore molto compatto", url: "https://muc-off-eu.myshopify.com/it/products/airmach-electric-mini-inflator" },
           immagine: { src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217575/Manuale%20di%20bordo/rp168ouhavpq0ht0aavx.png", caption: "Questo è esattamente il modello che uso io, ma prendetelo solo se avete molto spazio in valigia perché ne ruba parecchio." }
         },
         {
