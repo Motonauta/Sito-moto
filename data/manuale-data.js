@@ -191,6 +191,10 @@
           tipo: "consiglio", numero: 5, titolo: "Nastro e fascette",
           testo: "Anche questo è assolutamente necessario, e non credo serva spiegare troppo. Soprattutto quando si parla di parti elettriche o plastiche, sono sempre la soluzione giusta."
         },
+        {
+          tipo: "consiglio", numero: 6, titolo: "Cavo della frizione",
+          testo: "Ormai in qualsiasi negozio di abbigliamento moto e accessori si trovano cavi per la frizione di emergenza: kit che contengono, oltre al cavo, anche i nippli di varie misure per poterlo installare su qualsiasi modello. Insomma, il necessario per sostituire il cavo e ripartire. Vi ricordo sempre di acquistare, una volta tornati a casa, il kit cavo frizione originale per il vostro modello e di reinstallare quello: cambiando solo il cavo, è inevitabile che vi si rompa di nuovo nel giro di pochi mesi. Ve lo dico per esperienza."
+        },
         { tipo: "paragrafo", testo: "Questo è ciò che ritengo fondamentale per i miei viaggi, e finora è sempre stato d'aiuto: a noi, o a persone che lungo la strada abbiamo trovato in difficoltà. Se vi viene in mente qualcos'altro di utile da portare in viaggio, non esitate a contattarmi sui social: sarò felicissimo di aggiungere il vostro consiglio a questa guida, nominandovi di conseguenza." }
       ]
     }
