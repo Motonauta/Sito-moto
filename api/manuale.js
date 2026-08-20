@@ -106,6 +106,29 @@ const STYLE = `<style>
   }
   .manuale-breadcrumb a{ color:var(--cream-dim); }
   .manuale-breadcrumb a:hover{ color:var(--gold); }
+  .manuale-correlati{
+    margin-top:64px; padding-top:44px; border-top:1px solid rgba(245,240,230,0.14);
+  }
+  .manuale-correlati h2{ font-size:1.4rem; color:var(--sand); border:none; padding-bottom:0; margin-top:0; }
+  .manuale-correlati-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; margin-top:28px;
+  }
+  .manuale-correlati-card{
+    display:block; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+    overflow:hidden; transition:border-color .25s ease, transform .25s ease;
+  }
+  .manuale-correlati-card:hover{ border-color:var(--rust); transform:translateY(-4px); }
+  .manuale-correlati-photo{
+    aspect-ratio:16/9; background:linear-gradient(155deg, rgba(217,164,65,0.18) 0%, rgba(193,80,46,0.18) 100%);
+    overflow:hidden; display:flex; align-items:center; justify-content:center;
+  }
+  .manuale-correlati-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .manuale-correlati-photo .placeholder-icon{ font-size:2rem; opacity:0.5; }
+  .manuale-correlati-body{ padding:18px 20px; }
+  .manuale-correlati-body .marker{ margin-bottom:0; }
+  .manuale-correlati-body h3{ font-size:1rem; color:var(--sand); margin-top:8px; }
+  @media (max-width:900px){ .manuale-correlati-grid{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:600px){ .manuale-correlati-grid{ grid-template-columns:1fr; } }
   .manuale-breadcrumb span{ margin:0 6px; color:var(--gold); }
 </style>`;
 
@@ -165,6 +188,31 @@ function renderBlocco(b) {
     </div>`;
   }
   return '';
+}
+
+function articoliConsigliati(guidaCorrente) {
+  const altri = GUIDE.filter(g => g !== guidaCorrente);
+  for (let i = altri.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [altri[i], altri[j]] = [altri[j], altri[i]];
+  }
+  return altri.slice(0, 3);
+}
+
+function renderArticoloConsigliato(g) {
+  const slug = getSlug(g);
+  return `
+      <a class="manuale-correlati-card" href="/manuale/${slug}">
+        <div class="manuale-correlati-photo">
+          ${g.copertina
+            ? `<img src="${escapeHtml(wikiThumb(g.copertina, 500))}" alt="${escapeHtml(g.titolo)}" loading="lazy">`
+            : `<span class="placeholder-icon">📖</span>`}
+        </div>
+        <div class="manuale-correlati-body">
+          <p class="marker">${escapeHtml(g.categoria)}</p>
+          <h3>${escapeHtml(g.titolo)}</h3>
+        </div>
+      </a>`;
 }
 
 module.exports = async (req, res) => {
@@ -248,6 +296,19 @@ ${HEADER_HTML}
     <div class="manuale-content">
       ${contenutoHTML}
     </div>
+
+    ${(() => {
+      const correlati = articoliConsigliati(guida);
+      if (!correlati.length) return '';
+      return `
+    <div class="manuale-correlati">
+      <p class="marker">Continua a leggere</p>
+      <h2>Altri articoli consigliati</h2>
+      <div class="manuale-correlati-grid">
+        ${correlati.map(renderArticoloConsigliato).join('')}
+      </div>
+    </div>`;
+    })()}
 
     <p style="margin-top:44px;"><a href="/manuale.html" style="color:var(--gold);">← Torna al Manuale di bordo</a></p>
   </div>
