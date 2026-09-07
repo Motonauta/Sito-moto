@@ -208,7 +208,7 @@
       ]
     },
     {
-      titolo: "Il Cardo Packtalk Pro ha aiutato a salvare la vita a un motociclista in Arizona",
+      titolo: "Il giorno in cui un interfono ha salvato la vita di un uomo",
       categoria: "Equipaggiamento",
       excerpt: "La funzione Crash Detection del Cardo Packtalk Pro ha avvisato in automatico la moglie di un motociclista in Arizona dopo un incidente: senza quell'allarme, forse nessuno lo avrebbe trovato in tempo.",
       copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788790160/Manuale%20di%20bordo/r8d0hckoziqkweajhcoo.jpg",
