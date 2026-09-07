@@ -206,6 +206,26 @@
         },
         { tipo: "paragrafo", testo: "Questo è ciò che ritengo fondamentale per i miei viaggi, e finora è sempre stato d'aiuto: a noi, o a persone che lungo la strada abbiamo trovato in difficoltà. Se vi viene in mente qualcos'altro di utile da portare in viaggio, non esitate a contattarmi sui social: sarò felicissimo di aggiungere il vostro consiglio a questa guida, nominandovi di conseguenza." }
       ]
+    },
+    {
+      titolo: "Il Cardo Packtalk Pro ha aiutato a salvare la vita a un motociclista in Arizona",
+      categoria: "Equipaggiamento",
+      excerpt: "La funzione Crash Detection del Cardo Packtalk Pro ha avvisato in automatico la moglie di un motociclista in Arizona dopo un incidente: senza quell'allarme, forse nessuno lo avrebbe trovato in tempo.",
+      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788790160/Manuale%20di%20bordo/r8d0hckoziqkweajhcoo.jpg",
+      autore: "Il Motonauta",
+      data: "2026-09-07",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Ogni tanto capita una notizia che mi ferma un secondo. Non tanto per la disgrazia in sé, quella purtroppo capita, quanto per come sarebbe potuta andare molto peggio senza un pizzico di tecnologia addosso. È il caso di Dustin Hayes, motociclista dell'Arizona, e del suo Cardo Packtalk Pro." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788790160/Manuale%20di%20bordo/r8d0hckoziqkweajhcoo.jpg" },
+        { tipo: "paragrafo", testo: "La sera del 2 gennaio, verso le nove, Dustin stava percorrendo la New River Road, tra la Carefree Highway e la I-17. Si pensa abbia sterzato per evitare un animale sulla carreggiata. È stato sbalzato lontano dalla moto, in un punto dove difficilmente qualcuno lo avrebbe notato passando." },
+        { tipo: "paragrafo", testo: "Il suo intercom però ha fatto qualcosa che lui, in quel momento, non poteva fare da solo: ha avvisato chi doveva sapere che qualcosa non andava. La funzione Crash Detection del Packtalk Pro ha rilevato l'impatto e ha mandato in automatico un messaggio d'emergenza a sua moglie, Brooke." },
+        { tipo: "paragrafo", testo: "Brooke ha raccontato a Fox 10 Phoenix di aver ricevuto un messaggio sul telefono con scritto \"urgente\". Lo ha aperto e diceva che Dustin poteva essere stato coinvolto in un incidente. Ha pensato: vado a controllare di persona. Ha guidato circa mezz'ora per raggiungere il punto segnalato, e lì ha trovato suo marito a bordo strada. È convinta che, senza quell'avviso, nessuno lo avrebbe trovato in tempo." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788790162/Manuale%20di%20bordo/yce9uyzlgih18zkzt3l7.jpg", caption: "Cardo è il mio migliore amico in moto e viaggia sempre insieme a me, se avessi anche io il Pro sarebbe una grande salvata in caso di emergenza" },
+        { tipo: "paragrafo", testo: "Cardo, dal canto suo, ha voluto fare la sua parte: dal 26 febbraio al 26 marzo ha devoluto il 5% di ogni Packtalk Pro venduto per sostenere le spese di recupero di Dustin." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788790163/Manuale%20di%20bordo/rlza6d54gskxawj0eddn.webp" },
+        { tipo: "paragrafo", testo: "Non so voi, ma quando giro da solo, soprattutto su strade poco battute o di sera, questo genere di notizie mi fa riflettere. Non è tecnologia per sentirsi più sicuri sulla carta. È tecnologia che può davvero fare la differenza quando le cose vanno storte e non sei in grado di chiedere aiuto da solo." },
+        { tipo: "link", label: "Guarda il video in cui ne parlo", url: "https://www.tiktok.com/@ilmotonauta/video/7599404799049747734" }
+      ]
     }
   ];
 

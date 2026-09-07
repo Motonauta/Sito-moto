@@ -91,6 +91,12 @@ const STYLE = `<style>
     padding:8px 14px; text-decoration:none;
   }
   .manuale-tip .manuale-tip-link:hover{ background:var(--gold); color:var(--asphalt); }
+  .manuale-cta-link{
+    display:inline-block; margin-top:32px; font-family:var(--font-mono); font-size:0.78rem;
+    text-transform:uppercase; letter-spacing:0.04em; color:var(--gold); border:1px solid var(--gold);
+    padding:10px 18px; text-decoration:none;
+  }
+  .manuale-cta-link:hover{ background:var(--gold); color:var(--asphalt); }
   .manuale-tip-img{
     margin-top:14px; overflow:hidden; border:1px solid rgba(245,240,230,0.14);
   }
@@ -162,6 +168,9 @@ function renderBlocco(b) {
   }
   if (b.tipo === 'sottotitolo') {
     return `<h2>${escapeHtml(b.testo)}</h2>`;
+  }
+  if (b.tipo === 'link') {
+    return `<p style="margin-top:8px;"><a class="manuale-cta-link" href="${escapeHtml(b.url)}" target="_blank" rel="noopener">${escapeHtml(b.label)} →</a></p>`;
   }
   if (b.tipo === 'immagine') {
     return `
