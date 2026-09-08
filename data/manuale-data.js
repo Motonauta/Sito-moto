@@ -258,6 +258,8 @@
         { tipo: "paragrafo", testo: "Controlla sempre che il casco abbia l'omologazione ECE 22.06 (la più recente e più severa, sostituisce gradualmente la 22.05): non è un timbro decorativo, indica che il casco ha superato test di sicurezza aggiornati. Se stai comprando usato o su qualche sito poco chiaro, verifica sempre questo dato prima del prezzo." },
         { tipo: "sottotitolo", testo: "Un consiglio spicciolo ma che vale oro" },
         { tipo: "paragrafo", testo: "Se puoi, prova il casco con il tipo di giacca/collo che usi di solito in viaggio, non a torso nudo in negozio. Cambia tutto: un casco che sembra perfetto da solo può dare fastidio nella zona del collo una volta che ci infili sotto anche il colletto della giacca tecnica." },
+        { tipo: "sottotitolo", testo: "Occhio alle predisposizioni per l'interfono" },
+        { tipo: "paragrafo", testo: "Un'altra cosa importante da controllare quando scegli un casco sono le dimensioni delle predisposizioni per l'interfono. Alcuni caschi hanno gli spazi per le casse molto piccoli, perché pensati per l'interfono realizzato dalla stessa azienda che produce il casco, e magari non sono compatibili con il dispositivo che usi tu. Sembra una sciocchezza, ma se lo scopri dopo averlo comprato può diventare un problema vero." },
         { tipo: "paragrafo", testo: "Il casco perfetto non esiste. Esiste quello che ti fa arrivare a destinazione ancora dell'umore giusto per goderti il posto in cui sei arrivato." },
         { tipo: "paragrafo", testo: "Hai un casco che useresti per un giro del mondo e uno che eviteresti anche per andare al bar? Raccontamelo: magari ne esce un altro articolo!" }
       ]
