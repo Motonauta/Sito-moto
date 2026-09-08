@@ -250,7 +250,7 @@
         },
         {
           tipo: "consiglio", numero: 2, titolo: "Modulare",
-          testo: "Il compromesso che io stesso uso più spesso in viaggio: puoi aprirlo ai caselli, mentre parli con qualcuno, o quando ti fermi per una foto, senza doverlo sfilare del tutto. Il prezzo da pagare è un peso leggermente superiore e una struttura comunque un filo meno rigida di un integrale puro."
+          testo: "Il compromesso perfetto su carta: puoi aprirlo ai caselli, mentre parli con qualcuno, o quando ti fermi per una foto, senza doverlo sfilare del tutto. Il prezzo da pagare è un peso leggermente superiore, una sicurezza inferiore (a meno che non si guardano quelli di fascia altissima) e una struttura comunque un filo meno rigida di un integrale puro."
         },
         {
           tipo: "consiglio", numero: 3, titolo: "Jet",
