@@ -230,10 +230,12 @@
       titolo: "Come scegliere il casco giusto per i lunghi viaggi",
       categoria: "Equipaggiamento",
       excerpt: "Il casco più bello del negozio non è quasi mai quello giusto per un viaggio lungo. Comfort, ventilazione, peso e omologazione: cosa guardare davvero prima di comprarlo.",
+      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788859019/Manuale%20di%20bordo/e15joy7gmctbrly3ffho.jpg",
       autore: "Il Motonauta",
       data: "2026-09-08",
       blocchi: [
         { tipo: "paragrafo", testo: "Partiamo da una cosa che ho imparato a mie spese: il casco più bello del negozio non è quasi mai quello giusto per un viaggio lungo. L'ho scoperto dopo 800 km in un giorno con un casco sportivo che mi stava d'incanto al negozio e mi ha massacrato le cervicali sull'autostrada (oltre alle orecchie, visto lo scarico aftermarket). Da lì ho iniziato a guardare i caschi con occhi diversi, e oggi provo a spiegarti cosa cercare davvero, senza girarci troppo intorno." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788859017/Manuale%20di%20bordo/n5ku1p899lsjwjx2wcfq.jpg", caption: "il casco incriminato, ovviamente AGV Pista GP RR, assolutamente non pensato per i viaggi ma essendomi innamorato della sua estetica ci sono cascato in pieno" },
         { tipo: "sottotitolo", testo: "Comfort prima di tutto (sì, anche prima dell'estetica)" },
         { tipo: "paragrafo", testo: "Lo so, il casco è anche una questione di stile, ci sono passato pure io. Ma quando devi tenerlo in testa per 8-10 ore di fila, il primo criterio deve essere quanto ti sta comodo, non quanto sta bene nella foto. Provalo per almeno 10 minuti in negozio, non 30 secondi davanti allo specchio: i punti di pressione che non senti subito vengono fuori dopo un paio d'ore, e a quel punto sei già in autostrada e non puoi farci niente." },
         { tipo: "sottotitolo", testo: "Ventilazione: non è un dettaglio" },
@@ -260,6 +262,7 @@
         { tipo: "paragrafo", testo: "Se puoi, prova il casco con il tipo di giacca/collo che usi di solito in viaggio, non a torso nudo in negozio. Cambia tutto: un casco che sembra perfetto da solo può dare fastidio nella zona del collo una volta che ci infili sotto anche il colletto della giacca tecnica." },
         { tipo: "sottotitolo", testo: "Occhio alle predisposizioni per l'interfono" },
         { tipo: "paragrafo", testo: "Un'altra cosa importante da controllare quando scegli un casco sono le dimensioni delle predisposizioni per l'interfono. Alcuni caschi hanno gli spazi per le casse molto piccoli, perché pensati per l'interfono realizzato dalla stessa azienda che produce il casco, e magari non sono compatibili con il dispositivo che usi tu. Sembra una sciocchezza, ma se lo scopri dopo averlo comprato può diventare un problema vero." },
+        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788859015/Manuale%20di%20bordo/bltr1t2r6fxuykkcr6fp.jpg", caption: "HJC RPHA 11, quello a destra: decisamente meno aerodinamico e leggero del Pista, ma comodo, silenzioso e perfetto per viaggi molto lunghi, tra poco farò l'upgrade al 12 perché dopo 80.000 km insieme sta dando segni di cedimento" },
         { tipo: "paragrafo", testo: "Il casco perfetto non esiste. Esiste quello che ti fa arrivare a destinazione ancora dell'umore giusto per goderti il posto in cui sei arrivato." },
         { tipo: "paragrafo", testo: "Hai un casco che useresti per un giro del mondo e uno che eviteresti anche per andare al bar? Raccontamelo: magari ne esce un altro articolo!" }
       ]
