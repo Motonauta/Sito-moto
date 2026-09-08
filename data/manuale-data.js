@@ -225,6 +225,42 @@
         { tipo: "paragrafo", testo: "Non so voi, ma quando giro da solo, soprattutto su strade poco battute o di sera, questo genere di notizie mi fa riflettere. Non è tecnologia per sentirsi più sicuri sulla carta. È tecnologia che può davvero fare la differenza quando le cose vanno storte e non sei in grado di chiedere aiuto da solo." },
         { tipo: "link", label: "Guarda il video in cui ne parlo", url: "https://www.tiktok.com/@ilmotonauta/video/7599404799049747734" }
       ]
+    },
+    {
+      titolo: "Come scegliere il casco giusto per i lunghi viaggi",
+      categoria: "Equipaggiamento",
+      excerpt: "Il casco più bello del negozio non è quasi mai quello giusto per un viaggio lungo. Comfort, ventilazione, peso e omologazione: cosa guardare davvero prima di comprarlo.",
+      autore: "Il Motonauta",
+      data: "2026-09-08",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Partiamo da una cosa che ho imparato a mie spese: il casco più bello del negozio non è quasi mai quello giusto per un viaggio lungo. L'ho scoperto dopo 800 km in un giorno con un casco sportivo che mi stava d'incanto al negozio e mi ha massacrato le cervicali sull'autostrada (oltre alle orecchie, visto lo scarico aftermarket). Da lì ho iniziato a guardare i caschi con occhi diversi, e oggi provo a spiegarti cosa cercare davvero, senza girarci troppo intorno." },
+        { tipo: "sottotitolo", testo: "Comfort prima di tutto (sì, anche prima dell'estetica)" },
+        { tipo: "paragrafo", testo: "Lo so, il casco è anche una questione di stile, ci sono passato pure io. Ma quando devi tenerlo in testa per 8-10 ore di fila, il primo criterio deve essere quanto ti sta comodo, non quanto sta bene nella foto. Provalo per almeno 10 minuti in negozio, non 30 secondi davanti allo specchio: i punti di pressione che non senti subito vengono fuori dopo un paio d'ore, e a quel punto sei già in autostrada e non puoi farci niente." },
+        { tipo: "sottotitolo", testo: "Ventilazione: non è un dettaglio" },
+        { tipo: "paragrafo", testo: "Su un casco da città puoi anche sopravvivere con una ventilazione mediocre. In viaggio, specialmente d'estate, è quello che ti fa arrivare a destinazione ancora lucido invece che cotto come un arrosto. Cerca prese d'aria regolabili, non solo decorative: alcuni modelli le hanno più per estetica che per reale efficacia, e lo scopri solo provandoli o leggendo recensioni di chi li ha usati davvero in viaggio, non solo in un weekend fuori porta." },
+        { tipo: "sottotitolo", testo: "Peso: i grammi si sentono, eccome" },
+        { tipo: "paragrafo", testo: "Un casco pesante 200 grammi in più di un altro può sembrare una sciocchezza da specifica tecnica. Non lo è. Dopo ore di vibrazioni e vento laterale, quel peso extra si traduce in un collo indolenzito e in una stanchezza che ti accompagna anche il giorno dopo. Se puoi, confronta il peso tra i modelli che stai valutando: a parità di omologazione, spesso conviene quello più leggero." },
+        { tipo: "sottotitolo", testo: "Modulare o integrale? Dipende dal viaggio" },
+        { tipo: "paragrafo", testo: "Non esiste la risposta giusta in assoluto, esiste quella giusta per come viaggi tu:" },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Integrale",
+          testo: "La protezione migliore, punto. Se fai lunghe percorrenze anche in autostrada o in condizioni meteo variabili, resta la scelta più sicura."
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Modulare",
+          testo: "Il compromesso che io stesso uso più spesso in viaggio: puoi aprirlo ai caselli, mentre parli con qualcuno, o quando ti fermi per una foto, senza doverlo sfilare del tutto. Il prezzo da pagare è un peso leggermente superiore e una struttura comunque un filo meno rigida di un integrale puro."
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Jet",
+          testo: "Ovviamente neanche lo cito: non li definisco caschi bensì copricapo ai limiti della normativa sulla sicurezza. Posso capire in uno scooter, ma in moto, per quanto mi riguarda, non è assolutamente un'opzione."
+        },
+        { tipo: "sottotitolo", testo: "Omologazione: non è burocrazia, è sicurezza vera" },
+        { tipo: "paragrafo", testo: "Controlla sempre che il casco abbia l'omologazione ECE 22.06 (la più recente e più severa, sostituisce gradualmente la 22.05): non è un timbro decorativo, indica che il casco ha superato test di sicurezza aggiornati. Se stai comprando usato o su qualche sito poco chiaro, verifica sempre questo dato prima del prezzo." },
+        { tipo: "sottotitolo", testo: "Un consiglio spicciolo ma che vale oro" },
+        { tipo: "paragrafo", testo: "Se puoi, prova il casco con il tipo di giacca/collo che usi di solito in viaggio, non a torso nudo in negozio. Cambia tutto: un casco che sembra perfetto da solo può dare fastidio nella zona del collo una volta che ci infili sotto anche il colletto della giacca tecnica." },
+        { tipo: "paragrafo", testo: "Il casco perfetto non esiste. Esiste quello che ti fa arrivare a destinazione ancora dell'umore giusto per goderti il posto in cui sei arrivato." },
+        { tipo: "paragrafo", testo: "Hai un casco che useresti per un giro del mondo e uno che eviteresti anche per andare al bar? Raccontamelo: magari ne esce un altro articolo!" }
+      ]
     }
   ];
 
