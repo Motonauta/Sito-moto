@@ -391,7 +391,7 @@
   const MINIVIAGGI = [
     {
       zona: "Alta Valtellina", km: "2-3 giorni consigliati", titolo: "Passo dello Stelvio e Passo di Gavia",
-      desc: "Il valico più alto d'Italia (2758 m): 48 tornanti sul versante altoatesino, 36 su quello lombardo. Da Bormio si può abbinare anche il vicino Passo di Gavia, più stretto e selvaggio, tra i preferiti di chi cerca strada vera più che traffico turistico. Aperto indicativamente da giugno a ottobre.",
+      desc: "Il valico più alto d'Italia, 2758 metri, con 48 tornanti sul versante altoatesino e 36 su quello lombardo: se fate solo un mini viaggio all'anno, questo dovrebbe essere il primo della lista. Da Bormio si può abbinare anche il vicino Passo di Gavia, più stretto e selvaggio.\n\nIl Gavia lo consiglio a chi cerca strada vera più che traffico turistico: meno cartoline, più guida pura. È aperto indicativamente da giugno a ottobre, quindi organizzatevi con anticipo se puntate all'estate.",
       meteoPlace: "Bormio",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Stelvio_tornanti.JPG",
       tappe: [
@@ -403,7 +403,7 @@
     },
     {
       zona: "Alta Val Camonica", km: "1-2 giorni consigliati", titolo: "Passo del Tonale",
-      desc: "Un classico meno estremo dello Stelvio ma altrettanto scenico: da Ponte di Legno si sale tra prati d'alta quota fino al valico a 1883 m, con vista sull'Adamello, per poi scendere verso Vermiglio in Val di Sole.",
+      desc: "Un classico meno estremo dello Stelvio ma altrettanto scenico, e per questo lo consiglio spesso a chi vuole avvicinarsi ai grandi passi senza affrontarli subito tutti insieme. Da Ponte di Legno si sale tra prati d'alta quota fino al valico a 1883 m, con vista sull'Adamello.\n\nLa discesa verso Vermiglio, in Val di Sole, cambia completamente paesaggio: dai prati aspri lombardi ai pascoli più dolci del Trentino. Madonna di Campiglio, poco distante, è un buon posto per farsi vedere con la moto ancora calda.",
       meteoPlace: "Ponte di Legno",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Tonale.jpg",
       tappe: [
@@ -415,7 +415,7 @@
     },
     {
       zona: "Dolomiti", km: "3-4 giorni consigliati", titolo: "La Grande Strada delle Dolomiti",
-      desc: "Il tour dei passi dolomitici per eccellenza: Pordoi, Sella, Gardena e Falzarego collegano il Gruppo del Sella alla Marmolada tra tornanti panoramici e rifugi di quota. Da fare con calma, dormendo lungo il percorso.",
+      desc: "Il tour dei passi dolomitici per eccellenza, e probabilmente il mini viaggio più fotografato di questa lista: Pordoi, Sella, Gardena e Falzarego collegano il Gruppo del Sella alla Marmolada tra tornanti panoramici e rifugi di quota.\n\nNon è un giro da fare di corsa: vi consiglio di dormire lungo il percorso e godervi ogni passo con calma, magari con una sosta ai rifugi. Sotto il Falzarego ci sono ancora le gallerie scavate durante la Grande Guerra: un pezzo di storia che pochi si aspettano tra un tornante e l'altro.",
       meteoPlace: "Canazei",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_pordoi.jpg",
       tappe: [
@@ -428,7 +428,7 @@
     },
     {
       zona: "Valtellina", km: "1-2 giorni consigliati", titolo: "Passo del Mortirolo",
-      desc: "Non il più alto, ma tra i più duri: pendenze fino al 18%, reso leggendario dal ciclismo (la salita di Marco Pantani). In moto è un saliscendi tecnico tra boschi, con molto meno traffico dei passi vicini.",
+      desc: "Non il più alto di questa lista, ma tra i più duri: pendenze fino al 18%, reso leggendario dal ciclismo grazie alla salita di Marco Pantani. In moto è un saliscendi tecnico tra boschi stretti, molto meno affollato dei passi vicini.\n\nQui si guida, non si passeggia: le curve chiedono attenzione vera, non solo occhi per il panorama. Se cercate un passo dove mettere alla prova voi stessi più che la fotocamera, è questo.",
       meteoPlace: "Mazzo di Valtellina",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Mortirolo.JPG",
       tappe: [
@@ -440,7 +440,7 @@
     },
     {
       zona: "Valle d'Aosta", km: "2-3 giorni consigliati", titolo: "Piccolo e Grande San Bernardo",
-      desc: "Due valichi storici ai confini con Francia e Svizzera, entrambi carichi di storia (da qui passò anche Napoleone). Da Aosta si può salire a entrambi in giorni diversi, con soste a Courmayeur sotto il Monte Bianco.",
+      desc: "Due valichi storici ai confini con Francia e Svizzera, entrambi carichi di storia: da qui passò anche Napoleone. Da Aosta si può salire a entrambi in giorni diversi, con soste a Courmayeur sotto il Monte Bianco.\n\nAl Piccolo San Bernardo si cambia paese senza nemmeno spegnere il motore, letteralmente da un lato all'altro del confine. Al Gran San Bernardo invece sono nati i cani San Bernardo: occhio a non tornare a casa con l'idea di adottarne uno, capita più spesso di quanto pensiate.",
       meteoPlace: "Aosta",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Piccolo_S_Bernardo.jpg",
       tappe: [
@@ -452,7 +452,7 @@
     },
     {
       zona: "Alta Valchiavenna", km: "1-2 giorni consigliati", titolo: "Passo dello Spluga",
-      desc: "Un valico storico verso la Svizzera, meno affollato dei 'big three' lombardi: da Chiavenna si sale tra tornanti stretti fino al passo a 2113 m, con vista sul lago artificiale del Truzzo. Aperto tutto l'anno lato italiano, spesso chiuso in inverno oltre confine.",
+      desc: "Un valico storico verso la Svizzera, meno affollato dei \"big three\" lombardi, e proprio per questo uno dei miei consigli preferiti a chi vuole evitare la ressa estiva. Da Chiavenna si sale tra tornanti stretti fino al passo a 2113 m, con vista sul lago artificiale del Truzzo.\n\nÈ aperto tutto l'anno sul lato italiano, ma spesso chiuso in inverno oltre confine: controllate sempre prima di programmare il viaggio. Madesimo, poco distante, ha cascate vere d'estate e neve d'inverno: qui non ci si annoia in nessuna stagione.",
       meteoPlace: "Campodolcino",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_dello_spluga_in_inverno.JPG",
       tappe: [
@@ -464,7 +464,7 @@
     },
     {
       zona: "Val Varaita", km: "1-2 giorni consigliati", titolo: "Colle dell'Agnello",
-      desc: "Uno dei valichi asfaltati più alti d'Europa (2744 m), al confine con la Francia. Da Sampeyre si sale lungo una valle stretta tra pascoli d'alta quota, con tornanti che si arrampicano quasi a strapiombo negli ultimi chilometri.",
+      desc: "Uno dei valichi asfaltati più alti d'Europa, 2744 metri, al confine con la Francia. Da Sampeyre si sale lungo una valle stretta tra pascoli d'alta quota, con tornanti che si arrampicano quasi a strapiombo negli ultimi chilometri.\n\nÈ uno di quei passi dove l'aria si fa visibilmente più sottile e la strada più impegnativa man mano che si sale. Fermatevi a Pontechianale per l'ultimo caffè vero prima della salita finale: dopo, di soste comode ce ne sono poche.",
       meteoPlace: "Pontechianale",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Colleagnello001.jpg",
       tappe: [
@@ -475,7 +475,7 @@
     },
     {
       zona: "Costiera Amalfitana", km: "2-3 giorni consigliati", titolo: "La SS163 tra Positano e Ravello",
-      desc: "La costiera più fotografata d'Italia, curva dopo curva a picco sul mare: Positano, Amalfi e Ravello sospese tra scogliere e limoneti. Non è un giro veloce — la SS163 è stretta e trafficata d'estate — ma va vissuta con calma, meglio in bassa stagione.",
+      desc: "La costiera più fotografata d'Italia, curva dopo curva a picco sul mare: Positano, Amalfi e Ravello sospese tra scogliere e limoneti. Non è un giro veloce, la SS163 è stretta e trafficata d'estate, ma va vissuta con calma.\n\nVi consiglio la bassa stagione se potete scegliere: in piena estate il traffico rischia di rovinare quello che dovrebbe essere un piacere puro. Parcheggiare a Positano è già di per sé una piccola impresa, mettetelo in conto nella pianificazione della giornata.",
       meteoPlace: "Amalfi",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Positano-Amalfi_Coast-Italy.jpg",
       tappe: [
@@ -487,7 +487,7 @@
     },
     {
       zona: "Sardegna", km: "4-5 giorni consigliati", titolo: "Supramonte e la SS125 Orientale Sarda",
-      desc: "Una delle poche mete di questa lista che richiede un traghetto, e ne vale ogni ora di viaggio: la SS125 'Orientale Sarda' è leggendaria tra i motociclisti, tra le gole del Supramonte e la costa del golfo di Orosei. Da programmare con calma, traghetto incluso.",
+      desc: "Una delle poche mete di questa lista che richiede un traghetto, e vi garantisco che vale ogni ora di viaggio via mare. La SS125 \"Orientale Sarda\" è leggendaria tra i motociclisti, tra le gole del Supramonte e la costa del golfo di Orosei.\n\nLa Gola di Gorropu è uno dei canyon più profondi d'Europa: la moto si lascia al parcheggio e il resto si fa a piedi, ma la sosta vale la deviazione. Programmate questo viaggio con calma, traghetto incluso: non è un giro dell'ultimo minuto.",
       meteoPlace: "Dorgali",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Supramonte_visto_da_Orgosolo.jpg",
       tappe: [
@@ -499,7 +499,7 @@
     },
     {
       zona: "Val Passiria", km: "1-2 giorni consigliati", titolo: "Passo del Rombo (Timmelsjoch)",
-      desc: "Un valico spettacolare verso l'Austria, strada a pedaggio aperta solo da metà maggio a fine ottobre: da San Leonardo in Passiria si sale tra tornanti panoramici fino a 2509 m, con vista sui ghiacciai dell'Ötztal.",
+      desc: "Un valico spettacolare verso l'Austria, con una particolarità: è una strada a pedaggio aperta solo da metà maggio a fine ottobre, quindi va programmato per bene. Da San Leonardo in Passiria si sale tra tornanti panoramici fino a 2509 m, con vista sui ghiacciai dell'Ötztal.\n\nIl pedaggio si paga, ma per quei tornanti vale ogni centesimo, ve lo dico con convinzione. San Leonardo in Passiria è il paese natale di Andreas Hofer, eroe popolare tirolese: un pezzo di storia prima che inizino le curve vere.",
       meteoPlace: "Moso in Passiria",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_del_Rombo_06.JPG",
       tappe: [
@@ -510,7 +510,7 @@
     },
     {
       zona: "Sicilia", km: "4-5 giorni consigliati", titolo: "Etna e Madonie",
-      desc: "Un'altra meta che richiede il traghetto (breve, da Villa San Giovanni), ma ripaga con paesaggi che cambiano ad ogni tappa: le colate laviche dell'Etna e i boschi delle Madonie, tra i parchi naturali meno battuti dai turisti del sud Italia.",
+      desc: "Un'altra meta che richiede il traghetto, stavolta breve, da Villa San Giovanni, e che ripaga con paesaggi che cambiano a ogni tappa: le colate laviche dell'Etna e i boschi delle Madonie, tra i parchi naturali meno battuti dai turisti del sud Italia.\n\nIl Rifugio Sapienza, a 1900 metri sull'Etna, cambia scenografia praticamente ogni cento metri di salita: lava nera, neve d'inverno, panorama sul mare tutto insieme. Dopo il vulcano, i boschi delle Madonie sembrano un altro pianeta, eppure siete rimasti sulla stessa isola.",
       meteoPlace: "Nicolosi",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Etna_-_4.jpg",
       tappe: [
@@ -522,7 +522,7 @@
     },
     {
       zona: "Gran Sasso", km: "2-3 giorni consigliati", titolo: "Campo Imperatore, il 'Piccolo Tibet' d'Italia",
-      desc: "La meta più vicina a Roma di questa lista, eppure sembra un altro continente: l'altopiano di Campo Imperatore, a 2000 m sotto il Gran Sasso, con panorami che gli hanno guadagnato il soprannome di 'Piccolo Tibet'. Perfetto anche per un weekend lungo.",
+      desc: "La meta più vicina a Roma di questa lista, eppure appena arrivati sembra tutto tranne che vicino a casa: l'altopiano di Campo Imperatore, a 2000 m sotto il Gran Sasso, con panorami che gli hanno guadagnato il soprannome di \"Piccolo Tibet\".\n\nÈ perfetto anche per un weekend lungo se non avete più giorni liberi. L'Aquila, punto di partenza, si sta ricostruendo pezzo per pezzo dopo il sisma: merita la sosta anche solo per rispetto verso chi ci vive.",
       meteoPlace: "Campo Imperatore",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Campo_Imperatore,_Gran_Sasso.jpg",
       tappe: [
@@ -533,7 +533,7 @@
     },
     {
       zona: "Dolomiti Ampezzane", km: "1-2 giorni consigliati", titolo: "Passo Giau, il balcone delle Dolomiti",
-      desc: "Uno dei passi più fotografati e più amati d'Italia, spesso tappa del Giro d'Italia: da Cortina d'Ampezzo si sale tra tornanti panoramici fino a 2236 m, con vista sul Gruppo del Nuvolau e sulla Croda da Lago.",
+      desc: "Uno dei passi più fotografati e più amati d'Italia, spesso tappa del Giro d'Italia: da Cortina d'Ampezzo si sale tra tornanti panoramici fino a 2236 m, con vista sul Gruppo del Nuvolau e sulla Croda da Lago.\n\nPreparatevi a condividere il panorama con parecchi altri obiettivi fotografici, è tra i passi più instagrammati che conosco. La discesa verso Selva di Cadore fa capire bene perché i ciclisti del Giro arrivano quassù distrutti, e comunque felici.",
       meteoPlace: "Cortina d'Ampezzo",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Passo_di_Giau.jpg",
       tappe: [
@@ -544,7 +544,7 @@
     },
     {
       zona: "Valnerina", km: "1-2 giorni consigliati", titolo: "La Cascata delle Marmore e la Valnerina",
-      desc: "Una meta più vicina e accessibile delle altre, ma non meno spettacolare: la Cascata delle Marmore, tra le cascate artificiali più alte d'Europa (165 m, creata dai Romani), e la Valnerina che si snoda tra gole e borghi tra i meno turistici dell'Umbria.",
+      desc: "Una meta più vicina e accessibile delle altre di questa lista, ma non per questo meno spettacolare: la Cascata delle Marmore, tra le cascate artificiali più alte d'Europa (165 m, creata addirittura dai Romani), e la Valnerina che si snoda tra gole e borghi tra i meno turistici dell'Umbria.\n\nUn'opera idraulica costruita più di duemila anni fa che fa impallidire certi cantieri moderni, se ci pensate bene. Ferentillo, diviso in due dal fiume, ha una vista su una delle valli più strette e verdi che abbia mai visto in Umbria.",
       meteoPlace: "Terni",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cascata_delle_Marmore_2.JPG",
       tappe: [
@@ -555,7 +555,7 @@
     },
     {
       zona: "Val d'Orcia", km: "2-3 giorni consigliati", titolo: "Val d'Orcia, tra strade bianche e colline UNESCO",
-      desc: "Il paesaggio toscano più fotografato al mondo, patrimonio UNESCO: cipressi solitari, colline dorate e le celebri 'strade bianche' sterrate che attraversano la Val d'Orcia tra Pienza, San Quirico e Montalcino.",
+      desc: "Il paesaggio toscano più fotografato al mondo, patrimonio UNESCO: cipressi solitari, colline dorate e le celebri \"strade bianche\" sterrate che attraversano la Val d'Orcia tra Pienza, San Quirico e Montalcino.\n\nPienza fu ripensata a tavolino nel Quattrocento come \"città ideale\", e oggi è ideale soprattutto per una sosta con vista. A Montalcino, patria del Brunello, un bicchiere a fine giornata è quasi un obbligo morale, da queste parti.",
       meteoPlace: "Pienza",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Pienza_italy.jpg",
       tappe: [
@@ -566,7 +566,7 @@
     },
     {
       zona: "Valle d'Itria", km: "3-4 giorni consigliati", titolo: "Valle d'Itria, il regno dei trulli",
-      desc: "Un cambio di scenario totale rispetto al resto della lista: la Puglia dei trulli, tra Alberobello (patrimonio UNESCO), le stradine bianche di Locorotondo e i muretti a secco di Cisternino, tra gli 'i borghi più belli d'Italia'.",
+      desc: "Un cambio di scenario totale rispetto al resto di questa lista: la Puglia dei trulli, tra Alberobello (patrimonio UNESCO), le stradine bianche di Locorotondo e i muretti a secco di Cisternino, tra i borghi più belli d'Italia.\n\nAd Alberobello un intero quartiere di casette a cono bianche sembra un set giocattolo, invece ci vive gente vera. A Cisternino le celebri \"fornelle\" pronte per la bombetta a fine giro sono una delle poche volte in cui la sosta gastronomica vale quanto il panorama.",
       meteoPlace: "Alberobello",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Alberobello_Trulli.jpg",
       tappe: [
@@ -577,7 +577,7 @@
     },
     {
       zona: "Monti Sibillini", km: "2-3 giorni consigliati", titolo: "Castelluccio di Norcia e il Piano Grande",
-      desc: "Un altopiano carsico immenso a 1450 m, che a fine giugno si colora con la celebre 'Fioritura' delle lenticchie — uno degli spettacoli naturali più fotografati d'Italia. Norcia, gravemente colpita dal sisma del 2016, è oggi in piena ricostruzione.",
+      desc: "Un altopiano carsico immenso a 1450 m, che a fine giugno si colora con la celebre \"Fioritura\" delle lenticchie, uno degli spettacoli naturali più fotografati d'Italia. Norcia, gravemente colpita dal sisma del 2016, è oggi in piena ricostruzione.\n\nSe puntate alla fioritura, controllate sempre il periodo esatto prima di partire: dura pochissimo, e arrivare in anticipo o in ritardo di una settimana cambia tutto. Norcia, patria della norcineria, merita la sosta anche solo per rispetto, come Amatrice.",
       meteoPlace: "Norcia",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Piano_Grande_-_Castelluccio.jpg",
       tappe: [
@@ -588,7 +588,7 @@
     },
     {
       zona: "Livigno", km: "1-2 giorni consigliati", titolo: "Livigno e il Passo di Foscagno",
-      desc: "La 'piccola Svizzera' italiana: Livigno, zona extra-doganale a 1800 m, raggiunta attraverso il Passo di Foscagno, meno famoso dello Stelvio ma altrettanto panoramico, con vista sulle Alpi Retiche.",
+      desc: "La \"piccola Svizzera\" italiana: Livigno, zona extra-doganale a 1800 m, raggiunta attraverso il Passo di Foscagno, meno famoso dello Stelvio ma altrettanto panoramico, con vista sulle Alpi Retiche.\n\nIl Passo dell'Eira, appena prima del Foscagno, è già di per sé un buon assaggio di quello che vi aspetta. A Livigno i prezzi da zona franca e i panorami da cartolina sono un buon motivo per fermarsi almeno una notte, non solo di passaggio.",
       meteoPlace: "Livigno",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Livigno_-_Comune_di_Livigno_-_2023-09-06_00-39-00_001.JPG",
       tappe: [
