@@ -215,7 +215,8 @@ p{color:var(--cream-dim); max-width:60ch;}
   color:var(--cream);
   line-height:1;
 }
-.logo span{color:var(--rust);}
+.logo .accent{color:var(--rust);}
+.logo-wrap .logo-text{ white-space:nowrap; }
 .nav-links{
   display:flex; gap:34px;
   font-family:var(--font-mono);
