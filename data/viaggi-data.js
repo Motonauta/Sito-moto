@@ -17,7 +17,7 @@
   const ITINERARI = [
     {
       zona: "Castelli Romani", km: "circa 90 km", kmNum: 90, titolo: "Il classico dei due laghi",
-      desc: "Il giro più breve e più gettonato per chi parte da Roma: due laghi vulcanici, borghi affacciati sul cratere e la porchetta ad Ariccia a fine giro. Perfetto anche per chi ha solo mezza giornata.",
+      desc: "Il giro più breve e più gettonato per chi parte da Roma, ed è anche il primo che consiglio a chi va in moto da poco o ha solo mezza giornata libera. Due laghi vulcanici, borghi affacciati sul cratere, strade non troppo impegnative: un itinerario che perdona qualche errore senza far rimpiangere il tempo speso.\n\nLa chicca è la porchetta ad Ariccia a fine giro, non fatevi ingannare dal nome da \"gita fuori porta\": la Via dei Laghi tra Rocca di Papa e Nemi ha curve che vi faranno dimenticare l'orario del rientro, quindi organizzatevi di conseguenza.",
       meteoPlace: "Ariccia",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lago_di_Albano,_a_Castel_Gandolfo_31.JPG",
       tappe: [
@@ -30,7 +30,7 @@
     },
     {
       zona: "Monti Simbruini", km: "circa 200 km", kmNum: 200, titolo: "Curve pure verso la montagna",
-      desc: "Il giro per chi cerca solo curve: da Subiaco si sale tra i boschi fino a Filettino, il comune più alto del Lazio. Asfalto tecnico, poco traffico, aria di montagna.",
+      desc: "Questo è il giro che consiglio a chi mi scrive cercando \"solo curve, niente storia, niente mare\". Da Subiaco si sale tra i boschi fino a Filettino, il comune più alto del Lazio, con un asfalto tecnico e pochissimo traffico che lo rende perfetto anche in una giornata feriale.\n\nNon aspettatevi il caldo della pianura: anche d'estate qui si sale di quota velocemente, quindi una felpa nel bauletto non è mai una cattiva idea. Il monastero di Santa Scolastica a Subiaco vale la sosta anche solo per il contrasto tra la sua età (sesto secolo) e l'asfalto che sembra appena steso.",
       meteoPlace: "Subiaco",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Monastero_di_Santa_Scolastica_(Subiaco).jpg",
       tappe: [
@@ -42,7 +42,7 @@
     },
     {
       zona: "Litorale Pontino", km: "circa 260 km", kmNum: 260, titolo: "Mare, dune e borghi da guardare dall'alto",
-      desc: "La costa che da Sabaudia scende verso sud: pineta del Circeo, promontorio con vista sul golfo, e i vicoli bianchi di Sperlonga. Il tratto più lungo dei sei, ma quasi tutto pianeggiante e veloce.",
+      desc: "La costa che da Sabaudia scende verso sud è il giro giusto per chi vuole staccare la testa dalle curve tecniche e godersi chilometri veloci e scorrevoli, quasi tutti pianeggianti. Pineta del Circeo, promontorio con vista sul golfo, e i vicoli bianchi di Sperlonga a chiudere la giornata.\n\nÈ il tratto più lungo dei sei che vi ho messo qui, ma proprio per la sua natura veloce si percorre più in fretta di quanto sembri sulla carta. Se potete, evitate agosto: il traffico verso il mare in questa zona può rovinare anche il giro più bello.",
       meteoPlace: "Sabaudia",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mt_Circeo_from_Sabaudia_Beach.jpg",
       tappe: [
@@ -54,7 +54,7 @@
     },
     {
       zona: "Laghi della Tuscia", km: "circa 140 km", kmNum: 140, titolo: "Due laghi vulcanici e un anfiteatro etrusco",
-      desc: "Un anello tranquillo verso nord: il Lago di Bracciano, i borghi colorati sulle sue sponde, e il Lago di Vico circondato dal verde. Buono anche per chi va in moto da poco.",
+      desc: "Un anello tranquillo verso nord che consiglio spesso a chi sta iniziando ad andare in moto, o a chi vuole semplicemente una giornata rilassata senza rinunciare al bello da vedere. Il Lago di Bracciano con i suoi borghi colorati, il Lago di Vico circondato dal verde: nulla di estremo, tutto molto godibile.\n\nIl castello Orsini-Odescalchi a Bracciano è uno di quei posti dove capita di fermarsi \"solo per una foto\" e restarci mezz'ora. Se siete della zona nord di Roma, è probabilmente il giro più comodo da cui iniziare a esplorare la Tuscia.",
       meteoPlace: "Bracciano",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Castello_Orsini-Odescalchi.jpg",
       tappe: [
@@ -66,7 +66,7 @@
     },
     {
       zona: "Sabina e Monti Lucretili", km: "circa 150 km", kmNum: 150, titolo: "Curve scorrevoli e un'abbazia millenaria",
-      desc: "Meno battuto dei Castelli Romani ma altrettanto bello: colline di ulivi, la SR314 Licinese tra i tornanti del Parco dei Lucretili, e una sosta all'Abbazia di Farfa che vale il giro da sola.",
+      desc: "Meno battuto dei Castelli Romani, e per me altrettanto bello: colline di ulivi a perdita d'occhio, la SR314 Licinese che si arrampica tra i tornanti del Parco dei Lucretili, e una sosta all'Abbazia di Farfa che da sola vale il giro.\n\nÈ uno di quei percorsi che consiglio a chi ha già fatto il giro dei laghi e cerca qualcosa di simile ma con meno gente in strada. Orvinio, tra i borghi più belli d'Italia, qui è quasi sempre vuoto di motociclisti: approfittatene finché dura.",
       meteoPlace: "Fara in Sabina",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Abbazia_di_Farfa_09.jpg",
       tappe: [
@@ -78,7 +78,7 @@
     },
     {
       zona: "Monti della Tolfa", km: "circa 160 km", kmNum: 160, titolo: "Curve ad alto godimento sopra la costa",
-      desc: "Il giro più curvoso e meno conosciuto: da Civitavecchia si sale tra pascoli e panorami sul Tirreno fino a Tolfa e Allumiere, due borghi nati dall'estrazione dell'allume nel Medioevo.",
+      desc: "Se dovessi consigliare un solo giro a chi ama le curve pure, senza troppe soste culturali di mezzo, sarebbe questo. Da Civitavecchia si sale tra pascoli e panorami sul Tirreno fino a Tolfa e Allumiere, due borghi nati dall'estrazione dell'allume nel Medioevo.\n\nÈ tra i meno conosciuti di questa lista, e onestamente non capisco perché: l'asfalto è pulito, il traffico quasi assente nei giorni feriali, e la vista sul mare da lassù ripaga ogni tornante affrontato per arrivarci.",
       meteoPlace: "Civitavecchia",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Tolfa_10-080325.jpg",
       tappe: [
@@ -89,7 +89,7 @@
     },
     {
       zona: "Ciociaria", km: "circa 190 km", kmNum: 190, titolo: "Il Balcone della Ciociaria e l'Acropoli di Alatri",
-      desc: "Verso sud-est, tra colline e antiche mura poligonali: Alatri con la sua Acropoli millenaria, il lago di Canterno e il borgo-fortezza di Fumone, arroccato su uno sperone roccioso visibile da tutta la valle.",
+      desc: "Verso sud-est, tra colline e antiche mura poligonali che fanno sembrare recente pure la storia di Roma: Alatri con la sua Acropoli millenaria, il lago di Canterno, e il borgo-fortezza di Fumone, arroccato su uno sperone roccioso visibile da tutta la valle.\n\nIl punto panoramico che dà il nome al giro, il Balcone della Ciociaria, è uno di quei posti dove vale la pena fermarsi il tempo di spegnere il motore e basta. Da Fumone dicono si vedano cinque regioni: io mi sono sempre fermato prima di contarle tutte.",
       meteoPlace: "Alatri",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Acropoli_di_Alatri.jpg",
       tappe: [
@@ -101,7 +101,7 @@
     },
     {
       zona: "Valle di Comino", km: "circa 260 km", kmNum: 260, titolo: "Curve tra Alvito, Atina e Picinisco",
-      desc: "Ai piedi delle Mainarde, al confine con l'Abruzzo: un anello tra borghi meno turistici, con curve continue e panorami sulla valle circondata dai monti. Atina è nota per l'olio, Picinisco per i formaggi di malga.",
+      desc: "Ai piedi delle Mainarde, al confine con l'Abruzzo, questo è un anello tra borghi meno turistici che consiglio a chi vuole vedere una Ciociaria diversa da quella più fotografata. Curve continue, panorami sulla valle circondata dai monti, e poco altro traffico oltre al vostro.\n\nAtina è nota per l'olio, Picinisco per i formaggi di malga: se avete spazio nei bagagli, è uno dei pochi giri dove torno sempre con qualcosa da mangiare comprato lungo strada. San Donato Val di Comino, l'ultima tappa, regala la vista sulle Mainarde che vi farà venire voglia di tornare.",
       meteoPlace: "Alvito",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Alvito_Palazzo_Ducale,_DSC02531.JPG",
       tappe: [
@@ -113,7 +113,7 @@
     },
     {
       zona: "Tuscia Etrusca", km: "circa 270 km", kmNum: 270, titolo: "Da Orte a Civita di Bagnoregio",
-      desc: "Un giro più lungo verso il confine con l'Umbria: il borgo medievale di Orte, Montefiascone panoramica sul Lago di Bolsena, e la spettacolare Civita di Bagnoregio, la 'città che muore' raggiungibile solo a piedi da un ponte sospeso.",
+      desc: "Un giro più lungo verso il confine con l'Umbria, e uno dei miei preferiti in assoluto: il borgo medievale di Orte su una rupe di tufo, Montefiascone panoramica sul Lago di Bolsena, e la spettacolare Civita di Bagnoregio, la \"città che muore\", raggiungibile solo a piedi da un ponte sospeso.\n\nVi consiglio di partire presto: tra le soste fotografiche che farete per forza lungo strada e la salita a piedi verso Civita, la giornata si riempie in fretta. Un bicchiere di Est! Est!! Est!!! a Montefiascone è quasi un rito di passaggio per chi passa da queste parti.",
       meteoPlace: "Bagnoregio",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Civita_(Bagnoregio)_-_Panorama.jpg",
       tappe: [
@@ -125,7 +125,7 @@
     },
     {
       zona: "Monti Prenestini", km: "circa 120 km", kmNum: 120, titolo: "Palestrina, Genazzano e Olevano Romano",
-      desc: "Un giro breve verso est, buono anche per una mezza giornata: il Santuario della Fortuna Primigenia di Palestrina, i vicoli di Genazzano e i vigneti di Olevano Romano, tra i più noti del Lazio.",
+      desc: "Un giro breve verso est, buono anche per una mezza giornata quando il tempo stringe ma la voglia di sella no: il Santuario della Fortuna Primigenia di Palestrina, così grande che ci hanno costruito sopra mezza città, i vicoli di Genazzano, e i vigneti di Olevano Romano, tra i più noti del Lazio.\n\nGenazzano ha vicoli davvero stretti: la moto la lascio sempre fuori dalle mura e faccio il resto a piedi, ne vale la pena. Se siete amanti del vino, un Cesanese di Olevano a fine giro è la chiusura perfetta, ovviamente da bere dopo aver riposto il casco.",
       meteoPlace: "Palestrina",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Palestrina_-_Santuario_della_Fortuna_Primigenia_-_vista_della_rampa_di_sinistra.jpg",
       tappe: [
@@ -136,7 +136,7 @@
     },
     {
       zona: "Terminillo e la Salaria", km: "circa 200 km", kmNum: 200, titolo: "Curve di montagna sopra Rieti",
-      desc: "La Salaria che segue il corso del Velino fino a Rieti, poi la salita verso il Terminillo, 'la montagna di Roma': tornanti continui, aria di montagna e panorami sulla conca reatina.",
+      desc: "La Salaria che segue il corso del Velino fino a Rieti, poi la salita verso il Terminillo, \"la montagna di Roma\": tornanti continui, aria di montagna, e panorami sulla conca reatina che da soli valgono la deviazione dalla via principale.\n\nControllate sempre il meteo prima di partire, specialmente fuori stagione: d'estate le curve sono fresche e piacevoli, ma d'inverno lassù arriva la neve sul serio, e non è il tipo di sorpresa che vuoi trovare in moto. Leonessa, nonostante il nome, è un borgo tranquillo dove fermarsi senza fretta.",
       meteoPlace: "Rieti",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Panoramica_monte_Terminillo.jpg",
       tappe: [
@@ -147,7 +147,7 @@
     },
     {
       zona: "Valle dell'Aniene", km: "circa 100 km", kmNum: 100, titolo: "Tivoli, Villa Adriana e i borghi dell'Aniene",
-      desc: "Il giro più corto e più semplice, perfetto per chi ha solo una mattinata: Tivoli con le sue ville UNESCO, poi risalendo la valle dell'Aniene tra Vicovaro, Arsoli e Roviano.",
+      desc: "Il giro più corto e più semplice di questa lista, perfetto per chi ha solo una mattinata libera o vuole portare qualcuno alla prima uscita in moto: Tivoli con le sue ville UNESCO, poi risalendo la valle dell'Aniene tra Vicovaro, Arsoli e Roviano.\n\nLe fontane di Villa d'Este zampillano da cinquecento anni, e ogni volta che ci passo penso a quanta manutenzione ci sia dietro. Arsoli ha un castello ancora abitato: se salutate qualcuno dal cancello, è probabile che sia davvero di casa.",
       meteoPlace: "Tivoli",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Villa_d%27Este_01.jpg",
       tappe: [
@@ -159,7 +159,7 @@
     },
     {
       zona: "Golfo di Gaeta", km: "circa 290 km", kmNum: 290, titolo: "Formia, Gaeta e la Via Flacca",
-      desc: "Il giro più lungo, da fare con calma: la costa verso sud fino a Gaeta, il promontorio con vista sul golfo, e il ritorno lungo la panoramica Via Flacca scavata nella roccia sopra il mare.",
+      desc: "Il giro più lungo di questa selezione, da fare con calma e senza fretta di tornare: la costa verso sud fino a Gaeta, il promontorio con vista sul golfo, e il ritorno lungo la panoramica Via Flacca, scavata nella roccia sopra il mare.\n\nSulla Via Flacca capita di prendere spruzzi veri quando il mare è mosso, quindi il casco integrale qui non è un vezzo estetico. Gaeta con la sua Montagna Spaccata merita una sosta più lunga del previsto: la leggenda dice che si sia aperta durante il terremoto della crocifissione, vera o no, resta impressionante.",
       meteoPlace: "Gaeta",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Panorama-gaeta.jpg",
       tappe: [
@@ -171,7 +171,7 @@
     },
     {
       zona: "Etruria Meridionale", km: "circa 210 km", kmNum: 210, titolo: "Le necropoli etrusche di Cerveteri e Tarquinia",
-      desc: "Un giro storico-costiero verso nord: la necropoli della Banditaccia a Cerveteri, patrimonio UNESCO, e le tombe dipinte di Tarquinia, tra le testimonianze etrusche meglio conservate al mondo.",
+      desc: "Un giro storico-costiero verso nord che consiglio a chi si è stancato dei soliti laghi e borghi medievali: la necropoli della Banditaccia a Cerveteri, patrimonio UNESCO, e le tombe dipinte di Tarquinia, tra le testimonianze etrusche meglio conservate al mondo.\n\nGli affreschi di Tarquinia hanno più di duemilacinquecento anni e sono ancora più vivaci di certi filtri che si usano oggi sui social. Dopo tanta storia, la sosta al Lido di Tarquinia per un po' di mare è quasi un obbligo per rimettere in pari gli occhi.",
       meteoPlace: "Tarquinia",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cerveteri,_necropoli_della_banditaccia,_via_sepolcrale_principale,_01.jpg",
       tappe: [
@@ -182,7 +182,7 @@
     },
     {
       zona: "Monti della Laga", km: "circa 300 km", kmNum: 300, titolo: "Verso Amatrice, al confine tra tre regioni",
-      desc: "Il giro più impegnativo dei venti, da affrontare con partenza presto: la Salaria fino ad Amatrice, ai piedi dei Monti della Laga, al confine tra Lazio, Abruzzo e Marche. Zona colpita dal sisma 2016, oggi in ricostruzione — un giro anche per non dimenticare.",
+      desc: "Il giro più impegnativo di questa lista, da affrontare con partenza presto: la Salaria fino ad Amatrice, ai piedi dei Monti della Laga, al confine tra Lazio, Abruzzo e Marche. È anche un giro per non dimenticare: la zona è stata colpita duramente dal sisma del 2016, e oggi è ancora in ricostruzione.\n\nFermarsi ad Amatrice, patria dell'amatriciana, è quasi un dovere, anche solo per rispetto verso chi ci vive e sta ricostruendo. Accumoli, piccolo e silenzioso ai piedi della Laga, regala una vista sui monti che ripaga la salita fin qui.",
       meteoPlace: "Amatrice",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Amatrice.JPG",
       tappe: [
@@ -193,7 +193,7 @@
     },
     {
       zona: "Valle del Liri", km: "circa 190 km", kmNum: 190, titolo: "Frosinone, la cascata di Isola del Liri e l'Abbazia di Casamari",
-      desc: "Un giro tra industria antica e natura: la cascata che taglia in due il centro di Isola del Liri, e l'Abbazia cistercense di Casamari, silenziosa e ben conservata, poco fuori Veroli.",
+      desc: "Un giro tra industria antica e natura che sorprende chi non conosce questa parte di Ciociaria: la cascata che taglia in due il centro di Isola del Liri, letteralmente in mezzo alla città, e l'Abbazia cistercense di Casamari, silenziosa e ben conservata poco fuori Veroli.\n\nFermarsi al semaforo con una cascata del genere davanti non capita spesso, ve lo garantisco. Veroli, con il suo balcone naturale sulla valle, ha molta meno folla dei Castelli Romani: un buon motivo per allungare la sosta.",
       meteoPlace: "Isola del Liri",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Isola_del_Liri_-_Cascata_Grande_-_2007.JPG",
       tappe: [
@@ -205,7 +205,7 @@
     },
     {
       zona: "Laghi Reatini", km: "circa 210 km", kmNum: 210, titolo: "Lago del Turano e Lago del Salto",
-      desc: "Due laghi artificiali incastonati tra le montagne della Sabina reatina, con strade strette e panoramiche che li costeggiano quasi per intero: meno conosciuti del Trasimeno, non meno belli.",
+      desc: "Due laghi artificiali incastonati tra le montagne della Sabina reatina, con strade strette e panoramiche che li costeggiano quasi per intero. Sono meno conosciuti del Trasimeno, ma non per questo meno belli: anzi, forse è proprio quello il loro punto di forza.\n\nSul Lago del Turano le curve corrono a filo d'acqua, con i borghi che si specchiano dentro: andateci piano, perché la tentazione di guardare il panorama invece della strada è tanta. Il Lago del Salto è il fratello meno fotografato, ma merita comunque la sua sosta.",
       meteoPlace: "Rieti",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lago_del_Turano_2020.jpg",
       tappe: [
@@ -217,7 +217,7 @@
     },
     {
       zona: "Monti Ausoni", km: "circa 230 km", kmNum: 230, titolo: "Campodimele, Lenola e Fondi",
-      desc: "Colline e monti tra Ciociaria e costa: Campodimele, il 'paese della lunga vita' cinto da mura medievali intatte, Lenola tra gli ulivi, e Fondi con il suo centro storico dal impianto urbanistico romano.",
+      desc: "Colline e monti tra Ciociaria e costa, un giro che mette insieme storia e natura senza fretta: Campodimele, il \"paese della lunga vita\" cinto da mura medievali ancora intatte, Lenola tra gli ulivi, e Fondi con il suo centro storico dall'impianto urbanistico romano.\n\nA Fondi le strade sono ancora quelle tracciate dai Romani, quindi occhio ai vicoli stretti in curva. Il nome di Campodimele nasce dalla longevità dei suoi abitanti: che sia la dieta mediterranea o l'aria buona, qui qualcosa funziona davvero.",
       meteoPlace: "Campodimele",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Campodimele_2012_by-RaBoe_30.jpg",
       tappe: [
@@ -228,7 +228,7 @@
     },
     {
       zona: "Valle del Sacco", km: "circa 150 km", kmNum: 150, titolo: "Anagni e Ferentino, la 'Città dei Papi'",
-      desc: "Un giro storico tra le città della Ciociaria settentrionale: Anagni con la sua Cattedrale e il celebre 'Schiaffo', e Ferentino con le imponenti mura poligonali meglio conservate del Lazio.",
+      desc: "Un giro storico tra le città della Ciociaria settentrionale, breve ma denso di cose da vedere: Anagni con la sua Cattedrale e il celebre \"Schiaffo\" che tutti abbiamo studiato a scuola, e Ferentino con le imponenti mura poligonali meglio conservate del Lazio.\n\nVedere di persona il luogo dello schiaffo di Anagni fa un certo effetto, se vi ricordate ancora qualcosa delle medie. Le mura di Ferentino sono costruite senza malta e sono in piedi da millenni: la vostra moto, al confronto, sembra un neonato.",
       meteoPlace: "Anagni",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cattedrale_di_Santa_Maria_(Anagni)_con_campanile.JPG",
       tappe: [
@@ -238,7 +238,7 @@
     },
     {
       zona: "Monti Cimini", km: "circa 220 km", kmNum: 220, titolo: "Viterbo, Caprarola e il Lago di Vico",
-      desc: "Un giro nella Tuscia viterbese diverso da quello dei laghi: il centro medievale di Viterbo, l'imponente Palazzo Farnese a Caprarola, e i boschi di castagni intorno al Lago di Vico.",
+      desc: "Un giro nella Tuscia viterbese diverso da quello dei laghi: il centro medievale di Viterbo, l'imponente Palazzo Farnese a Caprarola, e i boschi di castagni intorno al Lago di Vico.\n\nIl quartiere di San Pellegrino a Viterbo è il medievale meglio conservato del centro Italia, e sembra davvero un set cinematografico invece che una città vera. Se ci passate in autunno, portate un sacchetto per le castagne: intorno al lago ce n'è per tutti.",
       meteoPlace: "Viterbo",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Palazzo_Farnese_(Caprarola).jpg",
       tappe: [
@@ -249,7 +249,7 @@
     },
     {
       zona: "Monti Ernici", km: "circa 210 km", kmNum: 210, titolo: "Le Grotte di Collepardo e la Certosa di Trisulti",
-      desc: "Un giro tra natura e spiritualità sui Monti Ernici: le Grotte di Collepardo scavate nel calcare, la millenaria Certosa di Trisulti con la sua antica farmacia monastica, e il borgo murato di Vico nel Lazio.",
+      desc: "Un giro tra natura e spiritualità sui Monti Ernici: le Grotte di Collepardo scavate nel calcare, la millenaria Certosa di Trisulti con la sua antica farmacia monastica, e il borgo murato di Vico nel Lazio.\n\nLe formazioni calcaree delle grotte hanno impiegato millenni a formarsi, voi ci arrivate in un paio d'ore di strada: mettetela in prospettiva. Il souvenir più originale di questa lista è probabilmente qualcosa comprato nell'antica farmacia dei monaci a Trisulti.",
       meteoPlace: "Collepardo",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Collepardo,_Certosa_di_Trisulti_003.JPG",
       tappe: [
@@ -260,7 +260,7 @@
     },
     {
       zona: "Vallepietra", km: "circa 220 km", kmNum: 220, titolo: "Il Santuario della Trinità, incastonato nella roccia",
-      desc: "Un giro nel cuore selvaggio dei Simbruini: l'altopiano di Arcinazzo con i resti di una villa romana, e il Santuario della Santissima Trinità di Vallepietra, letteralmente scavato in una parete rocciosa a 1337 metri.",
+      desc: "Un giro nel cuore selvaggio dei Simbruini, tra i più suggestivi che conosco: l'altopiano di Arcinazzo con i resti di una villa romana, e il Santuario della Santissima Trinità di Vallepietra, letteralmente scavato in una parete rocciosa a 1337 metri di altezza.\n\nDa lontano il santuario sembra quasi un miraggio incollato alla montagna, da vicino è ancora più impressionante di quanto sembri in foto. Camerata Nuova è uno dei paesi più isolati del Lazio, e si sente nel modo più bello del termine: silenzio vero, non quello finto delle giornate no.",
       meteoPlace: "Vallepietra",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Museo_Santissima_Trinit%C3%A0_chiesa_San_Giovanni_Evangelista_Vallepietra.jpg",
       tappe: [
@@ -271,7 +271,7 @@
     },
     {
       zona: "Arpino", km: "circa 210 km", kmNum: 210, titolo: "Arpino, la patria di Marco Tullio Cicerone",
-      desc: "Un giro in Ciociaria sulle tracce di uno dei più grandi oratori della storia romana: il borgo di Arpino, la sua Torre di Cicerone, e la vicina Sora affacciata sul fiume Liri.",
+      desc: "Un giro in Ciociaria sulle tracce di uno dei più grandi oratori della storia romana: il borgo di Arpino, la sua Torre di Cicerone, e la vicina Sora affacciata sul fiume Liri.\n\nSe vi ricordate ancora qualcosa del liceo classico, vedere dove è nato l'oratore più citato di sempre fa un certo effetto. Santopadre, l'ultima tappa, ha poche righe su Wikipedia ma una vista che vale comunque la piccola deviazione dal percorso principale.",
       meteoPlace: "Arpino",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Arpino_wall.JPG",
       tappe: [
@@ -282,7 +282,7 @@
     },
     {
       zona: "Fiuggi", km: "circa 170 km", kmNum: 170, titolo: "Fiuggi, la città termale dell'acqua che 'scioglie i calcoli'",
-      desc: "Un giro breve tra le colline della Ciociaria settentrionale: le storiche terme di Fiuggi, i borghi tranquilli di Guarcino e Trivigliano, e Piglio, patria del Cesanese DOCG.",
+      desc: "Un giro breve tra le colline della Ciociaria settentrionale: le storiche terme di Fiuggi, i borghi tranquilli di Guarcino e Trivigliano, e Piglio, patria del Cesanese DOCG.\n\nL'acqua di Fiuggi \"scioglie i calcoli\" da secoli, dicono, e onestamente dopo una mattinata di curve funziona bene anche sulle tensioni da ufficio. Guarcino è uno di quei paesini che nessuna guida turistica menziona mai, e proprio per questo vale la pena scoprirlo con i propri occhi.",
       meteoPlace: "Fiuggi",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Panorama_innevato_di_Fiuggi_Fonte.jpg",
       tappe: [
@@ -293,7 +293,7 @@
     },
     {
       zona: "Cassino", km: "circa 260 km", kmNum: 260, titolo: "L'Abbazia di Montecassino, tra fede e Seconda Guerra Mondiale",
-      desc: "Un giro carico di storia: l'Abbazia di Montecassino, fondata da San Benedetto nel 529 e ricostruita dopo i bombardamenti del 1944, con il cimitero militare polacco che racconta una delle battaglie più dure della guerra in Italia.",
+      desc: "Un giro carico di storia, tra i più intensi di questa lista: l'Abbazia di Montecassino, fondata da San Benedetto nel 529 e ricostruita dopo i bombardamenti del 1944, con il cimitero militare polacco che racconta una delle battaglie più dure della guerra in Italia.\n\nL'abbazia è stata rasa al suolo dai bombardamenti e ricostruita \"dov'era, com'era\": qui la storia si legge letteralmente nei muri. Il cimitero militare polacco merita una sosta di almeno cinque minuti in silenzio, vale più di qualsiasi libro di storia letto a scuola.",
       meteoPlace: "Cassino",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Abbazia_Montecassino.jpg",
       tappe: [
@@ -304,7 +304,7 @@
     },
     {
       zona: "Norma, Ninfa e Sermoneta", km: "circa 160 km", kmNum: 160, titolo: "Il Giardino di Ninfa e i borghi della piana pontina",
-      desc: "Un giro nella provincia di Latina tra alcuni dei posti più belli del Lazio: Norma appesa sopra la valle, il Giardino di Ninfa (tra i giardini più belli del mondo, aperto solo in alcuni weekend — controlla il calendario prima di partire), e il borgo medievale di Sermoneta.",
+      desc: "Un giro nella provincia di Latina tra alcuni dei posti più belli del Lazio, e uno di quelli che consiglio più spesso a chi mi chiede \"dove mi porti oggi\": Norma appesa sopra la valle, il Giardino di Ninfa, tra i più belli del mondo, e il borgo medievale di Sermoneta.\n\nIl giardino è aperto solo in alcuni weekend stagionali: controllate sempre il calendario prima di partire, o rischiate di vederlo solo dal cancello come è capitato a me la prima volta. Da Norma, il giardino sembra un plastico in miniatura visto dall'alto: è tutto vero, promesso.",
       meteoPlace: "Sermoneta",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Giardino_di_Ninfa,_rovine_della_citt%C3%A0..JPG",
       tappe: [
@@ -315,7 +315,7 @@
     },
     {
       zona: "Cori e i Monti Lepini", km: "circa 140 km", kmNum: 140, titolo: "Cori, tra storia romana e curve dei Lepini",
-      desc: "Il giro più breve tra le new entry: Cori, antichissima città sui Monti Lepini con un tempio romano ancora in piedi, raggiunta con un percorso di curve scorrevoli tra uliveti e boschi.",
+      desc: "Il giro più breve tra le new entry di questa lista: Cori, antichissima città sui Monti Lepini con un tempio romano ancora in piedi, raggiunta con un percorso di curve scorrevoli tra uliveti e boschi.\n\nIl Tempio di Ercole è lì da più di duemila anni e sta messo meglio di certe strade asfaltate l'anno scorso, fateci caso. Giulianello, la seconda tappa, è una frazione minuscola con una vista che non vi aspettereste da un nome così poco pubblicizzato.",
       meteoPlace: "Cori",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Cori-Tempio_Ercole.JPG",
       tappe: [
@@ -325,7 +325,7 @@
     },
     {
       zona: "Priverno e l'Abbazia di Fossanova", km: "circa 190 km", kmNum: 190, titolo: "Priverno e la millenaria Abbazia di Fossanova",
-      desc: "Un giro tranquillo verso sud: il centro storico di Priverno e la vicina Abbazia di Fossanova, capolavoro dell'architettura cistercense e primo esempio di gotico in Italia, dove morì San Tommaso d'Aquino.",
+      desc: "Un giro tranquillo verso sud, buono per una giornata senza fretta: il centro storico di Priverno e la vicina Abbazia di Fossanova, capolavoro dell'architettura cistercense e primo esempio di gotico in Italia.\n\nQui morì San Tommaso d'Aquino, quindi non è solo un capolavoro architettonico ma anche un pezzo di storia della filosofia. Priverno raramente finisce negli itinerari turistici classici, ed è esattamente il motivo per cui l'ho messa in questa lista.",
       meteoPlace: "Priverno",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Abbazia_di_Fossanova_(2008).jpg",
       tappe: [
@@ -335,7 +335,7 @@
     },
     {
       zona: "Nettuno e Anzio", km: "circa 130 km", kmNum: 130, titolo: "Nettuno e Anzio, tra storia e mare",
-      desc: "Il giro più corto e rilassato: il lungomare di Anzio e Nettuno, il Forte Sangallo cinquecentesco, e le spiagge dello sbarco alleato del 1944 — perfetto anche per una mezza giornata con vista mare.",
+      desc: "Il giro più corto e rilassato della lista, perfetto per una mezza giornata con vista mare: il lungomare di Anzio e Nettuno, il Forte Sangallo cinquecentesco, e le spiagge dello sbarco alleato del 1944.\n\nDa Anzio partì Nerone in fuga da Roma, secondo la storia: voi almeno tornate indietro con calma, senza congiure alle spalle. Il Forte Sangallo con vista sul mare è la prova che anche la difesa costiera, a volte, sapeva essere panoramica.",
       meteoPlace: "Nettuno",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Forte_Sangallo.JPG",
       tappe: [
@@ -345,7 +345,7 @@
     },
     {
       zona: "Civita Castellana e la Valle del Tevere", km: "circa 130 km", kmNum: 130, titolo: "Civita Castellana, tra forre e archeologia",
-      desc: "Un giro breve nella Tuscia orientale, diverso da quello dei laghi: il Forte Sangallo di Civita Castellana affacciato su una forra scavata dal fiume, e le rovine dell'antica città etrusca di Falerii Novi poco distante.",
+      desc: "Un giro breve nella Tuscia orientale, diverso da quello più battuto dei laghi: il Forte Sangallo di Civita Castellana affacciato su una forra scavata dal fiume, e le rovine dell'antica città etrusca di Falerii Novi poco distante.\n\nIl forte è costruito sul bordo di un burrone scavato dall'acqua, e ogni volta che ci passo penso a quanto sapessero il fatto loro gli ingegneri rinascimentali. Falerii Novi è una città romana abbandonata da quasi mille anni, con le mura ancora quasi tutte in piedi e pochissimi turisti in giro: uno dei posti più sottovalutati di questa lista.",
       meteoPlace: "Civita Castellana",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Forte_Sangallo_Civita_Castellana.jpg",
       tappe: [
@@ -355,7 +355,7 @@
     },
     {
       zona: "Monti Sibillini", km: "circa 340 km", kmNum: 340, titolo: "Castelluccio di Norcia in giornata",
-      desc: "Lo stesso altopiano raccontato tra i Miniviaggi, ma in versione mordi e fuggi: si può fare anche in un giorno solo, se si parte presto. Norcia e il Piano Grande, con la 'Fioritura' delle lenticchie a fine giugno tra gli spettacoli naturali più fotografati d'Italia.",
+      desc: "Lo stesso altopiano raccontato tra i Miniviaggi, ma in versione mordi e fuggi: si può fare anche in un giorno solo, se si parte presto e non ci si ferma a dormire in giro. Norcia e il Piano Grande, con la \"Fioritura\" delle lenticchie a fine giugno, tra gli spettacoli naturali più fotografati d'Italia.\n\nSe puntate alla fioritura, controllate sempre online prima di partire: dura pochissimo, e arrivare una settimana troppo tardi vuol dire trovare solo campi verdi. Norcia merita la sosta anche solo per rispetto, come Amatrice: un salume vero comprato lì vale il viaggio da solo.",
       meteoPlace: "Norcia",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Fioritura_Castelluccio_di_Norcia.jpg",
       tappe: [
@@ -366,7 +366,7 @@
     },
     {
       zona: "Gran Sasso", km: "circa 300 km", kmNum: 300, titolo: "Campo Imperatore in giornata",
-      desc: "L'altopiano soprannominato 'Piccolo Tibet d'Italia' raggiungibile e visitabile comodamente in una domenica, senza dover per forza fermarsi a dormire: L'Aquila, l'altopiano a 2000 metri e la Rocca di Calascio, tra le fortezze più fotografate d'Abruzzo.",
+      desc: "L'altopiano soprannominato \"Piccolo Tibet d'Italia\", raggiungibile e visitabile comodamente in una domenica, senza dover per forza fermarsi a dormire: L'Aquila, l'altopiano a 2000 metri, e la Rocca di Calascio, tra le fortezze più fotografate d'Abruzzo.\n\nA Campo Imperatore hanno girato scene di film western, e appena arrivate capite esattamente perché: il paesaggio non sembra nemmeno italiano. L'Aquila si sta ricostruendo pezzo per pezzo dopo il sisma, e merita la sosta anche solo per rispetto verso chi ci vive.",
       meteoPlace: "Campo Imperatore",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Campo_Imperatore,_Gran_Sasso.jpg",
       tappe: [
@@ -377,7 +377,7 @@
     },
     {
       zona: "Lago di Bolsena", km: "circa 260 km", kmNum: 260, titolo: "Il giro del lago di Bolsena",
-      desc: "Il lago vulcanico più grande d'Europa, con un anello quasi interamente panoramico: Montefiascone affacciata dall'alto, Bolsena col suo centro storico e il castello, e Marta, il borgo di pescatori sulla sponda opposta.",
+      desc: "Il lago vulcanico più grande d'Europa, con un anello quasi interamente panoramico: Montefiascone affacciata dall'alto, Bolsena col suo centro storico e il castello, e Marta, il borgo di pescatori sulla sponda opposta.\n\nLo si gira in moto come fosse un laghetto di quartiere, ma resta uno dei laghi più grandi d'Italia: un bel contrasto quando ci si pensa a bocce ferme. Marta è l'unico paese del lago che vive ancora davvero di pesca, e si vede anche in tavola: il pesce qui non è un vezzo turistico.",
       meteoPlace: "Bolsena",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lago_di_Bolsena.jpg",
       tappe: [
