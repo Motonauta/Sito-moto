@@ -602,7 +602,7 @@
   const VIAGGI_RICORDARE = [
     {
       zona: "Baviera, Ring e Olanda", km: "7 giorni consigliati", kmNum: 3996, titolo: "Castelli bavaresi, Porsche, il Nürburgring e Amsterdam",
-      desc: "Un giro raccontato da chi l'ha fatto davvero: castelli tra Austria e Baviera, un museo per gli amanti delle auto, il circuito più leggendario del mondo e due giorni tra i canali di Amsterdam. Quasi 4000 km reali (3996, per la precisione) in una settimana, con un solo giorno di sosta vera.",
+      desc: "Un giro raccontato da chi l'ha fatto davvero: castelli tra Austria e Baviera, un museo per gli amanti delle auto, il circuito più leggendario del mondo e due giorni tra i canali di Amsterdam. Quasi 4000 km reali (3996, per la precisione) in una settimana, con un solo giorno di sosta vera.\n\nÈ uno dei viaggi più densi che vi possa consigliare: ogni giorno una tappa diversa, quasi mai un momento morto. Se pensate di farlo, mettete in conto che l'ultimo giorno si guida e basta, senza soste intermedie: preparatevi mentalmente prima di partire, non solo la moto.",
       meteoPlace: "Monaco di Baviera",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Castle_Neuschwanstein.jpg",
       tappe: [
@@ -619,7 +619,7 @@
     },
     {
       zona: "Costa Azzurra e Provenza", km: "7 giorni consigliati", kmNum: 2650, titolo: "Costa Azzurra, Provenza e i profumi della Francia del sud",
-      desc: "Il mito della Riviera francese visto dalla sella: curve panoramiche fino a Nizza, il glamour di Saint-Tropez, il porto vecchio di Marsiglia e i campi di lavanda della Provenza. Un giro che alterna mare, borghi e buona tavola senza mai avere fretta.",
+      desc: "Il mito della Riviera francese visto dalla sella: curve panoramiche fino a Nizza, il glamour di Saint-Tropez, il porto vecchio di Marsiglia e i campi di lavanda della Provenza. Un giro che alterna mare, borghi e buona tavola senza mai avere fretta.\n\nRispetto ad altri viaggi di questa lista, qui il ritmo è più lento e godibile: meno tappe di rottura, più soste per godersi il posto. Se riuscite a incastrare le date tra giugno e luglio, i campi di lavanda intorno ad Avignone valgono da soli la deviazione dal percorso costiero.",
       meteoPlace: "Nizza",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Nice_(FR-06000)_Promenade_des_anglais.jpg",
       tappe: [
@@ -635,7 +635,7 @@
     },
     {
       zona: "Svizzera, i grandi passi", km: "7 giorni consigliati", kmNum: 2050, titolo: "Svizzera: il Grand Tour dei passi alpini",
-      desc: "Una settimana dedicata solo a curve, tornanti e panorami da cartolina: San Gottardo, Furka e Grimsel in sequenza, poi i laghi di Interlaken e la capitale Berna. Il viaggio giusto per chi in moto cerca soprattutto la strada, non la meta.",
+      desc: "Una settimana dedicata solo a curve, tornanti e panorami da cartolina: San Gottardo, Furka e Grimsel in sequenza, poi i laghi di Interlaken e la capitale Berna. Il viaggio giusto per chi in moto cerca soprattutto la strada, non la meta.\n\nÈ il viaggio giusto per chi, tra tutti quelli di questa lista, cerca meno cultura e più guida pura: pochissimi chilometri di trasferimento, quasi tutto il tempo speso su strade che meritano davvero. Se potete scegliere, evitate i weekend estivi: i passi più famosi si affollano in fretta.",
       meteoPlace: "Andermatt",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Belvedere_Furka.jpg",
       tappe: [
@@ -651,7 +651,7 @@
     },
     {
       zona: "Istria e Dalmazia", km: "7 giorni consigliati", kmNum: 2800, titolo: "Croazia: Istria, Plitvice e le mura di Dubrovnik",
-      desc: "La costa croata da nord a sud: la 'piccola Venezia' di Rovigno, le cascate turchesi di Plitvice, il tramonto di Zara e il palazzo romano di Spalato, fino alle mura patrimonio UNESCO di Dubrovnik. Un viaggio che alterna borghi di mare e natura spettacolare.",
+      desc: "La costa croata da nord a sud: la \"piccola Venezia\" di Rovigno, le cascate turchesi di Plitvice, il tramonto di Zara e il palazzo romano di Spalato, fino alle mura patrimonio UNESCO di Dubrovnik. Un viaggio che alterna borghi di mare e natura spettacolare.\n\nÈ un viaggio che consiglio a chi non ha mai considerato la Croazia come meta \"vera\": la costa cambia colore e carattere ogni poche ore di strada. Ai Laghi di Plitvice la moto resta ferma per un bel po', ma con quei colori davanti nessuno se ne lamenta.",
       meteoPlace: "Dubrovnik",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Old_City_of_Dubrovnik-108773.jpg",
       tappe: [
@@ -666,7 +666,7 @@
     },
     {
       zona: "Austria e Slovenia", km: "7 giorni consigliati", kmNum: 2750, titolo: "Austria e Slovenia: Salisburgo, Vienna e il lago di Bled",
-      desc: "Da Mozart agli Asburgo, poi la quiete del lago di Bled: un giro che unisce grandi capitali imperiali e la Slovenia più verde e tranquilla. Salisburgo, Vienna, Graz, Bled e Lubiana in una sola settimana, senza mai correre.",
+      desc: "Da Mozart agli Asburgo, poi la quiete del lago di Bled: un giro che unisce grandi capitali imperiali e la Slovenia più verde e tranquilla. Salisburgo, Vienna, Graz, Bled e Lubiana in una sola settimana, senza mai correre.\n\nÈ uno dei viaggi più equilibrati della lista: città, montagna e laghi senza mai un giorno davvero pesante di autostrada. Al lago di Bled, se riuscite a suonare la campana della chiesetta sull'isola, dicono porti fortuna: io un tentativo l'ho sempre fatto.",
       meteoPlace: "Vienna",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Bled,_Slovenia.jpg",
       tappe: [
@@ -681,7 +681,7 @@
     },
     {
       zona: "Boemia e Baviera", km: "7 giorni consigliati", kmNum: 2850, titolo: "Praga e la Strada Romantica tedesca",
-      desc: "Il centro Europa più fiabesco: Rothenburg e la Strada Romantica, Norimberga, la Praga di Ponte Carlo e Città Vecchia, le terme liberty di Karlovy Vary e la medievale Ratisbona. Un giro fatto apposta per chi ama i centri storici che sembrano scenografie.",
+      desc: "Il centro Europa più fiabesco: Rothenburg e la Strada Romantica, Norimberga, la Praga di Ponte Carlo e Città Vecchia, le terme liberty di Karlovy Vary e la medievale Ratisbona. Un giro fatto apposta per chi ama i centri storici che sembrano scenografie.\n\nSe amate i centri storici che sembrano set cinematografici, questo è probabilmente il viaggio più denso di questa lista da questo punto di vista. Vi consiglio di attraversare il Ponte Carlo a Praga il prima possibile la mattina, prima che arrivino i pullman: è tutta un'altra esperienza.",
       meteoPlace: "Praga",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Charles_Bridge_Prague.jpg",
       tappe: [
@@ -696,7 +696,7 @@
     },
     {
       zona: "Ungheria e Balcani", km: "7 giorni consigliati", kmNum: 2650, titolo: "Budapest, il lago Balaton e Zagabria",
-      desc: "Il Danubio, le terme di Budapest, le spiagge d'acqua dolce del Balaton e i caffè all'aperto di Zagabria: un giro più rilassato, pensato per chi vuole scoprire l'Europa centro-orientale senza inseguire troppi chilometri al giorno.",
+      desc: "Il Danubio, le terme di Budapest, le spiagge d'acqua dolce del Balaton e i caffè all'aperto di Zagabria: un giro più rilassato, pensato per chi vuole scoprire l'Europa centro-orientale senza inseguire troppi chilometri al giorno.\n\nÈ il viaggio più rilassato del gruppo, pensato apposta per chi non vuole inseguire troppi chilometri ogni giorno. A Budapest, un bagno nelle terme di Széchenyi dopo ore di sella è probabilmente il miglior modo che conosco per recuperare le energie.",
       meteoPlace: "Budapest",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Hungarian_Parliament_Building,_Budapest.jpg",
       tappe: [
@@ -710,7 +710,7 @@
     },
     {
       zona: "Normandia e Bretagna", km: "7 giorni consigliati", kmNum: 3800, titolo: "Normandia e Bretagna: scogliere, sbarchi e Mont Saint-Michel",
-      desc: "Uno dei viaggi più lunghi e ambiziosi della lista, verso l'estremo nordovest della Francia: le spiagge dello sbarco in Normandia, l'abbazia sull'isola di Mont Saint-Michel e le coste fortificate della Bretagna. Giornate impegnative in autostrada, ricompensate da paesaggi che in Italia non si trovano.",
+      desc: "Uno dei viaggi più lunghi e ambiziosi della lista, verso l'estremo nordovest della Francia: le spiagge dello sbarco in Normandia, l'abbazia sull'isola di Mont Saint-Michel e le coste fortificate della Bretagna. Giornate impegnative in autostrada, ricompensate da paesaggi che in Italia non si trovano.\n\nÈ uno dei viaggi più impegnativi in termini di autostrada, con due giornate buone solo per arrivare e altrettante per tornare. Alle spiagge dello sbarco non troverete aneddoti scherzosi da parte mia: è una tappa da vivere in silenzio, e vale la pena farlo comunque.",
       meteoPlace: "Saint-Malo",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Mont_Saint-Michel_France.jpg",
       tappe: [
@@ -725,7 +725,7 @@
     },
     {
       zona: "Catalogna e Pirenei", km: "7 giorni consigliati", kmNum: 3400, titolo: "Barcellona, Andorra e i passi dei Pirenei",
-      desc: "La Catalogna vista in moto: la Sagrada Família e il lungomare di Barcellona, lo shopping in quota di Andorra e i valichi di alta montagna dei Pirenei, prima di rientrare lungo la costa francese. Città, montagna e mare nello stesso viaggio.",
+      desc: "La Catalogna vista in moto: la Sagrada Família e il lungomare di Barcellona, lo shopping in quota di Andorra e i valichi di alta montagna dei Pirenei, prima di rientrare lungo la costa francese. Città, montagna e mare nello stesso viaggio.\n\nÈ un viaggio che mette insieme tre atmosfere completamente diverse in una sola settimana, senza mai sentirsi ripetitivi. Il Port d'Envalira, oltre i 2400 metri, è uno dei punti più alti che toccherete su asfalto in tutta questa lista di viaggi.",
       meteoPlace: "Barcellona",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/La_Sagrada_Familia_Barcelona.jpg",
       tappe: [
@@ -740,7 +740,7 @@
     },
     {
       zona: "Polonia meridionale", km: "7 giorni consigliati", kmNum: 3300, titolo: "Cracovia, i Tatra e la memoria di Auschwitz",
-      desc: "Un viaggio che unisce la bellezza medievale di Cracovia, le montagne dei Tatra e una tappa che va oltre il turismo: il memoriale di Auschwitz-Birkenau, da visitare con rispetto e senza fretta. Un giro pensato per chi cerca anche significato, non solo panorami.",
+      desc: "Un viaggio che unisce la bellezza medievale di Cracovia, le montagne dei Tatra e una tappa che va oltre il turismo: il memoriale di Auschwitz-Birkenau, da visitare con rispetto e senza fretta. Un giro pensato per chi cerca anche significato, non solo panorami.\n\nNon è un viaggio come gli altri, e non ho intenzione di renderlo tale a parole: la tappa di Auschwitz-Birkenau va affrontata con rispetto, senza fretta, senza aspettarsi di \"divertirsi\" quel giorno. Zakopane, subito dopo, è il posto giusto per schiarirsi i pensieri con un po' di aria di montagna.",
       meteoPlace: "Cracovia",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Sukiennice_and_Main_Market_Square_Krakow_Poland.JPG",
       tappe: [
@@ -754,7 +754,7 @@
     },
     {
       zona: "Grecia centrale", km: "7 giorni consigliati", kmNum: 2050, titolo: "Grecia in moto: il traghetto, Meteora e Atene",
-      desc: "Un viaggio diverso dagli altri: si arriva in Grecia in nave, moto compresa, per risparmiare due giorni di autostrada balcanica. Poi Meteora, Delfi e Atene, prima di reimbarcarsi per il rientro. Cultura antica e monasteri sospesi nel cielo.",
+      desc: "Un viaggio diverso dagli altri: si arriva in Grecia in nave, moto compresa, per risparmiare due giorni di autostrada balcanica. Poi Meteora, Delfi e Atene, prima di reimbarcarsi per il rientro. Cultura antica e monasteri sospesi nel cielo.\n\nÈ l'unico viaggio di questa lista che si fa in parte per mare: imbarcare la moto sul traghetto per Ancona-Igoumenitsa vi risparmia due giorni pesanti di autostrada balcanica, e la traversata diventa già parte della vacanza. A Meteora, i monasteri sospesi sulla roccia lasciano senza parole anche chi, come me, si aspettava già foto pazzesche.",
       meteoPlace: "Meteora",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Meteora_-_Kalambaka_-_Greece.jpg",
       tappe: [
@@ -770,7 +770,7 @@
     },
     {
       zona: "Germania del nord e Danimarca", km: "7 giorni consigliati", kmNum: 4100, titolo: "Amburgo, il ponte di Øresund e Copenaghen",
-      desc: "Il viaggio più a nord — e il più lungo in chilometri — di tutta la lista: il porto anseatico di Amburgo, il leggendario ponte-tunnel di Øresund e le casette colorate di Nyhavn a Copenaghen. Giornate lunghe in autostrada tedesca, ricompensate da un'atmosfera scandinava che in Italia non si trova.",
+      desc: "Il viaggio più a nord — e il più lungo in chilometri — di tutta la lista: il porto anseatico di Amburgo, il leggendario ponte-tunnel di Øresund e le casette colorate di Nyhavn a Copenaghen. Giornate lunghe in autostrada tedesca, ricompensate da un'atmosfera scandinava che in Italia non si trova.\n\nÈ il viaggio più a nord e più lungo in chilometri di tutta questa lista, quindi organizzatelo con più margine degli altri. Il ponte di Øresund, che a metà attraversamento diventa un tunnel sott'acqua, è una delle esperienze di guida più particolari che abbia mai fatto: sembra uscito da un film di fantascienza.",
       meteoPlace: "Copenaghen",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Nyhavn-panorama.jpg",
       tappe: [
