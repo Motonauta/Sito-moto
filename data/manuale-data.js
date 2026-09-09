@@ -266,6 +266,47 @@
         { tipo: "paragrafo", testo: "Il casco perfetto non esiste. Esiste quello che ti fa arrivare a destinazione ancora dell'umore giusto per goderti il posto in cui sei arrivato." },
         { tipo: "paragrafo", testo: "Hai un casco che useresti per un giro del mondo e uno che eviteresti anche per andare al bar? Raccontamelo: magari ne esce un altro articolo!" }
       ]
+    },
+    {
+      titolo: "Valigie rigide vs borse morbide: quale scegliere?",
+      categoria: "Equipaggiamento",
+      excerpt: "La scelta tra valigie rigide e borse morbide non è solo una questione di gusto: cambia davvero come vivi il viaggio. Pro, contro e la mia esperienza con entrambe.",
+      autore: "Il Motonauta",
+      data: "2026-09-09",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Oggi parliamo delle due tipologie di borse per eccellenza e delle mie esperienze con esse. Il primo viaggio lungo l'ho fatto con delle borse morbide molto economiche, legate alla meglio sul mio GSXR 1000 con dei ragni elastici. Sono arrivato a destinazione con entrambe le borse chiuse con il nastro americano perché non era la moto giusta e non erano le borse più adatte. Da lì ho iniziato a capire che la scelta tra rigide e morbide non è solo una questione di gusto: cambia davvero come vivi il viaggio." },
+        { tipo: "sottotitolo", testo: "Valigie rigide" },
+        { tipo: "paragrafo", testo: "Le classiche \"valigette\" in plastica o alluminio agganciate al telaio, tipo le Givi Outback Evo che monto io." },
+        { tipo: "paragrafo", testo: "I pro:" },
+        { tipo: "consiglio", numero: 1, titolo: "Protezione vera", testo: "Se cadi, o se qualcuno urta la moto in un parcheggio affollato, il contenuto è protetto molto meglio che con un tessuto." },
+        { tipo: "consiglio", numero: 2, titolo: "Sicurezza dai furti", testo: "Si chiudono a chiave, e non è banale aprirle al volo come una cerniera." },
+        { tipo: "consiglio", numero: 3, titolo: "Impermeabilità reale", testo: "Quelle di buona qualità non fanno passare acqua nemmeno sotto un temporale vero, non solo sotto la pioggerella." },
+        { tipo: "consiglio", numero: 4, titolo: "Forma fissa", testo: "Sai sempre esattamente quanto spazio hai e come organizzarlo, comodo se sei tipo da \"tutto al suo posto\"." },
+        { tipo: "paragrafo", testo: "I contro:" },
+        { tipo: "consiglio", numero: 1, titolo: "Peso", testo: "Parliamo di diversi kg in più rispetto alle borse morbide, che si sentono soprattutto nella guida in curva." },
+        { tipo: "consiglio", numero: 2, titolo: "Ingombro fisso", testo: "Allargano la moto, e in città o su strade strette te ne accorgi eccome quando fai manovre." },
+        { tipo: "consiglio", numero: 3, titolo: "Costo", testo: "Un buon set di valigie rigide con i telai di aggancio è un investimento serio, altro che le borse da 60 euro la coppia." },
+        { tipo: "consiglio", numero: 4, titolo: "Meno versatili fuori moto", testo: "Se un giorno non ti servono, restano lì, ingombranti anche da conservare." },
+        { tipo: "sottotitolo", testo: "Borse morbide" },
+        { tipo: "paragrafo", testo: "Sacche in tessuto tecnico che si agganciano con cinghie, spesso senza bisogno di telai fissi." },
+        { tipo: "paragrafo", testo: "I pro:" },
+        { tipo: "consiglio", numero: 1, titolo: "Leggerezza", testo: "Molto più leggere, la moto resta più agile soprattutto se fai anche sterrato o strade tortuose." },
+        { tipo: "consiglio", numero: 2, titolo: "Costo accessibile", testo: "Si trovano soluzioni valide a una frazione del prezzo delle rigide." },
+        { tipo: "consiglio", numero: 3, titolo: "Flessibilità", testo: "Si adattano meglio a moto diverse, utile se cambi mezzo o le presti." },
+        { tipo: "consiglio", numero: 4, titolo: "Meno ingombro fisso", testo: "La moto resta più stretta, più semplice da infilare tra le auto in coda." },
+        { tipo: "paragrafo", testo: "I contro:" },
+        { tipo: "consiglio", numero: 1, titolo: "Protezione limitata", testo: "In caso di caduta il contenuto è molto più esposto." },
+        { tipo: "consiglio", numero: 2, titolo: "Sicurezza minore", testo: "Con un taglierino, in due secondi qualcuno può aprirtele: non è uno scenario così raro, specie nelle soste in città." },
+        { tipo: "consiglio", numero: 3, titolo: "Tenuta dell'acqua da verificare sempre", testo: "Anche le \"impermeabili\" spesso reggono bene la pioggia leggera ma vanno in crisi con un acquazzone lungo, a meno di modelli davvero di fascia alta." },
+        { tipo: "consiglio", numero: 4, titolo: "Si deformano", testo: "Nel tempo, o se le carichi troppo, perdono forma e tenuta sulle cinghie." },
+        { tipo: "sottotitolo", testo: "Quindi quale scegliere?" },
+        { tipo: "paragrafo", testo: "Dipende dal tuo tipo di viaggio, non c'è una risposta giusta per tutti:" },
+        { tipo: "consiglio", numero: 1, titolo: "Rigide", testo: "Se fai soprattutto asfalto, viaggi lunghi, e vuoi zero pensieri su pioggia e furti. Io per questo motivo sono passato alle Givi Outback Evo e non tornerei indietro." },
+        { tipo: "consiglio", numero: 2, titolo: "Morbide", testo: "Se fai anche sterrato, viaggi leggeri, o hai un budget limitato in partenza: restano la scelta più pratica e agile." },
+        { tipo: "consiglio", numero: 3, titolo: "Una combinazione", testo: "Molti finiscono per usare rigide per il grosso del bagaglio, dove serve sicurezza e tenuta, e morbide o un borsone da sella per l'essenziale che vuoi sempre a portata di mano." },
+        { tipo: "paragrafo", testo: "In sintesi: le rigide vincono su protezione e sicurezza ma pesano (letteralmente) sul portafoglio e sulla maneggevolezza; le morbide vincono su leggerezza e prezzo ma ti chiedono più attenzione su pioggia forte e soste incustodite. Io sono finito con le rigide dopo l'esperienza del primo viaggio, ma se stai iniziando ora, non è detto che sia la scelta giusta anche per te." },
+        { tipo: "paragrafo", testo: "Tu che borse usi? Se hai una combinazione che funziona bene, fammelo sapere! Potrebbe essere oggetto di un nuovo articolo." }
+      ]
     }
   ];
 
