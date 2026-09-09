@@ -160,7 +160,9 @@ module.exports = async (req, res) => {
   const section = SECTION_INFO[tipo] || SECTION_INFO.itinerario;
   const siteUrl = `https://ilmotonauta.com/viaggi/${slug}`;
   const pageTitle = `${it.titolo} — ${section.titleSuffix} | Il Motonauta`;
-  const description = it.desc.length > 160 ? `${it.desc.slice(0, 157)}...` : it.desc;
+  const descFlat = it.desc.replace(/\n\n+/g, ' ').trim();
+  const description = descFlat.length > 160 ? `${descFlat.slice(0, 157)}...` : descFlat;
+  const descParagraphs = it.desc.split(/\n\n+/).map(p => `<p style="margin-top:22px; font-size:1.05rem; max-width:70ch;">${escapeHtml(p.trim())}</p>`).join('');
   const nostromoLinks = buildNostromoLinks(tipo, it);
 
   const tappeHTML = it.tappe.map(t => `
@@ -266,7 +268,7 @@ ${HEADER_HTML}
       ${escapeHtml(it.titolo)}
     </h1>
     <p style="margin-top:14px; font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);">${escapeHtml(it.km)} — dati aggiornati al ${escapeHtml(new Date(ULTIMO_AGGIORNAMENTO_DATI).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }))}</p>
-    <p style="margin-top:22px; font-size:1.05rem; max-width:70ch;">${escapeHtml(it.desc)}</p>
+    ${descParagraphs}
 
     <div class="viaggio-photo">
       <img src="${escapeHtml(wikiThumb(it.foto, 1200))}" alt="${escapeHtml(it.titolo)}">

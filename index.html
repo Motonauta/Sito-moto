@@ -88,7 +88,7 @@
   .itinerario-card-body{ display:none; padding:26px 34px 34px; }
   .detail-modal-inner .itinerario-card-body{ display:block; }
   .itinerario-photo{
-    position:relative; aspect-ratio:16/9; overflow:hidden;
+    display:block; position:relative; aspect-ratio:16/9; overflow:hidden;
     background:var(--asphalt-2); margin:14px 14px 0;
     border:1px solid rgba(217,164,65,0.45);
   }
@@ -1098,7 +1098,7 @@
     return `
       <div class="itinerario-card-body">
         <p class="marker">${it.zona} — ${it.km}</p>
-        <p class="desc">${it.desc}</p>
+        ${it.desc.split(/\n\n+/).map(p => `<p class="desc">${p.trim()}</p>`).join("")}
         <div class="itinerario-actions">
           <a href="${mapsUrl}" target="_blank" rel="noopener">Apri l'itinerario completo su Maps</a>
           <a class="waze" href="${wazeUrl}" target="_blank" rel="noopener">Prima tappa su Waze</a>
@@ -1211,7 +1211,7 @@
 
     ctx.fillStyle = "#EDE4D3";
     ctx.font = "400 30px 'Work Sans', sans-serif";
-    y = wrapText(ctx, it.desc, innerX, y + 20, innerW, 40, 5) + 20;
+    y = wrapText(ctx, it.desc.replace(/\n\n+/g, " "), innerX, y + 20, innerW, 40, 5) + 20;
 
     ctx.fillStyle = "#D9A441";
     ctx.font = "700 24px 'JetBrains Mono', monospace";
@@ -1317,9 +1317,9 @@
         </div>
         ${weatherBarHTML()}
         ${it.foto ? `
-        <div class="itinerario-photo">
+        <a class="itinerario-photo" href="/viaggi/${window.VIAGGI_DATA.getSlug(it)}" title="Apri la pagina completa di questo viaggio">
           <img src="${wikiThumb(it.foto, 700)}" alt="${it.zona}" loading="lazy">
-        </div>
+        </a>
         ` : ""}
         <div class="card-compact-actions">
           <a href="${mapsUrl}" target="_blank" rel="noopener">Apri su Maps</a>
@@ -1355,9 +1355,9 @@
         <span class="card-price" title="Stima costo benzina">⛽ …</span>
       </div>
       ${it.foto ? `
-      <div class="itinerario-photo">
+      <a class="itinerario-photo" href="/viaggi/${window.VIAGGI_DATA.getSlug(it)}" title="Apri la pagina completa di questo viaggio">
         <img src="${wikiThumb(it.foto, 1000)}" alt="${it.zona}" loading="lazy">
-      </div>
+      </a>
       ` : ""}
       ${bodyHTML(it, mapsUrl, wazeUrl)}
     `;
