@@ -307,6 +307,7 @@ ${HEADER_HTML}
     <div class="manuale-photo">
       <img src="${escapeHtml(wikiThumb(guida.copertina, 1400))}" alt="${escapeHtml(guida.titolo)}">
     </div>
+    ${guida.copertinaCaption ? `<p class="manuale-tip-img-caption">${escapeHtml(guida.copertinaCaption)}</p>` : ''}
     ` : ''}
 
     <div class="manuale-content">

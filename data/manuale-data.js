@@ -272,11 +272,11 @@
       categoria: "Equipaggiamento",
       excerpt: "La scelta tra valigie rigide e borse morbide non è solo una questione di gusto: cambia davvero come vivi il viaggio. Pro, contro e la mia esperienza con entrambe.",
       copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788949306/Manuale%20di%20bordo/qtag7w900ke6z3wuyy3k.jpg",
+      copertinaCaption: "le mie morbide sul gsxr quando sono partito",
       autore: "Il Motonauta",
       data: "2026-09-09",
       blocchi: [
         { tipo: "paragrafo", testo: "Oggi parliamo delle due tipologie di borse per eccellenza e delle mie esperienze con esse. Il primo viaggio lungo l'ho fatto con delle borse morbide molto economiche, legate alla meglio sul mio GSXR 1000 con dei ragni elastici. Sono arrivato a destinazione con entrambe le borse chiuse con il nastro americano perché non era la moto giusta e non erano le borse più adatte. Da lì ho iniziato a capire che la scelta tra rigide e morbide non è solo una questione di gusto: cambia davvero come vivi il viaggio." },
-        { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788949306/Manuale%20di%20bordo/qtag7w900ke6z3wuyy3k.jpg", caption: "le mie morbide sul gsxr quando sono partito" },
         { tipo: "immagine", src: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788949305/Manuale%20di%20bordo/dngqgyigwvetxbocrxzb.jpg", caption: "ecco come sono tornato a casa, con entrambe piene di nastro americano, e la destra svuotata perché lo scarico aveva bucato la borsa e squagliato quasi tutti i miei vestiti" },
         { tipo: "video", src: "https://res.cloudinary.com/whqpxxz1/video/upload/f_auto,q_auto/v1788949321/Manuale%20di%20bordo/ia729wjeb5mcsqalwngi.mov", caption: "ecco le esatte condizioni" },
         { tipo: "sottotitolo", testo: "Valigie rigide" },
