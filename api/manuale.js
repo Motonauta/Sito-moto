@@ -100,7 +100,7 @@ const STYLE = `<style>
   .manuale-tip-img{
     margin-top:14px; overflow:hidden; border:1px solid rgba(245,240,230,0.14);
   }
-  .manuale-tip-img img{ width:100%; height:auto; display:block; }
+  .manuale-tip-img img, .manuale-tip-img video{ width:100%; height:auto; display:block; }
   .manuale-tip-img-caption{
     margin-top:10px; padding:10px 14px; border:1px dashed rgba(245,240,230,0.25);
     font-family:var(--font-mono); font-size:0.78rem; color:var(--cream-dim);
@@ -176,6 +176,13 @@ function renderBlocco(b) {
     return `
     <div class="manuale-tip-img">
       <img src="${escapeHtml(wikiThumb(b.src, 1000))}" alt="${escapeHtml(b.caption || b.alt || '')}" loading="lazy">
+    </div>
+    ${b.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.caption)}</p>` : ''}`;
+  }
+  if (b.tipo === 'video') {
+    return `
+    <div class="manuale-tip-img">
+      <video src="${escapeHtml(b.src)}" controls playsinline preload="metadata"></video>
     </div>
     ${b.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.caption)}</p>` : ''}`;
   }
