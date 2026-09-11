@@ -199,6 +199,8 @@ module.exports = async (req, res) => {
 <meta property="og:url" content="${siteUrl}">
 <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
 ${HEAD_COMMON}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   .viaggio-photo{
     position:relative; aspect-ratio:16/9; overflow:hidden; margin-top:36px;
@@ -246,8 +248,21 @@ ${HEAD_COMMON}
     cursor:pointer; transition:background .2s ease, color .2s ease;
   }
   .print-pdf-btn:hover{ background:rgba(245,240,230,0.12); }
+  .viaggio-route-preview{ margin-top:44px; max-width:900px; }
+  .viaggio-route-preview p.label{
+    font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); margin-bottom:16px;
+  }
+  #route-preview-map{
+    height:340px; width:100%; border:1px solid rgba(245,240,230,0.16); background:var(--asphalt-2);
+  }
+  .viaggio-route-note{ margin-top:12px; font-size:0.82rem; color:var(--cream-dim); }
+  .leaflet-popup-content-wrapper{
+    background:var(--asphalt-2); color:var(--cream); border-radius:0; border:1px solid rgba(245,240,230,0.2);
+  }
+  .leaflet-popup-tip{ background:var(--asphalt-2); }
   @media print {
-    .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, .copy-link-btn, #back-to-top{ display:none !important; }
+    .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, .copy-link-btn, #back-to-top, .viaggio-route-preview{ display:none !important; }
     body{ background:#fff !important; color:#111 !important; }
     .viaggio-breadcrumb, .marker, .viaggio-stops p.label{ color:#555 !important; }
     h1, h2{ color:#111 !important; }
@@ -290,6 +305,14 @@ ${HEADER_HTML}
       </ul>
     </div>
 
+    <div class="viaggio-route-preview">
+      <p class="label">Anteprima del percorso</p>
+      <div id="route-preview-map"></div>
+      <p class="viaggio-route-note" id="route-preview-caption">
+        Percorso generato in automatico sulle tappe qui sopra: è indicativo, verifica sempre il tragitto reale su Maps o Waze prima di partire.
+      </p>
+    </div>
+
     <div class="nostromo-cta">
       <p class="marker">Organizza il viaggio</p>
       <h2 style="font-size:1.3rem; color:var(--sand);">Fatti aiutare dal Nostromo</h2>
@@ -308,6 +331,69 @@ ${HEADER_HTML}
 </section>
 
 ${FOOTER_HTML}
+<script>
+  const ROUTE_TAPPE = ${JSON.stringify(it.tappe.map(t => ({ nome: t.nome, query: t.query }))).replace(/</g, '\\u003c')};
+
+  async function routePreviewGeocode(query){
+    const res = await fetch('/api/route-planner?action=search&q=' + encodeURIComponent(query));
+    const data = await res.json();
+    const hit = data[0];
+    return hit ? { lat: parseFloat(hit.lat), lon: parseFloat(hit.lon) } : null;
+  }
+
+  // Anteprima del percorso come quella che si vede su Maps prima di avviare
+  // la navigazione: geocodifica ogni tappa, calcola il percorso stradale
+  // reale (stesso motore usato da Nostromo) e disegna la linea su una mappa
+  // Leaflet. Se una tappa non viene trovata o il percorso non è disponibile,
+  // il widget si nasconde invece di mostrare una mappa vuota o rotta.
+  async function loadRoutePreview(){
+    const mapEl = document.getElementById('route-preview-map');
+    if(!mapEl) return;
+    if(typeof L === 'undefined'){
+      const wrap = mapEl.closest('.viaggio-route-preview');
+      if(wrap) wrap.style.display = 'none';
+      return;
+    }
+    try{
+      const coords = [];
+      for(const t of ROUTE_TAPPE){
+        const c = await routePreviewGeocode(t.query);
+        if(!c) throw new Error('tappa non trovata: ' + t.nome);
+        coords.push(c);
+      }
+
+      const coordsParam = coords.map(c => c.lat + ',' + c.lon).join(';');
+      const res = await fetch('/api/route-planner?action=route&coords=' + encodeURIComponent(coordsParam) + '&steps=1');
+      const data = await res.json();
+      const route = data.routes && data.routes[0];
+      if(!route || !route.geometry || !route.geometry.coordinates) throw new Error('percorso non disponibile');
+
+      const latlngs = route.geometry.coordinates.map(function(c){ return [c[1], c[0]]; });
+
+      const map = L.map('route-preview-map', { scrollWheelZoom: false });
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_2926_1_9433c9421427b00a6eeb97bc', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map);
+
+      const line = L.polyline(latlngs, { color: '#D9A441', weight: 4, opacity: 0.9 }).addTo(map);
+
+      coords.forEach(function(c, i){
+        L.circleMarker([c.lat, c.lon], {
+          radius: 7, fillColor: '#C1502E', color: '#1B1A17', weight: 2, fillOpacity: 1
+        }).addTo(map).bindPopup(ROUTE_TAPPE[i].nome);
+      });
+
+      map.fitBounds(line.getBounds(), { padding: [24, 24] });
+    } catch(err){
+      const wrap = mapEl.closest('.viaggio-route-preview');
+      if(wrap) wrap.style.display = 'none';
+    }
+  }
+
+  loadRoutePreview();
+</script>
 </body>
 </html>`;
 
