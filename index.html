@@ -50,10 +50,21 @@
 
   .viaggio-item{
     display:flex; gap:20px; background:var(--asphalt); border:1px solid rgba(245,240,230,0.14);
-    text-decoration:none; color:inherit; overflow:hidden;
-    transition:border-color .2s ease, transform .2s ease;
+    text-decoration:none; color:inherit; overflow:hidden; position:relative; z-index:1;
+    transition:border-color .25s ease, transform .25s ease, box-shadow .25s ease;
   }
-  .viaggio-item:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .viaggio-item:hover{ border-color:var(--gold); }
+
+  /* Solo su desktop/mouse (esclude i touchscreen, dove l'hover non ha
+     senso): la scheda sotto il cursore si ingrandisce leggermente e si
+     solleva sopra le altre, come se venisse incontro a chi guarda. */
+  @media (hover:hover) and (pointer:fine){
+    .viaggio-item:hover{
+      transform:scale(1.035) translateY(-4px);
+      z-index:5;
+      box-shadow:0 26px 54px -22px rgba(0,0,0,0.7);
+    }
+  }
   .viaggio-item-photo{
     flex:0 0 240px; aspect-ratio:4/3; overflow:hidden; background:var(--asphalt-2);
   }
