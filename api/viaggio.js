@@ -400,6 +400,34 @@ ${FOOTER_HTML}
     return tappe;
   }
 
+  function routePreviewHaversineKm(a, b){
+    const R = 6371;
+    const dLat = (b.lat - a.lat) * Math.PI / 180;
+    const dLon = (b.lon - a.lon) * Math.PI / 180;
+    const lat1 = a.lat * Math.PI / 180, lat2 = b.lat * Math.PI / 180;
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
+
+  // Il router pubblico usato per calcolare il percorso reale (lo stesso di
+  // Nostromo) a volte "impazzisce" su tappe geocodificate correttamente e
+  // restituisce un percorso che fa un giro assurdo (es. passa da un altro
+  // paese senza motivo): capita raramente ma produce un'anteprima fuorviante.
+  // Controllo di sicurezza: se una tratta tra due tappe consecutive è molto
+  // più lunga della distanza in linea d'aria (più del previsto anche per
+  // strade di montagna/costiere), non ci si fida del percorso calcolato e si
+  // torna alla linea diretta tra le tappe.
+  function routePreviewLegsLookSane(legs, coords){
+    if(!Array.isArray(legs) || legs.length !== coords.length - 1) return false;
+    for(let i = 0; i < legs.length; i++){
+      const legKm = (legs[i].distance || 0) / 1000;
+      const straightKm = routePreviewHaversineKm(coords[i], coords[i + 1]);
+      const extraKm = legKm - straightKm;
+      if(extraKm > 250 && legKm > straightKm * 2.5) return false;
+    }
+    return true;
+  }
+
   // Anteprima del percorso come quella che si vede su Maps prima di avviare
   // la navigazione: geocodifica ogni tappa, calcola il percorso stradale
   // reale (stesso motore usato da Nostromo) e disegna la linea su una mappa
@@ -439,7 +467,8 @@ ${FOOTER_HTML}
         clearTimeout(timeoutId);
         const data = await res.json();
         const route = data.routes && data.routes[0];
-        if(route && route.geometry && route.geometry.coordinates && route.geometry.coordinates.length > 1){
+        const legsOk = route && routePreviewLegsLookSane(route.legs, coords);
+        if(legsOk && route.geometry && route.geometry.coordinates && route.geometry.coordinates.length > 1){
           latlngs = route.geometry.coordinates.map(function(c){ return [c[1], c[0]]; });
         }
       } catch(routeErr){
