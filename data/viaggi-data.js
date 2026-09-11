@@ -612,7 +612,7 @@
         { nome: "Stoccarda", query: "Porsche Museum Stuttgart", label: "Museo Porsche, tappa gradita anche a chi ama solo le auto", fun: "Un piano intero di prototipi e leggende da corsa — ci si dimentica per un po' di essere arrivati in moto." },
         { nome: "Nürburgring", query: "Nürburgring", label: "il circuito più temuto e amato al mondo", fun: "Solo a leggere 'Nordschleife' sul cartello vengono i brividi, anche restando nel parcheggio." },
         { nome: "Amsterdam", query: "Amsterdam centro", label: "canali, biciclette e due notti di pausa dal casco", fun: "L'unica città dove la moto rischia di essere il mezzo più lento in circolazione — le bici comandano." },
-        { nome: "Norimberga", query: "Norimberga centro storico", label: "centro storico medievale ricostruito dopo la guerra", fun: "Cammini tra mura e torri che sembrano lì da sempre — invece sono rinate pezzo per pezzo dopo il 1945." },
+        { nome: "Norimberga", query: "Nürnberg Altstadt", label: "centro storico medievale ricostruito dopo la guerra", fun: "Cammini tra mura e torri che sembrano lì da sempre — invece sono rinate pezzo per pezzo dopo il 1945." },
         { nome: "Monaco di Baviera", query: "BMW Museum München", label: "Museo BMW, moto comprese in ordine cronologico", fun: "Tutta la storia BMW moto per moto, dalla prima all'ultima — un pellegrinaggio quasi obbligato con la targa giusta in tasca." },
         { nome: "Roma", query: "Roma", label: "ritorno diretto, senza tappe intermedie", fun: "L'ultimo giorno si guida e basta: quello in cui i chilometri si sentono tutti, ma anche quello che sa già di racconti da fare agli amici." }
       ]
@@ -687,10 +687,10 @@
       tappe: [
         { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Rotta verso la Baviera, con la Boemia come vera destinazione della settimana." },
         { nome: "Rothenburg ob der Tauber", query: "Rothenburg ob der Tauber", label: "il borgo medievale simbolo della Strada Romantica", fun: "Un centro storico così integro che sembra costruito apposta per un film in costume — invece è tutto vero." },
-        { nome: "Norimberga", query: "Norimberga centro storico", label: "castello imperiale e centro storico ricostruito", fun: "Dal castello imperiale la vista sui tetti rossi vale la salita a piedi con gli stivali da moto." },
+        { nome: "Norimberga", query: "Nürnberg Altstadt", label: "castello imperiale e centro storico ricostruito", fun: "Dal castello imperiale la vista sui tetti rossi vale la salita a piedi con gli stivali da moto." },
         { nome: "Praga", query: "Praga Ponte Carlo", label: "il Ponte Carlo, il Castello e la Città Vecchia", fun: "Attraversare il Ponte Carlo all'alba, prima dei pullman turistici, è tutto un altro Ponte Carlo." },
         { nome: "Karlovy Vary", query: "Karlovy Vary", label: "terme storiche e palazzine liberty color pastello", fun: "Le facciate color pastello sembrano una torta a più piani — le terme invece sono maledettamente serie da secoli." },
-        { nome: "Ratisbona", query: "Ratisbona centro storico", label: "una delle città medievali meglio conservate di Germania", fun: "Il ponte di pietra su cui cammini ha quasi 900 anni e regge ancora meglio di certe strade italiane." },
+        { nome: "Ratisbona", query: "Regensburg Altstadt", label: "una delle città medievali meglio conservate di Germania", fun: "Il ponte di pietra su cui cammini ha quasi 900 anni e regge ancora meglio di certe strade italiane." },
         { nome: "Roma", query: "Roma", label: "ritorno", fun: "Il casco si toglie a casa con la sensazione di aver attraversato tre epoche diverse in una settimana." }
       ]
     },
@@ -775,11 +775,11 @@
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Nyhavn-panorama.jpg",
       tappe: [
         { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Il viaggio con più latitudine da guadagnare di tutti — si punta dritti verso il Mare del Nord." },
-        { nome: "Norimberga", query: "Norimberga centro storico", label: "tappa di passaggio verso il nord Europa", fun: "Una sosta già vista da altri itinerari della lista — segno che è un crocevia quasi obbligato verso il nord." },
+        { nome: "Norimberga", query: "Nürnberg Altstadt", label: "tappa di passaggio verso il nord Europa", fun: "Una sosta già vista da altri itinerari della lista — segno che è un crocevia quasi obbligato verso il nord." },
         { nome: "Amburgo", query: "Amburgo porto", label: "il porto e i magazzini della Speicherstadt, patrimonio UNESCO", fun: "Il quartiere dei magazzini in mattoni rossi sembra scolpito apposta per le foto — ed è tutto vero, non scenografia." },
         { nome: "Ponte di Øresund", query: "Øresund Bridge", label: "il ponte-tunnel che collega Danimarca e Svezia sul mare", fun: "A metà attraversamento diventa tunnel sott'acqua: un capolavoro di ingegneria che sembra uscito da un film di fantascienza." },
         { nome: "Copenaghen", query: "Nyhavn Copenaghen", label: "le case colorate di Nyhavn e le biciclette ovunque", fun: "A Copenaghen le biciclette hanno letteralmente la precedenza su tutto — la moto, per una volta, si adegua rispettosa." },
-        { nome: "Monaco di Baviera", query: "Monaco di Baviera centro", label: "sosta di ritorno prima dell'ultimo tratto verso l'Italia", fun: "Una birra bavarese come premio di metà rientro, prima delle ultime ore che riportano dritti a casa." },
+        { nome: "Monaco di Baviera", query: "München Marienplatz", label: "sosta di ritorno prima dell'ultimo tratto verso l'Italia", fun: "Una birra bavarese come premio di metà rientro, prima delle ultime ore che riportano dritti a casa." },
         { nome: "Roma", query: "Roma", label: "ritorno", fun: "Il viaggio che porta più a nord di tutti si chiude, come sempre, tra il traffico romano — un rientro alla realtà in tutti i sensi." }
       ]
     }
