@@ -899,12 +899,25 @@
     return desc.split(/\n\n+/)[0];
   }
 
+  // La partenza scelta nel calcolatore benzina qui sopra (di default Roma)
+  // viaggia nell'URL della pagina dedicata di ogni viaggio, così l'anteprima
+  // del percorso lì può partire dallo stesso punto invece che sempre da Roma.
+  function currentPartenza(){
+    const el = document.getElementById("fuel-start");
+    const val = el ? el.value.trim() : "";
+    return val || "Roma";
+  }
+
+  function viaggioHref(it){
+    return `/viaggi/${window.VIAGGI_DATA.getSlug(it)}?partenza=${encodeURIComponent(currentPartenza())}`;
+  }
+
   // Ogni box della lista è un link diretto alla pagina dedicata del viaggio:
   // niente più modale di dettaglio, un click apre subito /viaggi/<slug>.
   function buildListItem(it, updateFuelFn){
     const item = document.createElement("a");
     item.className = "viaggio-item";
-    item.href = `/viaggi/${window.VIAGGI_DATA.getSlug(it)}`;
+    item.href = viaggioHref(it);
 
     item.innerHTML = `
       ${it.foto ? `
@@ -945,7 +958,10 @@
   ];
 
   function refreshAllFuel(){
-    allCards.forEach(({ card, it, updateFuelFn }) => updateFuelFn(card, it));
+    allCards.forEach(({ card, it, updateFuelFn }) => {
+      updateFuelFn(card, it);
+      card.href = viaggioHref(it);
+    });
   }
   ["fuel-cc", "fuel-price"].forEach(id => {
     document.getElementById(id).addEventListener("input", refreshAllFuel);

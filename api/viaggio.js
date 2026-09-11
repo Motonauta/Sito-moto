@@ -346,6 +346,7 @@ ${HEADER_HTML}
 ${FOOTER_HTML}
 <script>
   const ROUTE_TAPPE = ${JSON.stringify(it.tappe.map(t => ({ nome: t.nome, query: t.query }))).replace(/</g, '\\u003c')};
+  const ROUTE_IS_LOOP = ${tipo === 'itinerario' ? 'true' : 'false'};
 
   async function routePreviewGeocodeOne(query){
     try{
@@ -370,6 +371,35 @@ ${FOOTER_HTML}
     return await routePreviewGeocodeOne(t.nome);
   }
 
+  function getPartenza(){
+    const params = new URLSearchParams(location.search);
+    const val = (params.get('partenza') || '').trim();
+    return val || 'Roma';
+  }
+
+  // Inserisce nel percorso la partenza scelta da chi visita il sito (di
+  // default Roma, la stessa del calcolatore benzina in home): se la prima
+  // o l'ultima tappa del viaggio è già "Roma" (i viaggi da ricordare partono
+  // e tornano sempre lì) la sostituisce con la partenza scelta, altrimenti
+  // la aggiunge come primo punto e, sui giri ad anello che per definizione
+  // partono e tornano a Roma, anche come ultimo, per chiudere il giro.
+  function buildTappeConPartenza(){
+    const partenza = getPartenza();
+    const tappe = ROUTE_TAPPE.slice();
+    const partenzaTappa = { nome: partenza, query: partenza };
+
+    const firstIsRoma = tappe.length > 0 && tappe[0].nome.toLowerCase() === 'roma';
+    const lastIsRoma = tappe.length > 0 && tappe[tappe.length - 1].nome.toLowerCase() === 'roma';
+
+    if(firstIsRoma) tappe[0] = partenzaTappa;
+    else tappe.unshift(partenzaTappa);
+
+    if(lastIsRoma) tappe[tappe.length - 1] = partenzaTappa;
+    else if(ROUTE_IS_LOOP) tappe.push(partenzaTappa);
+
+    return tappe;
+  }
+
   // Anteprima del percorso come quella che si vede su Maps prima di avviare
   // la navigazione: geocodifica ogni tappa, calcola il percorso stradale
   // reale (stesso motore usato da Nostromo) e disegna la linea su una mappa
@@ -388,7 +418,7 @@ ${FOOTER_HTML}
     try{
       const coords = [];
       const tappeOk = [];
-      for(const t of ROUTE_TAPPE){
+      for(const t of buildTappeConPartenza()){
         const c = await routePreviewGeocode(t);
         if(c){ coords.push(c); tappeOk.push(t); }
       }
