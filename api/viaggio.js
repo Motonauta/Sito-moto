@@ -255,6 +255,11 @@ ${HEAD_COMMON}
   }
   #route-preview-map{
     height:340px; width:100%; border:1px solid rgba(245,240,230,0.16); background:var(--asphalt-2);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .route-preview-loading{
+    font-family:var(--font-mono); font-size:0.82rem; color:var(--cream-dim);
+    text-transform:uppercase; letter-spacing:0.04em;
   }
   .viaggio-route-note{ margin-top:12px; font-size:0.82rem; color:var(--cream-dim); }
   .leaflet-popup-content-wrapper{
@@ -307,7 +312,7 @@ ${HEADER_HTML}
 
     <div class="viaggio-route-preview">
       <p class="label">Anteprima del percorso</p>
-      <div id="route-preview-map"></div>
+      <div id="route-preview-map"><p class="route-preview-loading">Calcolo il percorso…</p></div>
       <p class="viaggio-route-note" id="route-preview-caption">
         Percorso generato in automatico sulle tappe qui sopra: è indicativo, verifica sempre il tragitto reale su Maps o Waze prima di partire.
       </p>
@@ -334,18 +339,36 @@ ${FOOTER_HTML}
 <script>
   const ROUTE_TAPPE = ${JSON.stringify(it.tappe.map(t => ({ nome: t.nome, query: t.query }))).replace(/</g, '\\u003c')};
 
-  async function routePreviewGeocode(query){
-    const res = await fetch('/api/route-planner?action=search&q=' + encodeURIComponent(query));
-    const data = await res.json();
-    const hit = data[0];
-    return hit ? { lat: parseFloat(hit.lat), lon: parseFloat(hit.lon) } : null;
+  async function routePreviewGeocodeOne(query){
+    try{
+      const res = await fetch('/api/route-planner?action=search&q=' + encodeURIComponent(query));
+      if(!res.ok) return null;
+      const data = await res.json();
+      const hit = Array.isArray(data) ? data[0] : null;
+      return hit ? { lat: parseFloat(hit.lat), lon: parseFloat(hit.lon) } : null;
+    } catch(err){
+      return null;
+    }
+  }
+
+  // Il campo "query" delle tappe è pensato per la ricerca libera di Google
+  // Maps, che capisce anche descrizioni come "Via dei Laghi SP217 RM": il
+  // geocoder che usiamo qui (Nominatim/OpenStreetMap) è molto più rigido e
+  // spesso non trova nulla per query così descrittive. Se fallisce, si
+  // ritenta con "nome" (il paese/luogo), quasi sempre geocodificabile.
+  async function routePreviewGeocode(t){
+    const byQuery = await routePreviewGeocodeOne(t.query);
+    if(byQuery) return byQuery;
+    return await routePreviewGeocodeOne(t.nome);
   }
 
   // Anteprima del percorso come quella che si vede su Maps prima di avviare
   // la navigazione: geocodifica ogni tappa, calcola il percorso stradale
   // reale (stesso motore usato da Nostromo) e disegna la linea su una mappa
-  // Leaflet. Se una tappa non viene trovata o il percorso non è disponibile,
-  // il widget si nasconde invece di mostrare una mappa vuota o rotta.
+  // Leaflet. Le tappe che non vengono geocodificate (anche col fallback)
+  // sono semplicemente saltate, invece di far fallire tutto il widget: si
+  // nasconde solo se restano meno di due punti validi, o se il calcolo del
+  // percorso non riesce comunque.
   async function loadRoutePreview(){
     const mapEl = document.getElementById('route-preview-map');
     if(!mapEl) return;
@@ -356,11 +379,12 @@ ${FOOTER_HTML}
     }
     try{
       const coords = [];
+      const tappeOk = [];
       for(const t of ROUTE_TAPPE){
-        const c = await routePreviewGeocode(t.query);
-        if(!c) throw new Error('tappa non trovata: ' + t.nome);
-        coords.push(c);
+        const c = await routePreviewGeocode(t);
+        if(c){ coords.push(c); tappeOk.push(t); }
       }
+      if(coords.length < 2) throw new Error('tappe geocodificate insufficienti per disegnare un percorso');
 
       const coordsParam = coords.map(c => c.lat + ',' + c.lon).join(';');
       const res = await fetch('/api/route-planner?action=route&coords=' + encodeURIComponent(coordsParam) + '&steps=1');
@@ -370,6 +394,7 @@ ${FOOTER_HTML}
 
       const latlngs = route.geometry.coordinates.map(function(c){ return [c[1], c[0]]; });
 
+      mapEl.innerHTML = '';
       const map = L.map('route-preview-map', { scrollWheelZoom: false });
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_2926_1_9433c9421427b00a6eeb97bc', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -382,7 +407,7 @@ ${FOOTER_HTML}
       coords.forEach(function(c, i){
         L.circleMarker([c.lat, c.lon], {
           radius: 7, fillColor: '#C1502E', color: '#1B1A17', weight: 2, fillOpacity: 1
-        }).addTo(map).bindPopup(ROUTE_TAPPE[i].nome);
+        }).addTo(map).bindPopup(tappeOk[i].nome);
       });
 
       map.fitBounds(line.getBounds(), { padding: [24, 24] });
