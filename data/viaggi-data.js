@@ -770,7 +770,7 @@
     },
     {
       zona: "Germania del nord e Danimarca", km: "7 giorni consigliati", kmNum: 4100, titolo: "Amburgo, il ponte di Øresund e Copenaghen",
-      desc: "Il viaggio più a nord — e il più lungo in chilometri — di tutta la lista: il porto anseatico di Amburgo, il leggendario ponte-tunnel di Øresund e le casette colorate di Nyhavn a Copenaghen. Giornate lunghe in autostrada tedesca, ricompensate da un'atmosfera scandinava che in Italia non si trova.\n\nÈ il viaggio più a nord e più lungo in chilometri di tutta questa lista, quindi organizzatelo con più margine degli altri. Il ponte di Øresund, che a metà attraversamento diventa un tunnel sott'acqua, è una delle esperienze di guida più particolari che abbia mai fatto: sembra uscito da un film di fantascienza.",
+      desc: "Il viaggio più a nord di tutta la lista, ed è anche il più lungo in chilometri: il porto anseatico di Amburgo, il leggendario ponte-tunnel di Øresund e le casette colorate di Nyhavn a Copenaghen. Giornate lunghe in autostrada tedesca, ricompensate da un'atmosfera scandinava che in Italia non si trova.\n\nÈ il viaggio più a nord e più lungo in chilometri di tutta questa lista, quindi organizzatelo con più margine degli altri. Il ponte di Øresund, che a metà attraversamento diventa un tunnel sott'acqua, è una delle esperienze di guida più particolari che abbia mai fatto: sembra uscito da un film di fantascienza.",
       meteoPlace: "Copenaghen",
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Nyhavn-panorama.jpg",
       tappe: [
