@@ -607,7 +607,7 @@
       foto: "https://commons.wikimedia.org/wiki/Special:FilePath/Castle_Neuschwanstein.jpg",
       tappe: [
         { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Zaino, borse laterali e una settimana intera davanti — la parte più bella inizia proprio qui, in garage." },
-        { nome: "Ehrenberg e Fort Claudia", query: "Ehrenberg Reutte Austria", label: "rovine medievali e fortezza asburgica al confine austro-tedesco", fun: "Un intero complesso di rovine e fortini sopra Reutte — ci si passa un pomeriggio intero e non basta." },
+        { nome: "Ehrenberg", query: "Ehrenberg Reutte Austria", label: "rovine medievali e Fort Claudia, fortezza asburgica al confine austro-tedesco", fun: "Un intero complesso di rovine e fortini sopra Reutte — ci si passa un pomeriggio intero e non basta." },
         { nome: "Castello di Neuschwanstein", query: "Schloss Neuschwanstein", label: "il castello fiabesco di Ludwig II di Baviera", fun: "Il castello che ha ispirato quello di Disney — arrivarci in moto invece che in pullman turistico è tutta un'altra storia." },
         { nome: "Stoccarda", query: "Porsche Museum Stuttgart", label: "Museo Porsche, tappa gradita anche a chi ama solo le auto", fun: "Un piano intero di prototipi e leggende da corsa — ci si dimentica per un po' di essere arrivati in moto." },
         { nome: "Nürburgring", query: "Nürburgring", label: "il circuito più temuto e amato al mondo", fun: "Solo a leggere 'Nordschleife' sul cartello vengono i brividi, anche restando nel parcheggio." },
@@ -626,7 +626,7 @@
         { nome: "Roma", query: "Roma", label: "punto di partenza", fun: "Si parte verso ovest, con il profumo di salsedine ligure già in testa." },
         { nome: "Genova", query: "Genova centro storico", label: "sosta panoramica lungo la costa ligure", fun: "L'ultima vera curva italiana prima del confine — da qui in poi si parla francese." },
         { nome: "Nizza", query: "Nice Promenade des Anglais", label: "la Promenade e il blu della Costa Azzurra", fun: "La Promenade des Anglais va percorsa piano, non per il traffico ma perché nessuno ha davvero fretta qui." },
-        { nome: "Cannes e Saint-Tropez", query: "Saint-Tropez", label: "yacht, vetrine e il mito della Dolce Vita francese", fun: "Parcheggiare la moto tra gli yacht da dieci milioni è probabilmente il momento più fotografato del viaggio." },
+        { nome: "Saint-Tropez", query: "Saint-Tropez", label: "yacht, vetrine e il mito della Dolce Vita francese (con Cannes lungo la strada)", fun: "Parcheggiare la moto tra gli yacht da dieci milioni è probabilmente il momento più fotografato del viaggio." },
         { nome: "Marsiglia", query: "Marsiglia Vieux Port", label: "il porto vecchio e la Provenza affacciata sul mare", fun: "Il Vieux Port profuma di pesce alla griglia dalla mattina — la bouillabaisse qui è quasi un rito." },
         { nome: "Avignone", query: "Avignone Palazzo dei Papi", label: "il Palazzo dei Papi e i campi di lavanda nei dintorni (giugno-luglio)", fun: "Se ci passi tra giugno e luglio, i campi color viola intorno valgono da soli la deviazione." },
         { nome: "Torino", query: "Torino centro", label: "ultima notte prima di rientrare, tra Mole e caffè storici", fun: "Un aperitivo sabaudo come premio finale prima delle ultime ore di autostrada verso casa." },
