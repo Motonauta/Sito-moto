@@ -266,6 +266,14 @@ ${HEAD_COMMON}
     background:var(--asphalt-2); color:var(--cream); border-radius:0; border:1px solid rgba(245,240,230,0.2);
   }
   .leaflet-popup-tip{ background:var(--asphalt-2); }
+  .route-line-glow{ filter:blur(6px); }
+  .route-line-main{
+    stroke-dasharray:12 10;
+    animation:route-dash-flow 1.1s linear infinite;
+  }
+  @keyframes route-dash-flow{
+    to{ stroke-dashoffset:-22; }
+  }
   @media print {
     .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, .copy-link-btn, #back-to-top, .viaggio-route-preview{ display:none !important; }
     body{ background:#fff !important; color:#111 !important; }
@@ -387,12 +395,26 @@ ${FOOTER_HTML}
       if(coords.length < 2) throw new Error('tappe geocodificate insufficienti per disegnare un percorso');
 
       const coordsParam = coords.map(c => c.lat + ',' + c.lon).join(';');
-      const res = await fetch('/api/route-planner?action=route&coords=' + encodeURIComponent(coordsParam) + '&steps=1');
-      const data = await res.json();
-      const route = data.routes && data.routes[0];
-      if(!route || !route.geometry || !route.geometry.coordinates) throw new Error('percorso non disponibile');
-
-      const latlngs = route.geometry.coordinates.map(function(c){ return [c[1], c[0]]; });
+      // Linea diretta tra le tappe come base: se il calcolo del percorso
+      // stradale reale funziona la sostituiamo, altrimenti resta questa.
+      // Sui viaggi più lunghi (molte tappe, migliaia di km, più paesi) il
+      // router pubblico usato da Nostromo può essere lento o non rispondere
+      // affatto: meglio mostrare comunque una linea indicativa che far
+      // sparire tutta l'anteprima.
+      let latlngs = coords.map(function(c){ return [c.lat, c.lon]; });
+      try{
+        const controller = new AbortController();
+        const timeoutId = setTimeout(function(){ controller.abort(); }, 7000);
+        const res = await fetch('/api/route-planner?action=route&coords=' + encodeURIComponent(coordsParam) + '&steps=1', { signal: controller.signal });
+        clearTimeout(timeoutId);
+        const data = await res.json();
+        const route = data.routes && data.routes[0];
+        if(route && route.geometry && route.geometry.coordinates && route.geometry.coordinates.length > 1){
+          latlngs = route.geometry.coordinates.map(function(c){ return [c[1], c[0]]; });
+        }
+      } catch(routeErr){
+        // resta la linea diretta calcolata sopra
+      }
 
       mapEl.innerHTML = '';
       const map = L.map('route-preview-map', { scrollWheelZoom: false });
@@ -402,12 +424,22 @@ ${FOOTER_HTML}
         maxZoom: 19,
       }).addTo(map);
 
-      const line = L.polyline(latlngs, { color: '#D9A441', weight: 4, opacity: 0.9 }).addTo(map);
+      // Linea con "glow" (una copia più larga e sfocata sotto) e tratteggio
+      // animato sopra, per dare l'idea di un percorso "in movimento" come
+      // nell'anteprima di navigazione di un vero navigatore.
+      L.polyline(latlngs, { color: '#D9A441', weight: 10, opacity: 0.35, className: 'route-line-glow' }).addTo(map);
+      const line = L.polyline(latlngs, { color: '#D9A441', weight: 4, opacity: 0.95, className: 'route-line-main' }).addTo(map);
 
+      // Marker differenziati: partenza in verde, arrivo in rosso, tappe
+      // intermedie in oro (stesso colore della linea).
       coords.forEach(function(c, i){
+        const isStart = i === 0;
+        const isEnd = i === coords.length - 1;
+        const fillColor = isStart ? '#4F7038' : (isEnd ? '#C1502E' : '#D9A441');
+        const label = tappeOk[i].nome + (isStart ? ' (partenza)' : isEnd ? ' (arrivo)' : '');
         L.circleMarker([c.lat, c.lon], {
-          radius: 7, fillColor: '#C1502E', color: '#1B1A17', weight: 2, fillOpacity: 1
-        }).addTo(map).bindPopup(tappeOk[i].nome);
+          radius: (isStart || isEnd) ? 8 : 6, fillColor: fillColor, color: '#1B1A17', weight: 2, fillOpacity: 1
+        }).addTo(map).bindPopup(label);
       });
 
       map.fitBounds(line.getBounds(), { padding: [24, 24] });
