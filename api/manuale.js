@@ -17,7 +17,8 @@ function wikiThumb(url, width) {
   return url + (url.includes('?') ? '&' : '?') + 'width=' + width;
 }
 
-const HEAD_COMMON = `<link rel="preconnect" href="https://fonts.googleapis.com">
+const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/image/upload/w_64,h_64,c_fill,r_max,f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
