@@ -448,6 +448,15 @@ p{color:var(--cream-dim); max-width:60ch;}
 @media (max-width:480px){
   .logo-wrap img{ height:32px; }
 }
+/* Anello bicolore attorno al logo, richiama i colori del nuovo patch senza
+   toccare il resto della palette del sito */
+.logo-ring{
+  display:flex;
+  flex-shrink:0;
+  padding:2px;
+  border-radius:50%;
+  background:conic-gradient(from 180deg, #C1272D 0deg 180deg, #1E5FAE 180deg 360deg);
+}
 
 /* ==========================================================
    LIGHTBOX — anteprima foto a schermo intero
