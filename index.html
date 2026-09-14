@@ -47,6 +47,16 @@
     padding:24px; display:flex; flex-direction:column; gap:16px;
   }
   .macro-box-list[hidden]{ display:none; }
+  .macro-filter-input{
+    width:100%; max-width:420px; background:var(--asphalt); border:1px solid rgba(245,240,230,0.2);
+    color:var(--cream); padding:11px 14px; font-family:var(--font-body); font-size:0.92rem;
+  }
+  .macro-filter-input:focus{ outline:none; border-color:var(--gold); }
+  .macro-filter-input::placeholder{ color:var(--cream-dim); }
+  .macro-filter-empty{
+    font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
+  }
+  .macro-filter-empty[hidden]{ display:none; }
 
   .viaggio-item{
     display:flex; gap:20px; background:var(--asphalt); border:1px solid rgba(245,240,230,0.14);
@@ -273,6 +283,8 @@
         <span class="macro-box-chevron" aria-hidden="true">▾</span>
       </button>
       <div class="macro-box-list" id="itinerari-list" hidden>
+        <input type="text" class="macro-filter-input" id="itinerari-list-filter" placeholder="Filtra per zona — es. Castelli Romani, Ciociaria, Tuscia…" autocomplete="off">
+        <p class="macro-filter-empty" id="itinerari-list-empty" hidden>Nessun itinerario trovato per questa zona.</p>
         <div class="itinerari-note">
           <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
           totali del giro ad anello (andata e ritorno da Roma inclusi) e ⛽ è la
@@ -309,6 +321,8 @@
         <span class="macro-box-chevron" aria-hidden="true">▾</span>
       </button>
       <div class="macro-box-list" id="miniviaggi-list" hidden>
+        <input type="text" class="macro-filter-input" id="miniviaggi-list-filter" placeholder="Filtra per zona — es. Dolomiti, Sicilia, Valle d'Aosta…" autocomplete="off">
+        <p class="macro-filter-empty" id="miniviaggi-list-empty" hidden>Nessun miniviaggio trovato per questa zona.</p>
         <div class="itinerari-note">
           <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
           totali andata e ritorno dal punto di partenza scelto nel calcolatore
@@ -346,6 +360,8 @@
         <span class="macro-box-chevron" aria-hidden="true">▾</span>
       </button>
       <div class="macro-box-list" id="viaggi-ricordare-list" hidden>
+        <input type="text" class="macro-filter-input" id="viaggi-ricordare-list-filter" placeholder="Filtra per zona — es. Baviera, Svizzera, Croazia…" autocomplete="off">
+        <p class="macro-filter-empty" id="viaggi-ricordare-list-empty" hidden>Nessun viaggio trovato per questa zona.</p>
         <div class="itinerari-note">
           <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
           totali andata e ritorno dal punto di partenza scelto nel calcolatore
@@ -942,13 +958,41 @@
     return item;
   }
 
+  // Stessa normalizzazione usata nella ricerca del Manuale di bordo: case e
+  // accenti non contano ("citta" trova anche "città").
+  function normalizeFilterText(str){
+    return String(str || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  }
+
   function buildMacroList(data, listId, updateFuelFn){
     const list = document.getElementById(listId);
-    return data.map(it => {
+    const entries = data.map(it => {
       const item = buildListItem(it, updateFuelFn);
+      item.dataset.filterText = normalizeFilterText(`${it.zona} ${it.titolo}`);
       list.appendChild(item);
       return { card: item, it, updateFuelFn };
     });
+
+    // Filtro per zona: ogni macro-categoria ha il suo campo, così si cerca
+    // solo tra le zone effettivamente presenti in quella lista (le zone degli
+    // itinerari sono aree del Lazio, quelle dei viaggi da ricordare sono
+    // paesi/regioni estere, non ha senso mescolarle in un filtro unico).
+    const filterInput = document.getElementById(`${listId}-filter`);
+    const emptyMsg = document.getElementById(`${listId}-empty`);
+    if(filterInput){
+      filterInput.addEventListener("input", () => {
+        const query = normalizeFilterText(filterInput.value.trim());
+        let visibleCount = 0;
+        entries.forEach(({ card }) => {
+          const match = !query || card.dataset.filterText.includes(query);
+          card.style.display = match ? "" : "none";
+          if(match) visibleCount++;
+        });
+        if(emptyMsg) emptyMsg.hidden = visibleCount !== 0;
+      });
+    }
+
+    return entries;
   }
 
   const allCards = [
