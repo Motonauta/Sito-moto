@@ -27,8 +27,15 @@
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
 <style>
+  .manuale-search{ margin-top:44px; max-width:480px; }
+  .manuale-search input{
+    width:100%; background:var(--asphalt); border:1px solid rgba(245,240,230,0.2);
+    color:var(--cream); padding:12px 14px; font-family:var(--font-body); font-size:0.95rem;
+  }
+  .manuale-search input:focus{ outline:none; border-color:var(--gold); }
+  .manuale-search input::placeholder{ color:var(--cream-dim); }
   .manuale-grid{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; margin-top:44px;
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; margin-top:28px;
   }
   .manuale-card{
     display:block; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
@@ -95,8 +102,12 @@
 
 <section style="padding-top:32px;">
   <div class="wrap">
+    <div class="manuale-search">
+      <input type="text" id="manuale-search-input" placeholder="Cerca nel manuale — es. sacco a pelo, guanti, catena…" autocomplete="off">
+    </div>
     <div class="manuale-grid" id="manuale-grid"></div>
     <p id="manuale-empty" style="display:none;">Le prime guide arrivano a breve — torna a trovarci.</p>
+    <p id="manuale-no-results" style="display:none; margin-top:44px; font-family:var(--font-mono); font-size:0.9rem; color:var(--cream-dim);">Nessuna guida trovata per questa ricerca.</p>
   </div>
 </section>
 
@@ -147,6 +158,28 @@
 
   const grid = document.getElementById("manuale-grid");
   const emptyMsg = document.getElementById("manuale-empty");
+  const noResultsMsg = document.getElementById("manuale-no-results");
+  const searchInput = document.getElementById("manuale-search-input");
+
+  // indice di ricerca per ogni guida: titolo, categoria, estratto e tutto il
+  // testo dei blocchi (paragrafi, consigli, didascalie, link) — così cercando
+  // una parola tipo "sacco a pelo" si trova anche una guida che non la ha nel
+  // titolo, ma la cita nel contenuto
+  function normalizeSearch(str){
+    return String(str || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  }
+  function guidaSearchText(guida){
+    const parts = [guida.titolo, guida.categoria, guida.excerpt];
+    (guida.blocchi || []).forEach(b => {
+      if(b.titolo) parts.push(b.titolo);
+      if(b.testo) parts.push(b.testo);
+      if(b.immagine && b.immagine.caption) parts.push(b.immagine.caption);
+      if(b.link && b.link.label) parts.push(b.link.label);
+    });
+    return normalizeSearch(parts.join(" "));
+  }
+
+  const cardEntries = [];
 
   if(!GUIDE.length){
     emptyMsg.style.display = "block";
@@ -172,6 +205,18 @@
         </div>
       `;
       grid.appendChild(card);
+      cardEntries.push({ el: card, searchText: guidaSearchText(guida) });
+    });
+
+    searchInput.addEventListener("input", () => {
+      const query = normalizeSearch(searchInput.value.trim());
+      let visibleCount = 0;
+      cardEntries.forEach(({ el, searchText }) => {
+        const match = !query || searchText.includes(query);
+        el.style.display = match ? "" : "none";
+        if(match) visibleCount++;
+      });
+      noResultsMsg.style.display = visibleCount === 0 ? "block" : "none";
     });
   }
 
