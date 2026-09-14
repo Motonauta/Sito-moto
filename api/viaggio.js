@@ -1,5 +1,7 @@
 const { findBySlug, ULTIMO_AGGIORNAMENTO_DATI } = require('../data/viaggi-data');
 
+const LOGO_URL = 'https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png';
+
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -185,6 +187,26 @@ module.exports = async (req, res) => {
     ],
   };
 
+  // niente data di pubblicazione per singolo viaggio nei dati: si usa la data
+  // dell'ultimo aggiornamento dell'intero file come riferimento, coerente con
+  // ULTIMO_AGGIORNAMENTO_DATI mostrata altrove nel sito
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: it.titolo,
+    description: description,
+    datePublished: ULTIMO_AGGIORNAMENTO_DATI,
+    dateModified: ULTIMO_AGGIORNAMENTO_DATI,
+    author: { '@type': 'Person', name: 'Il Motonauta' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Il Motonauta',
+      logo: { '@type': 'ImageObject', url: LOGO_URL },
+    },
+    mainEntityOfPage: siteUrl,
+    ...(it.foto ? { image: [wikiThumb(it.foto, 1200)] } : {}),
+  };
+
   const html = `<!DOCTYPE html>
 <html lang="it">
 <head>
@@ -199,6 +221,7 @@ module.exports = async (req, res) => {
 <meta property="og:image" content="${escapeHtml(wikiThumb(it.foto, 1200))}">
 <meta property="og:url" content="${siteUrl}">
 <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 ${HEAD_COMMON}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

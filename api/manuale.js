@@ -1,5 +1,7 @@
 const { findBySlug, getSlug, GUIDE } = require('../data/manuale-data');
 
+const LOGO_URL = 'https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png';
+
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -256,7 +258,11 @@ module.exports = async (req, res) => {
     datePublished: guida.data,
     dateModified: guida.data,
     author: { '@type': 'Person', name: guida.autore },
-    publisher: { '@type': 'Organization', name: 'Il Motonauta' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Il Motonauta',
+      logo: { '@type': 'ImageObject', url: LOGO_URL },
+    },
     mainEntityOfPage: siteUrl,
     ...(guida.copertina ? { image: [wikiThumb(guida.copertina, 1200)] } : {}),
   };
