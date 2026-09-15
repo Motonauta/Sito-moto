@@ -867,7 +867,7 @@
         btn.textContent = r.label;
         btn.addEventListener("click", () => {
           inputEl.value = r.label.split(",")[0].trim();
-          placeResolvedCoords[inputEl.id] = { lat: r.lat, lon: r.lon };
+          placeResolvedCoords[inputEl.id] = { lat: r.lat, lon: r.lon, label: r.label };
           listEl.classList.remove("open");
           inputEl.dispatchEvent(new Event("change"));
         });
@@ -1362,6 +1362,48 @@
   const RAIN_CODES = new Set([51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99]);
   const VALIGIA_HIST_YEARS = 5;
 
+  // Paesi dell'Unione Europea (per la tessera sanitaria europea) e paesi
+  // Schengen non-UE dove basta comunque la carta d'identità, senza passaporto
+  // (nomi in italiano, come li restituisce Nominatim con accept-language=it).
+  const EU_COUNTRIES = new Set([
+    "Austria", "Belgio", "Bulgaria", "Cechia", "Repubblica Ceca", "Cipro", "Croazia",
+    "Danimarca", "Estonia", "Finlandia", "Francia", "Germania", "Grecia", "Irlanda",
+    "Lettonia", "Lituania", "Lussemburgo", "Malta", "Paesi Bassi", "Polonia",
+    "Portogallo", "Romania", "Slovacchia", "Slovenia", "Spagna", "Svezia", "Ungheria",
+  ]);
+  const SCHENGEN_NON_EU_COUNTRIES = new Set(["Svizzera", "Norvegia", "Islanda", "Liechtenstein", "Andorra"]);
+
+  // Il servizio di geocodifica (Nominatim) restituisce il nome del posto come
+  // stringa unica "Via, Città, Regione, Paese": il paese è sempre l'ultimo
+  // pezzo. Non è infallibile al 100% ma è l'unico dato che già abbiamo senza
+  // chiamate aggiuntive.
+  function paeseDaLabel(label){
+    if(!label) return null;
+    const parts = label.split(",").map(p => p.trim()).filter(Boolean);
+    return parts.length ? parts[parts.length - 1] : null;
+  }
+
+  // Documenti per l'estero: indipendenti dal meteo, dipendono solo dal paese
+  // di destinazione. Nessuna voce se la destinazione è in Italia (o se il
+  // paese non è riconoscibile dalla risposta del servizio di geocodifica).
+  function documentiEsteriItems(paese){
+    if(!paese || paese === "Italia" || paese === "Italy") return [];
+
+    const items = [];
+    if(EU_COUNTRIES.has(paese) || SCHENGEN_NON_EU_COUNTRIES.has(paese)){
+      items.push("Carta d'identità valida per l'espatrio (basta quella, non serve il passaporto)");
+      if(EU_COUNTRIES.has(paese)){
+        items.push("Tessera sanitaria europea (TEAM), per le cure mediche in caso di bisogno");
+      }
+      items.push("Assicurazione di viaggio (facoltativa ma consigliata)");
+    } else {
+      items.push("Passaporto in corso di validità (per questo paese la sola carta d'identità potrebbe non bastare)");
+      items.push("Verifica in anticipo se serve un visto d'ingresso");
+      items.push("Assicurazione di viaggio (fortemente consigliata: la tessera sanitaria italiana spesso non copre fuori dall'UE)");
+    }
+    return items;
+  }
+
   // Per date troppo lontane per una previsione vera (oltre ~15 giorni), usa
   // la media storica dello stesso periodo (stesso mm-gg, stessa durata) negli
   // ultimi VALIGIA_HIST_YEARS anni, invece di inventare un meteo che non c'è.
@@ -1487,7 +1529,7 @@
       }
 
       // --- Abbigliamento moto ---
-      const motoItems = ["Casco", "Guanti da moto", "Stivali o scarpe da moto"];
+      const motoItems = ["Casco", "Guanti da moto", "Stivali o scarpe da moto", "Visiera o lente di ricambio (chiara per la notte, scura per il giorno)"];
       if(!weatherAvailable){
         motoItems.push("Giacca e pantaloni moto con inserto termico removibile (copre sia caldo che freddo)");
       } else {
@@ -1530,6 +1572,20 @@
         "Contanti (non ovunque si paga con carta)"
       ];
 
+      // --- Igiene personale --- (sempre uguale, non dipende dal meteo)
+      const igiene = [
+        "Spazzolino e dentifricio",
+        "Deodorante",
+        "Rasoio (se serve)",
+        "Farmaci personali abituali",
+        "Asciugamano microfibra da viaggio"
+      ];
+
+      // --- Documenti per l'estero --- (dipende solo dal paese di
+      // destinazione, non dal meteo: mostrata solo se si esce dall'Italia)
+      const paeseDestinazione = paeseDaLabel(destCoords.label);
+      const documentiEsteri = documentiEsteriItems(paeseDestinazione);
+
       const weatherNote = weatherSource === "forecast"
         ? `Meteo previsto: ${Math.round(minTemp)}°/${Math.round(maxTemp)}°C${hasRain ? ", possibile pioggia in uno o più giorni." : ", nessuna pioggia significativa prevista."}`
         : weatherSource === "historical"
@@ -1541,7 +1597,9 @@
           <p class="route-weather-summary">${weatherNote}</p>
           ${valigiaCategoryHTML("🏍️ Abbigliamento moto", motoItems)}
           ${valigiaCategoryHTML("👕 Abbigliamento giornaliero", dailyItems)}
+          ${valigiaCategoryHTML("🧴 Igiene personale", igiene)}
           ${valigiaCategoryHTML("🎒 Accessori", accessori)}
+          ${valigiaCategoryHTML("📄 Documenti per l'estero", documentiEsteri)}
           <p class="route-weather-note" style="margin-top:14px;">Lista indicativa generata in base a durata del viaggio e meteo previsto — adattala alle tue abitudini e controlla sempre le previsioni aggiornate il giorno prima di partire.</p>
         </div>
         <button type="button" class="btn print-pdf-btn" id="valigia-pdf-btn">📄 Salva come PDF</button>
