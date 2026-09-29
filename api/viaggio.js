@@ -298,16 +298,30 @@ ${HEAD_COMMON}
   @keyframes route-dash-flow{
     to{ stroke-dashoffset:-22; }
   }
+  .print-watermark{ display:none; }
   @media print {
     .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, .copy-link-btn, #back-to-top, .viaggio-route-preview{ display:none !important; }
-    body{ background:#fff !important; color:#111 !important; }
-    .viaggio-breadcrumb, .marker, .viaggio-stops p.label{ color:#555 !important; }
-    h1, h2{ color:#111 !important; }
-    a{ color:#111 !important; }
+
+    /* per default i browser tolgono i colori di sfondo in stampa per
+       risparmiare inchiostro: qui li vogliamo davvero, sono il tema del sito */
+    body, body *{
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+    }
+    body{ background:var(--asphalt) !important; color:var(--cream) !important; }
+    body > section{ position:relative; z-index:1; }
+
+    .print-watermark{
+      display:block; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+      width:520px; height:520px;
+      background:url('${LOGO_URL}') center/contain no-repeat;
+      opacity:0.08; z-index:0; pointer-events:none;
+    }
   }
 </style>
 </head>
 <body>
+<div class="print-watermark"></div>
 ${HEADER_HTML}
 
 <section style="padding-top:56px; padding-bottom:0;">
