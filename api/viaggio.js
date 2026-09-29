@@ -326,7 +326,8 @@ ${HEAD_COMMON}
     /* il logo piccolo in alto a destra è un'immagine vera, così stampa
        sempre anche quando il browser non stampa gli "sfondi/grafica" */
     .print-logo-corner{
-      display:block; position:fixed; top:24px; right:24px; width:64px; height:64px; object-fit:contain;
+      display:block; position:fixed; top:24px; right:24px; width:64px; height:64px; object-fit:cover;
+      border-radius:50%;
       z-index:2;
     }
   }
