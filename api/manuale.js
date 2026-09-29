@@ -139,6 +139,32 @@ const STYLE = `<style>
   @media (max-width:900px){ .manuale-correlati-grid{ grid-template-columns:repeat(2, 1fr); } }
   @media (max-width:600px){ .manuale-correlati-grid{ grid-template-columns:1fr; } }
   .manuale-breadcrumb span{ margin:0 6px; color:var(--gold); }
+  .print-pdf-btn{
+    font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
+    padding:12px 20px; border:1px solid rgba(245,240,230,0.3); color:var(--cream); background:transparent;
+    cursor:pointer; transition:background .2s ease, color .2s ease;
+  }
+  .print-pdf-btn:hover{ background:rgba(245,240,230,0.12); }
+  .print-watermark{ display:none; }
+  @media print {
+    .site-header, .site-footer, .print-pdf-btn, .copy-link-btn, .manuale-correlati{ display:none !important; }
+
+    /* per default i browser tolgono i colori di sfondo in stampa per
+       risparmiare inchiostro: qui li vogliamo davvero, sono il tema del sito */
+    body, body *{
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+    }
+    body{ background:var(--asphalt) !important; color:var(--cream) !important; }
+    body > section{ position:relative; z-index:1; }
+
+    .print-watermark{
+      display:block; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+      width:520px; height:520px;
+      background:url('${LOGO_URL}') center/contain no-repeat;
+      opacity:0.08; z-index:0; pointer-events:none;
+    }
+  }
 </style>`;
 
 function render404() {
@@ -296,6 +322,7 @@ ${HEAD_COMMON}
 ${STYLE}
 </head>
 <body>
+<div class="print-watermark"></div>
 ${HEADER_HTML}
 
 <section style="padding-top:56px; padding-bottom:0;">
@@ -308,7 +335,10 @@ ${HEADER_HTML}
       ${escapeHtml(guida.titolo)}
     </h1>
     <p class="manuale-meta">${escapeHtml(guida.autore)} — ${escapeHtml(dataLeggibile)}</p>
-    <button type="button" class="copy-link-btn" data-copy="${siteUrl}" style="margin-top:16px;">🔗 Copia link</button>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+      <button type="button" class="print-pdf-btn" onclick="window.print()">📄 Stampa / Salva come PDF</button>
+      <button type="button" class="copy-link-btn" data-copy="${siteUrl}">🔗 Copia link</button>
+    </div>
 
     ${guida.copertina ? `
     <div class="manuale-photo">
