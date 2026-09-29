@@ -145,7 +145,7 @@ const STYLE = `<style>
     cursor:pointer; transition:background .2s ease, color .2s ease;
   }
   .print-pdf-btn:hover{ background:rgba(245,240,230,0.12); }
-  .print-watermark{ display:none; }
+  .print-watermark, .print-logo-corner{ display:none; }
   @media print {
     .site-header, .site-footer, .print-pdf-btn, .copy-link-btn, .manuale-correlati{ display:none !important; }
 
@@ -160,13 +160,21 @@ const STYLE = `<style>
     a{ color:#1b1a17 !important; text-decoration:underline; }
     body > section{ position:relative; z-index:1; }
 
-    /* il logo è un'immagine vera (non uno sfondo CSS), così stampa sempre
-       anche quando il browser non stampa gli "sfondi/grafica" */
+    /* scritta enorme e molto leggera sotto al testo, come una vera carta
+       intestata: è testo vero (non uno sfondo CSS), quindi stampa sempre */
     .print-watermark{
-      display:block; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-      width:440px; height:440px; object-fit:contain;
-      opacity:0.12; filter:grayscale(1);
+      display:block; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-22deg);
+      font-family:"Oswald", Arial, sans-serif; font-weight:700;
+      font-size:6rem; letter-spacing:0.06em; text-transform:uppercase;
+      white-space:nowrap; color:#000; opacity:0.06;
       z-index:0; pointer-events:none;
+    }
+
+    /* il logo piccolo in alto a destra è un'immagine vera, così stampa
+       sempre anche quando il browser non stampa gli "sfondi/grafica" */
+    .print-logo-corner{
+      display:block; position:fixed; top:24px; right:24px; width:64px; height:64px; object-fit:contain;
+      z-index:2;
     }
   }
 </style>`;
@@ -326,7 +334,8 @@ ${HEAD_COMMON}
 ${STYLE}
 </head>
 <body>
-<img class="print-watermark" src="${LOGO_URL}" alt="">
+<div class="print-watermark">Il Motonauta</div>
+<img class="print-logo-corner" src="${LOGO_URL}" alt="">
 ${HEADER_HTML}
 
 <section style="padding-top:56px; padding-bottom:0;">

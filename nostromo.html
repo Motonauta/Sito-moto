@@ -387,13 +387,21 @@
       padding:34px 28px; min-height:100vh;
     }
 
-    /* il logo è un'immagine vera (non uno sfondo CSS), così stampa sempre
-       anche quando il browser non stampa gli "sfondi/grafica" */
+    /* scritta enorme e molto leggera sotto al testo, come una vera carta
+       intestata: è testo vero (non uno sfondo CSS), quindi stampa sempre */
     .print-watermark{
-      position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-      width:440px; height:440px; object-fit:contain;
-      opacity:0.12; filter:grayscale(1);
+      position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-22deg);
+      font-family:"Oswald", Arial, sans-serif; font-weight:700;
+      font-size:6rem; letter-spacing:0.06em; text-transform:uppercase;
+      white-space:nowrap; color:#000; opacity:0.06;
       z-index:0; pointer-events:none;
+    }
+
+    /* il logo piccolo in alto a destra è un'immagine vera, così stampa
+       sempre anche quando il browser non stampa gli "sfondi/grafica" */
+    .print-logo-corner{
+      position:fixed; top:24px; right:24px; width:64px; height:64px; object-fit:contain;
+      z-index:2;
     }
 
     .print-header, .print-section{ position:relative; z-index:1; }
@@ -650,7 +658,8 @@
 </footer>
 
 <div id="print-root">
-  <img class="print-watermark" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="">
+  <div class="print-watermark">Il Motonauta</div>
+  <img class="print-logo-corner" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="">
   <div id="print-content"></div>
 </div>
 
