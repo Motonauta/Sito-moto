@@ -134,6 +134,13 @@
   .fuel-calc-note{ margin-top:14px; font-size:0.8rem; color:var(--cream-dim); }
   @media (max-width:780px){ .fuel-calc-grid{ grid-template-columns:1fr; } }
 
+  .viaggio-item-badges .card-weather{ color:var(--sand); font-weight:700; }
+  .oggi-results-list{ display:flex; flex-direction:column; gap:16px; margin-top:24px; }
+  .oggi-loading, .oggi-empty{
+    margin-top:24px; font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
+  }
+  .oggi-note{ margin-top:16px; font-size:0.8rem; color:var(--cream-dim); }
+
   .place-field{ position:relative; }
   .place-suggest-list{
     position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:20;
@@ -261,6 +268,33 @@
         se il calcolo del percorso non fosse disponibile si passa a una stima
         in linea d'aria con una maggiorazione per le curve.
       </p>
+    </div>
+  </div>
+</section>
+
+<!-- DOVE VADO OGGI? ==================================================== -->
+<section style="padding-top:32px; padding-bottom:0;">
+  <div class="wrap">
+    <div class="fuel-calc">
+      <p class="marker">Hai qualche ora libera?</p>
+      <h2 style="font-size:1.3rem; color:var(--sand);">Dove vado oggi?</h2>
+      <p class="fuel-calc-note" style="margin-top:8px;">
+        Dimmi quanto tempo hai e quanti km vuoi fare al massimo: ti propongo
+        gli itinerari che ci stanno, con il meteo di oggi già controllato,
+        dal migliore in giù.
+      </p>
+      <div class="fuel-calc-grid" style="grid-template-columns:repeat(2, 1fr);">
+        <div>
+          <label for="oggi-ore">Ore libere</label>
+          <input type="number" id="oggi-ore" value="3" min="1" max="12">
+        </div>
+        <div>
+          <label for="oggi-km">Km che vuoi fare (al massimo)</label>
+          <input type="number" id="oggi-km" value="150" min="20" max="400" step="10">
+        </div>
+      </div>
+      <button type="button" class="btn solid" id="oggi-btn" style="margin-top:18px;">Dove vado oggi?</button>
+      <div id="oggi-results"></div>
     </div>
   </div>
 </section>
@@ -608,6 +642,127 @@
     const a = Math.sin(dLat/2) ** 2 + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2) ** 2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
+
+  // ===== "Dove vado oggi?" =============================================
+  // Filtra gli Itinerari (uscite in giornata) per ore libere e km che si
+  // vogliono fare, poi li ordina dal meteo migliore di oggi in giù. La
+  // velocità media è volutamente prudente: sono strade di collina/paese
+  // vicino Roma, non autostrada, con soste fotografiche incluse.
+  const OGGI_RAIN_CODES = new Set([51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99]);
+  const OGGI_AVG_SPEED_KMH = 45;
+
+  function oggiWeatherIcon(code){
+    if(code === 0) return "☀️";
+    if([1,2].includes(code)) return "🌤️";
+    if(code === 3) return "☁️";
+    if([45,48].includes(code)) return "🌫️";
+    if(OGGI_RAIN_CODES.has(code)) return "🌧️";
+    if([71,73,75,77,85,86].includes(code)) return "❄️";
+    if([95,96,99].includes(code)) return "⛈️";
+    return "🌡️";
+  }
+
+  function oggiTodayISO(){
+    const d = new Date();
+    const pad = n => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  // Punteggio "bel meteo": parte da 100, penalizza pioggia/probabilità di
+  // pioggia e si allontana da una temperatura di riferimento comoda in moto
+  // (23°C) — serve solo a ordinare i risultati, non è mostrato all'utente.
+  async function fetchOggiWeather(place){
+    const coords = await geocodePlace(place);
+    if(!coords) return null;
+    try{
+      const today = oggiTodayISO();
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=auto&start_date=${today}&end_date=${today}`);
+      const data = await res.json();
+      const daily = data.daily || {};
+      const maxTemp = daily.temperature_2m_max && daily.temperature_2m_max[0];
+      const code = daily.weather_code && daily.weather_code[0];
+      const precipProb = (daily.precipitation_probability_max && daily.precipitation_probability_max[0]) || 0;
+      if(maxTemp == null || code == null) return null;
+
+      let score = 100;
+      if(OGGI_RAIN_CODES.has(code) || precipProb >= 50) score -= 70;
+      else if(precipProb >= 25) score -= 25;
+      score -= Math.abs(maxTemp - 23) * 1.5;
+
+      return { maxTemp, code, precipProb, score, icon: oggiWeatherIcon(code) };
+    } catch(err){
+      return null;
+    }
+  }
+
+  function buildOggiCard(it, weather){
+    const item = buildListItem(it, updateFuelEstimate);
+    if(weather){
+      const badges = item.querySelector(".viaggio-item-badges");
+      if(badges){
+        const weatherBadge = document.createElement("span");
+        weatherBadge.className = "card-weather";
+        weatherBadge.title = `Meteo previsto oggi a ${it.meteoPlace}`;
+        weatherBadge.textContent = `${weather.icon} ${Math.round(weather.maxTemp)}°`;
+        badges.insertBefore(weatherBadge, badges.firstChild);
+      }
+    }
+    return item;
+  }
+
+  async function calculateOggi(){
+    const oreEl = document.getElementById("oggi-ore");
+    const kmEl = document.getElementById("oggi-km");
+    const btn = document.getElementById("oggi-btn");
+    const resultsEl = document.getElementById("oggi-results");
+
+    const ore = Math.min(12, Math.max(1, parseFloat(oreEl.value) || 1));
+    const kmBudget = Math.min(400, Math.max(20, parseInt(kmEl.value, 10) || 20));
+
+    btn.disabled = true;
+    btn.textContent = "Guardo il meteo...";
+    resultsEl.innerHTML = `<p class="oggi-loading">Controllo il meteo di oggi sugli itinerari che ci stanno...</p>`;
+
+    const candidates = ITINERARI.filter(it => it.kmNum <= kmBudget && (it.kmNum / OGGI_AVG_SPEED_KMH) <= ore);
+
+    if(!candidates.length){
+      const minKm = Math.min(...ITINERARI.map(it => it.kmNum));
+      resultsEl.innerHTML = `<p class="oggi-empty">Con questi parametri non c'è nessun itinerario che ci sta — il più corto che ho in lista è di ${minKm} km. Prova ad alzare un po' le ore o i km.</p>`;
+      btn.disabled = false;
+      btn.textContent = "Dove vado oggi?";
+      return;
+    }
+
+    // un solo controllo meteo per ogni meteoPlace, alcuni itinerari lo condividono
+    const weatherByPlace = {};
+    await Promise.all(
+      [...new Set(candidates.map(it => it.meteoPlace))].map(async (place) => {
+        weatherByPlace[place] = await fetchOggiWeather(place);
+      })
+    );
+
+    const ranked = candidates
+      .map(it => ({ it, weather: weatherByPlace[it.meteoPlace] }))
+      .sort((a, b) => (b.weather ? b.weather.score : -999) - (a.weather ? a.weather.score : -999));
+
+    resultsEl.innerHTML = "";
+    const list = document.createElement("div");
+    list.className = "oggi-results-list";
+    ranked.slice(0, 6).forEach(({ it, weather }) => list.appendChild(buildOggiCard(it, weather)));
+    resultsEl.appendChild(list);
+
+    if(ranked.some(r => !r.weather)){
+      const note = document.createElement("p");
+      note.className = "oggi-note";
+      note.textContent = "Per uno o più itinerari non sono riuscito a recuperare il meteo di oggi: restano comunque in lista, mostrati per ultimi.";
+      resultsEl.appendChild(note);
+    }
+
+    btn.disabled = false;
+    btn.textContent = "Dove vado oggi?";
+  }
+
+  document.getElementById("oggi-btn").addEventListener("click", calculateOggi);
 
   // ===== Ricerca luoghi con autocompletamento (Nominatim/OpenStreetMap) =====
   // Usata al posto della sola geocodifica "al buio": mostra un elenco di
