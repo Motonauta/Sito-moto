@@ -302,26 +302,30 @@ ${HEAD_COMMON}
   @media print {
     .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, .copy-link-btn, #back-to-top, .viaggio-route-preview{ display:none !important; }
 
-    /* per default i browser tolgono i colori di sfondo in stampa per
-       risparmiare inchiostro: qui li vogliamo davvero, sono il tema del sito */
-    body, body *{
-      -webkit-print-color-adjust:exact !important;
-      print-color-adjust:exact !important;
-    }
-    body{ background:var(--asphalt) !important; color:var(--cream) !important; }
+    /* Sfondo bianco "di serie" invece che forzare quello scuro del sito: gli
+       sfondi impostati via CSS sono la prima cosa che molti browser/telefoni
+       tolgono in stampa, col rischio di lasciare testo chiaro illeggibile su
+       bianco. Il colore del testo invece stampa sempre, quindi restiamo su
+       sfondo bianco "di serie" con testo scuro: robusto ovunque. */
+    body{ background:#fff !important; color:#1b1a17 !important; }
+    .viaggio-breadcrumb, .marker, .viaggio-stops p.label{ color:#555 !important; }
+    h1, h2{ color:#1b1a17 !important; }
+    a{ color:#1b1a17 !important; text-decoration:underline; }
     body > section{ position:relative; z-index:1; }
 
+    /* il logo è un'immagine vera (non uno sfondo CSS), così stampa sempre
+       anche quando il browser non stampa gli "sfondi/grafica" */
     .print-watermark{
       display:block; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-      width:520px; height:520px;
-      background:url('${LOGO_URL}') center/contain no-repeat;
-      opacity:0.08; z-index:0; pointer-events:none;
+      width:440px; height:440px; object-fit:contain;
+      opacity:0.12; filter:grayscale(1);
+      z-index:0; pointer-events:none;
     }
   }
 </style>
 </head>
 <body>
-<div class="print-watermark"></div>
+<img class="print-watermark" src="${LOGO_URL}" alt="">
 ${HEADER_HTML}
 
 <section style="padding-top:56px; padding-bottom:0;">

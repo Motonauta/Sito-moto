@@ -374,45 +374,45 @@
     body > *:not(#print-root){ display:none !important; }
     #print-root{ display:block !important; }
 
-    /* per default i browser tolgono i colori di sfondo in stampa per
-       risparmiare inchiostro: qui li vogliamo davvero, sono il tema del sito */
-    #print-root, #print-root *{
-      -webkit-print-color-adjust:exact !important;
-      print-color-adjust:exact !important;
-    }
-
+    /* Sfondo bianco "di serie" invece che forzare quello scuro del sito: gli
+       sfondi impostati via CSS (colori o immagini) sono la prima cosa che
+       molti browser/telefoni tolgono in stampa, col risultato che uno sfondo
+       scuro forzato può sparire lasciando testo chiaro illeggibile su bianco.
+       Il colore del testo, invece, stampa sempre: si può restare bianco
+       "di serie" e usare testo scuro, robusto ovunque. */
     #print-root{
       position:relative; overflow:hidden;
       font-family:"Work Sans", Arial, sans-serif;
-      background:var(--asphalt) !important; color:var(--cream) !important;
+      background:#fff !important; color:#1b1a17 !important;
       padding:34px 28px; min-height:100vh;
     }
 
+    /* il logo è un'immagine vera (non uno sfondo CSS), così stampa sempre
+       anche quando il browser non stampa gli "sfondi/grafica" */
     .print-watermark{
       position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-      width:520px; height:520px;
-      background:url('https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png') center/contain no-repeat;
-      opacity:0.08;
+      width:440px; height:440px; object-fit:contain;
+      opacity:0.12; filter:grayscale(1);
       z-index:0; pointer-events:none;
     }
 
     .print-header, .print-section{ position:relative; z-index:1; }
-    .print-header{ border-bottom:2px solid var(--gold); padding-bottom:14px; margin-bottom:20px; }
-    .print-brand{ font-family:"JetBrains Mono", monospace; font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; margin:0; color:var(--gold) !important; }
-    .print-header h1{ font-family:"Oswald", Arial, sans-serif; font-size:1.8rem; margin:6px 0 4px; color:var(--sand) !important; }
-    .print-meta{ font-size:0.8rem; color:var(--cream-dim) !important; margin:0; }
+    .print-header{ border-bottom:2px solid var(--rust); padding-bottom:14px; margin-bottom:20px; }
+    .print-brand{ font-family:"JetBrains Mono", monospace; font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; margin:0; color:var(--rust) !important; }
+    .print-header h1{ font-family:"Oswald", Arial, sans-serif; font-size:1.8rem; margin:6px 0 4px; color:#1b1a17 !important; }
+    .print-meta{ font-size:0.8rem; color:#555 !important; margin:0; }
     .print-section{ margin-top:22px; }
-    .print-section h2{ font-family:"Oswald", Arial, sans-serif; font-size:1.1rem; border-bottom:1px solid rgba(245,240,230,0.25); padding-bottom:6px; margin-bottom:12px; color:var(--sand) !important; }
+    .print-section h2{ font-family:"Oswald", Arial, sans-serif; font-size:1.1rem; border-bottom:1px solid #ccc; padding-bottom:6px; margin-bottom:12px; color:#1b1a17 !important; }
     .print-params-list{ list-style:none; margin:0; padding:0; }
-    .print-params-list li{ padding:4px 0; font-size:0.92rem; color:var(--cream) !important; }
-    #print-root a{ color:var(--gold) !important; text-decoration:underline; }
+    .print-params-list li{ padding:4px 0; font-size:0.92rem; color:#1b1a17 !important; }
+    #print-root a{ color:#1b1a17 !important; text-decoration:underline; }
     #print-root .route-weather-list li,
     #print-root .valigia-list li,
     #print-root .rotta-leg{
-      background:var(--asphalt-2) !important; border:1px solid rgba(245,240,230,0.18) !important;
+      border:1px solid #ccc !important;
       break-inside:avoid; margin-bottom:6px;
     }
-    #print-root .rotta-leg-links a{ border:1px solid var(--gold) !important; padding:4px 10px; }
+    #print-root .rotta-leg-links a{ border:1px solid #999 !important; padding:4px 10px; }
     #print-root .print-pdf-btn{ display:none !important; }
   }
 </style>
@@ -650,7 +650,7 @@
 </footer>
 
 <div id="print-root">
-  <div class="print-watermark"></div>
+  <img class="print-watermark" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="">
   <div id="print-content"></div>
 </div>
 
