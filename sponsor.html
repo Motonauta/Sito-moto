@@ -18,13 +18,54 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Prova v2 della palette rosso/blu ispirata al nuovo logo: titoli tornati
-     al caldo originale (il bianco/argento freddo toglieva carattere al
-     sito), rosso e blu resi più ricchi/profondi invece che accesi e piatti */
+  /* Prova v3: più presenza del colore, con sfumature rosso/blu invece di
+     semplici tinte piatte (feedback: "poco colore, non si abbina al
+     design") — stessa logica della v2 per i toni (caldi, non accesi) */
   :root{
     --rust:#C23B35;
     --gold:#3B5BA5;
     --sand:#EDE3D0;
+  }
+
+  /* scritta "MOTONAUTA" a doppia tinta, come le lettere rosse/blu del logo */
+  .logo .accent{
+    background:linear-gradient(100deg, var(--rust), var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  /* bagliore cromatico diffuso dietro al titolo iniziale */
+  body > section:first-of-type{ position:relative; }
+  body > section:first-of-type::before{
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 600px 400px at 10% 0%, rgba(194,59,53,0.16), transparent 60%),
+      radial-gradient(ellipse 600px 400px at 90% 100%, rgba(59,91,165,0.16), transparent 60%);
+  }
+  body > section:first-of-type .wrap{ position:relative; z-index:1; }
+
+  /* barra sfumata rosso/blu in cima a ogni scheda sponsor, richiamo diretto
+     alle due lettere colorate del logo */
+  .grid-flat-3 > div{ position:relative; padding-top:46px !important; }
+  .grid-flat-3 > div::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg, var(--rust), var(--gold));
+  }
+
+  /* pulsante con sfumatura invece di tinta piatta */
+  .btn.solid{
+    background:linear-gradient(120deg, var(--rust), var(--gold)) !important;
+    border-color:transparent !important;
+  }
+  .btn.solid:hover{
+    background:linear-gradient(120deg, var(--gold), var(--rust)) !important;
+    color:var(--cream) !important;
+  }
+
+  /* riquadro "Lavoriamo insieme" con sfondo sfumato invece di piatto */
+  .section-alt{
+    background:
+      linear-gradient(135deg, rgba(194,59,53,0.16), rgba(59,91,165,0.16)),
+      var(--asphalt-2) !important;
   }
 </style>
 <script src="cookie-consent.js" defer></script>
