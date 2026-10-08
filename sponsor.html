@@ -18,9 +18,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Prova v3: più presenza del colore, con sfumature rosso/blu invece di
-     semplici tinte piatte (feedback: "poco colore, non si abbina al
-     design") — stessa logica della v2 per i toni (caldi, non accesi) */
+  /* Prova v4: cambio di estetica, non solo di colore (feedback: "senza
+     anima"). Via il bagliore ambientale sfumato (troppo "da sito SaaS"),
+     dentro un linguaggio più grafico e deciso ispirato alle livree da
+     corsa/moto sportive: fasce diagonali, angoli a bandierina, forme
+     tagliate invece di rettangoli piatti. */
   :root{
     --rust:#C23B35;
     --gold:#3B5BA5;
@@ -33,26 +35,44 @@
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
 
-  /* bagliore cromatico diffuso dietro al titolo iniziale */
-  body > section:first-of-type{ position:relative; }
-  body > section:first-of-type::before{
-    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
-    background:
-      radial-gradient(ellipse 600px 400px at 10% 0%, rgba(194,59,53,0.16), transparent 60%),
-      radial-gradient(ellipse 600px 400px at 90% 100%, rgba(59,91,165,0.16), transparent 60%);
-  }
-  body > section:first-of-type .wrap{ position:relative; z-index:1; }
-
-  /* barra sfumata rosso/blu in cima a ogni scheda sponsor, richiamo diretto
-     alle due lettere colorate del logo */
-  .grid-flat-3 > div{ position:relative; padding-top:46px !important; }
-  .grid-flat-3 > div::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:4px;
-    background:linear-gradient(90deg, var(--rust), var(--gold));
+  /* fascia diagonale rosso/blu sotto al titolo, come la riga di partenza di
+     una livrea da corsa, al posto del bagliore ambientale */
+  h1{ position:relative; width:fit-content; padding-bottom:18px; }
+  h1::after{
+    content:""; position:absolute; left:0; bottom:0; width:72%; height:8px;
+    background:repeating-linear-gradient(
+      -45deg,
+      var(--rust) 0 18px,
+      var(--gold) 18px 36px
+    );
   }
 
-  /* pulsante con sfumatura invece di tinta piatta */
+  /* divisore a fasce diagonali rosso/blu, al posto della linea tratteggiata */
+  .divider{
+    border:none; height:6px; margin:0;
+    background:repeating-linear-gradient(
+      -45deg,
+      var(--rust) 0 20px,
+      var(--gold) 20px 40px
+    );
+  }
+
+  /* angolo a bandierina su ogni scheda sponsor, alternato rosso/blu, come i
+     numeri di gara sulle carene — più deciso di una semplice barra sfumata */
+  .grid-flat-3 > div{ position:relative; overflow:hidden; }
+  .grid-flat-3 > div::after{
+    content:""; position:absolute; top:0; right:0;
+    border-style:solid; border-width:0 54px 54px 0;
+    border-color:transparent var(--rust) transparent transparent;
+  }
+  .grid-flat-3 > div:nth-child(even)::after{
+    border-color:transparent var(--gold) transparent transparent;
+  }
+
+  /* pulsante con sfumatura e taglio diagonale, come un cartello da gara
+     invece di un rettangolo piatto */
   .btn.solid{
+    clip-path:polygon(4% 0, 100% 0, 96% 100%, 0 100%);
     background:linear-gradient(120deg, var(--rust), var(--gold)) !important;
     border-color:transparent !important;
   }
