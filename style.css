@@ -171,11 +171,11 @@ p{color:var(--cream-dim); max-width:60ch;}
    ========================================================== */
 #site-search-trigger{
   flex-shrink:0; margin-left:18px;
-  width:38px; height:38px; display:flex; align-items:center; justify-content:center;
-  background:transparent; border:1px solid rgba(245,240,230,0.25); color:var(--cream-dim);
+  width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:rgba(245,240,230,0.06); border:1px solid rgba(245,240,230,0.14); color:var(--cream-dim);
   font-size:1rem; cursor:pointer; transition:all .2s ease;
 }
-#site-search-trigger:hover{ border-color:var(--gold); color:var(--gold); }
+#site-search-trigger:hover{ background:var(--gold); border-color:var(--gold); color:var(--asphalt); }
 @media (max-width:780px){
   #site-search-trigger{ margin-left:auto; margin-right:12px; }
 }
@@ -266,10 +266,10 @@ p{color:var(--cream-dim); max-width:60ch;}
 .logo .accent-nauta{color:#1E5FAE;}
 .logo-wrap .logo-text{ white-space:nowrap; }
 .nav-links{
-  display:flex; gap:34px;
+  display:flex; gap:26px;
   font-family:var(--font-mono);
   font-size:0.8rem;
-  letter-spacing:0.06em;
+  letter-spacing:0.04em;
   text-transform:uppercase;
 }
 .nav-links a{
@@ -529,7 +529,7 @@ p{color:var(--cream-dim); max-width:60ch;}
   flex-shrink:0;
   padding:2px;
   border-radius:50%;
-  background:conic-gradient(from 180deg, #C1272D 0deg 180deg, #1E5FAE 180deg 360deg);
+  background:conic-gradient(from 180deg, #C1272D 0deg, #1E5FAE 180deg, #C1272D 360deg);
 }
 
 /* ==========================================================
