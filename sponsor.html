@@ -17,6 +17,25 @@
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Prova v6: lezione imparata dalle 5 prove di ieri (una skill di design
+     installata nel frattempo lo conferma): il problema non era la forma
+     delle decorazioni, era usare rosso E blu come due accenti di pari
+     peso in competizione tra loro in ogni elemento. Qui un solo colore
+     dominante (rosso, in due toni per la gerarchia) usato identico in
+     tutta la pagina; il blu resta solo nel punto più naturale e già
+     "suo": la scritta del logo, dove richiama le due lettere colorate
+     del patch senza competere con nient'altro intorno. */
+  :root{
+    --rust:#C23B35;
+    --gold:#8B342E;
+    --sand:#EDE3D0;
+  }
+  .logo .accent{
+    background:linear-gradient(100deg, #C23B35, #3B5BA5);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+</style>
 <script src="cookie-consent.js" defer></script>
 </head>
 <body>
