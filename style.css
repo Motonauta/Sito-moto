@@ -6,7 +6,12 @@
   --asphalt-2: #232019;
   --rust: #C1502E;
   --rust-dim: #8f3a20;
-  --gold: #D9A441;
+  /* "--gold" è rimasto il nome storico della variabile, ma dal
+     restyling rosso/blu del logo il suo valore è diventato un blu
+     (stessa famiglia del logo, schiarito per restare leggibile come
+     testo su sfondo scuro) — usata per link, hover, prezzi, badge:
+     tutto ciò che prima era "oro" in giro per il sito */
+  --gold: #4F9FE0;
   --sand: #EDE3D0;
   --steel: #4A5859;
   --concrete: #7C7C72;
