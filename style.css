@@ -229,7 +229,6 @@ p{color:var(--cream-dim); max-width:60ch;}
 .site-header .wrap{
   display:flex; align-items:center; justify-content:space-between;
   padding-top:18px; padding-bottom:18px;
-  perspective:800px;
 }
 .logo{
   font-family:var(--font-display);
@@ -240,7 +239,11 @@ p{color:var(--cream-dim); max-width:60ch;}
   line-height:1;
   --tilt-x:0deg;
   --tilt-y:0deg;
-  transform:rotateX(var(--tilt-y)) rotateY(var(--tilt-x));
+  /* prospettiva dentro al transform del logo stesso, non su un
+     antenato condiviso con il menu mobile: "perspective" su un
+     contenitore crea un nuovo "containing block" per i figli con
+     position:fixed, e rompeva il menu a tendina su mobile */
+  transform:perspective(800px) rotateX(var(--tilt-y)) rotateY(var(--tilt-x));
   transition:transform .15s ease-out;
   will-change:transform;
 }
