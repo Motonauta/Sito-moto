@@ -71,13 +71,6 @@ ul{list-style:none;}
   gap:10px;
   margin-bottom:14px;
 }
-.marker::before{
-  content:"";
-  width:22px;
-  height:1px;
-  background:var(--gold);
-  display:inline-block;
-}
 
 /* headings ----------------------------------------------------------*/
 h1,h2,h3{
