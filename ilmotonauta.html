@@ -19,6 +19,73 @@
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
 <style>
+  /* stesso sistema di base di Alleati/Canale aperto/Diario di bordo:
+     grafite freddo, livrea rosso/blu sotto l'header e sulle sezioni
+     alternate. Niente sweep diagonale nell'hero: qui c'è già una foto
+     vera e la strada disegnata, sarebbe troppo carico. */
+  :root{
+    --racing-blue:#1E5FAE;
+    --asphalt:#15171B;
+    --asphalt-2:#1D2126;
+  }
+
+  .site-header{
+    background:rgba(21,23,27,0.92);
+    border-bottom:3px solid var(--rust);
+    box-shadow:0 3px 0 0 var(--racing-blue);
+  }
+
+  .section-alt{ position:relative; }
+  .section-alt::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:5px;
+    background:linear-gradient(to bottom, var(--rust) 0 3px, var(--racing-blue) 3px 5px);
+  }
+
+  .btn.solid{
+    position:relative;
+    padding:14px 54px 14px 24px;
+    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+  }
+  .btn.solid::after{
+    content:"→";
+    position:absolute; right:10px; top:50%;
+    transform:translateY(-50%);
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.18);
+    font-size:0.9rem;
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+  }
+  .btn.solid:hover{ transform:translateY(-2px); }
+  .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+
+  /* cornice a doppia bordatura sulle foto, come sulle card di Alleati:
+     guscio sottile + pannello di sfondo dietro la foto + barra colore
+     in alto, alternata rosso/blu tra una foto e l'altra */
+  .photo-frame{
+    position:relative;
+    border:1px solid rgba(245,240,230,0.1);
+    border-radius:24px;
+    padding:7px;
+    background:var(--asphalt-2);
+    transition:transform .5s cubic-bezier(.22,.9,.32,1), box-shadow .5s cubic-bezier(.22,.9,.32,1);
+  }
+  /* la barra colore sta sul guscio, non sulla foto: così resta ferma
+     anche quando l'immagine si sposta leggermente (parallasse hero) */
+  .photo-frame::before{
+    content:""; position:absolute; top:7px; left:7px; right:7px; height:3px;
+    background:var(--rust); border-radius:3px 3px 0 0; z-index:2;
+  }
+  .photo-frame.is-blue::before{ background:var(--racing-blue); }
+  .photo-frame img{
+    display:block; width:100%; height:100%;
+    object-fit:cover; border-radius:18px;
+  }
+  .photo-frame:hover{
+    transform:translateY(-6px);
+    box-shadow:0 28px 50px -30px rgba(0,0,0,0.6);
+  }
+
   .bike-stats{
     display:grid; grid-template-columns:repeat(4, 1fr); gap:1px;
     background:rgba(245,240,230,0.14); margin-top:44px;
@@ -37,16 +104,7 @@
   .bike-gallery{
     display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:24px;
   }
-  .bike-gallery .gallery-item{
-    aspect-ratio:4/3; position:relative; overflow:hidden;
-    border:1px dashed rgba(245,240,230,0.22);
-    display:flex; align-items:flex-end;
-  }
-  .bike-gallery img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .bike-gallery .tag{
-    padding:16px; font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase;
-    letter-spacing:0.05em; color:var(--cream-dim); position:relative; z-index:1;
-  }
+  .bike-gallery .gallery-item{ aspect-ratio:4/3; }
   @media (max-width:780px){ .bike-gallery{ grid-template-columns:repeat(2, 1fr); } }
   @media (max-width:520px){ .bike-gallery{ grid-template-columns:1fr; } }
 
@@ -113,7 +171,7 @@
         <a href="contatti.html" class="btn">Contattami</a>
       </div>
     </div>
-    <div class="hero-parallax-frame" style="aspect-ratio:4/5; overflow:hidden;">
+    <div class="hero-parallax-frame photo-frame" style="aspect-ratio:4/5; overflow:hidden;">
       <img class="hero-parallax" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784825410/IMG_2754_t3n34v.jpg" alt="Angelo, il Motonauta, senza casco" style="width:100%; height:100%; object-fit:cover;">
     </div>
   </div>
@@ -132,7 +190,7 @@
 <!-- CHI SONO ======================================================== -->
 <section class="section-alt">
   <div class="wrap feature-grid">
-   <div style="aspect-ratio:4/5; overflow:hidden;">
+   <div class="photo-frame is-blue" style="aspect-ratio:4/5;">
   <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784732942/IMG_0181_TIF_1_cnyrxh.jpg" alt="Foto profilo" style="width:100%; height:100%; object-fit:cover;">
 </div>
     <div>
@@ -224,7 +282,7 @@
 
 <section class="section-alt">
   <div class="wrap feature-grid">
-    <div style="aspect-ratio:4/5; overflow:hidden;">
+    <div class="photo-frame" style="aspect-ratio:4/5;">
       <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896613/IMG_4693_s0ipoz.jpg" alt="La mia BMW S1000XR" style="width:100%; height:100%; object-fit:cover;">
     </div>
     <div>
@@ -265,13 +323,13 @@
     <h2 style="max-width:18ch;">Qualche scatto della mia moto</h2>
 
     <div class="bike-gallery">
-      <div class="gallery-item">
+      <div class="gallery-item photo-frame is-blue">
         <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896612/IMG_0242_TIF_qfhllm.jpg" alt="La mia BMW S1000XR">
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item photo-frame">
         <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896612/IMG_3359_t4jlvx.jpg" alt="La mia BMW S1000XR">
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item photo-frame is-blue">
         <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896611/IMG_2359_z8mixo.jpg" alt="La mia BMW S1000XR">
       </div>
     </div>
