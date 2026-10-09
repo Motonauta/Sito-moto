@@ -1,4 +1,6 @@
-const { findBySlug, ULTIMO_AGGIORNAMENTO_DATI } = require('../data/viaggi-data');
+const { ULTIMO_AGGIORNAMENTO_DATI } = require('../data/viaggi-data');
+const { getViaggiData, saveViaggiData, findBySlug, CATEGORIE } = require('../lib/viaggi-store');
+const { isAuthenticated } = require('../lib/auth');
 
 const LOGO_URL = 'https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png';
 
@@ -161,9 +163,117 @@ ${FOOTER_HTML}
 </html>`;
 }
 
+// Azioni per l'area riservata (gestione itinerari/miniviaggi/viaggi da
+// ricordare): list è pubblica (stessi dati già visibili sul sito, servono
+// anche a index.html per i caroselli e alla ricerca), save/delete scrivono
+// e richiedono una sessione admin valida.
+async function handleList(req, res) {
+  try {
+    const data = await getViaggiData();
+    res.status(200).json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Errore interno, riprova più tardi.' });
+  }
+}
+
+function validateItem(categoria, item) {
+  if (!item || typeof item !== 'object') return 'Voce mancante.';
+  if (!item.titolo || !item.titolo.trim()) return 'Il titolo è obbligatorio.';
+  if (!item.zona || !item.zona.trim()) return 'La zona è obbligatoria.';
+  if (!item.km || !item.km.trim()) return 'Il campo km è obbligatorio.';
+  if (!item.meteoPlace || !item.meteoPlace.trim()) return 'Il comune per il meteo è obbligatorio.';
+  if (!item.desc || !item.desc.trim()) return 'La descrizione è obbligatoria.';
+  if (!Array.isArray(item.tappe) || !item.tappe.length) return 'Serve almeno una tappa.';
+  for (const t of item.tappe) {
+    if (!t || !t.nome || !t.nome.trim() || !t.query || !t.query.trim()) {
+      return 'Ogni tappa deve avere almeno nome e query (per Maps/Waze).';
+    }
+  }
+  if (item.kmNum != null && item.kmNum !== '' && isNaN(Number(item.kmNum))) {
+    return 'Il campo km (numero) deve essere un numero.';
+  }
+  return null;
+}
+
+async function handleSave(req, res) {
+  try {
+    if (!(await isAuthenticated(req))) {
+      return res.status(401).json({ error: 'Sessione scaduta, rifai il login.' });
+    }
+    const { categoria, index, item } = req.body || {};
+    if (!CATEGORIE.includes(categoria)) {
+      return res.status(400).json({ error: 'Categoria non valida.' });
+    }
+    const errore = validateItem(categoria, item);
+    if (errore) return res.status(400).json({ error: errore });
+
+    const cleanItem = {
+      titolo: item.titolo.trim(),
+      zona: item.zona.trim(),
+      km: item.km.trim(),
+      meteoPlace: item.meteoPlace.trim(),
+      foto: (item.foto || '').trim(),
+      desc: item.desc.trim(),
+      tappe: item.tappe.map(t => ({
+        nome: t.nome.trim(), query: t.query.trim(),
+        label: (t.label || '').trim(), fun: (t.fun || '').trim(),
+      })),
+    };
+    if (item.kmNum != null && item.kmNum !== '') cleanItem.kmNum = Number(item.kmNum);
+
+    const data = await getViaggiData();
+    const lista = data[categoria];
+    if (index === null || index === undefined || index === '') {
+      lista.push(cleanItem);
+    } else {
+      const i = Number(index);
+      if (!(i >= 0 && i < lista.length)) {
+        return res.status(400).json({ error: 'Voce da modificare non trovata.' });
+      }
+      lista[i] = cleanItem;
+    }
+    await saveViaggiData(data);
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Errore interno, riprova più tardi.' });
+  }
+}
+
+async function handleDelete(req, res) {
+  try {
+    if (!(await isAuthenticated(req))) {
+      return res.status(401).json({ error: 'Sessione scaduta, rifai il login.' });
+    }
+    const { categoria, index } = req.body || {};
+    if (!CATEGORIE.includes(categoria)) {
+      return res.status(400).json({ error: 'Categoria non valida.' });
+    }
+    const data = await getViaggiData();
+    const lista = data[categoria];
+    const i = Number(index);
+    if (!(i >= 0 && i < lista.length)) {
+      return res.status(400).json({ error: 'Voce da eliminare non trovata.' });
+    }
+    lista.splice(i, 1);
+    await saveViaggiData(data);
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Errore interno, riprova più tardi.' });
+  }
+}
+
 module.exports = async (req, res) => {
+  const action = req.query && req.query.action;
+  if (action === 'list') return handleList(req, res);
+  if (action === 'save') return handleSave(req, res);
+  if (action === 'delete') return handleDelete(req, res);
+
   const slug = (req.query && req.query.slug) || '';
-  const entry = findBySlug(slug);
+  const data = await getViaggiData();
+  const entry = findBySlug(data, slug);
 
   if (!entry) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
