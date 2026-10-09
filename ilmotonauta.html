@@ -59,27 +59,19 @@
   .btn.solid:hover{ transform:translateY(-2px); }
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
 
-  /* cornice a doppia bordatura sulle foto, come sulle card di Alleati:
-     guscio sottile + pannello di sfondo dietro la foto + barra colore
-     in alto, alternata rosso/blu tra una foto e l'altra */
+  /* cornice "cordolo da pista" sulle foto: strisce diagonali rosso/
+     bianco, come i cordoli dei circuiti — invece della barra colore
+     singola usata sulle card sponsor */
   .photo-frame{
     position:relative;
-    border:1px solid rgba(245,240,230,0.1);
     border-radius:24px;
-    padding:7px;
-    background:var(--asphalt-2);
+    padding:10px;
+    background:repeating-linear-gradient(45deg, var(--rust) 0 14px, var(--cream) 14px 28px);
     transition:transform .5s cubic-bezier(.22,.9,.32,1), box-shadow .5s cubic-bezier(.22,.9,.32,1);
   }
-  /* la barra colore sta sul guscio, non sulla foto: così resta ferma
-     anche quando l'immagine si sposta leggermente (parallasse hero) */
-  .photo-frame::before{
-    content:""; position:absolute; top:7px; left:7px; right:7px; height:3px;
-    background:var(--rust); border-radius:3px 3px 0 0; z-index:2;
-  }
-  .photo-frame.is-blue::before{ background:var(--racing-blue); }
   .photo-frame img{
     display:block; width:100%; height:100%;
-    object-fit:cover; border-radius:18px;
+    object-fit:cover; border-radius:16px;
   }
   .photo-frame:hover{
     transform:translateY(-6px);
@@ -190,7 +182,7 @@
 <!-- CHI SONO ======================================================== -->
 <section class="section-alt">
   <div class="wrap feature-grid">
-   <div class="photo-frame is-blue" style="aspect-ratio:4/5;">
+   <div class="photo-frame" style="aspect-ratio:4/5;">
   <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784732942/IMG_0181_TIF_1_cnyrxh.jpg" alt="Foto profilo" style="width:100%; height:100%; object-fit:cover;">
 </div>
     <div>
@@ -323,13 +315,13 @@
     <h2 style="max-width:18ch;">Qualche scatto della mia moto</h2>
 
     <div class="bike-gallery">
-      <div class="gallery-item photo-frame is-blue">
+      <div class="gallery-item photo-frame">
         <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896612/IMG_0242_TIF_qfhllm.jpg" alt="La mia BMW S1000XR">
       </div>
       <div class="gallery-item photo-frame">
         <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896612/IMG_3359_t4jlvx.jpg" alt="La mia BMW S1000XR">
       </div>
-      <div class="gallery-item photo-frame is-blue">
+      <div class="gallery-item photo-frame">
         <img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1784896611/IMG_2359_z8mixo.jpg" alt="La mia BMW S1000XR">
       </div>
     </div>
