@@ -81,7 +81,7 @@
   .gallery-item:hover{
     transform:translateY(-4px);
     border-color:rgba(245,240,230,0.4);
-    box-shadow:0 20px 40px -20px rgba(0,0,0,0.6);
+    box-shadow:0 20px 40px -20px rgba(8,10,18,0.6);
   }
   .gallery-item .tag{
     padding:16px; font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em;
@@ -99,7 +99,7 @@
     border-left:22px solid var(--sand);
     opacity:0.9; z-index:1;
     pointer-events:none;
-    filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+    filter:drop-shadow(0 2px 6px rgba(8,10,18,0.5));
   }
   @media (max-width: 780px){
     .gallery-grid{grid-template-columns:repeat(2, 1fr);}
@@ -107,9 +107,8 @@
   @media (max-width: 520px){
     .gallery-grid{grid-template-columns:1fr;}
   }
-  #gallery-loading{
-    font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim); margin-top:44px;
-  }
+  #gallery-loading{ margin-top:44px; }
+  #gallery-loading .gallery-item{ border-style:solid; }
   .gallery-city-heading{
     grid-column:1 / -1; margin-top:28px; font-family:var(--font-mono); font-size:0.8rem;
     text-transform:uppercase; letter-spacing:0.05em; color:var(--gold);
@@ -122,14 +121,14 @@
     border:1px solid rgba(245,240,230,0.16);
     border-radius:18px;
     background:var(--asphalt-2);
-    box-shadow:0 28px 50px -30px rgba(0,0,0,0.6);
+    box-shadow:0 28px 50px -30px rgba(8,10,18,0.6);
     overflow:hidden;
   }
   .map-pin{
     width:28px; height:28px; border-radius:50%;
     background:var(--asphalt) url('https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png') center/cover;
     border:2px solid var(--asphalt);
-    box-shadow:0 0 0 3px rgba(30,95,174,0.35), 0 2px 8px rgba(0,0,0,0.6);
+    box-shadow:0 0 0 3px rgba(30,95,174,0.35), 0 2px 8px rgba(8,10,18,0.6);
   }
   .leaflet-popup-content-wrapper{
     background:var(--asphalt-2); color:var(--cream);
@@ -193,7 +192,14 @@
 
 <section>
   <div class="wrap">
-    <p id="gallery-loading">Carico le foto...</p>
+    <div class="gallery-grid" id="gallery-loading" aria-hidden="true">
+      <div class="gallery-item skeleton"></div>
+      <div class="gallery-item skeleton"></div>
+      <div class="gallery-item skeleton"></div>
+      <div class="gallery-item skeleton"></div>
+      <div class="gallery-item skeleton"></div>
+      <div class="gallery-item skeleton"></div>
+    </div>
     <div class="gallery-grid" id="gallery-grid"></div>
   </div>
 </section>
@@ -378,7 +384,7 @@
 
       loadingEl.style.display = "none";
     } catch(err){
-      loadingEl.textContent = "Non riesco a caricare le foto al momento. Riprova tra poco.";
+      loadingEl.innerHTML = '<p style="grid-column:1/-1; font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);">Non riesco a caricare le foto al momento. Riprova tra poco.</p>';
     }
   })();
 </script>
