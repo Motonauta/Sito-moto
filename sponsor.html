@@ -114,6 +114,15 @@
     grid-column:2;
   }
 
+  /* il logo EICMA ha uno sfondo bianco pieno nel file originale, che
+     stonava a vista sulla card scura — qui diventa un chip bianco
+     intenzionale invece di un rettangolo bianco "accidentale" */
+  .sponsor-bento > div:nth-child(5) .sponsor-logo-link{
+    background:#fff;
+    border-radius:12px;
+    padding:12px 16px;
+  }
+
   .btn.solid{
     position:relative;
     padding:14px 54px 14px 24px;
