@@ -549,6 +549,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
     }
 
+    // Toglie accenti (città → citta) per confrontare parole indipendentemente
+    // da come sono scritte: prima la ricerca falliva su "citta" se il testo
+    // aveva "città", o su "borgo" scritto in ordine diverso da come appare
+    // nel testo, perché cercava solo la frase intera come un'unica sottostringa.
+    function normalizeSearch(str){
+      return String(str).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    }
+
     let searchIndex = null;
     function buildSearchIndex(){
       const items = [];
@@ -564,7 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
             items.push({
               cat, title: it.titolo, desc: it.desc,
               href: `/viaggi/${getSlug(it)}`,
-              haystack: `${it.titolo} ${it.zona} ${it.desc}`.toLowerCase(),
+              haystack: normalizeSearch(`${it.titolo} ${it.zona} ${it.desc}`),
             });
           });
         });
@@ -575,7 +583,7 @@ document.addEventListener("DOMContentLoaded", () => {
           items.push({
             cat: "Manuale di bordo", title: g.titolo, desc: g.excerpt,
             href: `/manuale/${getSlug(g)}`,
-            haystack: `${g.titolo} ${g.categoria} ${g.excerpt}`.toLowerCase(),
+            haystack: normalizeSearch(`${g.titolo} ${g.categoria} ${g.excerpt}`),
           });
         });
       }
@@ -583,13 +591,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function runSearch(query){
-      const q = query.trim().toLowerCase();
+      const q = normalizeSearch(query.trim());
       if (q.length < 2) {
         resultsEl.innerHTML = "";
         return;
       }
       if (!searchIndex) searchIndex = buildSearchIndex();
-      const matches = searchIndex.filter(item => item.haystack.includes(q)).slice(0, 20);
+      // ogni parola della ricerca deve comparire da qualche parte nel testo
+      // (non più un'unica frase esatta): "moto enduro" trova anche un
+      // itinerario che parla di "enduro in moto" o le cita in paragrafi diversi
+      const words = q.split(/\s+/).filter(Boolean);
+      const matches = searchIndex
+        .filter(item => words.every(w => item.haystack.includes(w)))
+        .sort((a, b) => {
+          const aExact = a.haystack.includes(q) ? 0 : 1;
+          const bExact = b.haystack.includes(q) ? 0 : 1;
+          return aExact - bExact;
+        })
+        .slice(0, 20);
       if (!matches.length) {
         resultsEl.innerHTML = `<p class="site-search-hint" style="padding:16px 0;">Nessun risultato per "${escapeSearchHtml(query.trim())}".</p>`;
         return;
