@@ -59,29 +59,42 @@
   .btn.solid:hover{ transform:translateY(-2px); }
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
 
-  /* cornice "cordolo da pista" sulle foto: blocchi rettangolari rosso/
-     bianco (non strisce diagonali — quelle leggono come nastro da
-     cantiere, non come un cordolo). Il trucco: una scacchiera usata
-     come bordo vero (border-image) invece che come sfondo, così i
-     blocchi restano dritti e corretti su tutti e quattro i lati. */
+  /* cornice sulle foto: angoli stile mirino fotografico (non un bordo
+     continuo) — 4 parentesi agli angoli, rosso/blu in diagonale */
   .photo-frame{
     position:relative;
-    border:14px solid;
-    border-image-source:repeating-conic-gradient(var(--rust) 0% 25%, var(--cream) 0% 50%);
-    border-image-slice:24;
-    border-image-repeat:round;
+    --arm:30px; --thick:3px; --gap:12px;
     transition:transform .5s cubic-bezier(.22,.9,.32,1), box-shadow .5s cubic-bezier(.22,.9,.32,1);
   }
   .photo-frame img{
     display:block; width:100%; height:100%;
-    object-fit:cover;
+    object-fit:cover; border-radius:4px;
+    box-shadow:0 28px 50px -24px rgba(0,0,0,0.7);
   }
-  .photo-frame:hover{
-    transform:translateY(-6px);
-    box-shadow:0 28px 50px -30px rgba(0,0,0,0.6);
+  .photo-frame::before{
+    content:"";
+    position:absolute; inset:0;
+    pointer-events:none;
+    background-repeat:no-repeat;
+    background-image:
+      linear-gradient(var(--rust), var(--rust)), linear-gradient(var(--rust), var(--rust)),
+      linear-gradient(var(--racing-blue), var(--racing-blue)), linear-gradient(var(--racing-blue), var(--racing-blue)),
+      linear-gradient(var(--racing-blue), var(--racing-blue)), linear-gradient(var(--racing-blue), var(--racing-blue)),
+      linear-gradient(var(--rust), var(--rust)), linear-gradient(var(--rust), var(--rust));
+    background-size:
+      var(--arm) var(--thick), var(--thick) var(--arm),
+      var(--arm) var(--thick), var(--thick) var(--arm),
+      var(--arm) var(--thick), var(--thick) var(--arm),
+      var(--arm) var(--thick), var(--thick) var(--arm);
+    background-position:
+      top var(--gap) left var(--gap), top var(--gap) left var(--gap),
+      top var(--gap) right var(--gap), top var(--gap) right var(--gap),
+      bottom var(--gap) left var(--gap), bottom var(--gap) left var(--gap),
+      bottom var(--gap) right var(--gap), bottom var(--gap) right var(--gap);
   }
+  .photo-frame:hover{ transform:translateY(-6px); }
   @media (max-width:600px){
-    .photo-frame{ border-width:10px; }
+    .photo-frame{ --arm:22px; --gap:8px; }
   }
 
   .bike-stats{
