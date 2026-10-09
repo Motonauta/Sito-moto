@@ -216,6 +216,22 @@ p{color:var(--cream-dim); max-width:60ch;}
   line-height:1;
 }
 .logo .accent{color:var(--rust);}
+/* "MOTO" rosso + "NAUTA" blu, gli stessi colori dell'anello attorno
+   al logo — bordo scurissimo per dare spessore alla scritta, e un
+   piccolo "avvicinamento" al passaggio del mouse */
+.logo .accent-moto,
+.logo .accent-nauta{
+  display:inline-block;
+  -webkit-text-stroke:0.4px rgba(0,0,0,0.55);
+  text-shadow:0 1px 1px rgba(0,0,0,0.4);
+  transition:transform .2s ease;
+}
+.logo .accent-moto{color:#C1272D;}
+.logo .accent-nauta{color:#1E5FAE;}
+.logo:hover .accent-moto,
+.logo:hover .accent-nauta{
+  transform:translateY(-2px) scale(1.05);
+}
 .logo-wrap .logo-text{ white-space:nowrap; }
 .nav-links{
   display:flex; gap:34px;

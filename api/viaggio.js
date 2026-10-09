@@ -97,7 +97,7 @@ const HEADER_HTML = `<header class="site-header">
   <div class="wrap">
     <a href="/index.html" class="logo logo-wrap">
       <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
-      <span class="logo-text">IL <span class="accent">MOTONAUTA</span></span>
+      <span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span>
     </a>
     <nav class="nav-links">
       <a href="/index.html">Rotte</a>
