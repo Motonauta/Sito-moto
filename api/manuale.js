@@ -62,6 +62,18 @@ const FOOTER_HTML = `<footer class="site-footer">
 <script src="/script.js"></script>`;
 
 const STYLE = `<style>
+  /* stesso sistema di base delle altre pagine già fatte: grafite
+     freddo, doppio filo rosso/blu sotto l'header */
+  :root{
+    --racing-blue:#1E5FAE;
+    --asphalt:#15171B;
+    --asphalt-2:#1D2126;
+  }
+  .site-header{
+    background:rgba(21,23,27,0.92);
+    border-bottom:3px solid var(--rust);
+    box-shadow:0 3px 0 0 var(--racing-blue);
+  }
   .manuale-meta{
     margin-top:14px; font-family:var(--font-mono); font-size:0.8rem; color:var(--cream-dim);
   }

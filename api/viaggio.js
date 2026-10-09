@@ -226,6 +226,39 @@ ${HEAD_COMMON}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
+  /* stesso sistema di base delle altre pagine già fatte: grafite
+     freddo, doppio filo rosso/blu sotto l'header, bottone pieno con
+     freccia cerchiata in hover. Niente sweep diagonale: qui l'hero e
+     il resto della pagina condividono la stessa unica sezione, un
+     effetto pensato per un hero corto stonerebbe su tutta l'altezza */
+  :root{
+    --racing-blue:#1E5FAE;
+    --asphalt:#15171B;
+    --asphalt-2:#1D2126;
+  }
+  .site-header{
+    background:rgba(21,23,27,0.92);
+    border-bottom:3px solid var(--rust);
+    box-shadow:0 3px 0 0 var(--racing-blue);
+  }
+  .btn.solid{
+    position:relative;
+    padding:14px 54px 14px 24px;
+    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+  }
+  .btn.solid::after{
+    content:"→";
+    position:absolute; right:10px; top:50%;
+    transform:translateY(-50%);
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.18);
+    font-size:0.9rem;
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+  }
+  .btn.solid:hover{ transform:translateY(-2px); }
+  .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+
   .viaggio-photo{
     position:relative; aspect-ratio:16/9; overflow:hidden; margin-top:36px;
     border:1px solid rgba(30,95,174,0.45); max-width:900px;
