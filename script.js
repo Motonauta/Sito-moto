@@ -510,7 +510,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // presenti nella pagina corrente
   (function initSiteSearch(){
     const headerWrap = document.querySelector(".site-header .wrap");
-    if (!headerWrap) return;
+    // niente ricerca nell'header semplificato dell'area riservata (lì non
+    // c'è la nav pubblica, solo il pulsante "Torna al sito")
+    if (!headerWrap || !headerWrap.querySelector(".nav-links")) return;
 
     const trigger = document.createElement("button");
     trigger.id = "site-search-trigger";

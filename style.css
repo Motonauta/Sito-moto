@@ -45,10 +45,11 @@ body{
      opposti, fissi rispetto alla finestra (non scorrono con la pagina),
      molto tenui per non intaccare la leggibilità del testo sopra */
   background:
-    radial-gradient(ellipse 900px 700px at 8% -8%, rgba(193,39,45,0.14), transparent 60%),
-    radial-gradient(ellipse 900px 700px at 94% 108%, rgba(30,95,174,0.14), transparent 60%),
+    radial-gradient(ellipse 1100px 900px at 10% -10%, rgba(193,39,45,0.24), transparent 65%),
+    radial-gradient(ellipse 1100px 900px at 92% 108%, rgba(30,95,174,0.24), transparent 65%),
+    radial-gradient(ellipse 1500px 1100px at 50% 40%, rgba(193,39,45,0.05), transparent 72%),
     var(--asphalt);
-  background-attachment:fixed, fixed, fixed;
+  background-attachment:fixed, fixed, fixed, fixed;
   color:var(--cream);
   font-family:var(--font-body);
   line-height:1.6;
