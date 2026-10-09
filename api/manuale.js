@@ -67,7 +67,7 @@ const STYLE = `<style>
   }
   .manuale-photo{
     position:relative; aspect-ratio:16/9; overflow:hidden; margin-top:36px;
-    border:1px solid rgba(217,164,65,0.45); max-width:900px;
+    border:1px solid rgba(30,95,174,0.45); max-width:900px;
   }
   .manuale-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
   .manuale-content{ margin-top:32px; max-width:720px; }
@@ -128,7 +128,7 @@ const STYLE = `<style>
   }
   .manuale-correlati-card:hover{ border-color:var(--rust); transform:translateY(-4px); }
   .manuale-correlati-photo{
-    aspect-ratio:16/9; background:linear-gradient(155deg, rgba(217,164,65,0.18) 0%, rgba(193,80,46,0.18) 100%);
+    aspect-ratio:16/9; background:linear-gradient(155deg, rgba(30,95,174,0.18) 0%, rgba(193,39,45,0.18) 100%);
     overflow:hidden; display:flex; align-items:center; justify-content:center;
   }
   .manuale-correlati-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
