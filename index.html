@@ -754,6 +754,20 @@
 <script src="data/viaggi-data.js"></script>
 <script src="data/manuale-data.js"></script>
 <script>
+(async function initViaggiHome(){
+  // Itinerari/Miniviaggi/Viaggi da ricordare non sono più fissi nel file
+  // data/viaggi-data.js: quello resta solo come dati di partenza/fallback,
+  // la versione vera e aggiornabile dall'area riservata vive su Redis.
+  // Qui sovrascriviamo le liste con quelle live prima di usarle — tutto il
+  // resto di questo script (filtri, "dove vado oggi", ecc.) resta invariato,
+  // parte semplicemente un attimo dopo invece che subito.
+  try {
+    const res = await fetch('/api/viaggio?action=list');
+    if (res.ok) Object.assign(window.VIAGGI_DATA, await res.json());
+  } catch (err) {
+    console.error('Non riesco a caricare i dati live degli itinerari, uso quelli di partenza', err);
+  }
+
   const { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE } = window.VIAGGI_DATA;
 
   const geocodeCache = {};
@@ -1355,6 +1369,7 @@
       ultimiArticoliGrid.appendChild(card);
     });
   }
+})();
 </script>
 
 <script src="script.js"></script>

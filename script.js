@@ -1,6 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // contatore "nostro" per le statistiche in area riservata (non Google
+  // Analytics): un solo numero per pagina, niente da configurare. admin.html
+  // resta fuori di proposito, come per Analytics (vedi CLAUDE.md).
+  (function trackPageview(){
+    const path = location.pathname;
+    let page = null;
+    if (path === "/" || /\/index\.html$/.test(path)) page = "index";
+    else if (/\/viaggi\/[^/]+\/?$/.test(path)) page = "viaggio-dettaglio";
+    else if (/\/manuale\/[^/]+\/?$/.test(path)) page = "manuale-dettaglio";
+    else {
+      const match = path.match(/\/([a-z]+)\.html$/);
+      if (match && match[1] !== "admin") page = match[1];
+    }
+    if (!page) return;
+    fetch("/api/stats?action=track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ page }),
+    }).catch(() => {});
+  })();
+
   // parallasse leggero sulla foto hero, durante lo scroll
   const heroParallax = document.querySelector(".hero-parallax");
   if (heroParallax && !prefersReducedMotion) {

@@ -836,6 +836,12 @@
   }
 
   function saveNostromoHistoryEntry(tool, label, params){
+    fetch("/api/stats?action=track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tool }),
+    }).catch(() => {});
+
     const history = loadNostromoHistory();
     history.unshift({
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,

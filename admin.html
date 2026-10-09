@@ -306,6 +306,91 @@
   </div>
 </section>
 
+<section id="panel-viaggi" style="display:none;">
+  <div class="wrap">
+    <p class="marker">Itinerari del sito</p>
+    <h2>Itinerari, miniviaggi e viaggi da ricordare</h2>
+    <p style="margin-top:14px;">Aggiungi, modifica o elimina le voci che compaiono in home e nelle pagine singole — non serve più chiedere a Claude di modificare il codice.</p>
+
+    <div class="contact-card" style="margin-top:28px;">
+      <button class="admin-btn outline" onclick="loadViaggi()">Aggiorna elenco</button>
+      <div id="viaggi-status" class="status-list"></div>
+      <div id="viaggi-categorie"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="panel-viaggi-form" style="display:none;">
+  <div class="wrap">
+    <p class="marker" id="viaggi-form-marker">Nuovo itinerario</p>
+    <h2 id="viaggi-form-title">Aggiungi</h2>
+
+    <div class="contact-card" style="margin-top:28px; max-width:760px;">
+      <input type="hidden" id="vf-categoria">
+      <input type="hidden" id="vf-index">
+
+      <label class="admin-label">Titolo</label>
+      <input type="text" id="vf-titolo" class="admin-input">
+
+      <label class="admin-label">Zona</label>
+      <input type="text" id="vf-zona" class="admin-input">
+
+      <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:220px;">
+          <label class="admin-label">Km mostrati (es. "circa 90 km" o "3 giorni consigliati")</label>
+          <input type="text" id="vf-km" class="admin-input">
+        </div>
+        <div style="flex:1; min-width:220px;">
+          <label class="admin-label">Km numero (solo per "Dove vado oggi?" — lascia vuoto per un mini viaggio/viaggio di più giorni)</label>
+          <input type="number" id="vf-kmnum" class="admin-input">
+        </div>
+      </div>
+
+      <label class="admin-label">Comune per il meteo</label>
+      <input type="text" id="vf-meteoplace" class="admin-input">
+
+      <label class="admin-label">Foto (URL immagine — Wikipedia o una già caricata in galleria)</label>
+      <input type="text" id="vf-foto" class="admin-input" placeholder="https://...">
+
+      <label class="admin-label">Descrizione (lascia una riga vuota tra un paragrafo e l'altro)</label>
+      <textarea id="vf-desc" class="admin-input" rows="8" style="resize:vertical;"></textarea>
+
+      <label class="admin-label" style="margin-top:6px;">Tappe (ognuna con un link a Maps)</label>
+      <div id="vf-tappe"></div>
+      <button type="button" class="admin-btn outline" style="margin-top:10px; padding:10px 18px; font-size:0.74rem;" onclick="addTappaRow()">+ Aggiungi tappa</button>
+
+      <div style="display:flex; gap:12px; margin-top:28px; flex-wrap:wrap;">
+        <button class="admin-btn" onclick="saveViaggio()">Salva</button>
+        <button class="admin-btn outline" onclick="closeViaggioForm()">Annulla</button>
+      </div>
+      <div id="viaggi-form-status" class="status-list"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="panel-stats" style="display:none;">
+  <div class="wrap">
+    <p class="marker">Numeri del sito</p>
+    <h2>Statistiche</h2>
+    <p style="margin-top:14px;">Contatore nostro, non Google Analytics: quante volte è stata vista ogni pagina e quante volte è stato usato ogni assistente di Nostromo, da quando questa funzione è online.</p>
+
+    <div class="contact-card" style="margin-top:28px;">
+      <button class="admin-btn outline" onclick="loadStats()">Aggiorna numeri</button>
+      <div id="stats-status" class="status-list"></div>
+
+      <div style="margin-top:28px;">
+        <p style="font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--gold); border-bottom:1px solid rgba(245,240,230,0.14); padding-bottom:8px;">Visite per pagina</p>
+        <div id="stats-pageviews" style="margin-top:14px;"></div>
+      </div>
+
+      <div style="margin-top:32px;">
+        <p style="font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--gold); border-bottom:1px solid rgba(245,240,230,0.14); padding-bottom:8px;">Utilizzo di Nostromo</p>
+        <div id="stats-nostromo" style="margin-top:14px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-social">
@@ -331,8 +416,12 @@
     document.getElementById("panel-manage").style.display = "block";
     document.getElementById("panel-ideas").style.display = "block";
     document.getElementById("panel-bike").style.display = "block";
+    document.getElementById("panel-viaggi").style.display = "block";
+    document.getElementById("panel-stats").style.display = "block";
     loadIdeas();
     loadKm();
+    loadViaggi();
+    loadStats();
     populateAlbumSelects();
   }
 
@@ -1057,6 +1146,210 @@
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
 
       statusEl.innerHTML = '<div class="ok">Salvato ✓ — visibile subito sulla pagina "La mia moto".</div>';
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">Errore: ${err.message}</div>`;
+    }
+  }
+
+  // -------- itinerari / miniviaggi / viaggi da ricordare --------
+  // escapeHtml è pensato per il testo (es. <p>${escapeHtml(x)}</p>): qui
+  // serve anche dentro attributi value="...", dove una virgoletta non
+  // scappata romperebbe l'HTML — da qui questa variante in più.
+  function escapeAttr(str){
+    return escapeHtml(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  const VIAGGI_CATEGORIE_LABELS = { ITINERARI: "Itinerari", MINIVIAGGI: "Miniviaggi", VIAGGI_RICORDARE: "Viaggi da ricordare" };
+  let viaggiDataCache = null;
+
+  async function loadViaggi(){
+    const statusEl = document.getElementById("viaggi-status");
+    const container = document.getElementById("viaggi-categorie");
+    statusEl.innerHTML = "<div>Carico gli itinerari...</div>";
+    container.innerHTML = "";
+
+    try{
+      const res = await fetch("/api/viaggio?action=list");
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+      viaggiDataCache = data;
+      statusEl.innerHTML = "";
+
+      Object.keys(VIAGGI_CATEGORIE_LABELS).forEach(categoria => {
+        const lista = data[categoria] || [];
+        const block = document.createElement("div");
+        block.style.cssText = "margin-top:28px;";
+        block.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(245,240,230,0.14); padding-bottom:8px; flex-wrap:wrap; gap:10px;">
+            <p style="font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--gold);">${VIAGGI_CATEGORIE_LABELS[categoria]} (${lista.length})</p>
+            <button class="admin-btn outline" style="padding:8px 16px; font-size:0.72rem;" onclick="openViaggioForm('${categoria}', null)">+ Aggiungi</button>
+          </div>
+        `;
+        const listWrap = document.createElement("div");
+        lista.forEach((it, index) => {
+          const row = document.createElement("div");
+          row.style.cssText = "display:flex; justify-content:space-between; align-items:center; gap:12px; border-bottom:1px solid rgba(245,240,230,0.1); padding:12px 0; flex-wrap:wrap;";
+          row.innerHTML = `
+            <div>
+              <p style="color:var(--sand);">${escapeHtml(it.titolo)}</p>
+              <p style="font-family:var(--font-mono); font-size:0.72rem; color:var(--cream-dim);">${escapeHtml(it.zona)} — ${escapeHtml(it.km)}</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-shrink:0;">
+              <button class="admin-btn outline" style="padding:8px 14px; font-size:0.72rem;" onclick="openViaggioForm('${categoria}', ${index})">Modifica</button>
+              <button class="admin-btn danger" style="padding:8px 14px; font-size:0.72rem;" onclick="deleteViaggio('${categoria}', ${index}, this)">Elimina</button>
+            </div>
+          `;
+          listWrap.appendChild(row);
+        });
+        block.appendChild(listWrap);
+        container.appendChild(block);
+      });
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">Errore: ${err.message}</div>`;
+    }
+  }
+
+  function addTappaRow(t){
+    t = t || { nome: "", query: "", label: "", fun: "" };
+    const row = document.createElement("div");
+    row.className = "vf-tappa-row";
+    row.style.cssText = "display:flex; gap:8px; margin-top:8px; align-items:flex-start; flex-wrap:wrap;";
+    row.innerHTML = `
+      <input type="text" placeholder="Nome (es. Ariccia)" class="admin-input vf-tappa-nome" style="flex:1; min-width:140px; margin-bottom:0;" value="${escapeAttr(t.nome)}">
+      <input type="text" placeholder="Query Maps (es. Ariccia RM)" class="admin-input vf-tappa-query" style="flex:1; min-width:140px; margin-bottom:0;" value="${escapeAttr(t.query)}">
+      <input type="text" placeholder="Cosa vedere" class="admin-input vf-tappa-label" style="flex:1; min-width:140px; margin-bottom:0;" value="${escapeAttr(t.label)}">
+      <input type="text" placeholder="Curiosità/tono scherzoso" class="admin-input vf-tappa-fun" style="flex:1; min-width:140px; margin-bottom:0;" value="${escapeAttr(t.fun)}">
+      <button type="button" class="admin-btn danger" style="padding:10px 14px;" onclick="this.closest('.vf-tappa-row').remove()">×</button>
+    `;
+    document.getElementById("vf-tappe").appendChild(row);
+  }
+
+  function openViaggioForm(categoria, index){
+    document.getElementById("vf-categoria").value = categoria;
+    document.getElementById("vf-index").value = index === null ? "" : index;
+    document.getElementById("vf-tappe").innerHTML = "";
+    document.getElementById("viaggi-form-status").innerHTML = "";
+
+    const it = (index !== null && viaggiDataCache) ? viaggiDataCache[categoria][index] : null;
+    document.getElementById("viaggi-form-title").textContent = it ? "Modifica" : "Aggiungi";
+    document.getElementById("viaggi-form-marker").textContent = VIAGGI_CATEGORIE_LABELS[categoria];
+    document.getElementById("vf-titolo").value = it ? it.titolo : "";
+    document.getElementById("vf-zona").value = it ? it.zona : "";
+    document.getElementById("vf-km").value = it ? it.km : "";
+    document.getElementById("vf-kmnum").value = (it && it.kmNum != null) ? it.kmNum : "";
+    document.getElementById("vf-meteoplace").value = it ? it.meteoPlace : "";
+    document.getElementById("vf-foto").value = it ? it.foto : "";
+    document.getElementById("vf-desc").value = it ? it.desc : "";
+
+    if(it && it.tappe && it.tappe.length){
+      it.tappe.forEach(t => addTappaRow(t));
+    } else {
+      addTappaRow();
+    }
+
+    const formPanel = document.getElementById("panel-viaggi-form");
+    formPanel.style.display = "block";
+    formPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function closeViaggioForm(){
+    document.getElementById("panel-viaggi-form").style.display = "none";
+  }
+
+  async function saveViaggio(){
+    const statusEl = document.getElementById("viaggi-form-status");
+    const categoria = document.getElementById("vf-categoria").value;
+    const indexVal = document.getElementById("vf-index").value;
+    const tappe = Array.from(document.querySelectorAll("#vf-tappe .vf-tappa-row")).map(row => ({
+      nome: row.querySelector(".vf-tappa-nome").value.trim(),
+      query: row.querySelector(".vf-tappa-query").value.trim(),
+      label: row.querySelector(".vf-tappa-label").value.trim(),
+      fun: row.querySelector(".vf-tappa-fun").value.trim(),
+    }));
+    const item = {
+      titolo: document.getElementById("vf-titolo").value.trim(),
+      zona: document.getElementById("vf-zona").value.trim(),
+      km: document.getElementById("vf-km").value.trim(),
+      kmNum: document.getElementById("vf-kmnum").value.trim(),
+      meteoPlace: document.getElementById("vf-meteoplace").value.trim(),
+      foto: document.getElementById("vf-foto").value.trim(),
+      desc: document.getElementById("vf-desc").value.trim(),
+      tappe,
+    };
+
+    statusEl.innerHTML = "<div>Salvo...</div>";
+    try{
+      const res = await fetch("/api/viaggio?action=save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoria, index: indexVal === "" ? null : Number(indexVal), item })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+      statusEl.innerHTML = '<div class="ok">Salvato ✓</div>';
+      closeViaggioForm();
+      loadViaggi();
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">Errore: ${err.message}</div>`;
+    }
+  }
+
+  async function deleteViaggio(categoria, index, btnEl){
+    if(!confirm("Eliminare questa voce? Non si può annullare.")) return;
+    try{
+      const res = await fetch("/api/viaggio?action=delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoria, index })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+      loadViaggi();
+    } catch(err){
+      alert("Errore durante l'eliminazione: " + err.message);
+    }
+  }
+
+  // -------- statistiche --------
+  const STATS_PAGINE_LABELS = {
+    "index": "Rotte (home)", "nostromo": "Nostromo", "manuale": "Manuale di bordo",
+    "ilmotonauta": "Il Motonauta", "sponsor": "Alleati", "galleria": "Diario di bordo",
+    "contatti": "Canale aperto", "privacy": "Privacy & Cookie",
+    "viaggio-dettaglio": "Pagine singole viaggio", "manuale-dettaglio": "Pagine singole guida",
+  };
+  const STATS_NOSTROMO_LABELS = {
+    viaggio: "Assistente di viaggio", valigia: "Assistente di valigia", rotta: "Assistente di rotta",
+  };
+
+  function renderStatsBars(container, counts, labels){
+    const entries = Object.keys(labels)
+      .map(key => ({ key, label: labels[key], count: Number(counts[key] || 0) }))
+      .sort((a, b) => b.count - a.count);
+    const max = Math.max(1, ...entries.map(e => e.count));
+
+    container.innerHTML = entries.map(e => `
+      <div style="margin-top:14px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.88rem; color:var(--cream-dim);">
+          <span>${escapeHtml(e.label)}</span>
+          <span style="font-family:var(--font-mono); color:var(--sand);">${e.count}</span>
+        </div>
+        <div style="margin-top:6px; height:8px; background:var(--asphalt); border-radius:4px; overflow:hidden;">
+          <div style="height:100%; width:${(e.count / max * 100).toFixed(1)}%; background:var(--rust); transition:width .4s ease;"></div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  async function loadStats(){
+    const statusEl = document.getElementById("stats-status");
+    statusEl.innerHTML = "<div>Carico le statistiche...</div>";
+    try{
+      const res = await fetch("/api/stats?action=summary");
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
+      statusEl.innerHTML = "";
+      renderStatsBars(document.getElementById("stats-pageviews"), data.pageviews || {}, STATS_PAGINE_LABELS);
+      renderStatsBars(document.getElementById("stats-nostromo"), data.nostromo || {}, STATS_NOSTROMO_LABELS);
     } catch(err){
       statusEl.innerHTML = `<div class="err">Errore: ${err.message}</div>`;
     }
