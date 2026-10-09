@@ -18,28 +18,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Prova v7: su richiesta di Angelo, un quarto colore al posto del
-     sabbia caldo (percepito come "marroncino"). Scelto un bianco/grigio
-     chiaro morbido, non il grigio freddo sterile della prima prova: qui
-     il rosso intorno dà già calore, quindi un neutro più pulito non
-     legge come sterile. È anche il colore reale della scritta "IL
-     MOTONAUTA" sul patch — rosso/blu/bianco è oltretutto la terna
-     classica delle livree da corsa. */
+  /* v9: un solo accento (rosso) + neutri del sito, niente scritta logo
+     in gradiente (illeggibile su testo piccolo) e via il "gold" scurito
+     che sembrava un rosso sbagliato — torna il gold caldo di sempre. */
   :root{
     --rust:#C23B35;
-    --gold:#8B342E;
-    --sand:#EAE7E0;
-  }
-  .logo .accent{
-    background:linear-gradient(100deg, #C23B35, #3B5BA5);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
+    --sand:#F2EEE7;
   }
 
-  /* Prova v8: la griglia 3x2 di schede tutte uguali era il problema vero,
-     non il colore — è letteralmente il layout più generico che esista
-     per una fila di card. Sostituita con una griglia "bento" asimmetrica:
-     uno sponsor in evidenza più grande, gli altri attorno a dimensioni
-     diverse, più veri stati hover (prima c'era solo lo zoom del logo). */
   .sponsor-bento{
     display:grid;
     grid-template-columns:repeat(3, 1fr);
@@ -47,16 +33,30 @@
       "bep bep allianz"
       "bep bep eicma"
       "easy carp foto";
-    gap:1px;
-    background:rgba(245,240,230,0.14);
+    gap:22px;
   }
+  /* card "a doppia cornice": guscio sottile + pannello interno con
+     il proprio sfondo e un filo di luce in alto, invece di un div piatto */
   .sponsor-bento > div{
-    background:var(--asphalt);
-    transition:background .25s ease, transform .25s ease;
+    position:relative;
+    border:1px solid rgba(245,240,230,0.1);
+    border-radius:24px;
+    padding:7px;
+    transition:transform .5s cubic-bezier(.22,.9,.32,1), border-color .5s cubic-bezier(.22,.9,.32,1), box-shadow .5s cubic-bezier(.22,.9,.32,1);
   }
-  .sponsor-bento > div:hover{
+  .sponsor-bento > div::before{
+    content:"";
+    position:absolute; inset:7px;
     background:var(--asphalt-2);
-    transform:translateY(-4px);
+    border-radius:18px;
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.06);
+    z-index:0;
+  }
+  .sponsor-bento > div > *{ position:relative; z-index:1; }
+  .sponsor-bento > div:hover{
+    transform:translateY(-6px);
+    border-color:rgba(193,80,46,0.5);
+    box-shadow:0 28px 50px -26px rgba(0,0,0,0.6);
   }
   .sponsor-bento > div:nth-child(1){ grid-area:bep; display:flex; flex-direction:column; justify-content:center; }
   .sponsor-bento > div:nth-child(1) h3{ font-size:1.5rem !important; }
@@ -66,10 +66,27 @@
   .sponsor-bento > div:nth-child(4){ grid-area:carp; }
   .sponsor-bento > div:nth-child(5){ grid-area:eicma; }
   .sponsor-bento > div:nth-child(6){ grid-area:foto; }
-  .btn.solid{ transition:background .2s ease, color .2s ease, transform .2s ease; }
+
+  .btn.solid{
+    position:relative;
+    padding:14px 54px 14px 24px;
+    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+  }
+  .btn.solid::after{
+    content:"→";
+    position:absolute; right:10px; top:50%;
+    transform:translateY(-50%);
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.18);
+    font-size:0.9rem;
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+  }
   .btn.solid:hover{ transform:translateY(-2px); }
+  .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+
   @media (max-width:860px){
-    .sponsor-bento{ grid-template-columns:1fr; grid-template-areas:none; }
+    .sponsor-bento{ grid-template-columns:1fr; grid-template-areas:none; gap:16px; }
     .sponsor-bento > div{ grid-area:auto !important; }
     .sponsor-bento > div:nth-child(1) h3{ font-size:1.15rem !important; }
     .sponsor-bento > div:nth-child(1) .sponsor-logo-link{ height:64px; }
