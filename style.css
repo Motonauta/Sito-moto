@@ -4,8 +4,12 @@
 :root{
   --asphalt: #1B1A17;
   --asphalt-2: #232019;
-  --rust: #C1502E;
-  --rust-dim: #8f3a20;
+  /* stesso rosso esatto usato per "MOTO" nel logo e per l'anello
+     bicolore — un solo rosso in tutto il sito, nessuna variante diversa
+     (--rust-dim non è usato da nessuna pagina, ma lo teniamo identico
+     per sicurezza) */
+  --rust: #C1272D;
+  --rust-dim: #C1272D;
   /* "--gold" è rimasto il nome storico della variabile, ma dal
      restyling rosso/blu del logo il suo valore è diventato un blu
      (stessa famiglia del logo, schiarito per restare leggibile come
