@@ -291,7 +291,12 @@ p{color:var(--cream-dim); max-width:60ch;}
    stesso piano. Hover e focus-within lo aprono su desktop senza JS; il
    click (gestito in script.js) serve da touch/tastiera e su mobile,
    dove il sottomenu diventa una lista verticale sempre nel flusso. */
-.nav-dropdown{ position:relative; }
+/* padding-bottom (compensato dal margin-bottom negativo, che non altera lo
+   spazio occupato nella riga della nav) allunga l'area "attiva" per :hover
+   fino a toccare il sottomenu: senza, il vuoto visivo tra il pulsante e il
+   menu non apparteneva a nessun elemento, e passandoci sopra con il mouse
+   si perdeva l'hover prima di arrivare alle voci (bisognava cliccare). */
+.nav-dropdown{ position:relative; padding-bottom:18px; margin-bottom:-18px; }
 .nav-dropdown-toggle{
   display:flex; align-items:center; gap:6px;
   background:none; border:none; padding:0 0 4px; margin:0;
@@ -324,7 +329,7 @@ p{color:var(--cream-dim); max-width:60ch;}
 .nav-dropdown-toggle[aria-expanded="true"] .chevron{ transform:rotate(225deg) translateY(2px); }
 
 .nav-dropdown-menu{
-  position:absolute; top:calc(100% + 18px); left:50%;
+  position:absolute; top:100%; left:50%;
   transform:translateX(-50%) translateY(-6px);
   min-width:210px; display:flex; flex-direction:column; gap:2px;
   background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
@@ -387,7 +392,7 @@ p{color:var(--cream-dim); max-width:60ch;}
 
   /* sul mobile il sottomenu non è un popover ma una lista che si apre
      nel flusso, sotto il pulsante che la controlla */
-  .nav-dropdown{ width:100%; }
+  .nav-dropdown{ width:100%; padding-bottom:0; margin-bottom:0; }
   .nav-dropdown-toggle{
     width:100%; justify-content:space-between;
     padding:18px 0; border-bottom:var(--line);

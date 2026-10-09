@@ -327,7 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // filtro galleria per destinazione (delegato: funziona anche con pulsanti aggiunti dopo)
   const filtersContainer = document.querySelector(".filters");
-  const galleryGrid = document.querySelector(".gallery-grid");
+  const galleryGrid = document.getElementById("gallery-grid");
   let lightbox = null;
 
   function closeLightboxIfOpen(){
