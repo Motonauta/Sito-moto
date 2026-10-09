@@ -252,12 +252,12 @@ ${HEAD_COMMON}
     transform:translateY(-50%);
     width:26px; height:26px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    background:rgba(0,0,0,0.18);
+    background:rgba(8,10,18,0.18);
     font-size:0.9rem;
     transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
   }
   .btn.solid:hover{ transform:translateY(-2px); }
-  .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+  .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(8,10,18,0.28); }
 
   .viaggio-photo{
     position:relative; aspect-ratio:16/9; overflow:hidden; margin-top:36px;
@@ -288,9 +288,18 @@ ${HEAD_COMMON}
   .viaggio-stops a.stop-link::before{ content:"📍"; font-size:0.9em; flex-shrink:0; }
   .viaggio-stops .fun{ margin-top:6px; font-size:0.92rem; color:var(--cream-dim); font-style:italic; }
   .nostromo-cta{
-    margin-top:44px; max-width:720px; background:var(--asphalt-2);
-    border:1px solid rgba(245,240,230,0.14); padding:28px 30px;
+    position:relative;
+    margin-top:44px; max-width:720px;
+    border:1px solid rgba(245,240,230,0.1); border-radius:24px; padding:28px 30px;
   }
+  .nostromo-cta::before{
+    content:""; position:absolute; inset:7px;
+    background:var(--asphalt-2); border-radius:18px;
+    border-top:3px solid var(--racing-blue);
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.06);
+    z-index:0;
+  }
+  .nostromo-cta > *{ position:relative; z-index:1; }
   .nostromo-cta-buttons{ display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
   .viaggio-breadcrumb{
     margin-top:18px; font-family:var(--font-mono); font-size:0.76rem; color:var(--cream-dim);
@@ -314,10 +323,7 @@ ${HEAD_COMMON}
     height:340px; width:100%; border:1px solid rgba(245,240,230,0.16); background:var(--asphalt-2);
     display:flex; align-items:center; justify-content:center;
   }
-  .route-preview-loading{
-    font-family:var(--font-mono); font-size:0.82rem; color:var(--cream-dim);
-    text-transform:uppercase; letter-spacing:0.04em;
-  }
+  .route-preview-skeleton{ width:100%; height:100%; }
   .viaggio-route-note{ margin-top:12px; font-size:0.82rem; color:var(--cream-dim); }
   .leaflet-popup-content-wrapper{
     background:var(--asphalt-2); color:var(--cream); border-radius:0; border:1px solid rgba(245,240,230,0.2);
@@ -405,7 +411,7 @@ ${HEADER_HTML}
 
     <div class="viaggio-route-preview">
       <p class="label">Anteprima del percorso</p>
-      <div id="route-preview-map"><p class="route-preview-loading">Calcolo il percorso…</p></div>
+      <div id="route-preview-map"><div class="route-preview-skeleton skeleton" aria-label="Calcolo il percorso…"></div></div>
       <p class="viaggio-route-note" id="route-preview-caption">
         Percorso generato in automatico sulle tappe qui sopra: è indicativo, verifica sempre il tragitto reale su Maps o Waze prima di partire.
       </p>
@@ -571,15 +577,15 @@ ${FOOTER_HTML}
       // Linea con "glow" (una copia più larga e sfocata sotto) e tratteggio
       // animato sopra, per dare l'idea di un percorso "in movimento" come
       // nell'anteprima di navigazione di un vero navigatore.
-      L.polyline(latlngs, { color: '#D9A441', weight: 10, opacity: 0.35, className: 'route-line-glow' }).addTo(map);
-      const line = L.polyline(latlngs, { color: '#D9A441', weight: 4, opacity: 0.95, className: 'route-line-main' }).addTo(map);
+      L.polyline(latlngs, { color: '#1E5FAE', weight: 10, opacity: 0.35, className: 'route-line-glow' }).addTo(map);
+      const line = L.polyline(latlngs, { color: '#1E5FAE', weight: 4, opacity: 0.95, className: 'route-line-main' }).addTo(map);
 
       // Marker differenziati: partenza in verde, arrivo in rosso, tappe
-      // intermedie in oro (stesso colore della linea).
+      // intermedie in blu (stesso colore della linea).
       coords.forEach(function(c, i){
         const isStart = i === 0;
         const isEnd = i === coords.length - 1;
-        const fillColor = isStart ? '#4F7038' : (isEnd ? '#C1272D' : '#D9A441');
+        const fillColor = isStart ? '#4F7038' : (isEnd ? '#C1272D' : '#1E5FAE');
         const label = tappeOk[i].nome + (isStart ? ' (partenza)' : isEnd ? ' (arrivo)' : '');
         L.circleMarker([c.lat, c.lon], {
           radius: (isStart || isEnd) ? 8 : 6, fillColor: fillColor, color: '#1B1A17', weight: 2, fillOpacity: 1
