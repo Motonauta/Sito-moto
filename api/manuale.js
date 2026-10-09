@@ -71,8 +71,12 @@ const STYLE = `<style>
   }
   .site-header{
     background:rgba(21,23,27,0.92);
-    border-bottom:3px solid var(--rust);
-    box-shadow:0 3px 0 0 var(--racing-blue);
+    border-bottom:none;
+  }
+  .site-header::after{
+    content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px;
+    background:linear-gradient(90deg, var(--rust), var(--racing-blue));
+    pointer-events:none;
   }
   .manuale-meta{
     margin-top:14px; font-family:var(--font-mono); font-size:0.8rem; color:var(--cream-dim);
