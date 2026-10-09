@@ -546,7 +546,7 @@ ${FOOTER_HTML}
       coords.forEach(function(c, i){
         const isStart = i === 0;
         const isEnd = i === coords.length - 1;
-        const fillColor = isStart ? '#4F7038' : (isEnd ? '#C1502E' : '#D9A441');
+        const fillColor = isStart ? '#4F7038' : (isEnd ? '#C1272D' : '#D9A441');
         const label = tappeOk[i].nome + (isStart ? ' (partenza)' : isEnd ? ' (arrivo)' : '');
         L.circleMarker([c.lat, c.lon], {
           radius: (isStart || isEnd) ? 8 : 6, fillColor: fillColor, color: '#1B1A17', weight: 2, fillOpacity: 1
