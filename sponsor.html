@@ -18,24 +18,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* v9: un solo accento (rosso) + neutri del sito, niente scritta logo
-     in gradiente (illeggibile su testo piccolo) e via il "gold" scurito
-     che sembrava un rosso sbagliato — torna il gold caldo di sempre. */
+  /* v12: rosso e blu come protagonisti veri (su indicazione di Angelo,
+     riferimento Ducati/KTM/Dainese), ma con un motivo unico e ricorrente
+     — il doppio filo rosso+blu da livrea — invece di sparsi a caso. */
   :root{
     --rust:#C23B35;
     --sand:#F2EEE7;
-    /* via il nero-marrone "asfalto" di tutto il sito: qui un grafite
-       freddo, leggermente sul blu, che si abbina meglio a rosso+blu
-       e legge più "tecnico/corsa" che "vintage da cuoio". */
+    --racing-blue:#2B4C7E;
     --asphalt:#15171B;
     --asphalt-2:#1D2126;
   }
 
-  /* header in rosso logo, scritta tutta bianca invece del rosso su rosso */
+  /* doppio filo da livrea sotto l'header, ripreso in fondo pagina */
   .site-header{
-    background:rgba(194,59,53,0.92);
+    border-bottom:3px solid var(--rust);
+    box-shadow:0 3px 0 0 var(--racing-blue);
   }
-  .logo, .logo .accent{ color:#fff; }
+
+  /* sweep diagonale rosso+blu dietro al titolo, solo desktop */
+  section:first-of-type{ position:relative; overflow:hidden; }
+  section:first-of-type::before,
+  section:first-of-type::after{
+    content:""; position:absolute; top:-20%; height:160%;
+    transform:rotate(14deg); z-index:0; pointer-events:none;
+  }
+  section:first-of-type::before{ right:14%; width:140px; background:var(--rust); opacity:0.1; }
+  section:first-of-type::after{ right:6%; width:46px; background:var(--racing-blue); opacity:0.16; }
+  section:first-of-type .wrap{ position:relative; z-index:1; }
+  @media (max-width:780px){
+    section:first-of-type::before, section:first-of-type::after{ display:none; }
+  }
 
   .sponsor-bento{
     display:grid;
@@ -47,7 +59,8 @@
     gap:22px;
   }
   /* card "a doppia cornice": guscio sottile + pannello interno con
-     il proprio sfondo e un filo di luce in alto, invece di un div piatto */
+     il proprio sfondo e una barra colore in alto, rosso/blu alternati
+     card per card — qui il blu diventa presenza reale, non solo logo */
   .sponsor-bento > div{
     position:relative;
     border:1px solid rgba(245,240,230,0.1);
@@ -60,8 +73,14 @@
     position:absolute; inset:7px;
     background:var(--asphalt-2);
     border-radius:18px;
+    border-top:3px solid var(--rust);
     box-shadow:inset 0 1px 0 rgba(245,240,230,0.06);
     z-index:0;
+  }
+  .sponsor-bento > div:nth-child(2)::before,
+  .sponsor-bento > div:nth-child(4)::before,
+  .sponsor-bento > div:nth-child(6)::before{
+    border-top-color:var(--racing-blue);
   }
   .sponsor-bento > div > *{ position:relative; z-index:1; }
   .sponsor-bento > div:hover{
@@ -95,6 +114,13 @@
   }
   .btn.solid:hover{ transform:translateY(-2px); }
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+
+  /* stesso filo da livrea in cima al blocco finale, per "chiudere" la pagina */
+  .section-alt{ position:relative; }
+  .section-alt::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:5px;
+    background:linear-gradient(to bottom, var(--rust) 0 3px, var(--racing-blue) 3px 5px);
+  }
 
   @media (max-width:860px){
     .sponsor-bento{ grid-template-columns:1fr; grid-template-areas:none; gap:16px; }
