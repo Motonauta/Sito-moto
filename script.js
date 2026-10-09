@@ -251,6 +251,8 @@ document.addEventListener("DOMContentLoaded", () => {
       links.classList.remove("open");
       toggle.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
+      links.querySelectorAll(".nav-dropdown-menu.open").forEach(m => m.classList.remove("open"));
+      links.querySelectorAll('.nav-dropdown-toggle[aria-expanded="true"]').forEach(t => t.setAttribute("aria-expanded", "false"));
     };
 
     toggle.setAttribute("aria-expanded", "false");
@@ -284,6 +286,42 @@ document.addEventListener("DOMContentLoaded", () => {
     // chiude il menu se lo schermo torna largo (es. rotazione tablet)
     window.addEventListener("resize", () => {
       if (window.innerWidth > 780) closeMenu();
+    });
+  }
+
+  // Sottomenu a tendina della nav ("Viaggia con noi", "Il progetto"):
+  // su desktop si aprono anche al passaggio del mouse (solo CSS), questo
+  // gestisce il click/tocco (necessario su touch, dove l'hover non esiste)
+  // e la chiusura automatica degli altri sottomenu aperti.
+  const navDropdowns = document.querySelectorAll(".nav-dropdown");
+  if (navDropdowns.length) {
+    const closeDropdown = (dropdown) => {
+      dropdown.querySelector(".nav-dropdown-menu")?.classList.remove("open");
+      dropdown.querySelector(".nav-dropdown-toggle")?.setAttribute("aria-expanded", "false");
+    };
+    const closeAllDropdowns = (except) => {
+      navDropdowns.forEach(d => { if (d !== except) closeDropdown(d); });
+    };
+
+    navDropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector(".nav-dropdown-toggle");
+      const menu = dropdown.querySelector(".nav-dropdown-menu");
+      if (!toggle || !menu) return;
+
+      toggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = menu.classList.contains("open");
+        closeAllDropdowns(dropdown);
+        menu.classList.toggle("open", !isOpen);
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (![...navDropdowns].some(d => d.contains(e.target))) closeAllDropdowns();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeAllDropdowns();
     });
   }
 
