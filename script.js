@@ -24,6 +24,25 @@ document.addEventListener("DOMContentLoaded", () => {
     updateParallax();
   }
 
+  // logo in header: leggera inclinazione 3D verso il cursore
+  if (!prefersReducedMotion) {
+    const logoLink = document.querySelector(".logo");
+    if (logoLink) {
+      const maxTilt = 8;
+      logoLink.addEventListener("mousemove", (e) => {
+        const rect = logoLink.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        logoLink.style.setProperty("--tilt-x", `${px * maxTilt}deg`);
+        logoLink.style.setProperty("--tilt-y", `${py * -maxTilt}deg`);
+      });
+      logoLink.addEventListener("mouseleave", () => {
+        logoLink.style.setProperty("--tilt-x", "0deg");
+        logoLink.style.setProperty("--tilt-y", "0deg");
+      });
+    }
+  }
+
   // intro "accendi il motore" in home: appare solo una volta a sessione
   const ignitionOverlay = document.getElementById("ignition-overlay");
   if (ignitionOverlay) {

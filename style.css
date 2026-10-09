@@ -206,6 +206,7 @@ p{color:var(--cream-dim); max-width:60ch;}
 .site-header .wrap{
   display:flex; align-items:center; justify-content:space-between;
   padding-top:18px; padding-bottom:18px;
+  perspective:800px;
 }
 .logo{
   font-family:var(--font-display);
@@ -214,17 +215,17 @@ p{color:var(--cream-dim); max-width:60ch;}
   text-transform:uppercase;
   color:var(--cream);
   line-height:1;
+  --tilt-x:0deg;
+  --tilt-y:0deg;
+  transform:rotateX(var(--tilt-y)) rotateY(var(--tilt-x));
+  transition:transform .15s ease-out;
+  will-change:transform;
 }
 .logo .accent{color:var(--rust);}
 /* "MOTO" rosso + "NAUTA" blu, gli stessi colori dell'anello attorno
-   al logo — bordo scurissimo per dare spessore alla scritta. "IL" e
-   "MOTONAUTA" si spostano insieme come un unico blocco al passaggio
-   del mouse (per questo il gruppo di testo è un elemento a parte,
-   anche sulle pagine senza l'immagine del logo). */
-.logo .logo-text{
-  display:inline-block;
-  transition:transform .2s ease;
-}
+   al logo — bordo scurissimo per dare spessore alla scritta. Il logo
+   intero (anello + testo) si inclina leggermente verso il cursore
+   (script.js imposta --tilt-x/--tilt-y al passaggio del mouse). */
 .logo .accent-moto,
 .logo .accent-nauta{
   -webkit-text-stroke:0.4px rgba(0,0,0,0.55);
@@ -232,9 +233,6 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 .logo .accent-moto{color:#C1272D;}
 .logo .accent-nauta{color:#1E5FAE;}
-.logo:hover .logo-text{
-  transform:translateY(-2px) scale(1.05);
-}
 .logo-wrap .logo-text{ white-space:nowrap; }
 .nav-links{
   display:flex; gap:34px;
