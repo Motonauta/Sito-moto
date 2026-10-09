@@ -78,6 +78,21 @@ h1,h2,h3{
   line-height:1.05;
 }
 h2{font-size:clamp(1.9rem, 4vw, 2.8rem); color:var(--sand);}
+/* piccola firma rosso/blu sotto ogni titolo di pagina, stessi colori
+   del logo — un accento minimo e riutilizzabile ovunque, senza dover
+   rifare lo sfondo di ogni pagina */
+h1{
+  position:relative;
+  padding-bottom:20px;
+}
+h1::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:0;
+  width:64px; height:4px;
+  border-radius:2px;
+  background:linear-gradient(to right, #C1272D 50%, #1E5FAE 50%);
+}
 p{color:var(--cream-dim); max-width:60ch;}
 
 .btn{
