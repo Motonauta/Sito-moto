@@ -14,6 +14,49 @@
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
 <style>
+  /* stesso sistema di base delle altre pagine già fatte: grafite
+     freddo, doppio filo rosso/blu sotto l'header, sweep diagonale
+     dietro al titolo, bottone con freccia cerchiata in hover */
+  :root{
+    --racing-blue:#1E5FAE;
+    --asphalt:#15171B;
+    --asphalt-2:#1D2126;
+  }
+  .site-header{
+    background:rgba(21,23,27,0.92);
+    border-bottom:3px solid var(--rust);
+    box-shadow:0 3px 0 0 var(--racing-blue);
+  }
+  section:first-of-type{ position:relative; overflow:hidden; }
+  section:first-of-type::before,
+  section:first-of-type::after{
+    content:""; position:absolute; top:-20%; height:160%;
+    transform:rotate(14deg); z-index:0; pointer-events:none;
+  }
+  section:first-of-type::before{ right:14%; width:140px; background:var(--rust); opacity:0.1; }
+  section:first-of-type::after{ right:6%; width:46px; background:var(--racing-blue); opacity:0.16; }
+  section:first-of-type .wrap{ position:relative; z-index:1; }
+  @media (max-width:780px){
+    section:first-of-type::before, section:first-of-type::after{ display:none; }
+  }
+  .btn.solid{
+    position:relative;
+    padding:14px 54px 14px 24px;
+    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+  }
+  .btn.solid::after{
+    content:"→";
+    position:absolute; right:10px; top:50%;
+    transform:translateY(-50%);
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.18);
+    font-size:0.9rem;
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+  }
+  .btn.solid:hover{ transform:translateY(-2px); }
+  .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+
   .policy-section{ max-width:74ch; }
   .policy-section + .policy-section{ margin-top:52px; }
   .policy-section h2{ font-size:1.5rem; margin-bottom:16px; }
@@ -31,7 +74,10 @@
 
 <header class="site-header">
   <div class="wrap">
-    <a href="index.html" class="logo"><span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span></a>
+    <a href="index.html" class="logo logo-wrap">
+      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
+      <span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span>
+    </a>
     <nav class="nav-links">
       <a href="index.html">Rotte</a>
       <a href="nostromo.html">Nostromo</a>
