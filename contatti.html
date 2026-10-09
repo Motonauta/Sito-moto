@@ -18,10 +18,60 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  .contact-grid{
-    display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:rgba(245,240,230,0.14); margin-top:48px;
+  /* stesso sistema visivo di Alleati: grafite freddo, livrea rosso/blu
+     sotto l'header e in fondo pagina, sweep diagonale dietro al titolo,
+     card a doppia cornice con barra colore alternata — vedi sponsor.html */
+  :root{
+    --racing-blue:#2B4C7E;
+    --asphalt:#15171B;
+    --asphalt-2:#1D2126;
   }
-  .contact-card{background:var(--asphalt); padding:36px;}
+
+  .site-header{
+    background:rgba(21,23,27,0.92);
+    border-bottom:3px solid var(--rust);
+    box-shadow:0 3px 0 0 var(--racing-blue);
+  }
+
+  section:first-of-type{ position:relative; overflow:hidden; }
+  section:first-of-type::before,
+  section:first-of-type::after{
+    content:""; position:absolute; top:-20%; height:160%;
+    transform:rotate(14deg); z-index:0; pointer-events:none;
+  }
+  section:first-of-type::before{ right:14%; width:140px; background:var(--rust); opacity:0.1; }
+  section:first-of-type::after{ right:6%; width:46px; background:var(--racing-blue); opacity:0.16; }
+  section:first-of-type .wrap{ position:relative; z-index:1; }
+  @media (max-width:780px){
+    section:first-of-type::before, section:first-of-type::after{ display:none; }
+  }
+
+  .contact-grid{
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:22px; margin-top:48px;
+  }
+  .contact-card{
+    position:relative;
+    border:1px solid rgba(245,240,230,0.1);
+    border-radius:24px;
+    padding:36px;
+    transition:transform .5s cubic-bezier(.22,.9,.32,1), border-color .5s cubic-bezier(.22,.9,.32,1), box-shadow .5s cubic-bezier(.22,.9,.32,1);
+  }
+  .contact-card::before{
+    content:"";
+    position:absolute; inset:7px;
+    background:var(--asphalt-2);
+    border-radius:18px;
+    border-top:3px solid var(--rust);
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.06);
+    z-index:0;
+  }
+  .contact-card:nth-child(2)::before{ border-top-color:var(--racing-blue); }
+  .contact-card > *{ position:relative; z-index:1; }
+  .contact-card:hover{
+    transform:translateY(-6px);
+    border-color:rgba(193,39,45,0.5);
+    box-shadow:0 28px 50px -26px rgba(0,0,0,0.6);
+  }
   .contact-card a{
     display:flex; justify-content:space-between; align-items:center;
     padding:14px 0; border-bottom:var(--line); font-size:0.98rem; color:var(--cream-dim);
@@ -32,6 +82,31 @@
   .contact-card a .handle{font-family:var(--font-mono); font-size:0.8rem; color:var(--cream-dim);}
   @media (max-width:980px){ .contact-grid{grid-template-columns:1fr 1fr;} }
   @media (max-width:600px){ .contact-grid{grid-template-columns:1fr;} }
+
+  .btn.solid{
+    position:relative;
+    padding:14px 54px 14px 24px;
+    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+  }
+  .btn.solid::after{
+    content:"→";
+    position:absolute; right:10px; top:50%;
+    transform:translateY(-50%);
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.18);
+    font-size:0.9rem;
+    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+  }
+  .btn.solid:hover{ transform:translateY(-2px); }
+  .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+
+  /* stesso filo da livrea in cima al blocco finale, per "chiudere" la pagina */
+  .section-alt{ position:relative; }
+  .section-alt::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:5px;
+    background:linear-gradient(to bottom, var(--rust) 0 3px, var(--racing-blue) 3px 5px);
+  }
 </style>
 <script src="cookie-consent.js" defer></script>
 </head>
