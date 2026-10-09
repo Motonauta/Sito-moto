@@ -55,10 +55,15 @@ ul{list-style:none;}
 }
 
 /* eyebrow / mile-marker label -------------------------------------- */
+/* Font display (Oswald) invece di mono: il mono resta solo per i dati
+   veri (prezzi, coordinate, codici) come da sito — l'eyebrow è un
+   testo editoriale, non un dato, e nella texture mono accanto al
+   titolo grande condensato stonava. */
 .marker{
-  font-family:var(--font-mono);
-  font-size:0.72rem;
-  letter-spacing:0.14em;
+  font-family:var(--font-display);
+  font-size:0.78rem;
+  font-weight:600;
+  letter-spacing:0.1em;
   text-transform:uppercase;
   color:var(--gold);
   display:inline-flex;
