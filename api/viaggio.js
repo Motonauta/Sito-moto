@@ -102,14 +102,14 @@ const HEADER_HTML = `<header class="site-header">
     <nav class="nav-links">
       <a href="/index.html">Rotte</a>
       <div class="nav-dropdown">
-        <button type="button" class="nav-dropdown-toggle" aria-expanded="false">Viaggia con noi<span class="chevron"></span></button>
+        <button type="button" class="nav-dropdown-toggle" aria-expanded="false">Strumenti di viaggio<span class="chevron"></span></button>
         <div class="nav-dropdown-menu">
           <a href="/nostromo.html">Nostromo</a>
           <a href="/manuale.html">Manuale di bordo</a>
         </div>
       </div>
       <div class="nav-dropdown">
-        <button type="button" class="nav-dropdown-toggle" aria-expanded="false">Il progetto<span class="chevron"></span></button>
+        <button type="button" class="nav-dropdown-toggle" aria-expanded="false">Chi sono<span class="chevron"></span></button>
         <div class="nav-dropdown-menu">
           <a href="/ilmotonauta.html">Il Motonauta</a>
           <a href="/sponsor.html">Alleati</a>

@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Sottomenu a tendina della nav ("Viaggia con noi", "Il progetto"):
+  // Sottomenu a tendina della nav ("Strumenti di viaggio", "Chi sono"):
   // su desktop si aprono anche al passaggio del mouse (solo CSS), questo
   // gestisce il click/tocco (necessario su touch, dove l'hover non esiste)
   // e la chiusura automatica degli altri sottomenu aperti.
