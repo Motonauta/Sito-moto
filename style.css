@@ -286,6 +286,70 @@ p{color:var(--cream-dim); max-width:60ch;}
 .nav-links a:hover, .nav-links a.active{color:var(--sand);}
 .nav-links a:hover::after, .nav-links a.active::after{width:100%;}
 
+/* Sottomenu a tendina per raggruppare le pagine affini (es. "Viaggia con
+   noi" = Nostromo + Manuale di bordo), invece di 7 voci tutte sullo
+   stesso piano. Hover e focus-within lo aprono su desktop senza JS; il
+   click (gestito in script.js) serve da touch/tastiera e su mobile,
+   dove il sottomenu diventa una lista verticale sempre nel flusso. */
+.nav-dropdown{ position:relative; }
+.nav-dropdown-toggle{
+  display:flex; align-items:center; gap:6px;
+  background:none; border:none; padding:0 0 4px; margin:0;
+  font:inherit; font-family:inherit; letter-spacing:inherit; text-transform:inherit;
+  color:var(--cream-dim); cursor:pointer;
+  position:relative;
+  transition:color .2s ease;
+}
+.nav-dropdown-toggle::after{
+  content:""; position:absolute; left:0; bottom:0;
+  width:0; height:1px; background:var(--gold);
+  transition:width .25s ease;
+}
+.nav-dropdown-toggle .chevron{
+  width:6px; height:6px; flex-shrink:0;
+  border-right:1px solid currentColor; border-bottom:1px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);
+  transition:transform .2s ease;
+}
+.nav-dropdown:hover .nav-dropdown-toggle,
+.nav-dropdown:focus-within .nav-dropdown-toggle,
+.nav-dropdown-toggle[aria-expanded="true"],
+.nav-dropdown-toggle.active{ color:var(--sand); }
+.nav-dropdown:hover .nav-dropdown-toggle::after,
+.nav-dropdown:focus-within .nav-dropdown-toggle::after,
+.nav-dropdown-toggle[aria-expanded="true"]::after,
+.nav-dropdown-toggle.active::after{ width:100%; }
+.nav-dropdown:hover .nav-dropdown-toggle .chevron,
+.nav-dropdown:focus-within .nav-dropdown-toggle .chevron,
+.nav-dropdown-toggle[aria-expanded="true"] .chevron{ transform:rotate(225deg) translateY(2px); }
+
+.nav-dropdown-menu{
+  position:absolute; top:calc(100% + 18px); left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  min-width:210px; display:flex; flex-direction:column; gap:2px;
+  background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
+  border-top:2px solid var(--rust);
+  padding:8px; z-index:55;
+  box-shadow:0 20px 40px -20px rgba(8,10,18,0.6);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .2s ease, transform .2s ease, visibility .2s;
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu,
+.nav-dropdown-menu.open{
+  opacity:1; visibility:visible; pointer-events:auto;
+  transform:translateX(-50%) translateY(0);
+}
+.nav-dropdown-menu a{
+  display:block; padding:10px 12px; border-radius:4px;
+  font-size:0.78rem; color:var(--cream-dim); white-space:nowrap;
+  transition:background .15s ease, color .15s ease;
+}
+.nav-dropdown-menu a::after{ display:none; }
+.nav-dropdown-menu a:hover, .nav-dropdown-menu a.active{
+  background:rgba(245,240,230,0.06); color:var(--sand);
+}
+
 .nav-toggle{
   display:none;
   flex-direction:column;
@@ -320,6 +384,27 @@ p{color:var(--cream-dim); max-width:60ch;}
   }
   .nav-links.open{transform:translateY(0);}
   .nav-links a{padding:18px 0; border-bottom:var(--line); width:100%;}
+
+  /* sul mobile il sottomenu non è un popover ma una lista che si apre
+     nel flusso, sotto il pulsante che la controlla */
+  .nav-dropdown{ width:100%; }
+  .nav-dropdown-toggle{
+    width:100%; justify-content:space-between;
+    padding:18px 0; border-bottom:var(--line);
+  }
+  .nav-dropdown-menu{
+    position:static; transform:none; min-width:0;
+    opacity:1; visibility:visible; pointer-events:auto;
+    background:none; border:none; box-shadow:none; padding:0;
+    max-height:0; overflow:hidden; gap:0;
+    transition:max-height .25s ease;
+  }
+  .nav-links .nav-dropdown-menu.open{ max-height:200px; transform:none; }
+  .nav-dropdown-menu a{
+    padding:14px 0 14px 18px; border-bottom:var(--line); border-radius:0;
+    font-size:0.76rem;
+  }
+  .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active{ background:none; }
 }
 
 /* ==========================================================
