@@ -34,6 +34,46 @@
     background:linear-gradient(100deg, #C23B35, #3B5BA5);
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
+
+  /* Prova v8: la griglia 3x2 di schede tutte uguali era il problema vero,
+     non il colore — è letteralmente il layout più generico che esista
+     per una fila di card. Sostituita con una griglia "bento" asimmetrica:
+     uno sponsor in evidenza più grande, gli altri attorno a dimensioni
+     diverse, più veri stati hover (prima c'era solo lo zoom del logo). */
+  .sponsor-bento{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-template-areas:
+      "bep bep allianz"
+      "bep bep eicma"
+      "easy carp foto";
+    gap:1px;
+    background:rgba(245,240,230,0.14);
+  }
+  .sponsor-bento > div{
+    background:var(--asphalt);
+    transition:background .25s ease, transform .25s ease;
+  }
+  .sponsor-bento > div:hover{
+    background:var(--asphalt-2);
+    transform:translateY(-4px);
+  }
+  .sponsor-bento > div:nth-child(1){ grid-area:bep; display:flex; flex-direction:column; justify-content:center; }
+  .sponsor-bento > div:nth-child(1) h3{ font-size:1.5rem !important; }
+  .sponsor-bento > div:nth-child(1) .sponsor-logo-link{ height:84px; }
+  .sponsor-bento > div:nth-child(2){ grid-area:allianz; }
+  .sponsor-bento > div:nth-child(3){ grid-area:easy; }
+  .sponsor-bento > div:nth-child(4){ grid-area:carp; }
+  .sponsor-bento > div:nth-child(5){ grid-area:eicma; }
+  .sponsor-bento > div:nth-child(6){ grid-area:foto; }
+  .btn.solid{ transition:background .2s ease, color .2s ease, transform .2s ease; }
+  .btn.solid:hover{ transform:translateY(-2px); }
+  @media (max-width:860px){
+    .sponsor-bento{ grid-template-columns:1fr; grid-template-areas:none; }
+    .sponsor-bento > div{ grid-area:auto !important; }
+    .sponsor-bento > div:nth-child(1) h3{ font-size:1.15rem !important; }
+    .sponsor-bento > div:nth-child(1) .sponsor-logo-link{ height:64px; }
+  }
 </style>
 <script src="cookie-consent.js" defer></script>
 </head>
@@ -75,7 +115,7 @@
 
 <section>
   <div class="wrap">
-    <div class="grid-flat-3">
+    <div class="sponsor-bento">
 
       <!-- BEP'S -->
       <div style="padding:40px 30px;">
