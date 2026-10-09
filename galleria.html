@@ -126,9 +126,10 @@
     overflow:hidden;
   }
   .map-pin{
-    width:16px; height:16px; border-radius:50%;
-    background:var(--gold); border:2px solid var(--asphalt);
-    box-shadow:0 0 0 4px rgba(79,159,224,0.25);
+    width:28px; height:28px; border-radius:50%;
+    background:var(--asphalt) url('https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png') center/cover;
+    border:2px solid var(--asphalt);
+    box-shadow:0 0 0 3px rgba(79,159,224,0.35), 0 2px 8px rgba(0,0,0,0.6);
   }
   .leaflet-popup-content-wrapper{
     background:var(--asphalt-2); color:var(--cream);
@@ -226,7 +227,7 @@
     maxZoom: 19,
   }).addTo(map);
 
-  const pinIcon = L.divIcon({ className: "map-pin", iconSize: [16, 16] });
+  const pinIcon = L.divIcon({ className: "map-pin", iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -16] });
 
   function addPin(dest){
     const marker = L.marker([dest.lat, dest.lng], { icon: pinIcon }).addTo(map);
