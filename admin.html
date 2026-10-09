@@ -106,6 +106,18 @@
     font-family:var(--font-mono); font-size:0.78rem; color:var(--gold);
     border:1px dashed var(--gold); padding:12px 14px; margin-top:14px;
   }
+
+  .admin-tabs{
+    display:flex; gap:6px; flex-wrap:wrap; margin-top:32px;
+    border-bottom:1px solid rgba(245,240,230,0.14);
+  }
+  .admin-tab{
+    font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
+    padding:14px 20px; background:none; border:none; border-bottom:2px solid transparent;
+    color:var(--cream-dim); cursor:pointer; transition:color .2s ease, border-color .2s ease;
+  }
+  .admin-tab:hover{ color:var(--sand); }
+  .admin-tab.active{ color:var(--sand); border-bottom-color:var(--rust); }
 </style>
 </head>
 <body>
@@ -113,28 +125,7 @@
 <header class="site-header">
   <div class="wrap">
     <a href="index.html" class="logo"><span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span></a>
-    <nav class="nav-links">
-      <a href="index.html">Rotte</a>
-      <div class="nav-dropdown">
-        <button type="button" class="nav-dropdown-toggle" aria-expanded="false">Strumenti di viaggio<span class="chevron"></span></button>
-        <div class="nav-dropdown-menu">
-          <a href="nostromo.html">Nostromo</a>
-          <a href="manuale.html">Manuale di bordo</a>
-        </div>
-      </div>
-      <div class="nav-dropdown">
-        <button type="button" class="nav-dropdown-toggle" aria-expanded="false">Chi sono<span class="chevron"></span></button>
-        <div class="nav-dropdown-menu">
-          <a href="ilmotonauta.html">Il Motonauta</a>
-          <a href="sponsor.html">Alleati</a>
-        </div>
-      </div>
-      <a href="galleria.html">Diario di bordo</a>
-      <a href="contatti.html">Canale aperto</a>
-    </nav>
-    <button class="nav-toggle" aria-label="Apri menu">
-      <span></span><span></span><span></span>
-    </button>
+    <a href="index.html" class="admin-btn outline" style="padding:10px 20px; font-size:0.74rem; text-decoration:none;">← Torna al sito</a>
   </div>
 </header>
 
@@ -158,15 +149,23 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap;">
       <div>
         <p class="marker">Area riservata</p>
-        <h1 style="font-size:clamp(2rem, 5vw, 2.8rem); color:var(--sand); max-width:18ch;">Carica foto in galleria</h1>
-        <p style="margin-top:14px;">Seleziona l'album, scegli le foto, scrivi una didascalia per ciascuna e carica. Alla fine ti genero il codice pronto da incollare in <code>galleria.html</code> su GitHub.</p>
+        <h1 style="font-size:clamp(2rem, 5vw, 2.8rem); color:var(--sand); max-width:18ch;">Pannello di controllo</h1>
       </div>
       <button class="admin-btn outline" onclick="logout()">Esci</button>
+    </div>
+
+    <div class="admin-tabs">
+      <button type="button" class="admin-tab active" data-tab="galleria" onclick="switchAdminTab('galleria')">📷 Galleria</button>
+      <button type="button" class="admin-tab" data-tab="viaggi" onclick="switchAdminTab('viaggi')">🗺️ Itinerari</button>
+      <button type="button" class="admin-tab" data-tab="idee" onclick="switchAdminTab('idee')">💡 Idee</button>
+      <button type="button" class="admin-tab" data-tab="moto" onclick="switchAdminTab('moto')">🏍️ Moto</button>
+      <button type="button" class="admin-tab" data-tab="stats" onclick="switchAdminTab('stats')">📊 Statistiche</button>
     </div>
   </div>
 </section>
 
-<section style="padding-top:32px; display:none;" id="panel-upload">
+<div data-tab-content="galleria">
+<section style="padding-top:32px;" id="panel-upload">
   <div class="wrap">
     <div class="contact-card">
       <div style="display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap;">
@@ -230,7 +229,7 @@
   </div>
 </section>
 
-<section class="section-alt" id="panel-manage" style="display:none;">
+<section class="section-alt" id="panel-manage">
   <div class="wrap">
     <p class="marker">Gestione</p>
     <h2>Elimina foto o album</h2>
@@ -276,8 +275,10 @@
     </div>
   </div>
 </section>
+</div>
 
-<section id="panel-ideas" style="display:none;">
+<div data-tab-content="idee" style="display:none;">
+<section id="panel-ideas">
   <div class="wrap">
     <p class="marker">Suggerimenti dai visitatori</p>
     <h2>Idee per un video</h2>
@@ -290,8 +291,10 @@
     </div>
   </div>
 </section>
+</div>
 
-<section class="section-alt" id="panel-bike" style="display:none;">
+<div data-tab-content="moto" style="display:none;">
+<section class="section-alt" id="panel-bike">
   <div class="wrap">
     <p class="marker">La mia moto</p>
     <h2>Km percorsi</h2>
@@ -305,8 +308,10 @@
     </div>
   </div>
 </section>
+</div>
 
-<section id="panel-viaggi" style="display:none;">
+<div data-tab-content="viaggi" style="display:none;">
+<section id="panel-viaggi">
   <div class="wrap">
     <p class="marker">Itinerari del sito</p>
     <h2>Itinerari, miniviaggi e viaggi da ricordare</h2>
@@ -367,8 +372,10 @@
     </div>
   </div>
 </section>
+</div>
 
-<section class="section-alt" id="panel-stats" style="display:none;">
+<div data-tab-content="stats" style="display:none;">
+<section class="section-alt" id="panel-stats">
   <div class="wrap">
     <p class="marker">Numeri del sito</p>
     <h2>Statistiche</h2>
@@ -390,6 +397,7 @@
     </div>
   </div>
 </section>
+</div>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -409,15 +417,17 @@
   let PAESI_CITTA = {};
   let STANDALONE_ALBUMS = [];
 
+  function switchAdminTab(tab){
+    document.querySelectorAll(".admin-tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tab));
+    document.querySelectorAll("[data-tab-content]").forEach(el => {
+      el.style.display = el.dataset.tabContent === tab ? "block" : "none";
+    });
+  }
+
   function showPanel(){
     document.getElementById("gate").style.display = "none";
     document.getElementById("panel").style.display = "block";
-    document.getElementById("panel-upload").style.display = "block";
-    document.getElementById("panel-manage").style.display = "block";
-    document.getElementById("panel-ideas").style.display = "block";
-    document.getElementById("panel-bike").style.display = "block";
-    document.getElementById("panel-viaggi").style.display = "block";
-    document.getElementById("panel-stats").style.display = "block";
+    switchAdminTab("galleria");
     loadIdeas();
     loadKm();
     loadViaggi();
