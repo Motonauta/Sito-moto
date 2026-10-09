@@ -258,6 +258,10 @@
     `;
     marker.bindPopup(popupContent);
 
+    marker.on("click", () => {
+      map.flyTo([dest.lat, dest.lng], 7, { duration: 0.8 });
+    });
+
     marker.on("popupopen", () => {
       const btn = popupContent.querySelector(".map-popup-btn");
       btn.addEventListener("click", () => {
