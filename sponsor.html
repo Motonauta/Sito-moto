@@ -53,9 +53,9 @@
     display:grid;
     grid-template-columns:repeat(3, 1fr);
     grid-template-areas:
-      "bep bep allianz"
-      "bep bep eicma"
-      "easy carp foto";
+      "bep allianz allianz"
+      "bep easy carp"
+      "eicma eicma foto";
     gap:22px;
   }
   /* card "a doppia cornice": guscio sottile + pannello interno con
@@ -89,13 +89,30 @@
     box-shadow:0 28px 50px -26px rgba(0,0,0,0.6);
   }
   .sponsor-bento > div:nth-child(1){ grid-area:bep; display:flex; flex-direction:column; justify-content:center; }
-  .sponsor-bento > div:nth-child(1) h3{ font-size:1.5rem !important; }
-  .sponsor-bento > div:nth-child(1) .sponsor-logo-link{ height:84px; }
   .sponsor-bento > div:nth-child(2){ grid-area:allianz; }
   .sponsor-bento > div:nth-child(3){ grid-area:easy; }
   .sponsor-bento > div:nth-child(4){ grid-area:carp; }
   .sponsor-bento > div:nth-child(5){ grid-area:eicma; }
   .sponsor-bento > div:nth-child(6){ grid-area:foto; }
+
+  /* le due card "larghe" (AllianzDirect, EICMA) usano un layout
+     orizzontale — logo a sinistra, testo a destra — invece di essere
+     solo una versione più larga della stessa card verticale */
+  .sponsor-bento > div:nth-child(2),
+  .sponsor-bento > div:nth-child(5){
+    display:grid;
+    grid-template-columns:150px 1fr;
+    align-items:center;
+    gap:8px 28px;
+  }
+  .sponsor-bento > div:nth-child(2) .sponsor-logo-link,
+  .sponsor-bento > div:nth-child(5) .sponsor-logo-link{
+    grid-column:1; grid-row:1 / -1; height:90px;
+  }
+  .sponsor-bento > div:nth-child(2) h3, .sponsor-bento > div:nth-child(2) p,
+  .sponsor-bento > div:nth-child(5) h3, .sponsor-bento > div:nth-child(5) p{
+    grid-column:2;
+  }
 
   .btn.solid{
     position:relative;
@@ -125,8 +142,12 @@
   @media (max-width:860px){
     .sponsor-bento{ grid-template-columns:1fr; grid-template-areas:none; gap:16px; }
     .sponsor-bento > div{ grid-area:auto !important; }
-    .sponsor-bento > div:nth-child(1) h3{ font-size:1.15rem !important; }
-    .sponsor-bento > div:nth-child(1) .sponsor-logo-link{ height:64px; }
+    .sponsor-bento > div:nth-child(2),
+    .sponsor-bento > div:nth-child(5){ display:block; }
+    .sponsor-bento > div:nth-child(2) .sponsor-logo-link,
+    .sponsor-bento > div:nth-child(5) .sponsor-logo-link{
+      grid-column:auto; grid-row:auto; height:64px;
+    }
   }
 </style>
 <script src="cookie-consent.js" defer></script>
