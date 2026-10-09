@@ -22,7 +22,18 @@
 <link rel="stylesheet" href="style.css">
 <script src="cookie-consent.js" defer></script>
 <style>
-  html, body{ overflow-x:hidden; max-width:100vw; }
+  /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
+     orizzontale causato da una card a 4 colonne che non si adattava
+     al telefono (vedi sotto) — ma "overflow" su html/body impedisce
+     anche all'header "sticky" di restare fisso in cima durante lo
+     scroll. Risolto il vero problema (le 4 colonne), tolto il cerotto. */
+  html, body{ max-width:100vw; }
+  /* 4 card invece delle 3 di default — qui niente inline style:
+     un inline style vince sempre sulla regola mobile a 1 colonna di
+     .grid-cards-3, lasciando 4 colonne strette anche su telefono */
+  @media (min-width:861px){
+    .grid-cards-4-wide{ grid-template-columns:repeat(4, 1fr); }
+  }
 
   /* stesso sistema di base delle altre pagine già fatte (Alleati,
      Canale aperto, Diario di bordo, Il Motonauta): grafite freddo,
@@ -629,7 +640,7 @@
     <p class="marker">Esplora</p>
     <h2>Dove vuoi andare?</h2>
 
-    <div class="grid-cards-3" style="margin-top:44px; grid-template-columns:repeat(4, 1fr);">
+    <div class="grid-cards-3 grid-cards-4-wide" style="margin-top:44px;">
 
       <a href="ilmotonauta.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
         <p class="marker">Il diario</p>
