@@ -1,25 +1,3 @@
-// Cambio pagina: lo fa il browser con le View Transitions ("il logo ti
-// viene incontro", vedi style.css), senza nessuna attesa aggiunta. Qui si
-// misura soltanto dov'è il logo dell'intestazione, così quello grande parte
-// da lì e ci torna esattamente. Sta fuori da DOMContentLoaded perché il
-// browser avvia la transizione (pagereveal) prima di quel momento: questo
-// file è in fondo al <body>, quindi gli elementi esistono già.
-function measureVtLogo() {
-  const big = document.querySelector(".vt-logo");
-  const small = document.querySelector(".site-header .logo-ring img, .site-header .logo img");
-  if (!big || !small) return;
-  const b = big.getBoundingClientRect();
-  const r = small.getBoundingClientRect();
-  if (!b.width || !r.width) return;
-  const root = document.documentElement.style;
-  root.setProperty("--vt-dx", `${r.left + r.width / 2 - (b.left + b.width / 2)}px`);
-  root.setProperty("--vt-dy", `${r.top + r.height / 2 - (b.top + b.height / 2)}px`);
-  root.setProperty("--vt-s", String(r.width / b.width));
-}
-measureVtLogo();
-window.addEventListener("pagereveal", (e) => { if (e.viewTransition) measureVtLogo(); });
-window.addEventListener("resize", measureVtLogo);
-
 document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
