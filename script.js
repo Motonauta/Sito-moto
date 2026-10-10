@@ -22,6 +22,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }).catch(() => {});
   })();
 
+  // Contagiri per i <select data-dial> (cilindrata nel calcolatore benzina):
+  // numero grande con ‹ › ai lati. Il select vero resta dentro, invisibile
+  // sopra al numero: toccandolo si apre l'elenco nativo, e tutti gli script
+  // che lo leggono o lo ascoltano continuano a funzionare come prima.
+  document.querySelectorAll("select[data-dial]").forEach(select => {
+    const chevron = dir => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-chevron-${dir}"/></svg>`;
+    const dial = document.createElement("div");
+    dial.className = "cc-dial";
+    dial.innerHTML = `
+      <button type="button" class="cc-dial-btn" data-step="-1" aria-label="Valore precedente">${chevron("left")}</button>
+      <div class="cc-dial-readout"><span class="cc-dial-value" aria-hidden="true"></span><span class="cc-dial-unit" aria-hidden="true"></span></div>
+      <button type="button" class="cc-dial-btn" data-step="1" aria-label="Valore successivo">${chevron("right")}</button>
+    `;
+    select.parentNode.insertBefore(dial, select);
+    dial.querySelector(".cc-dial-readout").appendChild(select);
+
+    const valueEl = dial.querySelector(".cc-dial-value");
+    const unitEl = dial.querySelector(".cc-dial-unit");
+    const [prevBtn, nextBtn] = dial.querySelectorAll(".cc-dial-btn");
+
+    const render = () => {
+      const label = select.options[select.selectedIndex].text.trim();
+      const match = label.match(/^([\d.,]+)\s*(.*)$/);
+      valueEl.textContent = match ? match[1] : label;
+      unitEl.textContent = match ? match[2] : "";
+      prevBtn.disabled = select.selectedIndex === 0;
+      nextBtn.disabled = select.selectedIndex === select.options.length - 1;
+    };
+
+    [prevBtn, nextBtn].forEach(btn => btn.addEventListener("click", () => {
+      const index = select.selectedIndex + Number(btn.dataset.step);
+      if (index < 0 || index >= select.options.length) return;
+      select.selectedIndex = index;
+      select.dispatchEvent(new Event("input", { bubbles: true }));
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    }));
+    select.addEventListener("change", render);
+    select.addEventListener("input", render);
+    render();
+  });
+
   // Comparsa morbida dei blocchi mentre entrano nello schermo. La prima
   // sezione (hero) resta fuori: è già visibile al caricamento. Le griglie
   // vengono "aperte" card per card con un piccolo sfalsamento. Finita
