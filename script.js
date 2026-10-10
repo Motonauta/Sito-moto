@@ -284,88 +284,22 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Cambio pagina: lo fa il browser con le View Transitions ("sorpasso in
-  // livrea", vedi style.css), senza nessuna attesa aggiunta. Qui restano
-  // due ritocchi:
-  // 1) il titolo della pagina che lasci "diventa" quello della nuova solo
-  //    se è ancora visibile: se hai già scorso oltre, non deve volare
-  //    dentro dall'alto;
-  // 2) la vecchia animazione (moneta col logo + scritta "Brum bruuuum")
-  //    resta come sorpresa, ma solo cliccando il logo.
+  // livrea", vedi style.css), senza nessuna attesa aggiunta, logo compreso.
+  // Qui resta un solo ritocco: il titolo della pagina che lasci "diventa"
+  // quello della nuova solo se è ancora visibile: se hai già scorso oltre,
+  // non deve volare dentro dall'alto.
   const pageTitle = document.querySelector(
     "body > section:first-of-type h1, body > section:first-of-type:not(:has(h1)) > .wrap > h2"
   );
-  // se è partita la sorpresa del logo, le bande non devono passarci sopra:
-  // si salta la transizione sia in uscita (qui) sia in arrivo (pagereveal)
-  let logoSurprisePlaying = false;
   window.addEventListener("pageswap", (e) => {
-    if (!e.viewTransition) return;
-    if (logoSurprisePlaying) { e.viewTransition.skipTransition(); return; }
-    if (!pageTitle) return;
+    if (!e.viewTransition || !pageTitle) return;
     const r = pageTitle.getBoundingClientRect();
     if (r.bottom < 0 || r.top > window.innerHeight) pageTitle.style.viewTransitionName = "none";
   });
   // tornando indietro la pagina può essere ripristinata così com'era
   window.addEventListener("pageshow", () => {
     if (pageTitle) pageTitle.style.viewTransitionName = "";
-    logoSurprisePlaying = false;
-    document.querySelectorAll(".page-transition.pt-leaving").forEach((el) => el.remove());
   });
-
-  const TRANSITION_KEY = "motonauta-transition";
-  const TRANSITION_SOUNDS = [
-    "Brum bruuuum",
-    "Brap braaap",
-    "Rattattattattaaaaa",
-    "Vrooom vrooom",
-    "Broppopoppoppoopp",
-    "Gorogorogorogorogoro",
-    "Bum pow pow pow pow",
-    "Ninoooo ninoooo",
-  ];
-  const supportsPageTransitions = "CSSViewTransitionRule" in window;
-
-  // arrivo dalla sorpresa del logo: la pagina vecchia è finita coperta,
-  // quindi niente bande, solo la dissolvenza che rivela quella nuova
-  if (sessionStorage.getItem(TRANSITION_KEY)) {
-    sessionStorage.removeItem(TRANSITION_KEY);
-    if (supportsPageTransitions) {
-      window.addEventListener("pagereveal", (e) => {
-        if (e.viewTransition) e.viewTransition.skipTransition();
-      }, { once: true });
-    }
-    if (!prefersReducedMotion) {
-      const overlay = document.createElement("div");
-      overlay.className = "page-transition pt-arriving";
-      document.body.appendChild(overlay);
-      overlay.addEventListener("animationend", () => overlay.remove(), { once: true });
-      setTimeout(() => overlay.remove(), 500);
-    }
-  }
-
-  if (!prefersReducedMotion) {
-    document.querySelectorAll("a.logo[href]").forEach((link) => {
-      link.addEventListener("click", (e) => {
-        if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-        e.preventDefault();
-        const href = link.getAttribute("href");
-
-        const sound = TRANSITION_SOUNDS[Math.floor(Math.random() * TRANSITION_SOUNDS.length)];
-        const overlay = document.createElement("div");
-        overlay.className = "page-transition pt-leaving";
-        overlay.innerHTML = `
-          <img class="pt-coin" alt="" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_152,h_152,c_fill/v1784625192/IMG_1429_ufj4tu.jpg">
-          <span class="pt-sound">${sound}</span>
-        `;
-        document.body.appendChild(overlay);
-
-        logoSurprisePlaying = true;
-        setTimeout(() => {
-          sessionStorage.setItem(TRANSITION_KEY, "1");
-          window.location.href = href;
-        }, 950);
-      });
-    });
-  }
 
   const toggle = document.querySelector(".nav-toggle");
   const links = document.querySelector(".nav-links");
