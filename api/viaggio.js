@@ -150,6 +150,7 @@ function render404() {
 ${HEAD_COMMON}
 </head>
 <body>
+<div class="vt-livery" aria-hidden="true"></div>
 ${HEADER_HTML}
 <section style="padding-top:80px; padding-bottom:80px;">
   <div class="wrap" style="text-align:center;">
@@ -505,6 +506,7 @@ ${HEAD_COMMON}
 </style>
 </head>
 <body>
+<div class="vt-livery" aria-hidden="true"></div>
 <div class="print-watermark">Il Motonauta</div>
 <img class="print-logo-corner" src="${LOGO_URL}" alt="">
 ${HEADER_HTML}
