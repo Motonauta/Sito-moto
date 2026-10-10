@@ -2,7 +2,7 @@
    TOKENS
    ========================================================== */
 :root{
-  --css-build:"20261010a"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
+  --css-build:"20261010c"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
   /* curve di movimento condivise: --ease-out per entrate, hover e
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -905,79 +905,61 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
-   CAMBIO PAGINA — "timbro del logo" (View Transitions)
-   Il browser fotografa la pagina che lasci e quella nuova, senza nessuna
-   attesa aggiunta. La pagina vecchia sfuma, al centro dello schermo il
-   logo cresce e si rimpicciolisce (senza mai coprire tutto), e intanto
-   compare la pagina nuova. Dove il browser non lo supporta (es. Firefox)
-   la navigazione resta semplicemente istantanea.
+   CAMBIO PAGINA — "timbro del logo" (fatto dal sito, non dal browser)
+   Al clic su un link interno script.js aggiunge html.vt-leaving: la
+   pagina si copre di asfalto e al centro il logo cresce (~0,22 s), poi
+   si naviga. La pagina nuova nasce GIÀ coperta (html.vt-arriving, messo
+   dallo scriptino in cima al <body>), tiene il logo fermo ~0,3 s e poi
+   lo rimpicciolisce scoprendosi. Così va sempre uguale, con qualunque
+   browser e connessione. L'intestazione resta sopra, ferma.
+   (Le View Transitions del browser sono state tolte: su Chrome per Mac
+   partivano solo verso alcune pagine.)
    ========================================================== */
-@view-transition{ navigation:auto; }
-
-.site-header{ view-transition-name:site-header; }
-
-/* il logo: un elemento vuoto in cima a ogni pagina, sempre presente ma
-   invisibile (così l'immagine è già caricata), mostrato solo mentre è in
-   corso una transizione perché il browser lo "fotografi" */
 .vt-logo{
   --vt-size:clamp(140px, 34vmin, 300px);
-  position:fixed; z-index:9998; pointer-events:none; visibility:hidden;
-  left:calc(50% - var(--vt-size) / 2); top:calc(50% - var(--vt-size) / 2);
+  position:fixed; inset:0; z-index:45;   /* sotto l'intestazione (50) */
+  pointer-events:none; visibility:hidden; opacity:0;
+  background:var(--asphalt);
+}
+.vt-logo::before{
+  content:""; position:absolute; left:50%; top:50%;
   width:var(--vt-size); height:var(--vt-size);
+  margin:calc(var(--vt-size) / -2) 0 0 calc(var(--vt-size) / -2);
   background:url(img/logo-toppa.webp) center / contain no-repeat;
 }
-html:active-view-transition .vt-logo{ visibility:visible; view-transition-name:vt-logo; }
 
-/* sotto le due pagine c'è l'asfalto, non il bianco del browser */
-::view-transition{ background:var(--asphalt); }
+/* uscita: copre e fa crescere il logo, poi resta così finché si naviga */
+html.vt-leaving .vt-logo{ visibility:visible; animation:vt-cover .22s var(--ease-out) both; }
+html.vt-leaving .vt-logo::before{ animation:vt-logo-in .22s var(--ease-out) both; }
+@keyframes vt-cover{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes vt-logo-in{
+  from{ opacity:0; transform:scale(.6); }
+  70%{ opacity:1; transform:scale(1.06); }
+  to{ opacity:1; transform:scale(1); }
+}
 
-/* ordine dei livelli: pagina, intestazione, logo sopra a tutto */
-::view-transition-group(site-header){ z-index:1; }
-::view-transition-group(vt-logo){ z-index:2; }
-
-/* intestazione ferma: niente movimento né dissolvenza, cambia solo la
-   voce di menu evidenziata */
-::view-transition-group(site-header),
-::view-transition-new(site-header){ animation:none; }
-::view-transition-old(site-header){ display:none; }
-
-/* logo: si usa la "foto" presa dalla pagina che lasci, dove l'immagine
-   è di sicuro già caricata (quella nuova, con una connessione veloce,
-   potrebbe non averla ancora disegnata). Compare crescendo fino a poco
-   oltre la sua misura, si assesta e RESTA FERMO al centro per circa un
-   terzo di secondo su fondo scuro (così si vede bene anche quando la
-   pagina nuova è già pronta), poi si rimpicciolisce e sparisce */
-::view-transition-new(vt-logo){ display:none; }
-::view-transition-old(vt-logo){ animation:vt-logo-pulse .9s both; }
-@keyframes vt-logo-pulse{
-  0%{ opacity:0; transform:scale(.6); animation-timing-function:var(--ease-out); }
-  25%{ opacity:1; transform:scale(1.06); animation-timing-function:var(--ease-in-out); }
-  40%{ transform:scale(1); }
-  66%{ opacity:1; transform:scale(1); animation-timing-function:var(--ease-in-out); }
+/* arrivo: parte coperta, pausa col logo fermo, poi si scopre */
+html.vt-arriving .vt-logo{ visibility:visible; opacity:1; animation:vt-uncover .75s both; }
+html.vt-arriving .vt-logo::before{ animation:vt-logo-out .75s both; }
+@keyframes vt-uncover{
+  0%, 40%{ opacity:1; visibility:visible; animation-timing-function:var(--ease-out); }
+  100%{ opacity:0; visibility:hidden; }
+}
+@keyframes vt-logo-out{
+  0%, 40%{ opacity:1; transform:scale(1); animation-timing-function:var(--ease-in-out); }
   100%{ opacity:0; transform:scale(.6); }
 }
 
-/* pagina: la vecchia sfuma mentre il logo cresce, la nuova compare
-   quando il logo comincia a rimpicciolirsi */
-::view-transition-old(root){ animation:vt-page-out .2s var(--ease-out) both; }
-::view-transition-new(root){ animation:vt-page-in .3s var(--ease-out) .56s both; }
-@keyframes vt-page-out{ to{ opacity:0; transform:scale(.98); } }
-@keyframes vt-page-in{ from{ opacity:0; transform:scale(1.02); } }
-
-/* "riduci movimento" (es. l'opzione di macOS/Windows/iPhone): niente
-   ingrandimenti né spostamenti, ma il logo resta: compare e sparisce al
-   centro solo sfumando, con la stessa pausa, così si vede comunque */
-@keyframes vt-fade-out{ to{ opacity:0; } }
-@keyframes vt-fade-in{ from{ opacity:0; } }
-@keyframes vt-logo-fade{
-  0%{ opacity:0; }
-  20%, 66%{ opacity:1; }
-  100%{ opacity:0; }
-}
+/* "riduci movimento": stessa copertura e stessa pausa, ma il logo
+   compare e sparisce solo sfumando. Le durate vanno forzate perché la
+   regola generale più in alto azzera tutte le animazioni */
+@keyframes vt-logo-fade-in{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes vt-logo-fade-out{ 0%, 40%{ opacity:1; } 100%{ opacity:0; } }
 @media (prefers-reduced-motion: reduce){
-  ::view-transition-old(root){ animation:vt-fade-out .2s ease both; }
-  ::view-transition-new(root){ animation:vt-fade-in .3s ease .56s both; }
-  ::view-transition-old(vt-logo){ animation:vt-logo-fade .9s ease both; }
+  html.vt-leaving .vt-logo{ animation-duration:.22s !important; }
+  html.vt-leaving .vt-logo::before{ animation-name:vt-logo-fade-in; }
+  html.vt-arriving .vt-logo{ animation-duration:.75s !important; }
+  html.vt-arriving .vt-logo::before{ animation-name:vt-logo-fade-out; }
 }
 
 /* ==========================================================

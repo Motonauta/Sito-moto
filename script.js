@@ -1,72 +1,3 @@
-// Controllo del cambio pagina: aprendo una pagina qualsiasi con ?vt-check
-// nell'indirizzo compare un riquadro che dice se il browser supporta la
-// transizione, se il sistema chiede di ridurre il movimento e com'è andato
-// l'ultimo cambio pagina. Resta attivo navigando finché non lo si chiude.
-// Sta fuori da DOMContentLoaded perché "pagereveal" arriva prima.
-(() => {
-  let on = false;
-  try {
-    if (/[?&]vt-check\b/.test(location.search)) sessionStorage.setItem("vt-check", "1");
-    on = sessionStorage.getItem("vt-check") === "1";
-  } catch (e) {}
-  if (!on) return;
-  let esito = "nessun cambio pagina con transizione (pagina aperta direttamente o ricaricata)";
-  let animazioni = "";
-  let provenienza = "";
-  try { provenienza = sessionStorage.getItem("vt-check-da") || ""; sessionStorage.removeItem("vt-check-da"); } catch (e) {}
-  // la pagina che lasci si segna, così quella nuova sa da dove arrivi
-  window.addEventListener("pageswap", () => {
-    try { sessionStorage.setItem("vt-check-da", location.pathname); } catch (e) {}
-  });
-  window.addEventListener("pagereveal", (e) => {
-    if (!e.viewTransition) return;
-    esito = "transizione in corso…";
-    const t0 = performance.now();
-    e.viewTransition.ready.then(
-      () => {
-        esito = "transizione PARTITA";
-        // quali animazioni partono davvero (nome e durata): quelle del sito
-        // si chiamano vt-…, quelle standard del browser -ua-…
-        animazioni = document.getAnimations()
-          .filter((a) => a.effect && a.effect.pseudoElement && a.effect.pseudoElement.includes("view-transition-") && !a.effect.pseudoElement.includes("group"))
-          .map((a) => {
-            const t = a.effect.getComputedTiming();
-            return a.effect.pseudoElement.replace("::view-transition-", "") + " → " + (a.animationName || "?") + " " + Math.round(t.duration) + "ms";
-          })
-          .join("<br>");
-      },
-      (err) => { esito = "transizione ANNULLATA: " + (err && err.message); }
-    );
-    e.viewTransition.finished.then(() => {
-      if (esito.startsWith("transizione PARTITA")) esito += ", durata " + Math.round(performance.now() - t0) + " ms";
-      render();
-    });
-  });
-  const ua = navigator.userAgent;
-  const chrome = (ua.match(/Chrome\/(\d+)/) || [])[1];
-  const box = document.createElement("div");
-  box.style.cssText = "position:fixed;left:12px;bottom:12px;z-index:10000;max-width:min(420px,calc(100vw - 24px));padding:14px 16px;background:#0d0f12;color:#f5f0e6;border:1px solid #C1272D;border-radius:12px;font:12px/1.5 'JetBrains Mono',monospace;box-shadow:0 10px 30px rgba(0,0,0,.5)";
-  function render() {
-    const supporta = "CSSViewTransitionRule" in window;
-    const riduci = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    box.innerHTML =
-      "<b>Controllo cambio pagina</b><br>" +
-      "Browser: " + (chrome ? "Chrome/Chromium " + chrome : ua.slice(0, 90)) + "<br>" +
-      "Supporta la transizione: " + (supporta ? "SÌ" : "NO") + "<br>" +
-      "Riduci movimento attivo: " + (riduci ? "SÌ" : "no") + "<br>" +
-      "Versione stile: " + (getComputedStyle(document.documentElement).getPropertyValue("--css-build").trim() || "VECCHIA (senza sigla)") + "<br>" +
-      "Ultimo cambio pagina: " + (provenienza ? provenienza + " → " + location.pathname + ": " : "") + esito + "<br>" +
-      (animazioni ? "Animazioni:<br>" + animazioni + "<br>" : "") +
-      '<button type="button" style="margin-top:8px;font:inherit;color:inherit;background:none;border:1px solid currentColor;border-radius:6px;padding:2px 8px;cursor:pointer">chiudi</button>';
-    box.querySelector("button").onclick = () => {
-      try { sessionStorage.removeItem("vt-check"); } catch (e) {}
-      box.remove();
-    };
-  }
-  document.addEventListener("DOMContentLoaded", () => { render(); document.body.appendChild(box); });
-  setTimeout(render, 1500);
-})();
-
 document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -351,6 +282,37 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+
+  // Cambio pagina "timbro del logo" (vedi style.css, CAMBIO PAGINA): al
+  // clic su un link interno la pagina si copre col logo che cresce, poi si
+  // naviga; quella nuova arriva già coperta (classe messa dallo scriptino
+  // in cima al <body>) e si scopre da sola. Qui: pulizia all'arrivo e
+  // gestione del clic.
+  (function pageTransition(){
+    const root = document.documentElement;
+    try { sessionStorage.removeItem("vt-arrive"); } catch (e) {}
+    if (root.classList.contains("vt-arriving")) {
+      setTimeout(() => root.classList.remove("vt-arriving"), 800);
+    }
+    // tornando indietro la pagina può riapparire così com'era: scoperta
+    window.addEventListener("pageshow", (e) => {
+      if (e.persisted) root.classList.remove("vt-leaving", "vt-arriving");
+    });
+    document.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest && e.target.closest("a[href]");
+      if (!a || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
+      const url = new URL(a.href, location.href);
+      if (url.origin !== location.origin) return;                                        // esterni, mailto:, tel:
+      if (url.pathname === location.pathname && url.search === location.search) return; // stessa pagina / ancora
+      e.preventDefault();
+      try { sessionStorage.setItem("vt-arrive", String(Date.now())); } catch (err) {}
+      root.classList.add("vt-leaving");
+      setTimeout(() => { location.href = url.href; }, 220);
+      // se la navigazione non parte (rete assente), la pagina torna visibile
+      setTimeout(() => root.classList.remove("vt-leaving"), 6000);
+    });
+  })();
 
   const toggle = document.querySelector(".nav-toggle");
   const links = document.querySelector(".nav-links");
