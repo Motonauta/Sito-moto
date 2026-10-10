@@ -1,3 +1,52 @@
+// Controllo del cambio pagina: aprendo una pagina qualsiasi con ?vt-check
+// nell'indirizzo compare un riquadro che dice se il browser supporta la
+// transizione, se il sistema chiede di ridurre il movimento e com'è andato
+// l'ultimo cambio pagina. Resta attivo navigando finché non lo si chiude.
+// Sta fuori da DOMContentLoaded perché "pagereveal" arriva prima.
+(() => {
+  let on = false;
+  try {
+    if (/[?&]vt-check\b/.test(location.search)) sessionStorage.setItem("vt-check", "1");
+    on = sessionStorage.getItem("vt-check") === "1";
+  } catch (e) {}
+  if (!on) return;
+  let esito = "nessun cambio pagina con transizione (pagina aperta direttamente o ricaricata)";
+  window.addEventListener("pagereveal", (e) => {
+    if (!e.viewTransition) return;
+    esito = "transizione in corso…";
+    const t0 = performance.now();
+    e.viewTransition.ready.then(
+      () => { esito = "transizione PARTITA"; },
+      (err) => { esito = "transizione ANNULLATA: " + (err && err.message); }
+    );
+    e.viewTransition.finished.then(() => {
+      if (esito.startsWith("transizione PARTITA")) esito += ", durata " + Math.round(performance.now() - t0) + " ms";
+      render();
+    });
+  });
+  const ua = navigator.userAgent;
+  const chrome = (ua.match(/Chrome\/(\d+)/) || [])[1];
+  const box = document.createElement("div");
+  box.style.cssText = "position:fixed;left:12px;bottom:12px;z-index:10000;max-width:min(420px,calc(100vw - 24px));padding:14px 16px;background:#0d0f12;color:#f5f0e6;border:1px solid #C1272D;border-radius:12px;font:12px/1.5 'JetBrains Mono',monospace;box-shadow:0 10px 30px rgba(0,0,0,.5)";
+  function render() {
+    const supporta = "CSSViewTransitionRule" in window;
+    const riduci = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    box.innerHTML =
+      "<b>Controllo cambio pagina</b><br>" +
+      "Browser: " + (chrome ? "Chrome/Chromium " + chrome : ua.slice(0, 90)) + "<br>" +
+      "Supporta la transizione: " + (supporta ? "SÌ" : "NO") + "<br>" +
+      "Riduci movimento attivo: " + (riduci ? "SÌ" : "no") + "<br>" +
+      "Ultimo cambio pagina: " + esito + "<br>" +
+      '<button type="button" style="margin-top:8px;font:inherit;color:inherit;background:none;border:1px solid currentColor;border-radius:6px;padding:2px 8px;cursor:pointer">chiudi</button>';
+    box.querySelector("button").onclick = () => {
+      try { sessionStorage.removeItem("vt-check"); } catch (e) {}
+      box.remove();
+    };
+  }
+  document.addEventListener("DOMContentLoaded", () => { render(); document.body.appendChild(box); });
+  setTimeout(render, 1500);
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

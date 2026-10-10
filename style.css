@@ -963,13 +963,20 @@ html:active-view-transition .vt-logo{ visibility:visible; view-transition-name:v
 @keyframes vt-page-out{ to{ opacity:0; transform:scale(.98); } }
 @keyframes vt-page-in{ from{ opacity:0; transform:scale(1.02); } }
 
-/* "riduci movimento": solo una breve dissolvenza, niente logo */
+/* "riduci movimento" (es. l'opzione di macOS/Windows/iPhone): niente
+   ingrandimenti né spostamenti, ma il logo resta: compare e sparisce al
+   centro solo sfumando, con la stessa pausa, così si vede comunque */
 @keyframes vt-fade-out{ to{ opacity:0; } }
 @keyframes vt-fade-in{ from{ opacity:0; } }
+@keyframes vt-logo-fade{
+  0%{ opacity:0; }
+  20%, 66%{ opacity:1; }
+  100%{ opacity:0; }
+}
 @media (prefers-reduced-motion: reduce){
-  ::view-transition-old(root){ animation:vt-fade-out .15s ease both; }
-  ::view-transition-new(root){ animation:vt-fade-in .15s ease both; }
-  ::view-transition-old(vt-logo){ display:none; }
+  ::view-transition-old(root){ animation:vt-fade-out .2s ease both; }
+  ::view-transition-new(root){ animation:vt-fade-in .3s ease .56s both; }
+  ::view-transition-old(vt-logo){ animation:vt-logo-fade .9s ease both; }
 }
 
 /* ==========================================================
