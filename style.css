@@ -785,8 +785,6 @@ p{color:var(--cream-dim); max-width:60ch;}
 .logo-wrap img{
   height:40px;
   width:auto;
-  aspect-ratio:1;          /* già quadrato prima che l'immagine arrivi: il cambio pagina lo misura */
-  object-fit:cover;
   display:block;
 }
 @media (max-width:480px){
@@ -906,48 +904,31 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
-   CAMBIO PAGINA — "il logo ti viene incontro" (View Transitions)
+   CAMBIO PAGINA — "timbro del logo" (View Transitions)
    Il browser fotografa la pagina che lasci e quella nuova, senza nessuna
-   attesa aggiunta. Il logo si stacca dall'intestazione, si ingrandisce
-   fino a riempire lo schermo (la pagina dietro avanza un poco con lui),
-   sotto di lui la pagina cambia, poi torna indietro e rientra al suo
-   posto nell'intestazione scoprendo quella nuova. Dove il browser non lo
-   supporta (es. Firefox) la navigazione resta semplicemente istantanea.
+   attesa aggiunta. La pagina vecchia sfuma, al centro dello schermo il
+   logo cresce e si rimpicciolisce (senza mai coprire tutto), e intanto
+   compare la pagina nuova. Dove il browser non lo supporta (es. Firefox)
+   la navigazione resta semplicemente istantanea.
    ========================================================== */
 @view-transition{ navigation:auto; }
 
 .site-header{ view-transition-name:site-header; }
 
-/* il logo grande: un elemento vuoto in cima a ogni pagina, sempre
-   presente ma invisibile (così l'immagine è già caricata), mostrato solo
-   mentre è in corso una transizione perché il browser lo "fotografi".
-   Misura quanto la diagonale dello schermo: a grandezza piena copre
-   anche gli angoli. script.js gli dice dov'è il logo dell'intestazione
-   (--vt-dx, --vt-dy, --vt-s) per partire e tornare esattamente lì. */
+/* il logo: un elemento vuoto in cima a ogni pagina, sempre presente ma
+   invisibile (così l'immagine è già caricata), mostrato solo mentre è in
+   corso una transizione perché il browser lo "fotografi" */
 .vt-logo{
-  --vt-d:calc(hypot(100vw, 100vh) * 1.04);
+  --vt-size:clamp(140px, 34vmin, 300px);
   position:fixed; z-index:9998; pointer-events:none; visibility:hidden;
-  left:calc(50% - var(--vt-d) / 2); top:calc(50% - var(--vt-d) / 2);
-  width:var(--vt-d); height:var(--vt-d);
+  left:calc(50% - var(--vt-size) / 2); top:calc(50% - var(--vt-size) / 2);
+  width:var(--vt-size); height:var(--vt-size);
   background:url(img/logo-toppa.webp) center / contain no-repeat;
 }
 html:active-view-transition .vt-logo{ visibility:visible; view-transition-name:vt-logo; }
-/* posizione del logo dell'intestazione stimata dall'impaginazione, per
-   quando la transizione parte prima che script.js lo misuri davvero
-   (succede in home, che carica parecchi script esterni prima) */
-:root{
-  --vt-dx:calc(max(0px, (100vw - var(--container)) / 2) + 50px - 50vw);
-  --vt-dy:calc(40px - 50vh);
-  --vt-s:.025;
-}
-@media (min-width:1600px){ :root{ --vt-s:.018; } }
-@media (max-width:1000px){ :root{ --vt-s:.03; } }
-@media (max-width:780px){ :root{ --vt-dx:calc(42px - 50vw); --vt-s:.036; } }
-@media (max-width:480px){ :root{ --vt-s:.041; } }
-@media (prefers-reduced-motion: no-preference){
-  /* mentre vola, il logo piccolo dell'intestazione "manca": è quello */
-  html:active-view-transition .site-header .logo-ring{ visibility:hidden; }
-}
+
+/* sotto le due pagine c'è l'asfalto, non il bianco del browser */
+::view-transition{ background:var(--asphalt); }
 
 /* ordine dei livelli: pagina, intestazione, logo sopra a tutto */
 ::view-transition-group(site-header){ z-index:1; }
@@ -959,35 +940,25 @@ html:active-view-transition .vt-logo{ visibility:visible; view-transition-name:v
 ::view-transition-new(site-header){ animation:none; }
 ::view-transition-old(site-header){ display:none; }
 
-/* logo: viene incontro (0–42%), resta un attimo a schermo pieno mentre
-   sotto cambia pagina (42–54%), torna indietro nell'intestazione */
+/* logo: compare crescendo fino a poco oltre la sua misura, poi si
+   rimpicciolisce e sparisce */
 ::view-transition-old(vt-logo){ display:none; }
-::view-transition-new(vt-logo){ animation:vt-logo-zoom .66s both; }
-@keyframes vt-logo-zoom{
-  0%{
-    transform:translate(var(--vt-dx, 0px), var(--vt-dy, 0px)) scale(var(--vt-s, .03));
-    animation-timing-function:var(--ease-in-out);
-  }
-  42%, 54%{ transform:none; animation-timing-function:var(--ease-in-out); }
-  100%{ transform:translate(var(--vt-dx, 0px), var(--vt-dy, 0px)) scale(var(--vt-s, .03)); }
+::view-transition-new(vt-logo){ animation:vt-logo-pulse .5s both; }
+@keyframes vt-logo-pulse{
+  0%{ opacity:0; transform:scale(.6); animation-timing-function:var(--ease-out); }
+  40%{ opacity:1; transform:scale(1.06); animation-timing-function:var(--ease-in-out); }
+  70%{ opacity:1; }
+  100%{ opacity:0; transform:scale(.6); }
 }
 
-/* pagina: la vecchia avanza un poco insieme al logo, la nuova compare
-   sotto di lui (a schermo coperto) e si assesta mentre il logo si ritira */
-::view-transition-old(root){ animation:vt-page-out .66s both; }
-::view-transition-new(root){ animation:vt-page-in .66s both; }
-@keyframes vt-page-out{
-  0%{ transform:none; animation-timing-function:var(--ease-in-out); }
-  42%{ opacity:1; transform:scale(1.06); }
-  48%, 100%{ opacity:0; transform:scale(1.06); }
-}
-@keyframes vt-page-in{
-  0%, 48%{ opacity:0; transform:scale(1.06); }
-  54%{ opacity:1; transform:scale(1.06); animation-timing-function:var(--ease-in-out); }
-  100%{ opacity:1; transform:none; }
-}
+/* pagina: la vecchia sfuma mentre il logo cresce, la nuova compare
+   mentre si rimpicciolisce */
+::view-transition-old(root){ animation:vt-page-out .2s var(--ease-out) both; }
+::view-transition-new(root){ animation:vt-page-in .25s var(--ease-out) .22s both; }
+@keyframes vt-page-out{ to{ opacity:0; transform:scale(.98); } }
+@keyframes vt-page-in{ from{ opacity:0; transform:scale(1.02); } }
 
-/* "riduci movimento": solo una breve dissolvenza, niente logo in volo */
+/* "riduci movimento": solo una breve dissolvenza, niente logo */
 @keyframes vt-fade-out{ to{ opacity:0; } }
 @keyframes vt-fade-in{ from{ opacity:0; } }
 @media (prefers-reduced-motion: reduce){
