@@ -24,7 +24,7 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20261010a">
+<link rel="stylesheet" href="/style.css?v=20261010c">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
@@ -69,7 +69,7 @@ const FOOTER_HTML = `<footer class="site-footer">
     <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
   </div>
 </footer>
-<script src="/script.js?v=20261010a"></script>`;
+<script src="/script.js?v=20261010c"></script>`;
 
 const STYLE = `<style>
   /* stesso sistema di base delle altre pagine già fatte: grafite
@@ -231,7 +231,7 @@ function render404() {
 ${HEAD_COMMON}
 </head>
 <body>
-<div class="vt-logo" aria-hidden="true"></div>
+<div class="vt-logo" aria-hidden="true"></div><script>try{var vtA=+sessionStorage.getItem("vt-arrive");if(vtA&&Date.now()-vtA<4000)document.documentElement.classList.add("vt-arriving")}catch(e){}</script>
 ${HEADER_HTML}
 <section style="padding-top:80px; padding-bottom:80px;">
   <div class="wrap" style="text-align:center;">
@@ -376,7 +376,7 @@ ${HEAD_COMMON}
 ${STYLE}
 </head>
 <body>
-<div class="vt-logo" aria-hidden="true"></div>
+<div class="vt-logo" aria-hidden="true"></div><script>try{var vtA=+sessionStorage.getItem("vt-arrive");if(vtA&&Date.now()-vtA<4000)document.documentElement.classList.add("vt-arriving")}catch(e){}</script>
 <div class="print-watermark">Il Motonauta</div>
 <img class="print-logo-corner" src="${LOGO_URL}" alt="">
 ${HEADER_HTML}
