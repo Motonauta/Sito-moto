@@ -2,6 +2,7 @@
    TOKENS
    ========================================================== */
 :root{
+  --css-build:"20261010a"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
   /* curve di movimento condivise: --ease-out per entrate, hover e
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);

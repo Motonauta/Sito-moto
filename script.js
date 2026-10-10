@@ -11,12 +11,30 @@
   } catch (e) {}
   if (!on) return;
   let esito = "nessun cambio pagina con transizione (pagina aperta direttamente o ricaricata)";
+  let animazioni = "";
+  let provenienza = "";
+  try { provenienza = sessionStorage.getItem("vt-check-da") || ""; sessionStorage.removeItem("vt-check-da"); } catch (e) {}
+  // la pagina che lasci si segna, così quella nuova sa da dove arrivi
+  window.addEventListener("pageswap", () => {
+    try { sessionStorage.setItem("vt-check-da", location.pathname); } catch (e) {}
+  });
   window.addEventListener("pagereveal", (e) => {
     if (!e.viewTransition) return;
     esito = "transizione in corso…";
     const t0 = performance.now();
     e.viewTransition.ready.then(
-      () => { esito = "transizione PARTITA"; },
+      () => {
+        esito = "transizione PARTITA";
+        // quali animazioni partono davvero (nome e durata): quelle del sito
+        // si chiamano vt-…, quelle standard del browser -ua-…
+        animazioni = document.getAnimations()
+          .filter((a) => a.effect && a.effect.pseudoElement && a.effect.pseudoElement.includes("view-transition-") && !a.effect.pseudoElement.includes("group"))
+          .map((a) => {
+            const t = a.effect.getComputedTiming();
+            return a.effect.pseudoElement.replace("::view-transition-", "") + " → " + (a.animationName || "?") + " " + Math.round(t.duration) + "ms";
+          })
+          .join("<br>");
+      },
       (err) => { esito = "transizione ANNULLATA: " + (err && err.message); }
     );
     e.viewTransition.finished.then(() => {
@@ -36,7 +54,9 @@
       "Browser: " + (chrome ? "Chrome/Chromium " + chrome : ua.slice(0, 90)) + "<br>" +
       "Supporta la transizione: " + (supporta ? "SÌ" : "NO") + "<br>" +
       "Riduci movimento attivo: " + (riduci ? "SÌ" : "no") + "<br>" +
-      "Ultimo cambio pagina: " + esito + "<br>" +
+      "Versione stile: " + (getComputedStyle(document.documentElement).getPropertyValue("--css-build").trim() || "VECCHIA (senza sigla)") + "<br>" +
+      "Ultimo cambio pagina: " + (provenienza ? provenienza + " → " + location.pathname + ": " : "") + esito + "<br>" +
+      (animazioni ? "Animazioni:<br>" + animazioni + "<br>" : "") +
       '<button type="button" style="margin-top:8px;font:inherit;color:inherit;background:none;border:1px solid currentColor;border-radius:6px;padding:2px 8px;cursor:pointer">chiudi</button>';
     box.querySelector("button").onclick = () => {
       try { sessionStorage.removeItem("vt-check"); } catch (e) {}
