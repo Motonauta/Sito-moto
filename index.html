@@ -281,7 +281,7 @@
   .fuel-calc.is-blue::before{ border-top-color:var(--racing-blue); }
   .fuel-calc > *{ position:relative; z-index:1; }
   .fuel-calc-grid{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:18px; align-items:end;
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:18px; align-items:start;
   }
   .fuel-calc label{
     display:block; font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;
@@ -293,27 +293,6 @@
   }
   .fuel-calc-note{ margin-top:14px; font-size:0.8rem; color:var(--cream-dim); }
 
-  /* prezzo benzina come il totem elettronico di un distributore: cifre
-     grandi, luminose, su un pannello quasi nero */
-  .fuel-price-sign{
-    display:flex; align-items:baseline; gap:6px;
-    background:#0b0b0a; border:1px solid rgba(245,240,230,0.16);
-    border-radius:6px; padding:9px 14px;
-  }
-  .fuel-price-sign .fuel-price-currency{
-    font-family:var(--font-mono); font-weight:700; font-size:1.2rem;
-    color:var(--rust); text-shadow:0 0 10px rgba(193,39,45,0.65);
-  }
-  .fuel-price-sign input{
-    width:auto; flex:1; min-width:0; background:transparent !important; border:none !important;
-    padding:0 !important; font-family:var(--font-mono) !important; font-weight:700;
-    font-size:1.65rem; letter-spacing:0.01em;
-    color:var(--rust); text-shadow:0 0 12px rgba(193,39,45,0.65);
-  }
-  .fuel-price-sign .fuel-price-unit{
-    font-family:var(--font-mono); font-size:0.66rem; text-transform:uppercase;
-    letter-spacing:0.05em; color:var(--cream-dim); white-space:nowrap;
-  }
   @media (max-width:780px){ .fuel-calc-grid{ grid-template-columns:1fr; } }
 
   .viaggio-item-badges .card-weather{ color:var(--sand); font-weight:700; }
@@ -431,7 +410,7 @@
       <div class="fuel-calc-grid">
         <div>
           <label for="fuel-cc">Cilindrata moto</label>
-          <select id="fuel-cc">
+          <select id="fuel-cc" data-dial>
             <option value="32">50 cc</option>
             <option value="26">125 cc</option>
             <option value="21">250 cc</option>
@@ -456,10 +435,12 @@
         </div>
         <div>
           <label for="fuel-start">Partenza da</label>
-          <div class="place-field">
+          <div class="place-field nav-field">
+            <svg class="icon nav-field-pin" aria-hidden="true"><use href="/icons.svg#i-pin"/></svg>
             <input type="text" id="fuel-start" value="Roma" placeholder="Es. Roma" autocomplete="off">
             <div class="place-suggest-list" id="fuel-start-suggest"></div>
           </div>
+          <p class="nav-field-readout" data-for="fuel-start" aria-live="polite">Cerco la posizione…</p>
         </div>
       </div>
       <p class="fuel-calc-note">
@@ -1146,17 +1127,45 @@
     });
   }
 
+  // riga "GPS" sotto la partenza: nome + coordinate del punto davvero
+  // usato per i calcoli, così si vede subito se il paese è quello giusto
+  function updatePlaceReadout(inputEl, coords){
+    const readout = document.querySelector(`.nav-field-readout[data-for="${inputEl.id}"]`);
+    if(!readout) return;
+    const name = inputEl.value.trim();
+    if(!name){
+      readout.classList.remove("is-locked");
+      readout.textContent = "Scrivi una partenza";
+    } else if(!coords){
+      readout.classList.remove("is-locked");
+      readout.textContent = "Posizione non riconosciuta";
+    } else {
+      const lat = Number(coords.lat), lon = Number(coords.lon);
+      readout.classList.add("is-locked");
+      readout.textContent = `${name} · ${Math.abs(lat).toFixed(2)}° ${lat >= 0 ? "N" : "S"} ${Math.abs(lon).toFixed(2)}° ${lon >= 0 ? "E" : "O"}`;
+    }
+  }
+
   async function resolvePlace(inputEl){
     const resolved = placeResolvedCoords[inputEl.id];
-    if(resolved) return resolved;
+    if(resolved){
+      updatePlaceReadout(inputEl, resolved);
+      return resolved;
+    }
     const current = inputEl.value.trim();
-    if(!current) return null;
-    try{
-      const results = await nominatimSearch(current);
-      return results[0] ? { lat: results[0].lat, lon: results[0].lon } : null;
-    } catch(err){
+    if(!current){
+      updatePlaceReadout(inputEl, null);
       return null;
     }
+    let coords = null;
+    try{
+      const results = await nominatimSearch(current);
+      coords = results[0] ? { lat: results[0].lat, lon: results[0].lon } : null;
+    } catch(err){
+      coords = null;
+    }
+    if(inputEl.value.trim() === current) updatePlaceReadout(inputEl, coords);
+    return coords;
   }
 
   async function fetchRoute(startCoords, endCoords){
@@ -1414,6 +1423,26 @@
   document.getElementById("fuel-start").addEventListener("change", refreshAllFuel);
   attachPlaceAutocomplete(document.getElementById("fuel-start"), document.getElementById("fuel-start-suggest"));
   attachGeolocationButton(document.getElementById("fuel-start"));
+  // la riga GPS va aggiornata anche quando i km non richiedono di cercare
+  // la partenza (con "Roma" si usano i km già noti): per Roma le coordinate
+  // sono fisse, così non serve una ricerca in rete a ogni visita
+  const ROMA_COORDS = { lat: 41.8933, lon: 12.4829 };
+  function refreshStartReadout(){
+    const el = document.getElementById("fuel-start");
+    if(!placeResolvedCoords[el.id] && el.value.trim().toLowerCase() === "roma"){
+      updatePlaceReadout(el, ROMA_COORDS);
+    } else {
+      resolvePlace(el);
+    }
+  }
+  document.getElementById("fuel-start").addEventListener("change", refreshStartReadout);
+  refreshStartReadout();
+  document.getElementById("fuel-start").addEventListener("input", (e) => {
+    const readout = document.querySelector('.nav-field-readout[data-for="fuel-start"]');
+    if(!readout) return;
+    readout.classList.remove("is-locked");
+    readout.textContent = e.target.value.trim() ? "Scegli un luogo dall'elenco o premi invio" : "Scrivi una partenza";
+  });
 
   // Le tre macro-categorie sono chiuse di default: un click sull'header apre
   // o chiude la lista sottostante (già costruita sopra, solo nascosta).
