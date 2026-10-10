@@ -1,3 +1,25 @@
+// Cambio pagina: lo fa il browser con le View Transitions ("il logo ti
+// viene incontro", vedi style.css), senza nessuna attesa aggiunta. Qui si
+// misura soltanto dov'è il logo dell'intestazione, così quello grande parte
+// da lì e ci torna esattamente. Sta fuori da DOMContentLoaded perché il
+// browser avvia la transizione (pagereveal) prima di quel momento: questo
+// file è in fondo al <body>, quindi gli elementi esistono già.
+function measureVtLogo() {
+  const big = document.querySelector(".vt-logo");
+  const small = document.querySelector(".site-header .logo-ring img, .site-header .logo img");
+  if (!big || !small) return;
+  const b = big.getBoundingClientRect();
+  const r = small.getBoundingClientRect();
+  if (!b.width || !r.width) return;
+  const root = document.documentElement.style;
+  root.setProperty("--vt-dx", `${r.left + r.width / 2 - (b.left + b.width / 2)}px`);
+  root.setProperty("--vt-dy", `${r.top + r.height / 2 - (b.top + b.height / 2)}px`);
+  root.setProperty("--vt-s", String(r.width / b.width));
+}
+measureVtLogo();
+window.addEventListener("pagereveal", (e) => { if (e.viewTransition) measureVtLogo(); });
+window.addEventListener("resize", measureVtLogo);
+
 document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -282,24 +304,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
-
-  // Cambio pagina: lo fa il browser con le View Transitions ("sorpasso in
-  // livrea", vedi style.css), senza nessuna attesa aggiunta, logo compreso.
-  // Qui resta un solo ritocco: il titolo della pagina che lasci "diventa"
-  // quello della nuova solo se è ancora visibile: se hai già scorso oltre,
-  // non deve volare dentro dall'alto.
-  const pageTitle = document.querySelector(
-    "body > section:first-of-type h1, body > section:first-of-type:not(:has(h1)) > .wrap > h2"
-  );
-  window.addEventListener("pageswap", (e) => {
-    if (!e.viewTransition || !pageTitle) return;
-    const r = pageTitle.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > window.innerHeight) pageTitle.style.viewTransitionName = "none";
-  });
-  // tornando indietro la pagina può essere ripristinata così com'era
-  window.addEventListener("pageshow", () => {
-    if (pageTitle) pageTitle.style.viewTransitionName = "";
-  });
 
   const toggle = document.querySelector(".nav-toggle");
   const links = document.querySelector(".nav-links");
