@@ -785,6 +785,8 @@ p{color:var(--cream-dim); max-width:60ch;}
 .logo-wrap img{
   height:40px;
   width:auto;
+  aspect-ratio:1;          /* già quadrato prima che l'immagine arrivi: il cambio pagina lo misura */
+  object-fit:cover;
   display:block;
 }
 @media (max-width:480px){
@@ -904,43 +906,52 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
-   CAMBIO PAGINA — "sorpasso in livrea" (View Transitions)
-   Il browser fotografa la pagina che lasci e quella nuova, e anima il
-   passaggio senza nessuna attesa aggiunta: l'intestazione resta ferma,
-   la pagina vecchia scivola via a sinistra, la nuova entra da destra,
-   il titolo si sposta nella posizione di quello nuovo e le bande della
-   livrea passano sopra come un sorpasso. Dove il browser non lo supporta
-   (es. Firefox) la navigazione resta semplicemente istantanea.
+   CAMBIO PAGINA — "il logo ti viene incontro" (View Transitions)
+   Il browser fotografa la pagina che lasci e quella nuova, senza nessuna
+   attesa aggiunta. Il logo si stacca dall'intestazione, si ingrandisce
+   fino a riempire lo schermo (la pagina dietro avanza un poco con lui),
+   sotto di lui la pagina cambia, poi torna indietro e rientra al suo
+   posto nell'intestazione scoprendo quella nuova. Dove il browser non lo
+   supporta (es. Firefox) la navigazione resta semplicemente istantanea.
    ========================================================== */
 @view-transition{ navigation:auto; }
 
 .site-header{ view-transition-name:site-header; }
-/* il titolo visibile della pagina: l'h1 della prima sezione, oppure (in
-   home, dove l'h1 sta più in basso) il primo h2 */
-body > section:first-of-type h1,
-body > section:first-of-type:not(:has(h1)) > .wrap > h2:first-of-type{ view-transition-name:page-title; }
 
-/* bande rosso/blu: un elemento vuoto in cima a ogni pagina, visibile solo
-   mentre è in corso una transizione (così il browser lo "fotografa") */
-.vt-livery{ display:none; }
-html:active-view-transition .vt-livery{
-  display:block; position:fixed; inset:0; z-index:9998; pointer-events:none;
-  view-transition-name:vt-livery;
-  background:linear-gradient(100deg,
-    transparent 0 36%, var(--rust) 36% 50%, transparent 50% 53%,
-    var(--racing-blue) 53% 60%, transparent 60%);
+/* il logo grande: un elemento vuoto in cima a ogni pagina, sempre
+   presente ma invisibile (così l'immagine è già caricata), mostrato solo
+   mentre è in corso una transizione perché il browser lo "fotografi".
+   Misura quanto la diagonale dello schermo: a grandezza piena copre
+   anche gli angoli. script.js gli dice dov'è il logo dell'intestazione
+   (--vt-dx, --vt-dy, --vt-s) per partire e tornare esattamente lì. */
+.vt-logo{
+  --vt-d:calc(hypot(100vw, 100vh) * 1.04);
+  position:fixed; z-index:9998; pointer-events:none; visibility:hidden;
+  left:calc(50% - var(--vt-d) / 2); top:calc(50% - var(--vt-d) / 2);
+  width:var(--vt-d); height:var(--vt-d);
+  background:url(img/logo-toppa.webp) center / contain no-repeat;
+}
+html:active-view-transition .vt-logo{ visibility:visible; view-transition-name:vt-logo; }
+/* posizione del logo dell'intestazione stimata dall'impaginazione, per
+   quando la transizione parte prima che script.js lo misuri davvero
+   (succede in home, che carica parecchi script esterni prima) */
+:root{
+  --vt-dx:calc(max(0px, (100vw - var(--container)) / 2) + 50px - 50vw);
+  --vt-dy:calc(40px - 50vh);
+  --vt-s:.025;
+}
+@media (min-width:1600px){ :root{ --vt-s:.018; } }
+@media (max-width:1000px){ :root{ --vt-s:.03; } }
+@media (max-width:780px){ :root{ --vt-dx:calc(42px - 50vw); --vt-s:.036; } }
+@media (max-width:480px){ :root{ --vt-s:.041; } }
+@media (prefers-reduced-motion: no-preference){
+  /* mentre vola, il logo piccolo dell'intestazione "manca": è quello */
+  html:active-view-transition .site-header .logo-ring{ visibility:hidden; }
 }
 
-/* ordine dei livelli: pagina, titolo, bande, intestazione in cima */
-::view-transition-group(page-title){ z-index:1; }
-::view-transition-group(vt-livery){ z-index:2; }
-::view-transition-group(site-header){ z-index:3; }
-
-/* pagina: la vecchia esce a sinistra, la nuova entra da destra */
-::view-transition-old(root){ animation:vt-page-out .28s var(--ease-out) both; }
-::view-transition-new(root){ animation:vt-page-in .28s var(--ease-out) both; }
-@keyframes vt-page-out{ to{ opacity:0; transform:translateX(-4%); } }
-@keyframes vt-page-in{ from{ opacity:0; transform:translateX(4%); } }
+/* ordine dei livelli: pagina, intestazione, logo sopra a tutto */
+::view-transition-group(site-header){ z-index:1; }
+::view-transition-group(vt-logo){ z-index:2; }
 
 /* intestazione ferma: niente movimento né dissolvenza, cambia solo la
    voce di menu evidenziata */
@@ -948,34 +959,41 @@ html:active-view-transition .vt-livery{
 ::view-transition-new(site-header){ animation:none; }
 ::view-transition-old(site-header){ display:none; }
 
-/* titolo: si sposta dalla posizione vecchia alla nuova senza deformarsi
-   (le due "foto" del testo restano a grandezza naturale e sfumano) */
-::view-transition-group(page-title){
-  animation-duration:.28s; animation-timing-function:var(--ease-in-out);
-}
-::view-transition-old(page-title),
-::view-transition-new(page-title){
-  inline-size:auto; block-size:auto;
-  animation-duration:.28s; animation-timing-function:var(--ease-out);
-}
-
-/* bande: attraversano tutto lo schermo coprendo il punto di passaggio */
-::view-transition-old(vt-livery){ display:none; }
-::view-transition-new(vt-livery){ animation:vt-livery-sweep .4s var(--ease-in-out) both; }
-@keyframes vt-livery-sweep{
-  from{ transform:translateX(-62%); }
-  to{ transform:translateX(66%); }
+/* logo: viene incontro (0–42%), resta un attimo a schermo pieno mentre
+   sotto cambia pagina (42–54%), torna indietro nell'intestazione */
+::view-transition-old(vt-logo){ display:none; }
+::view-transition-new(vt-logo){ animation:vt-logo-zoom .66s both; }
+@keyframes vt-logo-zoom{
+  0%{
+    transform:translate(var(--vt-dx, 0px), var(--vt-dy, 0px)) scale(var(--vt-s, .03));
+    animation-timing-function:var(--ease-in-out);
+  }
+  42%, 54%{ transform:none; animation-timing-function:var(--ease-in-out); }
+  100%{ transform:translate(var(--vt-dx, 0px), var(--vt-dy, 0px)) scale(var(--vt-s, .03)); }
 }
 
-/* "riduci movimento": solo una breve dissolvenza, niente scorrimenti */
+/* pagina: la vecchia avanza un poco insieme al logo, la nuova compare
+   sotto di lui (a schermo coperto) e si assesta mentre il logo si ritira */
+::view-transition-old(root){ animation:vt-page-out .66s both; }
+::view-transition-new(root){ animation:vt-page-in .66s both; }
+@keyframes vt-page-out{
+  0%{ transform:none; animation-timing-function:var(--ease-in-out); }
+  42%{ opacity:1; transform:scale(1.06); }
+  48%, 100%{ opacity:0; transform:scale(1.06); }
+}
+@keyframes vt-page-in{
+  0%, 48%{ opacity:0; transform:scale(1.06); }
+  54%{ opacity:1; transform:scale(1.06); animation-timing-function:var(--ease-in-out); }
+  100%{ opacity:1; transform:none; }
+}
+
+/* "riduci movimento": solo una breve dissolvenza, niente logo in volo */
 @keyframes vt-fade-out{ to{ opacity:0; } }
 @keyframes vt-fade-in{ from{ opacity:0; } }
 @media (prefers-reduced-motion: reduce){
-  body > section:first-of-type h1,
-  body > section:first-of-type:not(:has(h1)) > .wrap > h2:first-of-type{ view-transition-name:none; }
   ::view-transition-old(root){ animation:vt-fade-out .15s ease both; }
   ::view-transition-new(root){ animation:vt-fade-in .15s ease both; }
-  ::view-transition-new(vt-livery){ display:none; }
+  ::view-transition-new(vt-logo){ display:none; }
 }
 
 /* ==========================================================
