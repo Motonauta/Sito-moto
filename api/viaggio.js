@@ -92,7 +92,7 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css?v=20261010a">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
@@ -137,7 +137,7 @@ const FOOTER_HTML = `<footer class="site-footer">
     <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
   </div>
 </footer>
-<script src="/script.js"></script>`;
+<script src="/script.js?v=20261010a"></script>`;
 
 function render404() {
   return `<!DOCTYPE html>
