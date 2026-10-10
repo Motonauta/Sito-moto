@@ -302,7 +302,7 @@ function renderArticoloConsigliato(g) {
         <div class="manuale-correlati-photo">
           ${g.copertina
             ? `<img src="${escapeHtml(wikiThumb(g.copertina, 500))}" alt="${escapeHtml(g.titolo)}" loading="lazy">`
-            : `<span class="placeholder-icon">📖</span>`}
+            : `<span class="placeholder-icon"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-book"/></svg></span>`}
         </div>
         <div class="manuale-correlati-body">
           <p class="marker">${escapeHtml(g.categoria)}</p>
@@ -388,8 +388,8 @@ ${HEADER_HTML}
     </h1>
     <p class="manuale-meta">${escapeHtml(guida.autore)} — ${escapeHtml(dataLeggibile)}</p>
     <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
-      <button type="button" class="print-pdf-btn" onclick="window.print()">📄 Stampa / Salva come PDF</button>
-      <button type="button" class="copy-link-btn" data-copy="${siteUrl}">🔗 Copia link</button>
+      <button type="button" class="print-pdf-btn" onclick="window.print()"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-file"/></svg> Stampa / Salva come PDF</button>
+      <button type="button" class="copy-link-btn" data-copy="${siteUrl}"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-link"/></svg> Copia link</button>
     </div>
 
     ${guida.copertina ? `

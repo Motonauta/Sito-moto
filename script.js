@@ -22,6 +22,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }).catch(() => {});
   })();
 
+  // Comparsa morbida dei blocchi mentre entrano nello schermo. La prima
+  // sezione (hero) resta fuori: è già visibile al caricamento. Le griglie
+  // vengono "aperte" card per card con un piccolo sfalsamento. Finita
+  // l'animazione le classi si tolgono, così gli effetti al passaggio del
+  // mouse (che usano anch'essi transform) tornano a funzionare.
+  (function initScrollReveal(){
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
+    if (!document.querySelector(".site-header .nav-links")) return;
+
+    const targets = [];
+    Array.from(document.querySelectorAll("body > section")).slice(1).forEach(section => {
+      const wrap = section.querySelector(":scope > .wrap");
+      if (!wrap) return;
+      Array.from(wrap.children).forEach(child => {
+        if (/(^|\s)[\w-]*grid[\w-]*(\s|$)/.test(child.className) && child.children.length) {
+          Array.from(child.children).forEach((card, i) => targets.push([card, Math.min(i, 4) * 90]));
+        } else {
+          targets.push([child, 0]);
+        }
+      });
+    });
+    if (!targets.length) return;
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0 });
+
+    targets.forEach(([el, delay]) => {
+      el.classList.add("reveal");
+      if (delay) el.style.setProperty("--reveal-delay", `${delay}ms`);
+      el.addEventListener("animationend", function done(e){
+        if (e.target !== el || e.animationName !== "reveal-up") return;
+        el.classList.remove("reveal", "is-visible");
+        el.style.removeProperty("--reveal-delay");
+        el.removeEventListener("animationend", done);
+      });
+      observer.observe(el);
+    });
+  })();
+
   // parallasse leggero sulla foto hero, durante lo scroll
   const heroParallax = document.querySelector(".hero-parallax");
   if (heroParallax && !prefersReducedMotion) {
@@ -518,7 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
     trigger.id = "site-search-trigger";
     trigger.type = "button";
     trigger.setAttribute("aria-label", "Cerca nel sito");
-    trigger.innerHTML = "🔍";
+    trigger.innerHTML = '<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-search"/></svg>';
     const navToggle = headerWrap.querySelector(".nav-toggle");
     if (navToggle) {
       headerWrap.insertBefore(trigger, navToggle);
@@ -531,7 +575,7 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.innerHTML = `
       <div class="site-search-box">
         <div class="site-search-input-row">
-          <span>🔍</span>
+          <span><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-search"/></svg></span>
           <input type="text" id="site-search-input" placeholder="Cerca un itinerario, un viaggio o una guida..." autocomplete="off">
           <button type="button" class="site-search-close" aria-label="Chiudi ricerca">&times;</button>
         </div>

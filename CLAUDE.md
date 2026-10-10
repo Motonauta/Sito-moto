@@ -77,3 +77,5 @@ Stile grafico ricorrente: eyebrow `.marker` con trattino dorato, card con bordo 
 - Le immagini Cloudinary vanno sempre con `f_auto,q_auto` nell'URL per l'ottimizzazione automatica
 - Il sito è in italiano; mantenere questo tono/lingua in ogni nuovo contenuto
 - Rispettare sempre `prefers-reduced-motion` per animazioni nuove (pattern già usato in `script.js`)
+- **Niente emoji come icone**: le icone vivono tutte in `icons.svg` (sprite SVG a tratto sottile) e si usano con `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-NOME"/></svg>` (nei template JS c'è l'helper `mnIcon("NOME")`). Per un'icona nuova, aggiungi un `<symbol id="i-NOME">` in `icons.svg` con lo stesso stile (viewBox 24, solo tratti, niente fill)
+- **Comparsa allo scroll automatica**: `script.js` aggiunge da solo la classe `.reveal` ai blocchi dentro `section > .wrap` (esclusa la prima sezione di ogni pagina e l'area riservata), e apre le griglie card per card. Non serve aggiungere nulla nell'HTML per i contenuti nuovi

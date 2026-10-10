@@ -217,7 +217,10 @@
     font-size:0.92rem; color:var(--cream); transition:color .2s ease;
   }
   .itinerario-stops a.stop-link:hover{ color:var(--gold); }
-  .itinerario-stops a.stop-link::before{ content:"📍"; font-size:0.85em; flex-shrink:0; }
+  .itinerario-stops a.stop-link::before{
+    content:""; width:1em; height:1em; flex-shrink:0; background:var(--rust);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z'/%3E%3Ccircle cx='12' cy='9.5' r='2.5'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z'/%3E%3Ccircle cx='12' cy='9.5' r='2.5'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
   .itinerario-stops .fun{
     margin-top:5px; font-size:0.85rem; color:var(--cream-dim); font-style:italic;
   }
@@ -770,15 +773,17 @@
 </div>
 
 <script>
+  const mnIcon = name => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${name}"/></svg>`;
+
   function weatherIcon(code){
-    if (code === 0) return "☀️";
-    if ([1,2].includes(code)) return "🌤️";
-    if (code === 3) return "☁️";
-    if ([45,48].includes(code)) return "🌫️";
-    if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return "🌧️";
-    if ([71,73,75,77,85,86].includes(code)) return "❄️";
-    if ([95,96,99].includes(code)) return "⛈️";
-    return "🌡️";
+    if (code === 0) return mnIcon("sun");
+    if ([1,2].includes(code)) return mnIcon("cloud-sun");
+    if (code === 3) return mnIcon("cloud");
+    if ([45,48].includes(code)) return mnIcon("fog");
+    if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return mnIcon("rain");
+    if ([71,73,75,77,85,86].includes(code)) return mnIcon("snow");
+    if ([95,96,99].includes(code)) return mnIcon("storm");
+    return mnIcon("thermo");
   }
 
   // ===== Salva risultato come PDF (stampa nativa del browser) ==========
@@ -821,9 +826,9 @@
   const NOSTROMO_HISTORY_KEY = "motonauta_nostromo_history";
   const NOSTROMO_HISTORY_MAX = 12;
   const NOSTROMO_TOOL_LABELS = {
-    viaggio: "🌦️ Meteo lungo il percorso",
-    valigia: "🧳 Valigia",
-    rotta: "🗺️ Rotta",
+    viaggio: `${mnIcon("cloud-sun")} Meteo lungo il percorso`,
+    valigia: `${mnIcon("suitcase")} Valigia`,
+    rotta: `${mnIcon("map")} Rotta`,
   };
 
   function loadNostromoHistory(){
@@ -1056,7 +1061,7 @@
     btn.className = "geoloc-btn";
     btn.title = "Usa la mia posizione attuale";
     btn.setAttribute("aria-label", "Usa la mia posizione attuale come partenza");
-    btn.innerHTML = "📍";
+    btn.innerHTML = mnIcon("locate");
     field.appendChild(btn);
 
     btn.addEventListener("click", () => {
@@ -1407,12 +1412,12 @@
       const prezzoBenzina = parseFloat(document.getElementById("fuel-price").value) || 1.75;
       const fuelCost = (distanceKm / consumo) * prezzoBenzina;
 
-      let costsLine = `⛽ Carburante stimato: <strong>€${fuelCost.toFixed(2)}</strong> (sola andata)`;
+      let costsLine = `${mnIcon("fuel")} Carburante stimato: <strong>€${fuelCost.toFixed(2)}</strong> (sola andata)`;
       if(!avoidTolls){
         const motorwayKm = estimateMotorwayKm(route);
         if(motorwayKm > 1){
           const tollCost = motorwayKm * 0.075; // tariffa media indicativa autostrade italiane, €/km
-          costsLine += ` &nbsp;·&nbsp; 🛣️ Pedaggio stimato: <strong>€${tollCost.toFixed(2)}</strong>`;
+          costsLine += ` &nbsp;·&nbsp; ${mnIcon("road")} Pedaggio stimato: <strong>€${tollCost.toFixed(2)}</strong>`;
         }
       }
 
@@ -1433,7 +1438,7 @@
           </ul>
           <p class="route-weather-note" style="margin-top:14px;">Stime indicative: orario di passaggio calcolato in proporzione ai km già percorsi rispetto alla durata totale (non tiene conto di soste), meteo orario per quell'orario esatto; carburante calcolato sulla distanza stradale reale con i parametri del calcolatore qui sopra, pedaggio su una tariffa media (non il prezzo ufficiale del casello).</p>
         </div>
-        <button type="button" class="btn print-pdf-btn" id="route-weather-pdf-btn">📄 Salva come PDF</button>
+        <button type="button" class="btn print-pdf-btn" id="route-weather-pdf-btn">${mnIcon("file")} Salva come PDF</button>
       `;
       saveNostromoHistoryEntry("viaggio", `${startPlace} → ${endPlace}`, {
         start: startPlace, end: endPlace, avoidTolls, dateStr, timeStr,
@@ -1716,14 +1721,14 @@
       resultsEl.innerHTML = `
         <div class="print-capture">
           <p class="route-weather-summary">${weatherNote}</p>
-          ${valigiaCategoryHTML("🏍️ Abbigliamento moto", motoItems)}
-          ${valigiaCategoryHTML("👕 Abbigliamento giornaliero", dailyItems)}
-          ${valigiaCategoryHTML("🧴 Igiene personale", igiene)}
-          ${valigiaCategoryHTML("🎒 Accessori", accessori)}
-          ${valigiaCategoryHTML("📄 Documenti per l'estero", documentiEsteri)}
+          ${valigiaCategoryHTML(`${mnIcon("moto")} Abbigliamento moto`, motoItems)}
+          ${valigiaCategoryHTML(`${mnIcon("shirt")} Abbigliamento giornaliero`, dailyItems)}
+          ${valigiaCategoryHTML(`${mnIcon("droplet")} Igiene personale`, igiene)}
+          ${valigiaCategoryHTML(`${mnIcon("backpack")} Accessori`, accessori)}
+          ${valigiaCategoryHTML(`${mnIcon("file")} Documenti per l'estero`, documentiEsteri)}
           <p class="route-weather-note" style="margin-top:14px;">Lista indicativa generata in base a durata del viaggio e meteo previsto — adattala alle tue abitudini e controlla sempre le previsioni aggiornate il giorno prima di partire.</p>
         </div>
-        <button type="button" class="btn print-pdf-btn" id="valigia-pdf-btn">📄 Salva come PDF</button>
+        <button type="button" class="btn print-pdf-btn" id="valigia-pdf-btn">${mnIcon("file")} Salva come PDF</button>
       `;
       saveNostromoHistoryEntry("valigia", `Valigia per ${destInputEl.value.trim()} (${giorni} gg)`, {
         dest: destInputEl.value.trim(), giorni, dataStr, bucato,
@@ -1945,13 +1950,13 @@
         <div class="print-capture">
           <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida, ${allStops.length} tappe totali</p>
           ${wasCapped ? `<p class="route-weather-note">Il link "tutto in uno" di Google Maps supporta un numero limitato di tappe: qui sotto trovi comunque il dettaglio completo di ogni tratta, ma quel link ne include solo ${MAX_WAYPOINTS_GOOGLE}.</p>` : ""}
-          <a href="${gmapsUrl}" target="_blank" rel="noopener" class="btn solid" style="margin-top:6px; display:inline-block;">🗺️ Apri il percorso completo su Google Maps</a>
+          <a href="${gmapsUrl}" target="_blank" rel="noopener" class="btn solid" style="margin-top:6px; display:inline-block;">${mnIcon("map")} Apri il percorso completo su Google Maps</a>
           <p class="route-weather-note" style="margin-top:14px;">Waze e Apple Maps non supportano un unico link con più tappe: qui sotto un link per ogni tratta, da aprire una alla volta man mano che arrivi.</p>
           <ol class="rotta-legs-list">
             ${legsHTML.join("")}
           </ol>
         </div>
-        <button type="button" class="btn print-pdf-btn" id="rotta-pdf-btn">📄 Salva come PDF</button>
+        <button type="button" class="btn print-pdf-btn" id="rotta-pdf-btn">${mnIcon("file")} Salva come PDF</button>
       `;
       {
         const rottaStopsValues = stopInputs.map(el => el.value.trim()).filter(Boolean);
