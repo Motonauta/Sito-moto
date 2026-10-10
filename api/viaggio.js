@@ -369,7 +369,7 @@ ${HEAD_COMMON}
   .btn.solid{
     position:relative;
     padding:14px 54px 14px 24px;
-    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+    transition:background .2s var(--ease-out), color .2s var(--ease-out), transform .2s var(--ease-out);
   }
   .btn.solid::after{
     content:"→";
@@ -379,10 +379,14 @@ ${HEAD_COMMON}
     display:flex; align-items:center; justify-content:center;
     background:rgba(8,10,18,0.18);
     font-size:0.9rem;
-    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+    transition:transform .2s var(--ease-out), background .2s ease;
   }
+  @media (hover: hover) and (pointer: fine){
   .btn.solid:hover{ transform:translateY(-2px); }
+}
+  @media (hover: hover) and (pointer: fine){
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(8,10,18,0.28); }
+}
 
   .viaggio-photo{
     position:relative; aspect-ratio:16/9; overflow:hidden; margin-top:36px;
@@ -439,7 +443,7 @@ ${HEAD_COMMON}
   .print-pdf-btn{
     font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
     padding:12px 20px; border:1px solid rgba(245,240,230,0.3); color:var(--cream); background:transparent;
-    cursor:pointer; transition:background .2s ease, color .2s ease;
+    cursor:pointer; transition:background .2s ease, color .2s ease, transform .16s var(--ease-out);
   }
   .print-pdf-btn:hover{ background:rgba(245,240,230,0.12); }
   .viaggio-route-preview{ margin-top:44px; max-width:900px; }

@@ -44,7 +44,7 @@
     position:relative; display:flex; flex-direction:column;
     padding:38px 30px 30px; border:1px solid rgba(245,240,230,0.1); border-radius:24px;
     color:inherit; text-decoration:none;
-    transition:transform .5s cubic-bezier(.22,.9,.32,1), box-shadow .5s cubic-bezier(.22,.9,.32,1);
+    transition:transform .22s var(--ease-out), box-shadow .22s var(--ease-out);
   }
   .dest-card::before{
     content:""; position:absolute; inset:7px; z-index:0;
@@ -61,10 +61,14 @@
     text-transform:uppercase; letter-spacing:0.06em; color:var(--cream-dim);
     transition:color .3s ease;
   }
-  .dest-card-go span{ display:inline-block; transition:transform .4s cubic-bezier(.22,.9,.32,1); }
+  .dest-card-go span{ display:inline-block; transition:transform .22s var(--ease-out); }
+  @media (hover: hover) and (pointer: fine){
   .dest-card:hover{ transform:translateY(-6px); box-shadow:0 28px 50px -30px rgba(8,10,18,0.6); }
+}
   .dest-card:hover .dest-card-go{ color:var(--sand); }
+  @media (hover: hover) and (pointer: fine){
   .dest-card:hover .dest-card-go span{ transform:translateX(5px); }
+}
   .dest-card:focus-visible{ outline:2px solid var(--rust); outline-offset:4px; }
   @media (prefers-reduced-motion: reduce){
     .dest-card:hover, .dest-card:hover .dest-card-go span{ transform:none; }
@@ -111,7 +115,7 @@
   .btn.solid{
     position:relative;
     padding:14px 54px 14px 24px;
-    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+    transition:background .2s var(--ease-out), color .2s var(--ease-out), transform .2s var(--ease-out);
   }
   .btn.solid::after{
     content:"→";
@@ -121,10 +125,14 @@
     display:flex; align-items:center; justify-content:center;
     background:rgba(8,10,18,0.18);
     font-size:0.9rem;
-    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+    transition:transform .2s var(--ease-out), background .2s ease;
   }
+  @media (hover: hover) and (pointer: fine){
   .btn.solid:hover{ transform:translateY(-2px); }
+}
+  @media (hover: hover) and (pointer: fine){
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(8,10,18,0.28); }
+}
 
   /* stesso trattamento "a doppia cornice" delle card di Alleati, qui
      applicato ai pannelli funzionali del sito (prima erano piatti:
@@ -203,7 +211,7 @@
   .viaggio-item-photo img{
     width:100%; height:100%; object-fit:cover; display:block;
     filter:saturate(0.78) contrast(1.06) brightness(0.92);
-    transition:filter .5s cubic-bezier(.22,.9,.32,1), transform .6s cubic-bezier(.22,.9,.32,1);
+    transition:filter .3s var(--ease-out), transform .3s var(--ease-out);
   }
   .viaggio-item-photo::after{
     content:""; position:absolute; inset:0; pointer-events:none;
@@ -211,10 +219,12 @@
       linear-gradient(180deg, rgba(21,23,27,0) 45%, rgba(21,23,27,0.45) 100%),
       linear-gradient(135deg, rgba(193,39,45,0.16), rgba(30,95,174,0.16));
   }
+  @media (hover: hover) and (pointer: fine){
   .viaggio-item:hover .viaggio-item-photo img{
     filter:saturate(1) contrast(1.04) brightness(1);
     transform:scale(1.04);
   }
+}
   /* riserva quando la foto manca o non si carica: niente icona "immagine
      rotta" del browser, ma un riquadro coerente con il resto */
   .viaggio-item-photo.is-missing{
@@ -340,7 +350,9 @@
     display:block; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
     overflow:hidden; transition:border-color .25s ease, transform .25s ease;
   }
+  @media (hover: hover) and (pointer: fine){
   .ultimi-articoli-card:hover{ border-color:var(--rust); transform:translateY(-4px); }
+}
   .ultimi-articoli-photo{
     aspect-ratio:16/9; background:linear-gradient(155deg, rgba(30,95,174,0.18) 0%, rgba(193,39,45,0.18) 100%);
     overflow:hidden;

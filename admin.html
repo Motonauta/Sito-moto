@@ -32,7 +32,10 @@
     padding:14px 26px; background:var(--rust); border:1px solid var(--rust); color:var(--cream);
     cursor:pointer; transition:background .25s ease, color .25s ease, transform .2s ease;
   }
-  .admin-btn:hover{ background:var(--gold); border-color:var(--gold); color:var(--asphalt); transform:translateY(-2px); }
+  .admin-btn:hover{ background:var(--gold); border-color:var(--gold); color:var(--asphalt); }
+  @media (hover: hover) and (pointer: fine){
+    .admin-btn:hover{ transform:translateY(-2px); }
+  }
   .admin-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
   .admin-btn.outline{ background:transparent; }
   .admin-btn.outline:hover{ background:var(--rust); border-color:var(--rust); color:var(--cream); }

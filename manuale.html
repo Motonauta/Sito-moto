@@ -65,7 +65,7 @@
   .btn.solid{
     position:relative;
     padding:14px 54px 14px 24px;
-    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+    transition:background .2s var(--ease-out), color .2s var(--ease-out), transform .2s var(--ease-out);
   }
   .btn.solid::after{
     content:"→";
@@ -75,10 +75,14 @@
     display:flex; align-items:center; justify-content:center;
     background:rgba(0,0,0,0.18);
     font-size:0.9rem;
-    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+    transition:transform .2s var(--ease-out), background .2s ease;
   }
+  @media (hover: hover) and (pointer: fine){
   .btn.solid:hover{ transform:translateY(-2px); }
+}
+  @media (hover: hover) and (pointer: fine){
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+}
 
   .manuale-search{ margin-top:44px; max-width:480px; }
   .manuale-search input{
@@ -94,7 +98,9 @@
     display:block; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
     overflow:hidden; transition:border-color .25s ease, transform .25s ease;
   }
+  @media (hover: hover) and (pointer: fine){
   .manuale-card:hover{ border-color:var(--rust); transform:translateY(-4px); }
+}
   .manuale-card-photo{
     aspect-ratio:16/9; background:linear-gradient(155deg, rgba(30,95,174,0.18) 0%, rgba(193,39,45,0.18) 100%);
     overflow:hidden; display:flex; align-items:center; justify-content:center;
