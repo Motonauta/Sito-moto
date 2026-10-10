@@ -283,11 +283,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // transizione tra pagine: la moneta col logo attraversa lo schermo una sola
-  // volta (da sinistra a destra, girando su se stessa per tutto il tragitto)
-  // quando lasci la pagina, con una scritta onomatopeica casuale ferma al
-  // centro; sulla pagina di arrivo c'è solo una dissolvenza, senza ripetere
-  // l'animazione
+  // Cambio pagina: lo fa il browser con le View Transitions ("sorpasso in
+  // livrea", vedi style.css), senza nessuna attesa aggiunta. Qui restano
+  // due ritocchi:
+  // 1) il titolo della pagina che lasci "diventa" quello della nuova solo
+  //    se è ancora visibile: se hai già scorso oltre, non deve volare
+  //    dentro dall'alto;
+  // 2) la vecchia animazione (moneta col logo + scritta "Brum bruuuum")
+  //    resta come sorpresa, ma solo cliccando il logo.
+  const pageTitle = document.querySelector(
+    "body > section:first-of-type h1, body > section:first-of-type:not(:has(h1)) > .wrap > h2"
+  );
+  window.addEventListener("pageswap", (e) => {
+    if (!e.viewTransition || !pageTitle) return;
+    const r = pageTitle.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) pageTitle.style.viewTransitionName = "none";
+  });
+  // tornando indietro la pagina può essere ripristinata così com'era
+  window.addEventListener("pageshow", () => {
+    if (pageTitle) pageTitle.style.viewTransitionName = "";
+  });
+
   const TRANSITION_KEY = "motonauta-transition";
   const TRANSITION_SOUNDS = [
     "Brum bruuuum",
@@ -299,10 +315,12 @@ document.addEventListener("DOMContentLoaded", () => {
     "Bum pow pow pow pow",
     "Ninoooo ninoooo",
   ];
+  const supportsPageTransitions = "CSSViewTransitionRule" in window;
 
+  // dissolvenza d'arrivo solo dove il browser non fa già la transizione
   if (sessionStorage.getItem(TRANSITION_KEY)) {
     sessionStorage.removeItem(TRANSITION_KEY);
-    if (!prefersReducedMotion) {
+    if (!prefersReducedMotion && !supportsPageTransitions) {
       const overlay = document.createElement("div");
       overlay.className = "page-transition pt-arriving";
       document.body.appendChild(overlay);
@@ -312,20 +330,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (!prefersReducedMotion) {
-    document.querySelectorAll("a[href]").forEach((link) => {
-      const href = link.getAttribute("href");
-      if (
-        !href ||
-        href.startsWith("#") ||
-        /^https?:\/\//i.test(href) ||
-        href.startsWith("mailto:") ||
-        href.startsWith("tel:") ||
-        link.target === "_blank"
-      ) return;
-
+    document.querySelectorAll("a.logo[href]").forEach((link) => {
       link.addEventListener("click", (e) => {
         if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
+        const href = link.getAttribute("href");
 
         const sound = TRANSITION_SOUNDS[Math.floor(Math.random() * TRANSITION_SOUNDS.length)];
         const overlay = document.createElement("div");

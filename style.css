@@ -6,6 +6,7 @@
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --asphalt: #1B1A17;
   --asphalt-2: #232019;
   /* stesso rosso esatto usato per "MOTO" nel logo e per l'anello
@@ -903,7 +904,83 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 /* ==========================================================
-   PAGE TRANSITION — "moto che sfreccia"
+   CAMBIO PAGINA — "sorpasso in livrea" (View Transitions)
+   Il browser fotografa la pagina che lasci e quella nuova, e anima il
+   passaggio senza nessuna attesa aggiunta: l'intestazione resta ferma,
+   la pagina vecchia scivola via a sinistra, la nuova entra da destra,
+   il titolo si sposta nella posizione di quello nuovo e le bande della
+   livrea passano sopra come un sorpasso. Dove il browser non lo supporta
+   (es. Firefox) la navigazione resta semplicemente istantanea.
+   ========================================================== */
+@view-transition{ navigation:auto; }
+
+.site-header{ view-transition-name:site-header; }
+/* il titolo visibile della pagina: l'h1 della prima sezione, oppure (in
+   home, dove l'h1 sta più in basso) il primo h2 */
+body > section:first-of-type h1,
+body > section:first-of-type:not(:has(h1)) > .wrap > h2:first-of-type{ view-transition-name:page-title; }
+
+/* bande rosso/blu: un elemento vuoto in cima a ogni pagina, visibile solo
+   mentre è in corso una transizione (così il browser lo "fotografa") */
+.vt-livery{ display:none; }
+html:active-view-transition .vt-livery{
+  display:block; position:fixed; inset:0; z-index:9998; pointer-events:none;
+  view-transition-name:vt-livery;
+  background:linear-gradient(100deg,
+    transparent 0 36%, var(--rust) 36% 50%, transparent 50% 53%,
+    var(--racing-blue) 53% 60%, transparent 60%);
+}
+
+/* ordine dei livelli: pagina, titolo, bande, intestazione in cima */
+::view-transition-group(page-title){ z-index:1; }
+::view-transition-group(vt-livery){ z-index:2; }
+::view-transition-group(site-header){ z-index:3; }
+
+/* pagina: la vecchia esce a sinistra, la nuova entra da destra */
+::view-transition-old(root){ animation:vt-page-out .28s var(--ease-out) both; }
+::view-transition-new(root){ animation:vt-page-in .28s var(--ease-out) both; }
+@keyframes vt-page-out{ to{ opacity:0; transform:translateX(-4%); } }
+@keyframes vt-page-in{ from{ opacity:0; transform:translateX(4%); } }
+
+/* intestazione ferma: niente movimento né dissolvenza, cambia solo la
+   voce di menu evidenziata */
+::view-transition-group(site-header),
+::view-transition-new(site-header){ animation:none; }
+::view-transition-old(site-header){ display:none; }
+
+/* titolo: si sposta dalla posizione vecchia alla nuova senza deformarsi
+   (le due "foto" del testo restano a grandezza naturale e sfumano) */
+::view-transition-group(page-title){
+  animation-duration:.28s; animation-timing-function:var(--ease-in-out);
+}
+::view-transition-old(page-title),
+::view-transition-new(page-title){
+  inline-size:auto; block-size:auto;
+  animation-duration:.28s; animation-timing-function:var(--ease-out);
+}
+
+/* bande: attraversano tutto lo schermo coprendo il punto di passaggio */
+::view-transition-old(vt-livery){ display:none; }
+::view-transition-new(vt-livery){ animation:vt-livery-sweep .4s var(--ease-in-out) both; }
+@keyframes vt-livery-sweep{
+  from{ transform:translateX(-62%); }
+  to{ transform:translateX(66%); }
+}
+
+/* "riduci movimento": solo una breve dissolvenza, niente scorrimenti */
+@keyframes vt-fade-out{ to{ opacity:0; } }
+@keyframes vt-fade-in{ from{ opacity:0; } }
+@media (prefers-reduced-motion: reduce){
+  body > section:first-of-type h1,
+  body > section:first-of-type:not(:has(h1)) > .wrap > h2:first-of-type{ view-transition-name:none; }
+  ::view-transition-old(root){ animation:vt-fade-out .15s ease both; }
+  ::view-transition-new(root){ animation:vt-fade-in .15s ease both; }
+  ::view-transition-new(vt-livery){ display:none; }
+}
+
+/* ==========================================================
+   SORPRESA SUL LOGO — "moto che sfreccia" (la vecchia transizione,
+   ora solo cliccando il logo)
    ========================================================== */
 .page-transition{
   position:fixed; inset:0; z-index:9999;
@@ -913,11 +990,11 @@ p{color:var(--cream-dim); max-width:60ch;}
   pointer-events:none;
 }
 .pt-coin{
-  position:absolute; top:50%; left:-15%;
+  position:absolute; top:50%; left:0;
   width:76px; height:76px;
   border-radius:50%;
   object-fit:cover;
-  transform:translate(-50%, -50%) rotate(0deg);
+  transform:translate(-50%, -50%) translateX(-15vw) rotate(0deg);
   box-shadow:0 0 22px rgba(30,95,174,0.55), 0 0 0 3px rgba(30,95,174,0.4);
   opacity:0;
 }
@@ -943,7 +1020,7 @@ p{color:var(--cream-dim); max-width:60ch;}
   opacity:1; pointer-events:all;
 }
 .page-transition.pt-leaving .pt-coin{
-  animation:pt-coin-sweep .95s cubic-bezier(.4,0,.2,1) forwards;
+  animation:pt-coin-sweep .95s var(--ease-in-out) forwards;
 }
 .page-transition.pt-leaving .pt-sound{
   animation:pt-sound-fade .95s ease forwards;
@@ -955,9 +1032,9 @@ p{color:var(--cream-dim); max-width:60ch;}
 }
 
 @keyframes pt-coin-sweep{
-  0%{ left:-15%; opacity:1; transform:translate(-50%, -50%) rotate(0deg); }
-  92%{ left:112%; opacity:1; transform:translate(-50%, -50%) rotate(720deg); }
-  100%{ left:112%; opacity:0; transform:translate(-50%, -50%) rotate(720deg); }
+  0%{ opacity:1; transform:translate(-50%, -50%) translateX(-15vw) rotate(0deg); }
+  92%{ opacity:1; transform:translate(-50%, -50%) translateX(112vw) rotate(720deg); }
+  100%{ opacity:0; transform:translate(-50%, -50%) translateX(112vw) rotate(720deg); }
 }
 @keyframes pt-sound-fade{
   0%{ opacity:0; }
