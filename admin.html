@@ -155,11 +155,11 @@
     </div>
 
     <div class="admin-tabs">
-      <button type="button" class="admin-tab active" data-tab="galleria" onclick="switchAdminTab('galleria')">📷 Galleria</button>
-      <button type="button" class="admin-tab" data-tab="viaggi" onclick="switchAdminTab('viaggi')">🗺️ Itinerari</button>
-      <button type="button" class="admin-tab" data-tab="idee" onclick="switchAdminTab('idee')">💡 Idee</button>
-      <button type="button" class="admin-tab" data-tab="moto" onclick="switchAdminTab('moto')">🏍️ Moto</button>
-      <button type="button" class="admin-tab" data-tab="stats" onclick="switchAdminTab('stats')">📊 Statistiche</button>
+      <button type="button" class="admin-tab active" data-tab="galleria" onclick="switchAdminTab('galleria')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-camera"/></svg> Galleria</button>
+      <button type="button" class="admin-tab" data-tab="viaggi" onclick="switchAdminTab('viaggi')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-map"/></svg> Itinerari</button>
+      <button type="button" class="admin-tab" data-tab="idee" onclick="switchAdminTab('idee')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-bulb"/></svg> Idee</button>
+      <button type="button" class="admin-tab" data-tab="moto" onclick="switchAdminTab('moto')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-moto"/></svg> Moto</button>
+      <button type="button" class="admin-tab" data-tab="stats" onclick="switchAdminTab('stats')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-chart"/></svg> Statistiche</button>
     </div>
   </div>
 </section>
@@ -169,8 +169,8 @@
   <div class="wrap">
     <div class="contact-card">
       <div style="display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap;">
-        <button type="button" class="admin-btn outline upload-mode-btn active" id="mode-viaggio-btn" onclick="setUploadMode('viaggio')">🌍 Foto di un viaggio</button>
-        <button type="button" class="admin-btn outline upload-mode-btn" id="mode-standalone-btn" onclick="setUploadMode('standalone')">📁 Album singolo (es. Manuale di bordo)</button>
+        <button type="button" class="admin-btn outline upload-mode-btn active" id="mode-viaggio-btn" onclick="setUploadMode('viaggio')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-globe"/></svg> Foto di un viaggio</button>
+        <button type="button" class="admin-btn outline upload-mode-btn" id="mode-standalone-btn" onclick="setUploadMode('standalone')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-folder"/></svg> Album singolo (es. Manuale di bordo)</button>
       </div>
 
       <div id="upload-mode-viaggio">
@@ -1094,8 +1094,8 @@
         row.style.cssText = "border-bottom:1px solid rgba(245,240,230,0.14); padding:16px 0;";
         const date = new Date(idea.date).toLocaleString("it-IT");
         const tipoBadge = idea.tipo === "manuale"
-          ? `<span style="font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--gold); border:1px solid var(--gold); padding:3px 8px;">📖 Manuale</span>`
-          : `<span style="font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--cream-dim); border:1px solid rgba(245,240,230,0.25); padding:3px 8px;">🎬 Video</span>`;
+          ? `<span style="font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--gold); border:1px solid var(--gold); padding:3px 8px;"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-book"/></svg> Manuale</span>`
+          : `<span style="font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--cream-dim); border:1px solid rgba(245,240,230,0.25); padding:3px 8px;"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-video"/></svg> Video</span>`;
         row.innerHTML = `
           <div style="margin-bottom:8px;">${tipoBadge}</div>
           <p style="font-size:0.95rem; color:var(--sand);">${escapeHtml(idea.text)}</p>

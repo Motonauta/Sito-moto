@@ -34,6 +34,41 @@
   @media (min-width:861px){
     .grid-cards-4-wide{ grid-template-columns:repeat(4, 1fr); }
   }
+  @media (min-width:561px) and (max-width:860px){
+    .grid-cards-4-wide{ grid-template-columns:repeat(2, 1fr); }
+  }
+
+  /* "Dove vuoi andare?": stessa doppia cornice delle card "Cosa faccio",
+     con accento rosso/blu alternato e una freccia che scorre al passaggio */
+  .dest-card{
+    position:relative; display:flex; flex-direction:column;
+    padding:38px 30px 30px; border:1px solid rgba(245,240,230,0.1); border-radius:24px;
+    color:inherit; text-decoration:none;
+    transition:transform .5s cubic-bezier(.22,.9,.32,1), box-shadow .5s cubic-bezier(.22,.9,.32,1);
+  }
+  .dest-card::before{
+    content:""; position:absolute; inset:7px; z-index:0;
+    background:var(--asphalt-2); border-radius:18px;
+    border-top:3px solid var(--rust);
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.06);
+  }
+  .dest-card:nth-child(even)::before{ border-top-color:var(--racing-blue); }
+  .dest-card > *{ position:relative; z-index:1; }
+  .dest-card h3{ font-size:1.45rem; color:var(--sand); }
+  .dest-card-desc{ margin-top:10px; font-size:0.92rem; color:var(--cream-dim); flex:1; }
+  .dest-card-go{
+    margin-top:22px; font-family:var(--font-mono); font-size:0.72rem;
+    text-transform:uppercase; letter-spacing:0.06em; color:var(--cream-dim);
+    transition:color .3s ease;
+  }
+  .dest-card-go span{ display:inline-block; transition:transform .4s cubic-bezier(.22,.9,.32,1); }
+  .dest-card:hover{ transform:translateY(-6px); box-shadow:0 28px 50px -30px rgba(8,10,18,0.6); }
+  .dest-card:hover .dest-card-go{ color:var(--sand); }
+  .dest-card:hover .dest-card-go span{ transform:translateX(5px); }
+  .dest-card:focus-visible{ outline:2px solid var(--rust); outline-offset:4px; }
+  @media (prefers-reduced-motion: reduce){
+    .dest-card:hover, .dest-card:hover .dest-card-go span{ transform:none; }
+  }
 
   /* stesso sistema di base delle altre pagine già fatte (Alleati,
      Canale aperto, Diario di bordo, Il Motonauta): grafite freddo,
@@ -157,10 +192,44 @@
       box-shadow:0 26px 54px -22px rgba(8,10,18,0.7);
     }
   }
+  /* Le foto arrivano da fonti diverse (Wikimedia, Cloudinary) con colori e
+     luce molto diversi tra loro: un'unica "correzione colore" leggermente
+     desaturata + una velatura rosso/blu le fa sembrare della stessa serie.
+     Al passaggio del mouse la foto torna più viva. */
   .viaggio-item-photo{
-    flex:0 0 240px; aspect-ratio:4/3; overflow:hidden; background:var(--asphalt-2);
+    flex:0 0 240px; aspect-ratio:4/3; overflow:hidden; position:relative;
+    background:var(--asphalt-2);
   }
-  .viaggio-item-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .viaggio-item-photo img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    filter:saturate(0.78) contrast(1.06) brightness(0.92);
+    transition:filter .5s cubic-bezier(.22,.9,.32,1), transform .6s cubic-bezier(.22,.9,.32,1);
+  }
+  .viaggio-item-photo::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      linear-gradient(180deg, rgba(21,23,27,0) 45%, rgba(21,23,27,0.45) 100%),
+      linear-gradient(135deg, rgba(193,39,45,0.16), rgba(30,95,174,0.16));
+  }
+  .viaggio-item:hover .viaggio-item-photo img{
+    filter:saturate(1) contrast(1.04) brightness(1);
+    transform:scale(1.04);
+  }
+  /* riserva quando la foto manca o non si carica: niente icona "immagine
+     rotta" del browser, ma un riquadro coerente con il resto */
+  .viaggio-item-photo.is-missing{
+    display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(circle at 25% 20%, rgba(193,39,45,0.22), transparent 60%),
+      radial-gradient(circle at 80% 85%, rgba(30,95,174,0.22), transparent 60%),
+      var(--asphalt-2);
+    color:rgba(245,240,230,0.35);
+  }
+  .viaggio-item-photo.is-missing .icon{ width:2.6rem; height:2.6rem; stroke-width:1.2; }
+  .viaggio-item-photo.is-missing::after{ display:none; }
+  @media (prefers-reduced-motion: reduce){
+    .viaggio-item:hover .viaggio-item-photo img{ transform:none; }
+  }
   .viaggio-item-body{ flex:1; min-width:0; padding:18px 22px 18px 0; }
   .viaggio-item-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap; }
   .viaggio-item-title{
@@ -455,8 +524,8 @@
         <input type="text" class="macro-filter-input" id="itinerari-list-filter" placeholder="Filtra per zona — es. Castelli Romani, Ciociaria, Tuscia…" autocomplete="off">
         <p class="macro-filter-empty" id="itinerari-list-empty" hidden>Nessun itinerario trovato per questa zona.</p>
         <div class="itinerari-note">
-          <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
-          totali del giro ad anello (andata e ritorno da Roma inclusi) e ⛽ è la
+          <strong>Prima di partire:</strong> in alto su ogni scheda, <svg class="icon" aria-hidden="true"><use href="/icons.svg#i-pin"/></svg> sono i km
+          totali del giro ad anello (andata e ritorno da Roma inclusi) e <svg class="icon" aria-hidden="true"><use href="/icons.svg#i-fuel"/></svg> è la
           stima del costo di benzina calcolata con i parametri qui sopra — entrambi
           calcolati a tavolino, controlla sempre il percorso su Google Maps il
           giorno stesso, verifica eventuali strade chiuse o lavori in corso, e
@@ -493,9 +562,9 @@
         <input type="text" class="macro-filter-input" id="miniviaggi-list-filter" placeholder="Filtra per zona — es. Dolomiti, Sicilia, Valle d'Aosta…" autocomplete="off">
         <p class="macro-filter-empty" id="miniviaggi-list-empty" hidden>Nessun miniviaggio trovato per questa zona.</p>
         <div class="itinerari-note">
-          <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
+          <strong>Prima di partire:</strong> in alto su ogni scheda, <svg class="icon" aria-hidden="true"><use href="/icons.svg#i-pin"/></svg> sono i km
           totali andata e ritorno dal punto di partenza scelto nel calcolatore
-          qui sopra e ⛽ è la stima del costo di benzina. I passi di montagna
+          qui sopra e <svg class="icon" aria-hidden="true"><use href="/icons.svg#i-fuel"/></svg> è la stima del costo di benzina. I passi di montagna
           sono aperti indicativamente da maggio/giugno a ottobre, meteo
           permettendo: controlla sempre lo stato di apertura del valico e le
           previsioni del giorno stesso, porta abbigliamento a strati (in quota le
@@ -532,9 +601,9 @@
         <input type="text" class="macro-filter-input" id="viaggi-ricordare-list-filter" placeholder="Filtra per zona — es. Baviera, Svizzera, Croazia…" autocomplete="off">
         <p class="macro-filter-empty" id="viaggi-ricordare-list-empty" hidden>Nessun viaggio trovato per questa zona.</p>
         <div class="itinerari-note">
-          <strong>Prima di partire:</strong> in alto su ogni scheda, 📍 sono i km
+          <strong>Prima di partire:</strong> in alto su ogni scheda, <svg class="icon" aria-hidden="true"><use href="/icons.svg#i-pin"/></svg> sono i km
           totali andata e ritorno dal punto di partenza scelto nel calcolatore
-          qui sopra e ⛽ è la stima del costo di benzina. Sono viaggi impegnativi,
+          qui sopra e <svg class="icon" aria-hidden="true"><use href="/icons.svg#i-fuel"/></svg> è la stima del costo di benzina. Sono viaggi impegnativi,
           con giornate lunghe in autostrada: controlla sempre documenti validi
           per l'espatrio e copertura assicurativa all'estero. Se il percorso
           tocca paesi fuori dall'Unione Europea, verifica anche eventuali
@@ -593,8 +662,8 @@
     <div class="idea-card">
       <form id="idea-form">
         <div class="idea-type-toggle" role="radiogroup" aria-label="Tipo di idea" style="display:flex; gap:10px; margin-bottom:14px;">
-          <button type="button" class="idea-type-btn active" data-tipo="video">🎬 Video</button>
-          <button type="button" class="idea-type-btn" data-tipo="manuale">📖 Manuale di bordo</button>
+          <button type="button" class="idea-type-btn active" data-tipo="video"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-video"/></svg> Video</button>
+          <button type="button" class="idea-type-btn" data-tipo="manuale"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-book"/></svg> Manuale di bordo</button>
         </div>
         <textarea id="idea-text" class="idea-textarea" maxlength="600" rows="4" placeholder="Es. Un video sul giro delle Dolomiti, o su come si fa la manutenzione della catena..." required></textarea>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; flex-wrap:wrap; gap:10px;">
@@ -711,28 +780,32 @@
 
     <div class="grid-cards-3 grid-cards-4-wide" style="margin-top:44px;">
 
-      <a href="ilmotonauta.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
+      <a href="ilmotonauta.html" class="dest-card">
         <p class="marker">Il diario</p>
-        <h3 style="font-size:1.4rem; color:var(--sand);">Il Motonauta</h3>
-        <p style="margin-top:10px; font-size:0.92rem;">La mia storia e la mia moto.</p>
+        <h3>Il Motonauta</h3>
+        <p class="dest-card-desc">La mia storia e la mia moto.</p>
+        <span class="dest-card-go">Apri <span aria-hidden="true">→</span></span>
       </a>
 
-      <a href="sponsor.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
+      <a href="sponsor.html" class="dest-card">
         <p class="marker">Collaborazioni</p>
-        <h3 style="font-size:1.4rem; color:var(--sand);">Alleati</h3>
-        <p style="margin-top:10px; font-size:0.92rem;">I brand con cui ho collaborato lungo la strada.</p>
+        <h3>Alleati</h3>
+        <p class="dest-card-desc">I brand con cui ho collaborato lungo la strada.</p>
+        <span class="dest-card-go">Apri <span aria-hidden="true">→</span></span>
       </a>
 
-      <a href="galleria.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
+      <a href="galleria.html" class="dest-card">
         <p class="marker">Scatti di viaggio</p>
-        <h3 style="font-size:1.4rem; color:var(--sand);">Diario di bordo</h3>
-        <p style="margin-top:10px; font-size:0.92rem;">Foto divise per viaggi e destinazioni.</p>
+        <h3>Diario di bordo</h3>
+        <p class="dest-card-desc">Foto divise per viaggi e destinazioni.</p>
+        <span class="dest-card-go">Apri <span aria-hidden="true">→</span></span>
       </a>
 
-      <a href="contatti.html" style="border:1px solid rgba(245,240,230,0.14); padding:38px 30px; display:block; transition:border-color .25s ease, transform .25s ease;" onmouseover="this.style.borderColor='var(--rust)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(245,240,230,0.14)'; this.style.transform='none'">
+      <a href="contatti.html" class="dest-card">
         <p class="marker">Restiamo in contatto</p>
-        <h3 style="font-size:1.4rem; color:var(--sand);">Canale aperto</h3>
-        <p style="margin-top:10px; font-size:0.92rem;">Social, email e recapiti diretti.</p>
+        <h3>Canale aperto</h3>
+        <p class="dest-card-desc">Social, email e recapiti diretti.</p>
+        <span class="dest-card-go">Apri <span aria-hidden="true">→</span></span>
       </a>
 
     </div>
@@ -769,6 +842,7 @@
   }
 
   const { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE } = window.VIAGGI_DATA;
+  const mnIcon = name => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${name}"/></svg>`;
 
   const geocodeCache = {};
   async function geocodePlace(place){
@@ -798,14 +872,14 @@
   const OGGI_AVG_SPEED_KMH = 45;
 
   function oggiWeatherIcon(code){
-    if(code === 0) return "☀️";
-    if([1,2].includes(code)) return "🌤️";
-    if(code === 3) return "☁️";
-    if([45,48].includes(code)) return "🌫️";
-    if(OGGI_RAIN_CODES.has(code)) return "🌧️";
-    if([71,73,75,77,85,86].includes(code)) return "❄️";
-    if([95,96,99].includes(code)) return "⛈️";
-    return "🌡️";
+    if(code === 0) return mnIcon("sun");
+    if([1,2].includes(code)) return mnIcon("cloud-sun");
+    if(code === 3) return mnIcon("cloud");
+    if([45,48].includes(code)) return mnIcon("fog");
+    if(OGGI_RAIN_CODES.has(code)) return mnIcon("rain");
+    if([71,73,75,77,85,86].includes(code)) return mnIcon("snow");
+    if([95,96,99].includes(code)) return mnIcon("storm");
+    return mnIcon("thermo");
   }
 
   function oggiTodayISO(){
@@ -849,7 +923,7 @@
         const weatherBadge = document.createElement("span");
         weatherBadge.className = "card-weather";
         weatherBadge.title = `Meteo previsto oggi a ${it.meteoPlace}`;
-        weatherBadge.textContent = `${weather.icon} ${Math.round(weather.maxTemp)}°`;
+        weatherBadge.innerHTML = `${weather.icon} ${Math.round(weather.maxTemp)}°`;
         badges.insertBefore(weatherBadge, badges.firstChild);
       }
     }
@@ -1041,7 +1115,7 @@
     btn.className = "geoloc-btn";
     btn.title = "Usa la mia posizione attuale";
     btn.setAttribute("aria-label", "Usa la mia posizione attuale come partenza");
-    btn.innerHTML = "📍";
+    btn.innerHTML = mnIcon("locate");
     field.appendChild(btn);
 
     btn.addEventListener("click", () => {
@@ -1148,8 +1222,8 @@
     if(fuelRequestToken.get(container) !== myToken) return;
     const kmEl = container.querySelector(".card-km");
     const priceEl = container.querySelector(".card-price");
-    if(kmEl) kmEl.textContent = `📍 ${km} km`;
-    if(priceEl) priceEl.textContent = `⛽ €${costo.toFixed(2)}`;
+    if(kmEl) kmEl.innerHTML = `${mnIcon("pin")} ${km} km`;
+    if(priceEl) priceEl.innerHTML = `${mnIcon("fuel")} €${costo.toFixed(2)}`;
   }
 
   // Le foto di Itinerari/Miniviaggi/Viaggi da ricordare arrivano da Wikimedia
@@ -1211,12 +1285,12 @@
     const kmEl = container.querySelector(".card-km");
     const priceEl = container.querySelector(".card-price");
     if(km == null){
-      if(kmEl) kmEl.textContent = "📍 — km";
-      if(priceEl) priceEl.textContent = "⛽ —";
+      if(kmEl) kmEl.innerHTML = `${mnIcon("pin")} — km`;
+      if(priceEl) priceEl.innerHTML = `${mnIcon("fuel")} —`;
       return;
     }
-    if(kmEl) kmEl.textContent = `📍 ${km} km totali`;
-    if(priceEl) priceEl.textContent = `⛽ €${costo.toFixed(2)}`;
+    if(kmEl) kmEl.innerHTML = `${mnIcon("pin")} ${km} km totali`;
+    if(priceEl) priceEl.innerHTML = `${mnIcon("fuel")} €${costo.toFixed(2)}`;
   }
 
   function firstParagraph(desc){
@@ -1238,29 +1312,48 @@
 
   // Ogni box della lista è un link diretto alla pagina dedicata del viaggio:
   // niente più modale di dettaglio, un click apre subito /viaggi/<slug>.
+  // i testi degli itinerari arrivano dall'area riservata (Redis), non più
+  // solo da un file scritto a mano: li si scappa prima di metterli nell'HTML
+  function escHtml(str){
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  function markPhotoMissing(photoEl){
+    photoEl.classList.add("is-missing");
+    photoEl.innerHTML = mnIcon("map");
+  }
+
   function buildListItem(it, updateFuelFn){
     const item = document.createElement("a");
     item.className = "viaggio-item";
     item.href = viaggioHref(it);
 
     item.innerHTML = `
-      ${it.foto ? `
       <div class="viaggio-item-photo">
-        <img src="${wikiThumb(it.foto, 500)}" alt="${it.zona}" loading="lazy">
+        ${it.foto ? `<img src="${escHtml(wikiThumb(it.foto, 500))}" alt="${escHtml(it.zona)}" loading="lazy">` : ""}
       </div>
-      ` : ""}
       <div class="viaggio-item-body">
         <div class="viaggio-item-top">
-          <span class="viaggio-item-title">${it.titolo}</span>
+          <span class="viaggio-item-title">${escHtml(it.titolo)}</span>
           <span class="viaggio-item-badges">
-            <span class="card-km" title="Km totali del giro">📍 …</span>
-            <span class="card-price" title="Stima costo benzina">⛽ …</span>
+            <span class="card-km" title="Km totali del giro">${mnIcon("pin")} …</span>
+            <span class="card-price" title="Stima costo benzina">${mnIcon("fuel")} …</span>
           </span>
         </div>
-        <p class="viaggio-item-zona">${it.zona} — ${it.km}</p>
-        <p class="viaggio-item-desc">${firstParagraph(it.desc)}</p>
+        <p class="viaggio-item-zona">${escHtml(it.zona)} — ${escHtml(it.km)}</p>
+        <p class="viaggio-item-desc">${escHtml(firstParagraph(it.desc))}</p>
       </div>
     `;
+
+    const photoEl = item.querySelector(".viaggio-item-photo");
+    const img = photoEl.querySelector("img");
+    if(!img){
+      markPhotoMissing(photoEl);
+    } else {
+      img.addEventListener("error", () => markPhotoMissing(photoEl), { once: true });
+    }
 
     updateFuelFn(item, it);
     return item;

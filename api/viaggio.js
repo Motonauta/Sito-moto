@@ -410,7 +410,10 @@ ${HEAD_COMMON}
     display:flex; align-items:center; gap:8px; font-size:1rem; color:var(--cream); transition:color .2s ease;
   }
   .viaggio-stops a.stop-link:hover{ color:var(--gold); }
-  .viaggio-stops a.stop-link::before{ content:"📍"; font-size:0.9em; flex-shrink:0; }
+  .viaggio-stops a.stop-link::before{
+    content:""; width:1.05em; height:1.05em; flex-shrink:0; background:var(--rust);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z'/%3E%3Ccircle cx='12' cy='9.5' r='2.5'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z'/%3E%3Ccircle cx='12' cy='9.5' r='2.5'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
   .viaggio-stops .fun{ margin-top:6px; font-size:0.92rem; color:var(--cream-dim); font-style:italic; }
   .nostromo-cta{
     position:relative;
@@ -524,8 +527,8 @@ ${HEADER_HTML}
     </div>
 
     <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
-      <button type="button" class="print-pdf-btn" onclick="window.print()">📄 Stampa / Salva come PDF</button>
-      <button type="button" class="copy-link-btn" data-copy="${siteUrl}">🔗 Copia link</button>
+      <button type="button" class="print-pdf-btn" onclick="window.print()"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-file"/></svg> Stampa / Salva come PDF</button>
+      <button type="button" class="copy-link-btn" data-copy="${siteUrl}"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-link"/></svg> Copia link</button>
     </div>
 
     <div class="viaggio-stops">
@@ -549,9 +552,9 @@ ${HEADER_HTML}
         Apri direttamente l'assistente che ti serve: parte già con partenza, arrivo e tappe di questo viaggio precompilati.
       </p>
       <div class="nostromo-cta-buttons">
-        <a href="${nostromoLinks.viaggio}" class="btn">🌦️ Meteo lungo il percorso</a>
-        <a href="${nostromoLinks.valigia}" class="btn">🧳 Prepara la valigia</a>
-        <a href="${nostromoLinks.rotta}" class="btn solid">🗺️ Genera il percorso e le tappe</a>
+        <a href="${nostromoLinks.viaggio}" class="btn"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-cloud-sun"/></svg> Meteo lungo il percorso</a>
+        <a href="${nostromoLinks.valigia}" class="btn"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-suitcase"/></svg> Prepara la valigia</a>
+        <a href="${nostromoLinks.rotta}" class="btn solid"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-map"/></svg> Genera il percorso e le tappe</a>
       </div>
     </div>
 

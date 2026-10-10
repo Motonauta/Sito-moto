@@ -258,7 +258,7 @@
         <div class="manuale-card-photo">
           ${guida.copertina
             ? `<img src="${wikiThumb(guida.copertina, 600)}" alt="${guida.titolo}" loading="lazy">`
-            : `<span class="placeholder-icon">📖</span>`}
+            : `<span class="placeholder-icon"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-book"/></svg></span>`}
         </div>
         <div class="manuale-card-body">
           <p class="marker">${guida.categoria}</p>
