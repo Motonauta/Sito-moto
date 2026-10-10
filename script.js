@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!wrap) return;
       Array.from(wrap.children).forEach(child => {
         if (/(^|\s)[\w-]*grid[\w-]*(\s|$)/.test(child.className) && child.children.length) {
-          Array.from(child.children).forEach((card, i) => targets.push([card, Math.min(i, 4) * 90]));
+          Array.from(child.children).forEach((card, i) => targets.push([card, Math.min(i, 4) * 60]));
         } else {
           targets.push([child, 0]);
         }
@@ -441,7 +441,12 @@ document.addEventListener("DOMContentLoaded", () => {
       lightbox.classList.remove("open");
       document.body.style.overflow = "";
       const mc = lightbox.querySelector(".lightbox-media");
-      if(mc) mc.innerHTML = "";
+      if(!mc) return;
+      mc.querySelector("video")?.pause();
+      // svuota solo a dissolvenza finita, così la foto non sparisce di colpo
+      setTimeout(() => {
+        if(!lightbox.classList.contains("open")) mc.innerHTML = "";
+      }, 160);
     }
   }
 

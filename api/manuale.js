@@ -164,7 +164,9 @@ const STYLE = `<style>
     display:block; background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
     overflow:hidden; transition:border-color .25s ease, transform .25s ease;
   }
+  @media (hover: hover) and (pointer: fine){
   .manuale-correlati-card:hover{ border-color:var(--rust); transform:translateY(-4px); }
+}
   .manuale-correlati-photo{
     aspect-ratio:16/9; background:linear-gradient(155deg, rgba(30,95,174,0.18) 0%, rgba(193,39,45,0.18) 100%);
     overflow:hidden; display:flex; align-items:center; justify-content:center;
@@ -180,7 +182,7 @@ const STYLE = `<style>
   .print-pdf-btn{
     font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
     padding:12px 20px; border:1px solid rgba(245,240,230,0.3); color:var(--cream); background:transparent;
-    cursor:pointer; transition:background .2s ease, color .2s ease;
+    cursor:pointer; transition:background .2s ease, color .2s ease, transform .16s var(--ease-out);
   }
   .print-pdf-btn:hover{ background:rgba(245,240,230,0.12); }
   .print-watermark, .print-logo-corner{ display:none; }

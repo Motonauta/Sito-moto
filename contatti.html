@@ -58,7 +58,7 @@
     border:1px solid rgba(245,240,230,0.1);
     border-radius:24px;
     padding:36px;
-    transition:transform .5s cubic-bezier(.22,.9,.32,1), border-color .5s cubic-bezier(.22,.9,.32,1), box-shadow .5s cubic-bezier(.22,.9,.32,1);
+    transition:transform .22s var(--ease-out), border-color .22s var(--ease-out), box-shadow .22s var(--ease-out);
   }
   .contact-card::before{
     content:"";
@@ -71,11 +71,13 @@
   }
   .contact-card:nth-child(2)::before{ border-top-color:var(--racing-blue); }
   .contact-card > *{ position:relative; z-index:1; }
+  @media (hover: hover) and (pointer: fine){
   .contact-card:hover{
     transform:translateY(-6px);
     border-color:rgba(193,39,45,0.5);
     box-shadow:0 28px 50px -26px rgba(8,10,18,0.6);
   }
+}
   .contact-card a{
     display:flex; justify-content:space-between; align-items:center;
     padding:14px 0; border-bottom:var(--line); font-size:0.98rem; color:var(--cream-dim);
@@ -90,7 +92,7 @@
   .btn.solid{
     position:relative;
     padding:14px 54px 14px 24px;
-    transition:background .3s cubic-bezier(.22,.9,.32,1), color .3s cubic-bezier(.22,.9,.32,1), transform .3s cubic-bezier(.22,.9,.32,1);
+    transition:background .2s var(--ease-out), color .2s var(--ease-out), transform .2s var(--ease-out);
   }
   .btn.solid::after{
     content:"→";
@@ -100,10 +102,14 @@
     display:flex; align-items:center; justify-content:center;
     background:rgba(8,10,18,0.18);
     font-size:0.9rem;
-    transition:transform .3s cubic-bezier(.22,.9,.32,1), background .3s ease;
+    transition:transform .2s var(--ease-out), background .2s ease;
   }
+  @media (hover: hover) and (pointer: fine){
   .btn.solid:hover{ transform:translateY(-2px); }
+}
+  @media (hover: hover) and (pointer: fine){
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(8,10,18,0.28); }
+}
 
   /* stesso filo da livrea in cima al blocco finale, per "chiudere" la pagina */
   .section-alt{ position:relative; }
