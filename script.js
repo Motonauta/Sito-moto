@@ -294,14 +294,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const pageTitle = document.querySelector(
     "body > section:first-of-type h1, body > section:first-of-type:not(:has(h1)) > .wrap > h2"
   );
+  // se è partita la sorpresa del logo, le bande non devono passarci sopra:
+  // si salta la transizione sia in uscita (qui) sia in arrivo (pagereveal)
+  let logoSurprisePlaying = false;
   window.addEventListener("pageswap", (e) => {
-    if (!e.viewTransition || !pageTitle) return;
+    if (!e.viewTransition) return;
+    if (logoSurprisePlaying) { e.viewTransition.skipTransition(); return; }
+    if (!pageTitle) return;
     const r = pageTitle.getBoundingClientRect();
     if (r.bottom < 0 || r.top > window.innerHeight) pageTitle.style.viewTransitionName = "none";
   });
   // tornando indietro la pagina può essere ripristinata così com'era
   window.addEventListener("pageshow", () => {
     if (pageTitle) pageTitle.style.viewTransitionName = "";
+    logoSurprisePlaying = false;
+    document.querySelectorAll(".page-transition.pt-leaving").forEach((el) => el.remove());
   });
 
   const TRANSITION_KEY = "motonauta-transition";
@@ -317,10 +324,16 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
   const supportsPageTransitions = "CSSViewTransitionRule" in window;
 
-  // dissolvenza d'arrivo solo dove il browser non fa già la transizione
+  // arrivo dalla sorpresa del logo: la pagina vecchia è finita coperta,
+  // quindi niente bande, solo la dissolvenza che rivela quella nuova
   if (sessionStorage.getItem(TRANSITION_KEY)) {
     sessionStorage.removeItem(TRANSITION_KEY);
-    if (!prefersReducedMotion && !supportsPageTransitions) {
+    if (supportsPageTransitions) {
+      window.addEventListener("pagereveal", (e) => {
+        if (e.viewTransition) e.viewTransition.skipTransition();
+      }, { once: true });
+    }
+    if (!prefersReducedMotion) {
       const overlay = document.createElement("div");
       overlay.className = "page-transition pt-arriving";
       document.body.appendChild(overlay);
@@ -345,6 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         document.body.appendChild(overlay);
 
+        logoSurprisePlaying = true;
         setTimeout(() => {
           sessionStorage.setItem(TRANSITION_KEY, "1");
           window.location.href = href;
