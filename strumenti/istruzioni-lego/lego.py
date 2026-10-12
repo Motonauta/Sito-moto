@@ -124,6 +124,21 @@ def spray():
             f'<rect x="-8" y="-82" width="16" height="16" rx="3" fill="#fff" stroke="{K}" stroke-width="3.5"/>'
             f'<rect x="8" y="-79" width="12" height="7" fill="{LBG}" stroke="{K}" stroke-width="3"/>'
             f'<rect x="-30" y="-50" width="60" height="110" rx="10" fill="url(#cyl)"/>')
+def spray_aim(tx, ty, s=1.0, rot=40, L=190, half=17, on=True):
+    """bomboletta inclinata di rot gradi che spruzza dall'erogatore (in cima,
+    ugello verso destra) fino al punto (tx, ty) della catena, a distanza L"""
+    a = math.radians(rot)
+    dx, dy = math.cos(a), math.sin(a)                 # direzione del getto
+    nx, ny = 21*s, -75.5*s                            # punta dell'ugello, prima della rotazione
+    tipx, tipy = tx - L*dx, ty - L*dy
+    cx = tipx - (nx*dx - ny*dy); cy = tipy - (nx*dy + ny*dx)
+    def ray(sign):
+        b = a + sign*math.radians(half)
+        return tipx + L*math.cos(b), tipy + L*math.sin(b)
+    (x1, y1), (x2, y2) = ray(-1), ray(1)
+    cone = (f'<path d="M{tipx:.1f} {tipy:.1f} L{x1:.1f} {y1:.1f} L{x2:.1f} {y2:.1f} Z" fill="#ffe1bd" stroke="{K}" '
+            f'stroke-width="3" stroke-dasharray="8 6" stroke-linejoin="round" opacity=".9"/>') if on else ''
+    return cone + at(cx, cy, spray(), s, rot)
 def clock(r=58, frac=0.0):
     a = 360 * frac
     big = 1 if a > 180 else 0
