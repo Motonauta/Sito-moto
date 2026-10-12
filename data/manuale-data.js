@@ -312,6 +312,57 @@
         { tipo: "paragrafo", testo: "In sintesi: le rigide vincono su protezione e sicurezza ma pesano (letteralmente) sul portafoglio e sulla maneggevolezza; le morbide vincono su leggerezza e prezzo ma ti chiedono più attenzione su pioggia forte e soste incustodite. Io sono finito con le rigide dopo l'esperienza del primo viaggio, ma se stai iniziando ora, non è detto che sia la scelta giusta anche per te." },
         { tipo: "paragrafo", testo: "Tu che borse usi? Se hai una combinazione che funziona bene, fammelo sapere! Potrebbe essere oggetto di un nuovo articolo." }
       ]
+    },
+    {
+      titolo: "Pulire la catena con il petrolio bianco: costa un quarto e funziona meglio",
+      categoria: "Manutenzione",
+      excerpt: "Gli sgrassatori spray per catena costano tra 10 e 22 € e bastano per tre pulizie. Un litro di petrolio bianco costa meno di 5 € e ne bastano 50 ml a lavaggio. Ecco come lo uso, perché non rovina gli O-ring e quando invece mi porto lo spray.",
+      autore: "Il Motonauta",
+      data: "2026-09-25",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Ammetto che a un certo punto mi sono stufato di spendere soldi in sgrassatori spray per la catena. Le bombolette più famose, come quelle di Motul e Ipone, costano tra i 10 e i 22 euro e con 400 ml, se ti va bene, pulisci la catena da cima a fondo tre volte." },
+        { tipo: "paragrafo", testo: "La mia alternativa costa meno di un caffè a pulizia: un pennello e del semplice petrolio bianco." },
+        { tipo: "sottotitolo", testo: "Quanto si risparmia davvero" },
+        { tipo: "paragrafo", testo: "Una latta da 1 litro di petrolio bianco l'ho pagata meno di 5 euro, e per pulire la catena alla perfezione ne bastano a malapena 50 ml. Con un litro fai una ventina di pulizie complete; con una bomboletta da 400 ml, che costa il doppio o di più, ne fai tre." },
+        { tipo: "sottotitolo", testo: "Come la pulisco" },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Pennello e petrolio bianco",
+          testo: "Intingi il pennello nel petrolio bianco e passalo bene in ogni punto della catena, maglia per maglia, facendo girare la ruota posteriore con la moto sul cavalletto centrale o su un alzamoto."
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Uno straccio per togliere lo sporco",
+          testo: "Passa uno straccio su tutta la catena per portare via il grasso vecchio sciolto e la sporcizia. Se serve ripeti: la differenza si vede subito."
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Aria compressa, poi di nuovo lo straccio",
+          testo: "L'ideale è soffiare via il petrolio rimasto con l'aria compressa, e poi ripassare la catena con uno straccio asciutto."
+        },
+        {
+          tipo: "consiglio", numero: 4, titolo: "Aspetta un'oretta",
+          testo: "Il petrolio bianco ci mette un po' a evaporare del tutto: lascia la catena ad asciugare per circa un'ora prima di ingrassarla, altrimenti il grasso non fa presa."
+        },
+        {
+          tipo: "consiglio", numero: 5, titolo: "Rimetti il grasso",
+          testo: "Una catena pulita va lubrificata. Io uso il grasso spray con cui mi sono trovato meglio in assoluto, passato su tutta la catena con la ruota che gira."
+        },
+        { tipo: "sottotitolo", testo: "L'unico neo: ci vuole tempo" },
+        { tipo: "paragrafo", testo: "Rispetto allo spray, questo metodo ha un solo difetto: tra aria compressa, straccio e asciugatura serve un'ora buona. Per questo io pulisco la catena col petrolio bianco ogni settimana, con calma, durante le normali manutenzioni alla moto. In viaggio invece mi porto gli spray, che fanno lo stesso lavoro in pochi minuti quando non hai un garage a disposizione." },
+        { tipo: "sottotitolo", testo: "«Ma il petrolio rovina gli O-ring!»" },
+        { tipo: "paragrafo", testo: "È l'obiezione che arriva sempre, e non è vera. Sulla latta c'è scritto che è ideale per sgrassare unto e grasso dalle superfici verniciate e che non intacca gomma e plastiche, e la conferma arriva anche dalla chimica: un creator spiega a livello molecolare perché il petrolio bianco scioglie così bene lo sporco e invece la gomma degli O-ring non la tocca. Il suo video lo trovi qui sotto." },
+        { tipo: "link", label: "Il reel che lo spiega a livello molecolare", url: "https://www.instagram.com/reel/DeR-F-_iEwi/" },
+        { tipo: "paragrafo", testo: "E la prova pratica ce l'ho sotto gli occhi: la mia catena l'ho pulita così già tre volte, brilla ed è ancora come nuova." },
+        { tipo: "sottotitolo", testo: "Due accortezze" },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Lontano da gomma e freni",
+          testo: "Non farlo colare su pneumatico, disco e pastiglie posteriori: metti un cartone sotto e tieni lo straccio a portata di mano."
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "All'aperto e lontano da fiamme",
+          testo: "È infiammabile: lavora in un posto ventilato e lascia asciugare gli stracci all'aria prima di buttarli."
+        },
+        { tipo: "paragrafo", testo: "Tu come pulisci la catena? Se hai un trucco che funziona, scrivimelo: potrebbe diventare il prossimo articolo." },
+        { tipo: "link", label: "Guarda il video su YouTube", url: "https://www.youtube.com/shorts/k1a9rsYvsus" }
+      ]
     }
   ];
 
