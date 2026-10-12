@@ -2,7 +2,7 @@
    TOKENS
    ========================================================== */
 :root{
-  --css-build:"20261012a"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
+  --css-build:"20261012b"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
   /* curve di movimento condivise: --ease-out per entrate, hover e
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -920,6 +920,61 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .cookie-banner{ padding:18px 20px; }
   .cookie-banner-actions{ width:100%; }
   .cookie-banner-actions .btn{ flex:1; justify-content:center; }
+}
+
+/* ==========================================================
+   CRUSCOTTO — quadro strumenti nero con cifre rosse "a LED" (il rosso
+   del logo, per bilanciare il tanto blu del sito). Usato in home (i
+   numeri del sito) e nella pagina Il Motonauta (le caratteristiche
+   della moto). Colonne con --cols sul contenitore; i fili tra i
+   riquadri sono il fondo del contenitore che si vede nei 1px di gap,
+   così funziona con qualsiasi numero di righe. Le cifre in
+   [data-odometer] girano come un contachilometri (script.js).
+   ========================================================== */
+.cruscotto{
+  --cols:4;
+  display:grid; grid-template-columns:repeat(var(--cols), minmax(0, 1fr)); gap:1px;
+  background:rgba(245,240,230,0.08);
+  border:1px solid rgba(245,240,230,0.14); border-radius:14px; overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(245,240,230,0.05), 0 24px 50px -34px rgba(193,39,45,0.55);
+  position:relative;
+}
+.cruscotto::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:2px; z-index:1;
+  background:linear-gradient(90deg, var(--rust), rgba(193,39,45,0) 85%);
+}
+.cruscotto-cell{ background:#0b0b0a; padding:22px 24px 20px; min-width:0; }
+.cruscotto-cell:first-child{
+  background:radial-gradient(ellipse 90% 120% at 0% 0%, rgba(193,39,45,0.16), transparent 70%), #0b0b0a;
+}
+.cruscotto-label{
+  display:flex; align-items:center; gap:8px; margin:0; max-width:none;
+  font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--cream-dim);
+}
+.cruscotto-led{
+  width:7px; height:7px; border-radius:50%; background:var(--rust); flex-shrink:0;
+  box-shadow:0 0 8px 1px rgba(193,39,45,0.8);
+}
+.cruscotto-value{
+  margin:10px 0 0; max-width:none; display:flex; align-items:baseline; gap:8px;
+  font-family:var(--font-mono); font-weight:700; line-height:1; white-space:nowrap;
+  font-size:clamp(1.7rem, 3.2vw, 2.4rem); color:var(--rust);
+  filter:drop-shadow(0 0 9px rgba(193,39,45,0.55));
+}
+/* valori a parole (modello, data): un po' più piccoli */
+.cruscotto-value--text{ font-size:clamp(1.15rem, 2vw, 1.55rem); white-space:normal; }
+.cruscotto-unit{ font-size:0.42em; letter-spacing:0.08em; color:var(--cream-dim); }
+.cruscotto-sub{ margin:8px 0 0; font-size:0.78rem; color:rgba(245,240,230,0.5); }
+/* ruote del contachilometri: una colonna 0–9 per cifra */
+.odo-digit{ display:inline-block; height:1em; overflow:hidden; vertical-align:top; }
+.odo-strip{ display:block; transition:transform 1.1s var(--ease-out); }
+.odo-strip > span{ display:block; height:1em; }
+/* telefono: due colonne; i riquadri .cruscotto-wide prendono la riga intera */
+@media (max-width:860px){
+  .cruscotto{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .cruscotto-wide{ grid-column:1 / -1; }
+  .cruscotto-cell{ padding:18px 20px 16px; }
 }
 
 /* ==========================================================

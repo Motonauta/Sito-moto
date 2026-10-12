@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261012a">
+<link rel="stylesheet" href="style.css?v=20261012b">
 <script src="cookie-consent.js" defer></script>
 <style>
   /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
@@ -132,58 +132,6 @@
     content:""; position:absolute; top:0; left:0; right:0; height:5px;
     background:linear-gradient(to bottom, var(--rust) 0 3px, var(--racing-blue) 3px 5px);
   }
-  /* CRUSCOTTO: quadro strumenti nero come i pannelli del calcolatore
-     benzina, cifre rosse "a LED" come il cartello del prezzo (il rosso
-     del logo, per bilanciare il tanto blu del sito). Le cifre girano
-     come un contachilometri quando il pannello entra nello schermo. */
-  .cruscotto{
-    display:grid; grid-template-columns:1.35fr 1fr 1fr 1fr;
-    background:#0b0b0a; border:1px solid rgba(245,240,230,0.14); border-radius:14px;
-    box-shadow:inset 0 1px 0 rgba(245,240,230,0.05), 0 24px 50px -34px rgba(193,39,45,0.55);
-    position:relative; overflow:hidden;
-  }
-  .cruscotto::before{
-    content:""; position:absolute; left:0; right:0; top:0; height:2px;
-    background:linear-gradient(90deg, var(--rust), rgba(193,39,45,0) 85%);
-  }
-  .cruscotto-cell{ padding:22px 24px 20px; min-width:0; }
-  .cruscotto-cell + .cruscotto-cell{ border-left:1px solid rgba(245,240,230,0.08); }
-  .cruscotto-main{
-    background:radial-gradient(ellipse 90% 120% at 0% 0%, rgba(193,39,45,0.16), transparent 70%);
-  }
-  .cruscotto-label{
-    display:flex; align-items:center; gap:8px; margin:0;
-    font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.12em;
-    text-transform:uppercase; color:var(--cream-dim);
-  }
-  .cruscotto-led{
-    width:7px; height:7px; border-radius:50%; background:var(--rust);
-    box-shadow:0 0 8px 1px rgba(193,39,45,0.8);
-  }
-  .cruscotto-value{
-    margin:10px 0 0; max-width:none; display:flex; align-items:baseline; gap:8px;
-    font-family:var(--font-mono); font-weight:700; line-height:1;
-    font-size:clamp(1.7rem, 3.2vw, 2.4rem); color:var(--rust);
-    filter:drop-shadow(0 0 9px rgba(193,39,45,0.55));
-  }
-  .cruscotto-main .cruscotto-value{ font-size:clamp(2rem, 4vw, 3rem); }
-  .cruscotto-unit{ font-size:0.42em; letter-spacing:0.08em; color:var(--cream-dim); filter:none; }
-  .cruscotto-sub{ margin:8px 0 0; font-size:0.78rem; color:rgba(245,240,230,0.5); }
-  /* ruote del contachilometri: una colonna 0–9 per cifra */
-  .odo-digit{ display:inline-block; height:1em; overflow:hidden; vertical-align:top; }
-  .odo-strip{ display:block; transition:transform 1.1s var(--ease-out); }
-  .odo-strip > span{ display:block; height:1em; }
-  /* telefono: contachilometri in alto, "rotte" e "guide" affiancate,
-     "strade tracciate" (il numero più lungo) per intero sotto */
-  @media (max-width:860px){
-    .cruscotto{ grid-template-columns:1fr 1fr; }
-    .cruscotto-main{ grid-column:1 / -1; }
-    .cruscotto-cell + .cruscotto-cell{ border-left:none; border-top:1px solid rgba(245,240,230,0.08); }
-    .cruscotto-cell:nth-child(3){ grid-column:1 / -1; order:3; }
-    .cruscotto-cell:nth-child(4){ border-left:1px solid rgba(245,240,230,0.08); }
-    .cruscotto-cell{ padding:18px 20px 16px; }
-  }
-
   .btn.solid{
     position:relative;
     padding:14px 54px 14px 24px;
@@ -489,83 +437,25 @@
 <!-- CRUSCOTTO: i numeri veri del sito, come un quadro strumenti ======== -->
 <section style="padding-top:36px; padding-bottom:0;">
   <div class="wrap">
-    <div class="cruscotto" role="group" aria-label="Il cruscotto del Motonauta">
-      <div class="cruscotto-cell cruscotto-main">
-        <p class="cruscotto-label"><span class="cruscotto-led" aria-hidden="true"></span>Contachilometri</p>
-        <p class="cruscotto-value"><span data-odometer id="cr-km" data-value="23000">23.000</span><span class="cruscotto-unit">km</span></p>
-        <p class="cruscotto-sub">BMW S1000XR, aggiornato da me</p>
-      </div>
+    <div class="cruscotto" role="group" aria-label="I numeri del sito" style="--cols:3;">
       <div class="cruscotto-cell">
-        <p class="cruscotto-label">Rotte pronte</p>
+        <p class="cruscotto-label"><span class="cruscotto-led" aria-hidden="true"></span>Rotte pronte</p>
         <p class="cruscotto-value"><span data-odometer id="cr-rotte" data-value="63">63</span></p>
         <p class="cruscotto-sub">giri, miniviaggi e viaggi</p>
-      </div>
-      <div class="cruscotto-cell">
-        <p class="cruscotto-label">Strade tracciate</p>
-        <p class="cruscotto-value"><span data-odometer id="cr-kmrotte" data-value="43056">43.056</span><span class="cruscotto-unit">km</span></p>
-        <p class="cruscotto-sub">da Roma e ritorno</p>
       </div>
       <div class="cruscotto-cell">
         <p class="cruscotto-label">Guide di bordo</p>
         <p class="cruscotto-value"><span data-odometer id="cr-guide" data-value="8">8</span></p>
         <p class="cruscotto-sub">nel Manuale</p>
       </div>
+      <div class="cruscotto-cell cruscotto-wide">
+        <p class="cruscotto-label">Strade tracciate</p>
+        <p class="cruscotto-value"><span data-odometer id="cr-kmrotte" data-value="43056">43.056</span><span class="cruscotto-unit">km</span></p>
+        <p class="cruscotto-sub">da Roma e ritorno</p>
+      </div>
     </div>
   </div>
 </section>
-<script>
-// Cruscotto: ogni numero diventa un contachilometri (una colonna 0–9 per
-// cifra) che gira fino al valore quando il pannello entra nello schermo.
-// Parte subito con i valori scritti nell'HTML; i dati veri (km dall'area
-// riservata, rotte e guide dai dati live) arrivano dopo con mnCruscotto.set().
-(function(){
-  const box = document.querySelector(".cruscotto");
-  if (!box) return;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const fmt = n => n.toLocaleString("it-IT");
-  const current = {};
-  let visible = false;
-
-  function build(el, n){
-    const text = fmt(n);
-    el.setAttribute("aria-label", text);
-    el.innerHTML = [...text].map(ch => /\d/.test(ch)
-      ? '<span class="odo-digit" aria-hidden="true"><span class="odo-strip" data-d="' + ch + '">' +
-        "0123456789".split("").map(d => "<span>" + d + "</span>").join("") + "</span></span>"
-      : '<span aria-hidden="true">' + ch + "</span>").join("");
-  }
-  function roll(el){
-    const strips = [...el.querySelectorAll(".odo-strip")];
-    strips.forEach((s, i) => {
-      s.style.transitionDelay = (strips.length - 1 - i) * 70 + "ms";
-      s.style.transform = "translateY(-" + s.dataset.d + "em)";
-    });
-  }
-  function set(id, n){
-    const el = document.getElementById(id);
-    if (!el || !Number.isFinite(n) || n <= 0 || current[id] === n) return;
-    current[id] = n;
-    if (reduce) { el.textContent = fmt(n); return; }
-    build(el, n);
-    // due fotogrammi: prima le ruote ferme sullo 0, poi la rotazione
-    if (visible) requestAnimationFrame(() => requestAnimationFrame(() => roll(el)));
-  }
-  box.querySelectorAll("[data-odometer]").forEach(el => set(el.id, Number(el.dataset.value)));
-
-  const io = new IntersectionObserver(entries => {
-    if (!entries.some(e => e.isIntersecting)) return;
-    visible = true; io.disconnect();
-    box.querySelectorAll("[data-odometer]").forEach(roll);
-  }, { threshold: 0.35 });
-  io.observe(box);
-
-  fetch("/api/km").then(r => r.ok ? r.json() : null).then(d => {
-    if (d && d.km) set("cr-km", parseInt(String(d.km).replace(/\D/g, ""), 10));
-  }).catch(() => {});
-
-  window.mnCruscotto = { set };
-})();
-</script>
 
 <!-- CALCOLATORE BENZINA, condiviso da tutte le categorie qui sotto ===== -->
 <section style="padding-top:32px; padding-bottom:0;">
@@ -990,13 +880,18 @@
 
   const { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE } = window.VIAGGI_DATA;
 
-  // cruscotto in cima: rotte, km tracciati (i miniviaggi hanno giorni, non
+  // cruscotto in cima (contachilometri in script.js): rotte, km tracciati (i miniviaggi hanno giorni, non
   // km, e restano fuori dalla somma) e guide, dai dati appena caricati
-  if (window.mnCruscotto) {
+  {
     const tutte = [...ITINERARI, ...MINIVIAGGI, ...VIAGGI_RICORDARE];
-    window.mnCruscotto.set("cr-rotte", tutte.length);
-    window.mnCruscotto.set("cr-kmrotte", tutte.reduce((t, it) => t + (Number(it.kmNum) || 0), 0));
-    window.mnCruscotto.set("cr-guide", ((window.MANUALE_DATA && window.MANUALE_DATA.GUIDE) || []).length);
+    const aggiorna = () => {
+      if (!window.mnCruscotto) return;
+      window.mnCruscotto.set("cr-rotte", tutte.length);
+      window.mnCruscotto.set("cr-kmrotte", tutte.reduce((t, it) => t + (Number(it.kmNum) || 0), 0));
+      window.mnCruscotto.set("cr-guide", ((window.MANUALE_DATA && window.MANUALE_DATA.GUIDE) || []).length);
+    };
+    // il contachilometri vive in script.js, caricato in fondo alla pagina
+    if (window.mnCruscotto) aggiorna(); else document.addEventListener("DOMContentLoaded", aggiorna);
   }
 
   const mnIcon = name => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${name}"/></svg>`;
@@ -1670,6 +1565,6 @@
 })();
 </script>
 
-<script src="script.js?v=20261012a"></script>
+<script src="script.js?v=20261012b"></script>
 </body>
 </html>
