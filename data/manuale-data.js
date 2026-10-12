@@ -316,7 +316,7 @@
     {
       titolo: "Non facciamoci fregare: pulire la catena della moto alla perfezione con pochi euro",
       categoria: "Manutenzione",
-      excerpt: "Gli sgrassatori spray per catena costano tra 10 e 22 € e bastano per tre pulizie. Un litro di petrolio bianco costa meno di 5 € e ne bastano 50 ml a lavaggio. Ecco come lo uso passo per passo, perché non rovina gli O-ring e quando invece mi porto lo spray.",
+      excerpt: "Perché spendere così tanto in sgrassatori, quando la soluzione è più economica di quanto sembri? Scopriamo insieme il metodo più efficiente ed economico per pulire la trasmissione alla perfezione!",
       copertina: "/img/manuale/catena/copertina-video.jpg",
       autore: "Il Motonauta",
       data: "2026-09-25",
