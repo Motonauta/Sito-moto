@@ -572,8 +572,8 @@ document.addEventListener("DOMContentLoaded", () => {
     bike.className = "moto-ride";
     bike.setAttribute("aria-hidden", "true");
     bike.innerHTML = '<svg class="moto-top"><use href="/icons.svg#i-moto-top"/></svg>';
-    bike.style.left = (r.left + r.width / 2 - 15) + "px";
-    bike.style.top = (r.top + r.height / 2 - 25) + "px";
+    bike.style.left = (r.left + r.width / 2 - 18.5) + "px";
+    bike.style.top = (r.top + r.height / 2 - 40) + "px";
     document.body.appendChild(bike);
     from.classList.add("is-riding");
     const dist = r.top + r.height / 2 + 80;

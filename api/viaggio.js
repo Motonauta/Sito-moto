@@ -92,7 +92,7 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20261012c">
+<link rel="stylesheet" href="/style.css?v=20261012d">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
@@ -153,7 +153,7 @@ const FOOTER_HTML = `<footer class="site-footer">
     </div>
   </div>
 </footer>
-<script src="/script.js?v=20261012c"></script>`;
+<script src="/script.js?v=20261012d"></script>`;
 
 function render404() {
   return `<!DOCTYPE html>
