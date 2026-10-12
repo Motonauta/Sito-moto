@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261010c">
+<link rel="stylesheet" href="style.css?v=20261012a">
 <script src="cookie-consent.js" defer></script>
 <style>
   /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
@@ -28,50 +28,70 @@
      anche all'header "sticky" di restare fisso in cima durante lo
      scroll. Risolto il vero problema (le 4 colonne), tolto il cerotto. */
   html, body{ max-width:100vw; }
-  /* 4 card invece delle 3 di default — qui niente inline style:
-     un inline style vince sempre sulla regola mobile a 1 colonna di
-     .grid-cards-3, lasciando 4 colonne strette anche su telefono */
-  @media (min-width:861px){
-    .grid-cards-4-wide{ grid-template-columns:repeat(4, 1fr); }
+  /* COSA FACCIO: righe editoriali, numero grande rosso a contorno che
+     si riempie al passaggio del mouse */
+  .cf-grid{ list-style:none; margin-top:44px; border-top:1px solid rgba(245,240,230,0.12); }
+  .cf-row{
+    display:grid; grid-template-columns:clamp(84px, 11vw, 150px) minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items:baseline; gap:12px 32px;
+    padding:28px 0; border-bottom:1px solid rgba(245,240,230,0.12);
   }
-  @media (min-width:561px) and (max-width:860px){
-    .grid-cards-4-wide{ grid-template-columns:repeat(2, 1fr); }
+  .cf-num{
+    font-family:var(--font-display); font-weight:700; line-height:0.8;
+    font-size:clamp(3rem, 6.5vw, 5.2rem); letter-spacing:-0.01em;
+    color:transparent; -webkit-text-stroke:1.5px var(--rust);
+    transition:color .22s var(--ease-out);
+  }
+  .cf-row h3{ font-size:clamp(1.3rem, 2.4vw, 1.75rem); color:var(--sand); }
+  .cf-row p{ font-size:0.98rem; }
+  @media (hover: hover) and (pointer: fine){
+    .cf-row:hover .cf-num{ color:var(--rust); }
+  }
+  @media (max-width:760px){
+    .cf-row{ grid-template-columns:auto minmax(0, 1fr); gap:6px 20px; padding:22px 0; }
+    .cf-num{ grid-row:span 2; font-size:3rem; }
   }
 
-  /* "Dove vuoi andare?": stessa doppia cornice delle card "Cosa faccio",
-     con accento rosso/blu alternato e una freccia che scorre al passaggio */
-  .dest-card{
-    position:relative; display:flex; flex-direction:column;
-    padding:38px 30px 30px; border:1px solid rgba(245,240,230,0.1); border-radius:24px;
+  /* DOVE VUOI ANDARE?: indice a righe, riga che si accende di rosso */
+  .esplora-grid{ margin-top:40px; border-top:1px solid rgba(245,240,230,0.12); }
+  .esplora-row{
+    position:relative; isolation:isolate;
+    display:grid; grid-template-columns:minmax(150px, 0.7fr) minmax(0, 1.3fr) minmax(0, 1fr) auto;
+    align-items:center; gap:10px 28px;
+    padding:26px 8px; border-bottom:1px solid rgba(245,240,230,0.12);
     color:inherit; text-decoration:none;
-    transition:transform .22s var(--ease-out), box-shadow .22s var(--ease-out);
   }
-  .dest-card::before{
-    content:""; position:absolute; inset:7px; z-index:0;
-    background:var(--asphalt-2); border-radius:18px;
-    border-top:3px solid var(--rust);
-    box-shadow:inset 0 1px 0 rgba(245,240,230,0.06);
+  .esplora-row::before{
+    content:""; position:absolute; inset:0; z-index:-1;
+    background:linear-gradient(90deg, rgba(193,39,45,0.2), rgba(193,39,45,0.04) 70%, transparent);
+    transform:scaleX(0); transform-origin:left center;
+    transition:transform .3s var(--ease-out);
   }
-  .dest-card:nth-child(even)::before{ border-top-color:var(--racing-blue); }
-  .dest-card > *{ position:relative; z-index:1; }
-  .dest-card h3{ font-size:1.45rem; color:var(--sand); }
-  .dest-card-desc{ margin-top:10px; font-size:0.92rem; color:var(--cream-dim); flex:1; }
-  .dest-card-go{
-    margin-top:22px; font-family:var(--font-mono); font-size:0.72rem;
-    text-transform:uppercase; letter-spacing:0.06em; color:var(--cream-dim);
-    transition:color .3s ease;
+  .esplora-tag{
+    font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--rust);
   }
-  .dest-card-go span{ display:inline-block; transition:transform .22s var(--ease-out); }
+  .esplora-title{
+    font-family:var(--font-display); font-weight:600; text-transform:uppercase;
+    font-size:clamp(1.7rem, 3.6vw, 2.9rem); line-height:1; color:var(--sand);
+    transition:transform .22s var(--ease-out);
+  }
+  .esplora-desc{ font-size:0.92rem; color:var(--cream-dim); }
+  .esplora-go{
+    width:44px; height:44px; border-radius:50%; border:1px solid rgba(245,240,230,0.25);
+    display:flex; align-items:center; justify-content:center; color:var(--cream);
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out), transform .22s var(--ease-out);
+  }
+  .esplora-row:focus-visible{ outline:2px solid var(--rust); outline-offset:2px; }
   @media (hover: hover) and (pointer: fine){
-  .dest-card:hover{ transform:translateY(-6px); box-shadow:0 28px 50px -30px rgba(8,10,18,0.6); }
-}
-  .dest-card:hover .dest-card-go{ color:var(--sand); }
-  @media (hover: hover) and (pointer: fine){
-  .dest-card:hover .dest-card-go span{ transform:translateX(5px); }
-}
-  .dest-card:focus-visible{ outline:2px solid var(--rust); outline-offset:4px; }
-  @media (prefers-reduced-motion: reduce){
-    .dest-card:hover, .dest-card:hover .dest-card-go span{ transform:none; }
+    .esplora-row:hover::before{ transform:scaleX(1); }
+    .esplora-row:hover .esplora-title{ transform:translateX(8px); }
+    .esplora-row:hover .esplora-go{ background:var(--rust); border-color:var(--rust); transform:translateX(4px); }
+  }
+  @media (max-width:760px){
+    .esplora-row{ grid-template-columns:minmax(0, 1fr) auto; padding:20px 4px; gap:6px 16px; }
+    .esplora-tag, .esplora-title, .esplora-desc{ grid-column:1; }
+    .esplora-go{ grid-column:2; grid-row:1 / span 3; width:40px; height:40px; }
   }
 
   /* stesso sistema di base delle altre pagine già fatte (Alleati,
@@ -112,6 +132,58 @@
     content:""; position:absolute; top:0; left:0; right:0; height:5px;
     background:linear-gradient(to bottom, var(--rust) 0 3px, var(--racing-blue) 3px 5px);
   }
+  /* CRUSCOTTO: quadro strumenti nero come i pannelli del calcolatore
+     benzina, cifre rosse "a LED" come il cartello del prezzo (il rosso
+     del logo, per bilanciare il tanto blu del sito). Le cifre girano
+     come un contachilometri quando il pannello entra nello schermo. */
+  .cruscotto{
+    display:grid; grid-template-columns:1.35fr 1fr 1fr 1fr;
+    background:#0b0b0a; border:1px solid rgba(245,240,230,0.14); border-radius:14px;
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.05), 0 24px 50px -34px rgba(193,39,45,0.55);
+    position:relative; overflow:hidden;
+  }
+  .cruscotto::before{
+    content:""; position:absolute; left:0; right:0; top:0; height:2px;
+    background:linear-gradient(90deg, var(--rust), rgba(193,39,45,0) 85%);
+  }
+  .cruscotto-cell{ padding:22px 24px 20px; min-width:0; }
+  .cruscotto-cell + .cruscotto-cell{ border-left:1px solid rgba(245,240,230,0.08); }
+  .cruscotto-main{
+    background:radial-gradient(ellipse 90% 120% at 0% 0%, rgba(193,39,45,0.16), transparent 70%);
+  }
+  .cruscotto-label{
+    display:flex; align-items:center; gap:8px; margin:0;
+    font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--cream-dim);
+  }
+  .cruscotto-led{
+    width:7px; height:7px; border-radius:50%; background:var(--rust);
+    box-shadow:0 0 8px 1px rgba(193,39,45,0.8);
+  }
+  .cruscotto-value{
+    margin:10px 0 0; max-width:none; display:flex; align-items:baseline; gap:8px;
+    font-family:var(--font-mono); font-weight:700; line-height:1;
+    font-size:clamp(1.7rem, 3.2vw, 2.4rem); color:var(--rust);
+    filter:drop-shadow(0 0 9px rgba(193,39,45,0.55));
+  }
+  .cruscotto-main .cruscotto-value{ font-size:clamp(2rem, 4vw, 3rem); }
+  .cruscotto-unit{ font-size:0.42em; letter-spacing:0.08em; color:var(--cream-dim); filter:none; }
+  .cruscotto-sub{ margin:8px 0 0; font-size:0.78rem; color:rgba(245,240,230,0.5); }
+  /* ruote del contachilometri: una colonna 0–9 per cifra */
+  .odo-digit{ display:inline-block; height:1em; overflow:hidden; vertical-align:top; }
+  .odo-strip{ display:block; transition:transform 1.1s var(--ease-out); }
+  .odo-strip > span{ display:block; height:1em; }
+  /* telefono: contachilometri in alto, "rotte" e "guide" affiancate,
+     "strade tracciate" (il numero più lungo) per intero sotto */
+  @media (max-width:860px){
+    .cruscotto{ grid-template-columns:1fr 1fr; }
+    .cruscotto-main{ grid-column:1 / -1; }
+    .cruscotto-cell + .cruscotto-cell{ border-left:none; border-top:1px solid rgba(245,240,230,0.08); }
+    .cruscotto-cell:nth-child(3){ grid-column:1 / -1; order:3; }
+    .cruscotto-cell:nth-child(4){ border-left:1px solid rgba(245,240,230,0.08); }
+    .cruscotto-cell{ padding:18px 20px 16px; }
+  }
+
   .btn.solid{
     position:relative;
     padding:14px 54px 14px 24px;
@@ -413,6 +485,87 @@
     </p>
   </div>
 </section>
+
+<!-- CRUSCOTTO: i numeri veri del sito, come un quadro strumenti ======== -->
+<section style="padding-top:36px; padding-bottom:0;">
+  <div class="wrap">
+    <div class="cruscotto" role="group" aria-label="Il cruscotto del Motonauta">
+      <div class="cruscotto-cell cruscotto-main">
+        <p class="cruscotto-label"><span class="cruscotto-led" aria-hidden="true"></span>Contachilometri</p>
+        <p class="cruscotto-value"><span data-odometer id="cr-km" data-value="23000">23.000</span><span class="cruscotto-unit">km</span></p>
+        <p class="cruscotto-sub">BMW S1000XR, aggiornato da me</p>
+      </div>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Rotte pronte</p>
+        <p class="cruscotto-value"><span data-odometer id="cr-rotte" data-value="63">63</span></p>
+        <p class="cruscotto-sub">giri, miniviaggi e viaggi</p>
+      </div>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Strade tracciate</p>
+        <p class="cruscotto-value"><span data-odometer id="cr-kmrotte" data-value="43056">43.056</span><span class="cruscotto-unit">km</span></p>
+        <p class="cruscotto-sub">da Roma e ritorno</p>
+      </div>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Guide di bordo</p>
+        <p class="cruscotto-value"><span data-odometer id="cr-guide" data-value="8">8</span></p>
+        <p class="cruscotto-sub">nel Manuale</p>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+// Cruscotto: ogni numero diventa un contachilometri (una colonna 0–9 per
+// cifra) che gira fino al valore quando il pannello entra nello schermo.
+// Parte subito con i valori scritti nell'HTML; i dati veri (km dall'area
+// riservata, rotte e guide dai dati live) arrivano dopo con mnCruscotto.set().
+(function(){
+  const box = document.querySelector(".cruscotto");
+  if (!box) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fmt = n => n.toLocaleString("it-IT");
+  const current = {};
+  let visible = false;
+
+  function build(el, n){
+    const text = fmt(n);
+    el.setAttribute("aria-label", text);
+    el.innerHTML = [...text].map(ch => /\d/.test(ch)
+      ? '<span class="odo-digit" aria-hidden="true"><span class="odo-strip" data-d="' + ch + '">' +
+        "0123456789".split("").map(d => "<span>" + d + "</span>").join("") + "</span></span>"
+      : '<span aria-hidden="true">' + ch + "</span>").join("");
+  }
+  function roll(el){
+    const strips = [...el.querySelectorAll(".odo-strip")];
+    strips.forEach((s, i) => {
+      s.style.transitionDelay = (strips.length - 1 - i) * 70 + "ms";
+      s.style.transform = "translateY(-" + s.dataset.d + "em)";
+    });
+  }
+  function set(id, n){
+    const el = document.getElementById(id);
+    if (!el || !Number.isFinite(n) || n <= 0 || current[id] === n) return;
+    current[id] = n;
+    if (reduce) { el.textContent = fmt(n); return; }
+    build(el, n);
+    // due fotogrammi: prima le ruote ferme sullo 0, poi la rotazione
+    if (visible) requestAnimationFrame(() => requestAnimationFrame(() => roll(el)));
+  }
+  box.querySelectorAll("[data-odometer]").forEach(el => set(el.id, Number(el.dataset.value)));
+
+  const io = new IntersectionObserver(entries => {
+    if (!entries.some(e => e.isIntersecting)) return;
+    visible = true; io.disconnect();
+    box.querySelectorAll("[data-odometer]").forEach(roll);
+  }, { threshold: 0.35 });
+  io.observe(box);
+
+  fetch("/api/km").then(r => r.ok ? r.json() : null).then(d => {
+    if (d && d.km) set("cr-km", parseInt(String(d.km).replace(/\D/g, ""), 10));
+  }).catch(() => {});
+
+  window.mnCruscotto = { set };
+})();
+</script>
 
 <!-- CALCOLATORE BENZINA, condiviso da tutte le categorie qui sotto ===== -->
 <section style="padding-top:32px; padding-bottom:0;">
@@ -741,68 +894,68 @@
 </script>
 
 <!-- COSA FACCIO ===================================================== -->
+<!-- lista "editoriale" senza riquadri: grandi numeri rossi a contorno,
+     righe separate da un filo, così non è l'ennesima fila di card -->
 <section class="section-alt">
   <div class="wrap">
     <p class="marker">Cosa faccio</p>
     <h2 style="max-width:16ch;">Contenuti on the road, dal casco allo schermo</h2>
 
-    <div class="grid-flat-3" style="margin-top:48px;">
-      <div style="padding:34px;">
-        <p class="marker">01 — viaggi</p>
-        <h3 style="font-size:1.45rem; color:var(--sand);">Itinerari e diari di viaggio</h3>
-        <p style="margin-top:12px; font-size:0.95rem;">Tappe, percorsi e consigli pratici da chi la strada l'ha davvero fatta.</p>
-      </div>
-      <div style="padding:34px;">
-        <p class="marker">02 — mezzi</p>
-        <h3 style="font-size:1.45rem; color:var(--sand);">Test e recensioni</h3>
-        <p style="margin-top:12px; font-size:0.95rem;">Prove su strada, equipaggiamento e attrezzatura da viaggio.</p>
-      </div>
-      <div style="padding:34px;">
-        <p class="marker">03 — community</p>
-        <h3 style="font-size:1.45rem; color:var(--sand);">Community e collaborazioni</h3>
-        <p style="margin-top:12px; font-size:0.95rem;">Progetti con brand e altri rider per raccontare la cultura del viaggio in moto.</p>
-      </div>
-    </div>
+    <ol class="cf-grid">
+      <li class="cf-row">
+        <span class="cf-num" aria-hidden="true">01</span>
+        <h3>Itinerari e diari di viaggio</h3>
+        <p>Tappe, percorsi e consigli pratici da chi la strada l'ha davvero fatta.</p>
+      </li>
+      <li class="cf-row">
+        <span class="cf-num" aria-hidden="true">02</span>
+        <h3>Test e recensioni</h3>
+        <p>Prove su strada, equipaggiamento e attrezzatura da viaggio.</p>
+      </li>
+      <li class="cf-row">
+        <span class="cf-num" aria-hidden="true">03</span>
+        <h3>Community e collaborazioni</h3>
+        <p>Progetti con brand e altri rider per raccontare la cultura del viaggio in moto.</p>
+      </li>
+    </ol>
   </div>
 </section>
 
-<!-- MACRO CATEGORIE ================================================= -->
+<!-- DOVE VUOI ANDARE? ================================================ -->
+<!-- indice a righe come i cartelli di una tangenziale: titolo grande,
+     una riga di spiegazione, freccia; al passaggio del mouse la riga si
+     accende di rosso da sinistra -->
 <section>
   <div class="wrap">
     <p class="marker">Esplora</p>
     <h2>Dove vuoi andare?</h2>
 
-    <div class="grid-cards-3 grid-cards-4-wide" style="margin-top:44px;">
-
-      <a href="ilmotonauta.html" class="dest-card">
-        <p class="marker">Il diario</p>
-        <h3>Il Motonauta</h3>
-        <p class="dest-card-desc">La mia storia e la mia moto.</p>
-        <span class="dest-card-go">Apri <span aria-hidden="true">→</span></span>
+    <nav class="esplora-grid" aria-label="Le altre pagine del sito">
+      <a href="ilmotonauta.html" class="esplora-row">
+        <span class="esplora-tag">Il diario</span>
+        <span class="esplora-title">Il Motonauta</span>
+        <span class="esplora-desc">La mia storia e la mia moto.</span>
+        <span class="esplora-go" aria-hidden="true">→</span>
       </a>
-
-      <a href="sponsor.html" class="dest-card">
-        <p class="marker">Collaborazioni</p>
-        <h3>Alleati</h3>
-        <p class="dest-card-desc">I brand con cui ho collaborato lungo la strada.</p>
-        <span class="dest-card-go">Apri <span aria-hidden="true">→</span></span>
+      <a href="sponsor.html" class="esplora-row">
+        <span class="esplora-tag">Collaborazioni</span>
+        <span class="esplora-title">Alleati</span>
+        <span class="esplora-desc">I brand con cui ho collaborato lungo la strada.</span>
+        <span class="esplora-go" aria-hidden="true">→</span>
       </a>
-
-      <a href="galleria.html" class="dest-card">
-        <p class="marker">Scatti di viaggio</p>
-        <h3>Diario di bordo</h3>
-        <p class="dest-card-desc">Foto divise per viaggi e destinazioni.</p>
-        <span class="dest-card-go">Apri <span aria-hidden="true">→</span></span>
+      <a href="galleria.html" class="esplora-row">
+        <span class="esplora-tag">Scatti di viaggio</span>
+        <span class="esplora-title">Diario di bordo</span>
+        <span class="esplora-desc">Foto divise per viaggi e destinazioni.</span>
+        <span class="esplora-go" aria-hidden="true">→</span>
       </a>
-
-      <a href="contatti.html" class="dest-card">
-        <p class="marker">Restiamo in contatto</p>
-        <h3>Canale aperto</h3>
-        <p class="dest-card-desc">Social, email e recapiti diretti.</p>
-        <span class="dest-card-go">Apri <span aria-hidden="true">→</span></span>
+      <a href="contatti.html" class="esplora-row">
+        <span class="esplora-tag">Restiamo in contatto</span>
+        <span class="esplora-title">Canale aperto</span>
+        <span class="esplora-desc">Social, email e recapiti diretti.</span>
+        <span class="esplora-go" aria-hidden="true">→</span>
       </a>
-
-    </div>
+    </nav>
   </div>
 </section>
 
@@ -836,6 +989,16 @@
   }
 
   const { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE } = window.VIAGGI_DATA;
+
+  // cruscotto in cima: rotte, km tracciati (i miniviaggi hanno giorni, non
+  // km, e restano fuori dalla somma) e guide, dai dati appena caricati
+  if (window.mnCruscotto) {
+    const tutte = [...ITINERARI, ...MINIVIAGGI, ...VIAGGI_RICORDARE];
+    window.mnCruscotto.set("cr-rotte", tutte.length);
+    window.mnCruscotto.set("cr-kmrotte", tutte.reduce((t, it) => t + (Number(it.kmNum) || 0), 0));
+    window.mnCruscotto.set("cr-guide", ((window.MANUALE_DATA && window.MANUALE_DATA.GUIDE) || []).length);
+  }
+
   const mnIcon = name => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${name}"/></svg>`;
 
   const geocodeCache = {};
@@ -1507,6 +1670,6 @@
 })();
 </script>
 
-<script src="script.js?v=20261010c"></script>
+<script src="script.js?v=20261012a"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
    TOKENS
    ========================================================== */
 :root{
-  --css-build:"20261010c"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
+  --css-build:"20261012a"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
   /* curve di movimento condivise: --ease-out per entrate, hover e
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -51,11 +51,12 @@ body{
      opposti, fissi rispetto alla finestra (non scorrono con la pagina),
      molto tenui per non intaccare la leggibilità del testo sopra */
   background:
+    url(img/topo.svg) right -280px top -60px / min(1400px, 170vw) auto no-repeat,
     radial-gradient(ellipse 1100px 900px at 10% -10%, rgba(193,39,45,0.24), transparent 65%),
     radial-gradient(ellipse 1100px 900px at 92% 108%, rgba(30,95,174,0.24), transparent 65%),
     radial-gradient(ellipse 1500px 1100px at 50% 40%, rgba(193,39,45,0.05), transparent 72%),
     var(--asphalt);
-  background-attachment:fixed, fixed, fixed, fixed;
+  background-attachment:scroll, fixed, fixed, fixed, fixed;
   color:var(--cream);
   font-family:var(--font-body);
   line-height:1.6;
@@ -64,6 +65,18 @@ body{
   cursor:url("data:image/png;base64,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") 16 16, auto;
 }
 input, textarea, select{ cursor:auto; }
+
+/* ==========================================================
+   TEXTURE "DA CARTA" — grana leggerissima su tutto lo sfondo e curve
+   di livello topografiche (img/topo.svg) in cima a ogni pagina
+   (strato dello sfondo del body, sfuma da solo) e sulle sezioni alternate. Restano dietro ai contenuti: le
+   card col loro fondo le coprono, si vedono solo nei vuoti.
+   ========================================================== */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.07;
+}
 
 /* ==========================================================
    CALCOLATORE BENZINA "A CRUSCOTTO" (home e Nostromo)
@@ -244,6 +257,8 @@ h1,h2,h3{
   font-weight:600;
   letter-spacing:0.01em;
   line-height:1.05;
+  /* righe bilanciate: niente parola sola a capo ("…NEL / LAZIO") */
+  text-wrap:balance;
 }
 h2{font-size:clamp(1.9rem, 4vw, 2.8rem); color:var(--sand);}
 /* piccola firma rosso/blu sotto ogni titolo di pagina, stessi colori
@@ -261,7 +276,10 @@ h1::after{
   border-radius:2px;
   background:linear-gradient(to right, #C1272D 50%, #1E5FAE 50%);
 }
-p{color:var(--cream-dim); max-width:60ch;}
+p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
+/* numeri che cambiano o stanno in colonna (km, prezzi, contatori): cifre
+   tutte della stessa larghezza, così non "ballano" e si allineano */
+.tabular, .value, .km-value, [data-odometer]{ font-variant-numeric:tabular-nums; }
 
 .btn{
   display:inline-flex;
@@ -1013,7 +1031,11 @@ section{padding:96px 0;}
   section{padding:64px 0;}
   .wrap{padding:0 20px;}
 }
-.section-alt{background:var(--asphalt-2);}
+.section-alt{
+  /* curve di livello anche sulle sezioni alternate, dal lato opposto
+     rispetto a quelle della prima sezione */
+  background:url(img/topo.svg) left -360px center / min(1300px, 160vw) auto no-repeat, var(--asphalt-2);
+}
 
 .skeleton{
   background:linear-gradient(90deg, rgba(245,240,230,0.04) 25%, rgba(245,240,230,0.09) 37%, rgba(245,240,230,0.04) 63%);
