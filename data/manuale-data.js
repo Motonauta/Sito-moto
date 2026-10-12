@@ -15,7 +15,7 @@
       titolo: "Come viaggiare l'estate in moto",
       categoria: "Consigli di viaggio",
       excerpt: "Il caldo estivo degli ultimi anni rende sempre più difficile viaggiare in moto senza rinunciare a giacca, guanti e protezioni. Sette consigli pratici imparati sul campo, viaggio dopo viaggio con la Capracrew.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/w_1600,h_900,c_fill,g_center,y_-280,f_auto,q_auto/v1786538784/IMG_4148_fmvzsw.jpg",
+      copertina: "/img/manuale/estate/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-08-12",
       blocchi: [
@@ -61,7 +61,7 @@
       titolo: "Le valigie nei viaggi in solitaria sono sopravvalutate",
       categoria: "Equipaggiamento",
       excerpt: "Dopo anni di valigie laterali di ogni tipo, dalle morbide alle rigide in alluminio, un confronto onesto con il borsone da sella: capacità, peso, prezzo e comodità, soprattutto per chi viaggia da solo.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786625577/Manuale%20di%20bordo/qk8gqiz8gaxrhdn8tj6h.jpg",
+      copertina: "/img/manuale/solitaria/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-08-13",
       blocchi: [
@@ -86,7 +86,7 @@
       titolo: "I 5 accessori definitivi per una mototendata compatta",
       categoria: "Equipaggiamento",
       excerpt: "Dalla GSX-R 1000 alla S1000XR: cinque accessori per dormire in tenda dopo un'escursione in moto, qualunque sia lo spazio che avete a disposizione in sella.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1786960146/Manuale%20di%20bordo/tmaxijwofymhqdnmig0w.png",
+      copertina: "/img/manuale/mototendata/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-08-17",
       blocchi: [
@@ -133,7 +133,7 @@
       titolo: "Cosa ne penso del mio Tris Givi Trekker Outback EVO",
       categoria: "Equipaggiamento",
       excerpt: "Dopo 15.000 km con il Tris Givi Trekker Outback EVO sulla mia S1000XR: capienza, robustezza, il sistema Camside e l'unico vero difetto che ho trovato.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787067434/Manuale%20di%20bordo/qdwtqzjnj3frchbklsph.jpg",
+      copertina: "/img/manuale/givi/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-08-18",
       blocchi: [
@@ -164,7 +164,7 @@
       titolo: "Gli attrezzi necessari da portare in viaggio",
       categoria: "Equipaggiamento",
       excerpt: "Dal kit per le gomme al bicomponente per le crepe: cinque attrezzi che porto sempre in viaggio, pensati per cavarsela da soli quando si resta a piedi lontano da tutto.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1787217568/Manuale%20di%20bordo/gtcwzywcl40vltll2cnc.jpg",
+      copertina: "/img/manuale/attrezzi/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-08-19",
       blocchi: [
@@ -211,7 +211,7 @@
       titolo: "Il giorno in cui un interfono ha salvato la vita di un uomo",
       categoria: "Equipaggiamento",
       excerpt: "La funzione Crash Detection del Cardo Packtalk Pro ha avvisato in automatico la moglie di un motociclista in Arizona dopo un incidente: senza quell'allarme, forse nessuno lo avrebbe trovato in tempo.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788790160/Manuale%20di%20bordo/r8d0hckoziqkweajhcoo.jpg",
+      copertina: "/img/manuale/interfono/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-09-07",
       blocchi: [
@@ -230,7 +230,7 @@
       titolo: "Come scegliere il casco giusto per i lunghi viaggi",
       categoria: "Equipaggiamento",
       excerpt: "Il casco più bello del negozio non è quasi mai quello giusto per un viaggio lungo. Comfort, ventilazione, peso e omologazione: cosa guardare davvero prima di comprarlo.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788859019/Manuale%20di%20bordo/e15joy7gmctbrly3ffho.jpg",
+      copertina: "/img/manuale/casco/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-09-08",
       blocchi: [
@@ -271,7 +271,7 @@
       titolo: "Valigie rigide vs borse morbide: quale scegliere?",
       categoria: "Equipaggiamento",
       excerpt: "La scelta tra valigie rigide e borse morbide non è solo una questione di gusto: cambia davvero come vivi il viaggio. Pro, contro e la mia esperienza con entrambe.",
-      copertina: "https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1788949306/Manuale%20di%20bordo/qtag7w900ke6z3wuyy3k.jpg",
+      copertina: "/img/manuale/rigide-morbide/copertina.jpg",
       copertinaCaption: "le mie morbide sul gsxr quando sono partito",
       autore: "Il Motonauta",
       data: "2026-09-09",
