@@ -21,8 +21,7 @@ evap = ''.join(f'<path d="M{x} {top-20} C{x-14} {top-40} {x+14} {top-56} {x} {to
 P['passo-5'] = page(W, H, callout([(clock(48, .25), 1)]) + step_num(5) + s + evap + at(170, 470, clock(80, 1))
     + f'<text x="170" y="600" text-anchor="middle" font-size="40" fill="{K}" {FONT}>1h</text>')
 s, (rs, top, bot) = scene(CX, CY, dirt=0, shine=1)
-cone = f'<path d="M402 {top-118} L520 {top-14} L470 {top+6} Z" fill="#ffe1bd" stroke="{K}" stroke-width="3" stroke-dasharray="8 6" opacity=".9"/>'
-P['passo-6'] = page(W, H, callout([(spray(), .75)]) + step_num(6) + s + rot_arrow(CX, CY, 182) + cone + at(370, top-150, spray(), 1.05, -48))
+P['passo-6'] = page(W, H, callout([(spray(), .75)]) + step_num(6) + s + rot_arrow(CX, CY, 182) + spray_aim(450, top, 1.05, 32, 175))
 s, (rs, top, bot) = scene(560, 300, R=120, dirt=0, shine=.3)
 cardboard = f'<path d="M300 452 L760 452 L780 482 L320 482 Z" fill="{TAN}" stroke="{K}" stroke-width="3.5" stroke-linejoin="round"/>'
 P['accortezze'] = page(W, H, s + drops([(560, 435), (600, 445)]) + cardboard + badge(820, 466, True)

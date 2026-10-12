@@ -85,9 +85,7 @@ def frame(t):
                 body += f'<path d="M{x} {y0} C{x-14} {y0-20} {x+14} {y0-36} {x} {y0-56}" fill="none" stroke="#9fd6f5" stroke-width="6" stroke-linecap="round" opacity="{1-ph:.2f}"/>'
         elif st == 6: # grasso spray
             on = (math.sin(u*2*math.pi*6) > -.3)
-            if on:
-                body += f'<path d="M560 {top-150} L700 {top-14} L640 {top+8} Z" fill="#ffe1bd" stroke="{K}" stroke-width="3" stroke-dasharray="8 6" opacity=".9"/>'
-            body += at(520, top-190, spray(), 1.15, -48)
+            body += spray_aim(600, top, 1.15, 32, 195, on=on)
     return page(W, H, body, rounded=False)
 
 n = int(TOTAL*FPS)

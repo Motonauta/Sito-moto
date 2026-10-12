@@ -19,7 +19,7 @@ solo a rigenerare tavole e video, o a farne di nuovi per altre guide.
 python3 video.py frames
 node render.js            # legge frames/, scrive png/
 ffmpeg -framerate 30 -i png/f%04d.png -c:v libx264 -pix_fmt yuv420p -crf 27 -preset slow -tune animation -movflags +faststart pulizia-catena.mp4
-ffmpeg -framerate 30 -i png/f%04d.png -c:v libvpx-vp9 -b:v 0 -crf 40 -row-mt 1 pulizia-catena.webm
+ffmpeg -framerate 30 -i png/f%04d.png -c:v libvpx-vp9 -b:v 0 -crf 40 -row-mt 1 -pix_fmt yuv420p pulizia-catena.webm
 ```
 
 Sempre entrambi i formati: alcuni browser (es. Chromium senza codec
