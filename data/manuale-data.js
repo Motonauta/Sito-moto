@@ -316,52 +316,66 @@
     {
       titolo: "Pulire la catena con il petrolio bianco: costa un quarto e funziona meglio",
       categoria: "Manutenzione",
-      excerpt: "Gli sgrassatori spray per catena costano tra 10 e 22 € e bastano per tre pulizie. Un litro di petrolio bianco costa meno di 5 € e ne bastano 50 ml a lavaggio. Ecco come lo uso, perché non rovina gli O-ring e quando invece mi porto lo spray.",
+      excerpt: "Gli sgrassatori spray per catena costano tra 10 e 22 € e bastano per tre pulizie. Un litro di petrolio bianco costa meno di 5 € e ne bastano 50 ml a lavaggio. Ecco come lo uso passo per passo, perché non rovina gli O-ring e quando invece mi porto lo spray.",
+      copertina: "/img/manuale/catena/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-09-25",
       blocchi: [
         { tipo: "paragrafo", testo: "Ammetto che a un certo punto mi sono stufato di spendere soldi in sgrassatori spray per la catena. Le bombolette più famose, come quelle di Motul e Ipone, costano tra i 10 e i 22 euro e con 400 ml, se ti va bene, pulisci la catena da cima a fondo tre volte." },
-        { tipo: "paragrafo", testo: "La mia alternativa costa meno di un caffè a pulizia: un pennello e del semplice petrolio bianco." },
+        { tipo: "paragrafo", testo: "La mia alternativa costa meno di un caffè a pulizia: del semplice petrolio bianco, un pennello e una spazzola per catena." },
         { tipo: "sottotitolo", testo: "Quanto si risparmia davvero" },
         { tipo: "paragrafo", testo: "Una latta da 1 litro di petrolio bianco l'ho pagata meno di 5 euro, e per pulire la catena alla perfezione ne bastano a malapena 50 ml. Con un litro fai una ventina di pulizie complete; con una bomboletta da 400 ml, che costa il doppio o di più, ne fai tre." },
         { tipo: "sottotitolo", testo: "Come la pulisco" },
+        { tipo: "paragrafo", testo: "Prima tutto il procedimento in venti secondi, poi passo per passo." },
+        { tipo: "video", animazione: true, src: "/img/manuale/catena/pulizia-catena.mp4", srcWebm: "/img/manuale/catena/pulizia-catena.webm", poster: "/img/manuale/catena/video-poster.jpg", alt: "Animazione della pulizia della catena in sei passaggi" },
         {
-          tipo: "consiglio", numero: 1, titolo: "Pennello e petrolio bianco",
-          testo: "Intingi il pennello nel petrolio bianco e passalo bene in ogni punto della catena, maglia per maglia, facendo girare la ruota posteriore con la moto sul cavalletto centrale o su un alzamoto."
+          tipo: "consiglio", numero: 1, titolo: "Petrolio bianco con il pennello",
+          testo: "Intingi il pennello nel petrolio bianco e passalo bene in ogni punto della catena, maglia per maglia, facendo girare la ruota posteriore con la moto sul cavalletto centrale o su un alzamoto.",
+          immagine: { src: "/img/manuale/catena/passo-1.svg" }
         },
         {
-          tipo: "consiglio", numero: 2, titolo: "Uno straccio per togliere lo sporco",
-          testo: "Passa uno straccio su tutta la catena per portare via il grasso vecchio sciolto e la sporcizia. Se serve ripeti: la differenza si vede subito."
+          tipo: "consiglio", numero: 2, titolo: "Spazzola per catena",
+          testo: "Passa la spazzola fatta apposta per la catena, quella a tre lati che la abbraccia, avanti e indietro su tutta la lunghezza: le setole entrano tra le maglie e staccano il grasso vecchio e lo sporco che il petrolio ha sciolto.",
+          immagine: { src: "/img/manuale/catena/passo-2.svg" }
         },
         {
-          tipo: "consiglio", numero: 3, titolo: "Aria compressa, poi di nuovo lo straccio",
-          testo: "L'ideale è soffiare via il petrolio rimasto con l'aria compressa, e poi ripassare la catena con uno straccio asciutto."
+          tipo: "consiglio", numero: 3, titolo: "Aria compressa",
+          testo: "Soffia la catena con l'aria compressa: spurga via il petrolio e lo sporco rimasti tra le maglie e i rulli.",
+          immagine: { src: "/img/manuale/catena/passo-3.svg" }
         },
         {
-          tipo: "consiglio", numero: 4, titolo: "Aspetta un'oretta",
-          testo: "Il petrolio bianco ci mette un po' a evaporare del tutto: lascia la catena ad asciugare per circa un'ora prima di ingrassarla, altrimenti il grasso non fa presa."
+          tipo: "consiglio", numero: 4, titolo: "Panno per asciugare",
+          testo: "Passa un panno su tutta la catena per raccogliere e asciugare quello che l'aria compressa ha spurgato via.",
+          immagine: { src: "/img/manuale/catena/passo-4.svg" }
         },
         {
-          tipo: "consiglio", numero: 5, titolo: "Rimetti il grasso",
-          testo: "Una catena pulita va lubrificata. Io uso il grasso spray di Ipone, quello con cui mi sono trovato meglio in assoluto, passato su tutta la catena con la ruota che gira."
+          tipo: "consiglio", numero: 5, titolo: "Aspetta un'oretta",
+          testo: "Il petrolio bianco ci mette un po' a evaporare del tutto: lascia la catena ad asciugare per circa un'ora prima di ingrassarla, altrimenti il grasso non fa presa.",
+          immagine: { src: "/img/manuale/catena/passo-5.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 6, titolo: "Grasso spray",
+          testo: "Una catena pulita va lubrificata. Io uso il grasso spray di Ipone, quello con cui mi sono trovato meglio in assoluto, passato su tutta la catena con la ruota che gira.",
+          immagine: { src: "/img/manuale/catena/passo-6.svg" }
         },
         { tipo: "sottotitolo", testo: "L'unico neo: ci vuole tempo" },
-        { tipo: "paragrafo", testo: "Rispetto allo spray, questo metodo ha un solo difetto: tra aria compressa, straccio e asciugatura serve un'ora buona. Per questo io pulisco la catena col petrolio bianco ogni settimana, con calma, durante le normali manutenzioni alla moto. In viaggio invece mi porto gli spray, che fanno lo stesso lavoro in pochi minuti quando non hai un garage a disposizione." },
-        { tipo: "sottotitolo", testo: "«Ma il petrolio rovina gli O-ring!»" },
+        { tipo: "paragrafo", testo: "Rispetto allo spray, questo metodo ha un solo difetto: tra spazzola, aria compressa, panno e asciugatura serve un'ora buona. Per questo io pulisco la catena col petrolio bianco ogni settimana, con calma, durante le normali manutenzioni alla moto. In viaggio invece mi porto gli spray, che fanno lo stesso lavoro in pochi minuti quando non hai un garage a disposizione." },
+        { tipo: "sottotitolo", testo: "\u00abMa il petrolio rovina gli O-ring!\u00bb" },
         { tipo: "paragrafo", testo: "È l'obiezione che arriva sempre, e non è vera. Sulla latta c'è scritto che è ideale per sgrassare unto e grasso dalle superfici verniciate e che non intacca gomma e plastiche, e la conferma arriva anche dalla chimica: Motocrawl spiega a livello molecolare perché il petrolio bianco scioglie così bene lo sporco e invece la gomma degli O-ring non la tocca. Il suo video lo trovi qui sotto." },
         { tipo: "link", label: "Il reel di Motocrawl che lo spiega a livello molecolare", url: "https://www.instagram.com/reel/DeR-F-_iEwi/" },
         { tipo: "paragrafo", testo: "E la prova pratica ce l'ho sotto gli occhi: la mia catena l'ho pulita così già tre volte, brilla ed è ancora come nuova." },
         { tipo: "sottotitolo", testo: "Due accortezze" },
+        { tipo: "immagine", src: "/img/manuale/catena/accortezze.svg", alt: "Niente fiamme, niente petrolio su gomma e freno, cartone sotto e finestra aperta" },
         {
           tipo: "consiglio", numero: 1, titolo: "Lontano da gomma e freni",
-          testo: "Non farlo colare su pneumatico, disco e pastiglie posteriori: metti un cartone sotto e tieni lo straccio a portata di mano."
+          testo: "Non farlo colare su pneumatico, disco e pastiglie posteriori: metti un cartone sotto e tieni il panno a portata di mano."
         },
         {
           tipo: "consiglio", numero: 2, titolo: "All'aperto e lontano da fiamme",
-          testo: "È infiammabile: lavora in un posto ventilato e lascia asciugare gli stracci all'aria prima di buttarli."
+          testo: "È infiammabile: lavora in un posto ventilato e lascia asciugare i panni all'aria prima di buttarli."
         },
         { tipo: "paragrafo", testo: "Tu come pulisci la catena? Se hai un trucco che funziona, scrivimelo: potrebbe diventare il prossimo articolo." },
-        { tipo: "link", label: "Guarda il video su YouTube", url: "https://www.youtube.com/shorts/k1a9rsYvsus" }
+        { tipo: "link", label: "Guarda il video dove lo spiego", url: "https://www.instagram.com/reel/Ddriftvx0Ln/" }
       ]
     }
   ];
