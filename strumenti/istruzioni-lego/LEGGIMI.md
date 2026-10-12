@@ -17,6 +17,11 @@ solo a rigenerare tavole e video, o a farne di nuovi per altre guide.
   specchietti, fianchi rossi, codino col fanale, scarico a destra), con le
   larghezze in scala vera (4 px per cm) così i limiti dei 50 cm per lato
   tornano
+- `tagliando.py tavole|video OUT` — guida del tagliando della S1000XR
+  (`img/manuale/tagliando/`): `kit`, `passo-1..14` (olio 1-9 sul motore visto
+  dal lato destro, filtro dell'aria 10-14 sotto la carena del serbatoio) e i
+  fotogrammi del cartone (50 s). `tagliando.py prova OUT 12.5 30` scrive solo
+  alcuni fotogrammi per controllare
 - `render.js` — trasforma i fotogrammi in PNG con Chromium (Playwright);
   poi si monta il video con ffmpeg:
 
