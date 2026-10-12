@@ -92,7 +92,7 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20261012b">
+<link rel="stylesheet" href="/style.css?v=20261012c">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
@@ -128,16 +128,32 @@ const HEADER_HTML = `<header class="site-header">
 
 const FOOTER_HTML = `<footer class="site-footer">
   <div class="wrap">
-    <div class="footer-social">
-      <a href="/contatti.html">Instagram</a>
-      <a href="/contatti.html">TikTok</a>
-      <a href="/contatti.html">YouTube</a>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img class="footer-toppa" src="/img/logo-toppa.webp" alt="" width="64" height="64" loading="lazy">
+        <div>
+          <p class="footer-title">Il Motonauta</p>
+          <p class="footer-coords"><span>41°53′N 12°29′E</span> — base operativa, Roma</p>
+        </div>
+      </div>
+      <nav class="footer-social" aria-label="Il Motonauta sui social">
+        <a href="https://www.instagram.com/motonautagram/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-instagram"/></svg></a>
+        <a href="https://www.tiktok.com/@ilmotonauta" target="_blank" rel="noopener" aria-label="TikTok"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-tiktok"/></svg></a>
+        <a href="https://www.youtube.com/@ilmotonauta" target="_blank" rel="noopener" aria-label="YouTube"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-youtube"/></svg></a>
+        <a href="https://www.facebook.com/p/Il-Motonauta-61576722846930/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-facebook"/></svg></a>
+      </nav>
+      <button type="button" class="footer-ride" data-ride-top aria-label="Torna in cima alla pagina">
+        <span class="footer-road" aria-hidden="true"><svg class="moto-top"><use href="/icons.svg#i-moto-top"/></svg></span>
+        <span class="footer-ride-label" aria-hidden="true">Torna su</span>
+      </button>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
       <a href="/privacy.html">Privacy &amp; Cookie</a>
     </div>
-    <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
   </div>
 </footer>
-<script src="/script.js?v=20261012b"></script>`;
+<script src="/script.js?v=20261012c"></script>`;
 
 function render404() {
   return `<!DOCTYPE html>
@@ -341,6 +357,7 @@ module.exports = async (req, res) => {
 <meta property="og:title" content="${escapeHtml(it.titolo)}">
 <meta property="og:description" content="${escapeHtml(description)}">
 <meta property="og:image" content="${escapeHtml(wikiThumb(it.foto, 1200))}">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="${siteUrl}">
 <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>

@@ -559,12 +559,56 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // pulsante "torna su": compare dopo un po' di scroll, su tutte le pagine
+  // "Torna su" con la moto vista dall'alto (pulsante fisso e quello nel piè
+  // di pagina): una copia della moto parte dal pulsante e sale lungo lo
+  // schermo, con la scia rossa del fanale, mentre la pagina torna in cima.
+  // Con "riduci movimento" si torna su e basta.
+  const easeInOut = getComputedStyle(document.documentElement).getPropertyValue("--ease-in-out").trim() || "ease-in-out";
+  function rideToTop(from){
+    if (prefersReducedMotion) { window.scrollTo({ top: 0, behavior: "auto" }); return; }
+    const icon = from.querySelector(".moto-top") || from;
+    const r = icon.getBoundingClientRect();
+    const bike = document.createElement("div");
+    bike.className = "moto-ride";
+    bike.setAttribute("aria-hidden", "true");
+    bike.innerHTML = '<svg class="moto-top"><use href="/icons.svg#i-moto-top"/></svg>';
+    bike.style.left = (r.left + r.width / 2 - 15) + "px";
+    bike.style.top = (r.top + r.height / 2 - 25) + "px";
+    document.body.appendChild(bike);
+    from.classList.add("is-riding");
+    const dist = r.top + r.height / 2 + 80;
+    const DURATA = 900;
+    const ride = bike.animate([
+      { transform: "translateY(0) scale(1)", opacity: 1 },
+      { transform: "translateY(" + (-dist * 0.82) + "px) scale(1.08)", opacity: 1, offset: 0.8 },
+      { transform: "translateY(" + (-dist) + "px) scale(1.1)", opacity: 0 }
+    ], { duration: DURATA, easing: easeInOut, fill: "forwards" });
+    // la pagina torna su con la stessa durata e la stessa curva della moto
+    // (lo scroll "smooth" del browser è più rapido e non andrebbe insieme):
+    // il progresso dell'animazione ha già dentro la curva --ease-in-out
+    const startY = window.scrollY;
+    const step = () => {
+      const t = ride.effect.getComputedTiming().progress;
+      const k = t == null ? 1 : t;
+      window.scrollTo({ top: Math.round(startY * (1 - k)), behavior: "instant" });
+      if (k < 1 && ride.playState === "running") requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    ride.onfinish = () => {
+      window.scrollTo({ top: 0, behavior: "instant" });
+      bike.remove(); from.classList.remove("is-riding");
+    };
+  }
+  document.querySelectorAll("[data-ride-top]").forEach(btn => {
+    btn.addEventListener("click", () => rideToTop(btn));
+  });
+
+  // pulsante fisso "torna su": compare dopo un po' di scroll, su tutte le pagine
   const backToTop = document.createElement("button");
   backToTop.id = "back-to-top";
   backToTop.type = "button";
   backToTop.setAttribute("aria-label", "Torna in cima alla pagina");
-  backToTop.innerHTML = "&#8593;";
+  backToTop.innerHTML = '<svg class="moto-top" aria-hidden="true"><use href="/icons.svg#i-moto-top"/></svg>';
   document.body.appendChild(backToTop);
 
   let backToTopTicking = false;
@@ -580,9 +624,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { passive: true });
   updateBackToTop();
 
-  backToTop.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
-  });
+  backToTop.addEventListener("click", () => rideToTop(backToTop));
+
+  // quando si vede il "torna su" del piè di pagina, quello fisso si fa da parte
+  const footerRide = document.querySelector(".footer-ride");
+  if (footerRide && "IntersectionObserver" in window) {
+    new IntersectionObserver(entries => {
+      backToTop.classList.toggle("is-footer", entries[0].isIntersecting);
+    }).observe(footerRide);
+  }
 
   // pulsante "copia link" riusabile: basta dare a un <button> la classe
   // .copy-link-btn (e opzionalmente data-copy="URL"; senza, copia l'URL

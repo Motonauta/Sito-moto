@@ -1,4 +1,4 @@
-const { findBySlug, getSlug, GUIDE } = require('../data/manuale-data');
+const { findBySlug, getSlug, GUIDE, tempoLettura } = require('../data/manuale-data');
 
 const LOGO_URL = 'https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png';
 
@@ -24,7 +24,7 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20261012b">
+<link rel="stylesheet" href="/style.css?v=20261012c">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
@@ -60,16 +60,32 @@ const HEADER_HTML = `<header class="site-header">
 
 const FOOTER_HTML = `<footer class="site-footer">
   <div class="wrap">
-    <div class="footer-social">
-      <a href="/contatti.html">Instagram</a>
-      <a href="/contatti.html">TikTok</a>
-      <a href="/contatti.html">YouTube</a>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img class="footer-toppa" src="/img/logo-toppa.webp" alt="" width="64" height="64" loading="lazy">
+        <div>
+          <p class="footer-title">Il Motonauta</p>
+          <p class="footer-coords"><span>41°53′N 12°29′E</span> — base operativa, Roma</p>
+        </div>
+      </div>
+      <nav class="footer-social" aria-label="Il Motonauta sui social">
+        <a href="https://www.instagram.com/motonautagram/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-instagram"/></svg></a>
+        <a href="https://www.tiktok.com/@ilmotonauta" target="_blank" rel="noopener" aria-label="TikTok"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-tiktok"/></svg></a>
+        <a href="https://www.youtube.com/@ilmotonauta" target="_blank" rel="noopener" aria-label="YouTube"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-youtube"/></svg></a>
+        <a href="https://www.facebook.com/p/Il-Motonauta-61576722846930/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-facebook"/></svg></a>
+      </nav>
+      <button type="button" class="footer-ride" data-ride-top aria-label="Torna in cima alla pagina">
+        <span class="footer-road" aria-hidden="true"><svg class="moto-top"><use href="/icons.svg#i-moto-top"/></svg></span>
+        <span class="footer-ride-label" aria-hidden="true">Torna su</span>
+      </button>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
       <a href="/privacy.html">Privacy &amp; Cookie</a>
     </div>
-    <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
   </div>
 </footer>
-<script src="/script.js?v=20261012b"></script>`;
+<script src="/script.js?v=20261012c"></script>`;
 
 const STYLE = `<style>
   /* stesso sistema di base delle altre pagine già fatte: grafite
@@ -90,7 +106,22 @@ const STYLE = `<style>
   }
   .manuale-meta{
     margin-top:14px; font-family:var(--font-mono); font-size:0.8rem; color:var(--cream-dim);
+    display:flex; align-items:center; flex-wrap:wrap; gap:6px 12px;
   }
+  .manuale-meta-sep{ width:4px; height:4px; border-radius:50%; background:var(--rust); }
+  .manuale-readtime{ display:inline-flex; align-items:center; gap:6px; color:var(--sand); }
+  .manuale-readtime .icon{ color:var(--rust); }
+  /* barra di lettura in cima allo schermo, rossa come la spia del cruscotto */
+  .read-progress{
+    position:fixed; left:0; right:0; top:0; height:3px; z-index:60; pointer-events:none;
+    background:rgba(245,240,230,0.06);
+  }
+  .read-progress span{
+    display:block; height:100%; background:var(--rust);
+    box-shadow:0 0 10px rgba(193,39,45,0.75);
+    transform:scaleX(0); transform-origin:left center;
+  }
+  @media print{ .read-progress{ display:none; } }
   .manuale-photo{
     position:relative; aspect-ratio:16/9; overflow:hidden; margin-top:36px;
     border:1px solid rgba(30,95,174,0.45); max-width:900px;
@@ -326,7 +357,10 @@ module.exports = async (req, res) => {
   const siteUrl = `https://ilmotonauta.com/manuale/${slug}`;
   const pageTitle = `${guida.titolo} | Il Motonauta`;
   const description = guida.excerpt.length > 160 ? `${guida.excerpt.slice(0, 157)}...` : guida.excerpt;
-  const dataLeggibile = new Date(guida.data).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+  // niente data in pagina: è una guida, non una notizia, e una data di
+  // qualche mese fa la farebbe sembrare superata. Al suo posto i minuti
+  // di lettura
+  const minutiLettura = tempoLettura(guida);
 
   const contenutoHTML = guida.blocchi.map(renderBlocco).join('\n');
 
@@ -335,8 +369,6 @@ module.exports = async (req, res) => {
     '@type': 'Article',
     headline: guida.titolo,
     description: description,
-    datePublished: guida.data,
-    dateModified: guida.data,
     author: { '@type': 'Person', name: guida.autore },
     publisher: {
       '@type': 'Organization',
@@ -368,7 +400,8 @@ module.exports = async (req, res) => {
 <meta property="og:type" content="article">
 <meta property="og:title" content="${escapeHtml(guida.titolo)}">
 <meta property="og:description" content="${escapeHtml(description)}">
-${guida.copertina ? `<meta property="og:image" content="${escapeHtml(wikiThumb(guida.copertina, 1200))}">` : ''}
+<meta property="og:image" content="${guida.copertina ? escapeHtml(wikiThumb(guida.copertina, 1200)) : 'https://ilmotonauta.com/img/og-cover.jpg'}">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="${siteUrl}">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
@@ -379,6 +412,7 @@ ${STYLE}
 <div class="vt-logo" aria-hidden="true"></div><script>try{var vtA=+sessionStorage.getItem("vt-arrive");if(vtA&&Date.now()-vtA<4000)document.documentElement.classList.add("vt-arriving")}catch(e){}</script>
 <div class="print-watermark">Il Motonauta</div>
 <img class="print-logo-corner" src="${LOGO_URL}" alt="">
+<div class="read-progress" aria-hidden="true"><span></span></div>
 ${HEADER_HTML}
 
 <section style="padding-top:56px; padding-bottom:0;">
@@ -390,7 +424,7 @@ ${HEADER_HTML}
     <h1 style="font-size:clamp(2.2rem, 5vw, 3.6rem); color:var(--sand); max-width:26ch;">
       ${escapeHtml(guida.titolo)}
     </h1>
-    <p class="manuale-meta">${escapeHtml(guida.autore)} — ${escapeHtml(dataLeggibile)}</p>
+    <p class="manuale-meta">di ${escapeHtml(guida.autore)}<span class="manuale-meta-sep" aria-hidden="true"></span><span class="manuale-readtime"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-book"/></svg>${minutiLettura} min di lettura</span></p>
     <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
       <button type="button" class="print-pdf-btn" onclick="window.print()"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-file"/></svg> Stampa / Salva come PDF</button>
       <button type="button" class="copy-link-btn" data-copy="${siteUrl}"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-link"/></svg> Copia link</button>
@@ -425,6 +459,27 @@ ${HEADER_HTML}
 </section>
 
 ${FOOTER_HTML}
+<script>
+  // barra di lettura: si riempie di rosso dall'inizio alla fine del testo
+  // della guida, come la lancetta del serbatoio che sale
+  (function(){
+    const bar = document.querySelector(".read-progress span");
+    const body = document.querySelector(".manuale-content");
+    if (!bar || !body) return;
+    let ticking = false;
+    function update(){
+      ticking = false;
+      const r = body.getBoundingClientRect();
+      const start = r.top + window.scrollY - window.innerHeight * 0.35;
+      const end = r.bottom + window.scrollY - window.innerHeight * 0.85;
+      const p = Math.min(1, Math.max(0, (window.scrollY - start) / Math.max(1, end - start)));
+      bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
+    }
+    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  })();
+</script>
 </body>
 </html>`;
 
