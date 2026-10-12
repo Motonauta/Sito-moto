@@ -1,7 +1,8 @@
 # Istruzioni "a mattoncini" (tavole e cartone animato)
 
-Strumenti usati per le illustrazioni della guida "Pulire la catena con il
-petrolio bianco" (`img/manuale/catena/`). Non fanno parte del sito: servono
+Strumenti usati per le illustrazioni della guida "Non facciamoci fregare:
+pulire la catena della moto alla perfezione con pochi euro"
+(`img/manuale/catena/`). Non fanno parte del sito: servono
 solo a rigenerare tavole e video, o a farne di nuovi per altre guide.
 
 - `lego.py` — primitive condivise: tavolozza dei colori LEGO, ruota con
@@ -24,3 +25,5 @@ ffmpeg -framerate 30 -i png/f%04d.png -c:v libvpx-vp9 -b:v 0 -crf 40 -row-mt 1 p
 Sempre entrambi i formati: alcuni browser (es. Chromium senza codec
 proprietari) non leggono l'MP4 H.264, Safari preferisce l'MP4.
 La copertina va anche in JPG 1600×900 (serve come anteprima nei social).
+La guida della catena oggi usa invece come copertina `copertina-video.jpg`:
+fotogramma del video di Angelo con il titolo scritto sopra.
