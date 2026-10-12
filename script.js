@@ -1,3 +1,55 @@
+// Cruscotto (vedi style.css, CRUSCOTTO): ogni [data-odometer] diventa un
+// contachilometri, una colonna 0–9 per cifra, che gira fino al valore
+// quando il pannello entra nello schermo. Parte dal data-value scritto
+// nell'HTML; i dati veri arrivano dopo con window.mnCruscotto.set(id, n).
+// Sta fuori da DOMContentLoaded perché le pagine lo chiamano anche prima.
+(function initCruscotto(){
+  const boxes = document.querySelectorAll(".cruscotto");
+  if (!boxes.length) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // data-plain: niente puntino delle migliaia (es. l'anno 2021)
+  const fmt = (n, el) => el && el.hasAttribute("data-plain") ? String(n) : n.toLocaleString("it-IT");
+  const current = new Map();
+  const visible = new Set();
+
+  function build(el, n){
+    const text = fmt(n, el);
+    el.setAttribute("aria-label", text);
+    el.innerHTML = [...text].map(ch => /\d/.test(ch)
+      ? '<span class="odo-digit" aria-hidden="true"><span class="odo-strip" data-d="' + ch + '">' +
+        "0123456789".split("").map(d => "<span>" + d + "</span>").join("") + "</span></span>"
+      : '<span aria-hidden="true">' + ch + "</span>").join("");
+  }
+  function roll(el){
+    const strips = [...el.querySelectorAll(".odo-strip")];
+    strips.forEach((s, i) => {
+      s.style.transitionDelay = (strips.length - 1 - i) * 70 + "ms";
+      s.style.transform = "translateY(-" + s.dataset.d + "em)";
+    });
+  }
+  function set(target, n){
+    const el = typeof target === "string" ? document.getElementById(target) : target;
+    if (!el || !Number.isFinite(n) || n <= 0 || current.get(el) === n) return;
+    current.set(el, n);
+    if (reduce) { el.textContent = fmt(n, el); return; }
+    build(el, n);
+    // due fotogrammi: prima le ruote ferme sullo 0, poi la rotazione
+    if (visible.has(el.closest(".cruscotto"))) requestAnimationFrame(() => requestAnimationFrame(() => roll(el)));
+  }
+  boxes.forEach(box => box.querySelectorAll("[data-odometer]").forEach(el => set(el, Number(el.dataset.value))));
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      visible.add(entry.target); io.unobserve(entry.target);
+      entry.target.querySelectorAll("[data-odometer]").forEach(roll);
+    });
+  }, { threshold: 0.35 });
+  boxes.forEach(box => io.observe(box));
+
+  window.mnCruscotto = { set };
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

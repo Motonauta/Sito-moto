@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261012a">
+<link rel="stylesheet" href="style.css?v=20261012b">
 <script src="cookie-consent.js" defer></script>
 <style>
   /* stesso sistema di base di Alleati/Canale aperto/Diario di bordo:
@@ -108,20 +108,7 @@
     .photo-frame{ --arm:22px; --gap:8px; }
   }
 
-  .bike-stats{
-    display:grid; grid-template-columns:repeat(4, 1fr); gap:1px;
-    background:rgba(245,240,230,0.14); margin-top:44px;
-  }
-  .bike-stats > div{ background:var(--asphalt); padding:26px 20px; }
-  .bike-stats .value{
-    font-family:var(--font-display); font-size:1.6rem; color:var(--gold);
-    text-transform:uppercase; line-height:1;
-  }
-  .bike-stats .label{
-    font-family:var(--font-mono); font-size:0.7rem; color:var(--cream-dim);
-    text-transform:uppercase; letter-spacing:0.05em; margin-top:8px;
-  }
-  @media (max-width:860px){ .bike-stats{ grid-template-columns:repeat(2, 1fr); } }
+  .bike-cruscotto{ margin-top:44px; }
 
   .bike-gallery{
     display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:24px;
@@ -257,60 +244,56 @@
       dietro la muccona che mi porta in giro.
     </p>
 
-    <div class="bike-stats">
-      <div>
-        <p class="value">BMW S1000XR</p>
-        <p class="label">Modello</p>
+    <div class="cruscotto bike-cruscotto" role="group" aria-label="Le caratteristiche della mia moto">
+      <div class="cruscotto-cell cruscotto-wide">
+        <p class="cruscotto-label">Modello</p>
+        <p class="cruscotto-value cruscotto-value--text">BMW S1000XR</p>
       </div>
-      <div>
-        <p class="value">2021</p>
-        <p class="label">Anno</p>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Anno</p>
+        <p class="cruscotto-value"><span data-odometer data-plain data-value="2021">2021</span></p>
       </div>
-      <div>
-        <p class="value">999 cc</p>
-        <p class="label">Cilindrata</p>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Cilindrata</p>
+        <p class="cruscotto-value"><span data-odometer data-value="999">999</span><span class="cruscotto-unit">cc</span></p>
       </div>
-      <div>
-        <p class="value">229 kg</p>
-        <p class="label">Peso — in ordine di marcia</p>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Peso</p>
+        <p class="cruscotto-value"><span data-odometer data-value="229">229</span><span class="cruscotto-unit">kg</span></p>
+        <p class="cruscotto-sub">in ordine di marcia</p>
       </div>
-      <div>
-        <p class="value">165 CV</p>
-        <p class="label">Potenza</p>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Potenza</p>
+        <p class="cruscotto-value"><span data-odometer data-value="165">165</span><span class="cruscotto-unit">CV</span></p>
       </div>
-      <div>
-        <p class="value">Novembre 2025</p>
-        <p class="label">Data di acquisto</p>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Data di acquisto</p>
+        <p class="cruscotto-value cruscotto-value--text">Novembre 2025</p>
       </div>
-      <div>
-        <p class="value">23.000 km</p>
-        <p class="label">Km all'acquisto</p>
+      <div class="cruscotto-cell">
+        <p class="cruscotto-label">Km all'acquisto</p>
+        <p class="cruscotto-value"><span data-odometer data-value="23000">23.000</span><span class="cruscotto-unit">km</span></p>
       </div>
-      <div>
-        <p class="value" id="km-attuali">— km</p>
-        <p class="label">Km attuali</p>
+      <div class="cruscotto-cell cruscotto-wide">
+        <p class="cruscotto-label"><span class="cruscotto-led" aria-hidden="true"></span>Km attuali</p>
+        <p class="cruscotto-value"><span data-odometer id="km-attuali" data-value="23000">23.000</span><span class="cruscotto-unit">km</span></p>
+        <p class="cruscotto-sub">aggiornati da me</p>
       </div>
     </div>
   </div>
 </section>
 
 <script>
-  function parseKm(str){
-    const digits = String(str).replace(/[^\d]/g, "");
-    return parseInt(digits, 10) || 0;
-  }
-
+  // km attuali della moto (quelli che aggiorno dall'area riservata): il
+  // contachilometri del cruscotto (script.js) gira fino al valore vero
   fetch("/api/km")
     .then(res => res.json())
     .then(data => {
-      const totaleNum = parseKm(data.km);
-      const elTotale = document.getElementById("km-attuali");
-      if (elTotale) elTotale.textContent = `${totaleNum.toLocaleString("it-IT")} km`;
+      const km = parseInt(String(data.km).replace(/[^\d]/g, ""), 10);
+      const aggiorna = () => window.mnCruscotto && window.mnCruscotto.set("km-attuali", km);
+      if (window.mnCruscotto) aggiorna(); else document.addEventListener("DOMContentLoaded", aggiorna);
     })
-    .catch(() => {
-      const elTotale = document.getElementById("km-attuali");
-      if (elTotale) elTotale.textContent = "23.000 km";
-    });
+    .catch(() => {});
 </script>
 
 <section class="section-alt">
@@ -460,6 +443,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=20261012a"></script>
+<script src="script.js?v=20261012b"></script>
 </body>
 </html>
