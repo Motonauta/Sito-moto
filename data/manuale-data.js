@@ -343,13 +343,13 @@
         },
         {
           tipo: "consiglio", numero: 5, titolo: "Rimetti il grasso",
-          testo: "Una catena pulita va lubrificata. Io uso il grasso spray con cui mi sono trovato meglio in assoluto, passato su tutta la catena con la ruota che gira."
+          testo: "Una catena pulita va lubrificata. Io uso il grasso spray di Ipone, quello con cui mi sono trovato meglio in assoluto, passato su tutta la catena con la ruota che gira."
         },
         { tipo: "sottotitolo", testo: "L'unico neo: ci vuole tempo" },
         { tipo: "paragrafo", testo: "Rispetto allo spray, questo metodo ha un solo difetto: tra aria compressa, straccio e asciugatura serve un'ora buona. Per questo io pulisco la catena col petrolio bianco ogni settimana, con calma, durante le normali manutenzioni alla moto. In viaggio invece mi porto gli spray, che fanno lo stesso lavoro in pochi minuti quando non hai un garage a disposizione." },
         { tipo: "sottotitolo", testo: "«Ma il petrolio rovina gli O-ring!»" },
-        { tipo: "paragrafo", testo: "È l'obiezione che arriva sempre, e non è vera. Sulla latta c'è scritto che è ideale per sgrassare unto e grasso dalle superfici verniciate e che non intacca gomma e plastiche, e la conferma arriva anche dalla chimica: un creator spiega a livello molecolare perché il petrolio bianco scioglie così bene lo sporco e invece la gomma degli O-ring non la tocca. Il suo video lo trovi qui sotto." },
-        { tipo: "link", label: "Il reel che lo spiega a livello molecolare", url: "https://www.instagram.com/reel/DeR-F-_iEwi/" },
+        { tipo: "paragrafo", testo: "È l'obiezione che arriva sempre, e non è vera. Sulla latta c'è scritto che è ideale per sgrassare unto e grasso dalle superfici verniciate e che non intacca gomma e plastiche, e la conferma arriva anche dalla chimica: Motocrawl spiega a livello molecolare perché il petrolio bianco scioglie così bene lo sporco e invece la gomma degli O-ring non la tocca. Il suo video lo trovi qui sotto." },
+        { tipo: "link", label: "Il reel di Motocrawl che lo spiega a livello molecolare", url: "https://www.instagram.com/reel/DeR-F-_iEwi/" },
         { tipo: "paragrafo", testo: "E la prova pratica ce l'ho sotto gli occhi: la mia catena l'ho pulita così già tre volte, brilla ed è ancora come nuova." },
         { tipo: "sottotitolo", testo: "Due accortezze" },
         {
