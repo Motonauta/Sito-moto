@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/image/upload/w_64,h_64,c_fill,r_max,f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png">
+<title>Carburante finito — Il Motonauta</title>
+<meta name="description" content="Questa pagina non esiste (più): torna alla home de Il Motonauta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- percorsi tutti assoluti: Vercel mostra questa pagina a qualunque
+     indirizzo sbagliato, anche annidato (/a/b/c), non solo in cima -->
+<link rel="stylesheet" href="/style.css?v=20261012a">
+<script src="/cookie-consent.js" defer></script>
+<style>
+  /* stessa base delle altre pagine: grafite freddo e filo rosso/blu
+     sotto l'header */
+  :root{
+    --racing-blue:#1E5FAE;
+    --asphalt:#15171B;
+    --asphalt-2:#1D2126;
+  }
+  .site-header{ background:rgba(21,23,27,0.92); border-bottom:none; }
+  .site-header::after{
+    content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px;
+    background:linear-gradient(90deg, var(--rust), var(--racing-blue));
+    pointer-events:none;
+  }
+
+  /* PAGINA 404 — "carburante finito": il segnale wifi che si spegne
+     tacca dopo tacca e l'indicatore della benzina fermo sulla riserva */
+  .lost{ min-height:calc(100dvh - 160px); display:flex; align-items:center; padding:64px 0 80px; }
+  .lost .wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+
+  .lost-signal{ width:clamp(120px, 22vw, 168px); color:var(--rust); margin-bottom:26px; }
+  .lost-signal svg{ display:block; width:100%; height:auto; overflow:visible; }
+  .lost-signal path, .lost-signal circle{ fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; }
+  .lost-signal circle{ fill:currentColor; stroke:none; }
+  .lost-signal .arc{ opacity:.16; }
+  /* le tacche si accendono dal centro verso fuori e poi muoiono insieme,
+     come un segnale che cerca la rete e non la trova */
+  @media (prefers-reduced-motion: no-preference){
+    .lost-signal .arc{ animation:signal-search 2.6s var(--ease-out) infinite; }
+    .lost-signal .arc-2{ animation-delay:.18s; }
+    .lost-signal .arc-3{ animation-delay:.36s; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .lost-signal .arc-1{ opacity:1; }
+  }
+  @keyframes signal-search{
+    0%, 8%{ opacity:.16; }
+    18%, 48%{ opacity:1; filter:drop-shadow(0 0 6px rgba(193,39,45,0.7)); }
+    62%, 100%{ opacity:.16; }
+  }
+
+  .lost .marker{ justify-content:center; color:var(--rust); }
+  .lost h1{
+    font-size:clamp(2.1rem, 5.4vw, 3.8rem); color:var(--sand); max-width:18ch;
+    padding-bottom:22px;
+  }
+  .lost h1::after{ left:50%; transform:translateX(-50%); }
+  .lost-sub{ margin:18px auto 0; font-size:1.08rem; max-width:44ch; }
+
+  /* indicatore della benzina, stile cruscotto: lancetta sulla riserva */
+  .lost-fuel{
+    margin-top:34px; display:flex; align-items:center; gap:14px;
+    background:#0b0b0a; border:1px solid rgba(245,240,230,0.14); border-radius:10px;
+    padding:12px 18px; font-family:var(--font-mono); font-size:0.78rem;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--cream-dim);
+  }
+  .lost-fuel-bar{ display:flex; gap:4px; }
+  .lost-fuel-bar span{ width:16px; height:10px; border-radius:2px; background:rgba(245,240,230,0.1); }
+  .lost-fuel-bar span:first-child{ background:var(--rust); box-shadow:0 0 8px rgba(193,39,45,0.8); }
+  @media (prefers-reduced-motion: no-preference){
+    .lost-fuel-bar span:first-child{ animation:fuel-blink 1.2s steps(1, end) infinite; }
+  }
+  @keyframes fuel-blink{ 50%{ background:rgba(193,39,45,0.25); box-shadow:none; } }
+  .lost-fuel strong{ color:var(--rust); font-weight:700; }
+
+  .lost-actions{ margin-top:36px; display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+  .btn.solid{
+    position:relative; padding:14px 54px 14px 24px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out), transform .2s var(--ease-out);
+  }
+  .btn.solid::after{
+    content:"→"; position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.18); font-size:0.9rem;
+    transition:transform .2s var(--ease-out), background .2s ease;
+  }
+  @media (hover: hover) and (pointer: fine){
+    .btn.solid:hover{ transform:translateY(-2px); }
+    .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(0,0,0,0.28); }
+  }
+  .lost-links{
+    margin-top:30px; display:flex; flex-wrap:wrap; justify-content:center; gap:8px 22px;
+    font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase;
+  }
+  .lost-links a{ color:var(--cream-dim); transition:color .2s ease; }
+  .lost-links a:hover{ color:var(--sand); }
+</style>
+</head>
+<body>
+<div class="vt-logo" aria-hidden="true"></div><script>try{var vtA=+sessionStorage.getItem("vt-arrive");if(vtA&&Date.now()-vtA<4000)document.documentElement.classList.add("vt-arriving")}catch(e){}</script>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="/index.html" class="logo logo-wrap">
+      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
+      <span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="/index.html">Rotte</a>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-toggle" aria-expanded="false">Strumenti di viaggio<span class="chevron"></span></button>
+        <div class="nav-dropdown-menu">
+          <a href="/nostromo.html">Nostromo</a>
+          <a href="/manuale.html">Manuale di bordo</a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-toggle" aria-expanded="false">Chi sono<span class="chevron"></span></button>
+        <div class="nav-dropdown-menu">
+          <a href="/ilmotonauta.html">Il Motonauta</a>
+          <a href="/sponsor.html">Alleati</a>
+        </div>
+      </div>
+      <a href="/galleria.html">Diario di bordo</a>
+      <a href="/contatti.html">Canale aperto</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Apri menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="lost">
+  <div class="wrap">
+    <div class="lost-signal" aria-hidden="true">
+      <svg viewBox="0 0 48 40">
+        <path class="arc arc-3" d="M3 14.5a30 30 0 0 1 42 0"/>
+        <path class="arc arc-2" d="M10 21.5a20 20 0 0 1 28 0"/>
+        <path class="arc arc-1" d="M17 28.5a10 10 0 0 1 14 0"/>
+        <circle cx="24" cy="35" r="2.8"/>
+      </svg>
+    </div>
+
+    <p class="marker">Errore 404 · pagina non trovata</p>
+    <h1>Ops, credo tu abbia finito il carburante</h1>
+    <p class="lost-sub">Controlla il serbatoio prima di riconnetterti.</p>
+
+    <div class="lost-fuel" role="img" aria-label="Indicatore della benzina in riserva">
+      <span>E</span>
+      <span class="lost-fuel-bar" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></span>
+      <span>F</span>
+      <strong>Riserva</strong>
+    </div>
+
+    <div class="lost-actions">
+      <a href="/index.html" class="btn solid">Fai il pieno in home</a>
+      <a href="/nostromo.html" class="btn">Chiedi al Nostromo</a>
+    </div>
+
+    <nav class="lost-links" aria-label="Altre pagine">
+      <a href="/manuale.html">Manuale di bordo</a>
+      <a href="/galleria.html">Diario di bordo</a>
+      <a href="/ilmotonauta.html">Il Motonauta</a>
+      <a href="/contatti.html">Canale aperto</a>
+    </nav>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-social">
+      <a href="https://www.instagram.com/motonautagram/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.tiktok.com/@ilmotonauta" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://www.youtube.com/@ilmotonauta" target="_blank" rel="noopener">YouTube</a>
+      <a href="/privacy.html">Privacy &amp; Cookie</a>
+    </div>
+    <p class="footer-note">© 2026 Il Motonauta — tutti i diritti riservati</p>
+  </div>
+</footer>
+
+<script src="/script.js?v=20261012a"></script>
+</body>
+</html>

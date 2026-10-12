@@ -25,7 +25,7 @@
       <div class="cookie-banner-text">
         <p class="marker">Cookie</p>
         <p>Uso Google Analytics solo per capire quante persone visitano il sito.
-        Si attiva soltanto se accetti. Leggi la <a href="privacy.html">privacy &amp; cookie policy</a>.</p>
+        Si attiva soltanto se accetti. Leggi la <a href="/privacy.html">privacy &amp; cookie policy</a>.</p>
       </div>
       <div class="cookie-banner-actions">
         <button type="button" class="btn" id="cookie-reject">Rifiuta</button>
