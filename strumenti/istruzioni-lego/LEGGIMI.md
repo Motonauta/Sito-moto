@@ -22,6 +22,8 @@ solo a rigenerare tavole e video, o a farne di nuovi per altre guide.
   dal lato destro, filtro dell'aria 10-14 sotto la carena del serbatoio) e i
   fotogrammi del cartone (50 s). `tagliando.py prova OUT 12.5 30` scrive solo
   alcuni fotogrammi per controllare
+  (Tavole e cartone poi tolti dalla guida: Angelo ha preferito le sue foto
+  del reel. Lo script resta qui se servisse rigenerarli.)
 - `render.js` — trasforma i fotogrammi in PNG con Chromium (Playwright);
   poi si monta il video con ffmpeg:
 
