@@ -35,10 +35,9 @@ dent = trimesh.creation.icosphere(subdivisions=2, radius=0.9); dent.apply_transl
 body = U(body, dent)
 # cavita + foro perno M4 + tasca dado M4 (si infila da dentro, tenuta dalla bombola)
 cavita = cyl(RI, 400, z0=FONDO)
-foro = cyl(2.25, 60, x=PX, z0=Z_BARRA-50, sec=48)
-dado = trimesh.creation.cylinder(radius=7.6/2*1.0, height=3.5, sections=6, transform=T([PX,0,Z_BARRA-8]))
-canale = box(RI-1, PX, -3.7, 3.7, Z_BARRA-9.75, Z_BARRA-6.25)
-body = S(body, cavita, foro, dado, canale)
+foro = cyl(2.25, 8.0, x=PX, z0=Z_BARRA-8.0, sec=48)          # collo del perno
+camera = cyl(3.2, 4.4, x=PX, z0=Z_BARRA-12.4, sec=48)         # dove si aggancia la testa del perno
+body = S(body, cavita, foro, camera)
 # i montanti hanno tagliato la cavita: ripristina il fondo
 body.export('portabombola_base.stl')
 
@@ -46,8 +45,14 @@ body.export('portabombola_base.stl')
 L = 2*PX
 barra = U(box(-PX, PX, -LARG_BARRA/2, LARG_BARRA/2, 0, SPESS_BARRA),
           cyl(LARG_BARRA/2, SPESS_BARRA, x=PX), cyl(LARG_BARRA/2, SPESS_BARRA, x=-PX))
-barra = U(barra, box(-PX+10, -PX+22, -LARG_BARRA/2, LARG_BARRA/2, SPESS_BARRA, SPESS_BARRA+4))  # presa
-barra = S(barra, cyl(2.3, 20, x=PX, z0=-5, sec=48))
+# perno a scatto: gambo + testa con spalla, tagliato da una fessura per farlo flettere
+gambo = cyl(1.95, 8.0, x=PX, z0=-8.0, sec=48)
+testa = trimesh.creation.revolve(np.array([[0,0],[1.7,0],[2.7,1.6],[2.7,2.2],[1.95,2.2],[0,2.2]]), sections=48)
+testa.apply_transform(T([PX,0,-11.6]))
+barra = U(barra, gambo, testa)
+barra = S(barra, box(PX-4, PX+4, -0.6, 0.6, -12, -3))
+barra.apply_transform(trimesh.transformations.rotation_matrix(np.pi, [1,0,0]))  # orientamento di stampa: perno in su
+barra.apply_translation([0,0,-barra.bounds[0][2]])
 barra.export('portabombola_barra.stl')
 for m,n in ((body,'base'),(barra,'barra')):
     print(n, m.is_watertight, np.round(m.bounds,1).tolist())
