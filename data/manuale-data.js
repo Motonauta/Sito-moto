@@ -439,6 +439,7 @@
           testo: "È il pannello in basso sul lato destro, quello dei collettori di scarico: tre viti Torx T25 e due incastri a pressione. Toglilo a motore freddo, così non rischi di toccare i collettori roventi.",
           immagine: { src: "/img/manuale/tagliando/passo-1.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-1.jpg", alt: "Smonto il pannello basso destro della mia XR", caption: "Il pannello basso destro che si stacca." },
         {
           tipo: "consiglio", numero: 2, titolo: "Scalda il motore",
           testo: "Con la moto sul cavalletto centrale, accendi e lascia girare al minimo per due o tre minuti: l'olio caldo scende meglio e porta via più sporco. Non serve che sia bollente, e usa i guanti: olio e collettori scottano.",
@@ -446,32 +447,37 @@
         },
         {
           tipo: "consiglio", numero: 3, titolo: "Scarica l'olio vecchio",
-          testo: "Metti la bacinella sotto la coppa e togli il tappo di riempimento: entrando aria, l'olio scende più veloce. Poi svita il tappo di scarico (Torx T50) sotto la coppa, tenendo la mano lontana dal getto. Lascia scolare con calma, anche mezz'ora.",
+          testo: "Metti la bacinella sotto la coppa e togli il tappo di riempimento: entrando aria, l'olio scende più veloce. Poi svita il tappo di scarico (Torx T50) sotto la coppa, tenendo la mano lontana dal getto. Lascia scolare con calma: io intanto faccio il filtro dell'aria (passi 10-14), così non si perde tempo.",
           immagine: { src: "/img/manuale/tagliando/passo-3.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-3.jpg", alt: "Svito il tappo di scarico sotto la coppa", caption: "Il tappo di scarico si svita con il cricchetto, la bacinella è già sotto." },
         {
           tipo: "consiglio", numero: 4, titolo: "Svita il filtro",
           testo: "Il filtro sta sul lato destro, attaccato ai collettori. Coprili con un foglio di alluminio, perché l'olio che cola li sporca e poi fuma. Svitalo con la chiave a tazza e fallo uscire inclinato, con calma: se non passa, allenta la piccola staffa accanto (vite Torx T30) per avere un po' più di spazio.",
           immagine: { src: "/img/manuale/tagliando/passo-4.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-4.jpg", alt: "Svito il filtro dell'olio tra i collettori di scarico", caption: "Il filtro sta proprio tra i collettori: serve una chiave a tazza bassa." },
         {
           tipo: "consiglio", numero: 5, titolo: "Monta il filtro nuovo",
-          testo: "Pulisci bene la superficie dove appoggia, ungi con un velo d'olio nuovo la guarnizione di gomma del filtro, avvitalo a mano finché la guarnizione tocca e poi chiudilo con la chiave a 11 Nm. Non stringerlo di più: si rovinano la guarnizione e il filetto.",
+          testo: "Pulisci bene la superficie dove appoggia e ungi la guarnizione di gomma del filtro nuovo con un velo d'olio (va bene anche un po' di quello vecchio). Avvitalo a mano finché la guarnizione tocca e poi chiudilo con la dinamometrica a 11 Nm, come indica il manuale d'officina. Non stringerlo di più: si rovinano la guarnizione e il filetto.",
           immagine: { src: "/img/manuale/tagliando/passo-5.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-5.jpg", alt: "Serro il filtro nuovo con la dinamometrica", caption: "Dinamometrica e, secondo il manuale d'officina, 11 Nm." },
         {
           tipo: "consiglio", numero: 6, titolo: "Rimonta il tappo di scarico",
-          testo: "Pulisci il tappo, che ha un magnete: se ci trovi solo una polvere finissima è normale, se ci sono pezzetti di metallo fallo vedere. Metti sempre una rondella nuova e serralo a 28 Nm con la dinamometrica: la coppa è d'alluminio, il filetto non perdona.",
+          testo: "Pulisci il tappo, che ha un magnete: se ci trovi solo una polvere finissima è normale, se ci sono pezzetti di metallo fallo vedere. Guarnizione vecchia via e sempre una nuova, poi serralo a 28 Nm con la dinamometrica: la coppa è d'alluminio, il filetto non perdona.",
           immagine: { src: "/img/manuale/tagliando/passo-6.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-6.jpg", alt: "Serro il tappo di scarico con la dinamometrica", caption: "Guarnizione vecchia via, quella nuova, e il bullone di scarico a 28 Nm." },
         {
           tipo: "consiglio", numero: 7, titolo: "Olio nuovo",
-          testo: "Versalo con l'imbuto dal tappo di riempimento. Il manuale BMW indica circa 4 litri con il cambio del filtro, ma non versarli tutti alla cieca: metti circa 3,5 litri, chiudi il tappo e passa al controllo. Il resto si aggiunge poco alla volta.",
+          testo: "Versalo con l'imbuto dal tappo di riempimento. Il manuale BMW indica circa 4 litri con il cambio del filtro: io verso quattro bottiglie da un litro, una alla volta. Poi chiudi il tappo e passa subito al controllo del livello.",
           immagine: { src: "/img/manuale/tagliando/passo-7.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-7.jpg", alt: "Verso l'olio nuovo con l'imbuto", caption: "Uno, due, tre e quattro: un litro alla volta con l'imbuto." },
         {
           tipo: "consiglio", numero: 8, titolo: "Controlla il livello",
-          testo: "Accendi e lascia girare al minimo in folle per un minuto, così si riempie anche il filtro, poi spegni e aspetta cinque minuti. Con la moto dritta, non appoggiata sul cavalletto laterale, guarda l'oblò: il livello deve stare tra MIN e MAX. Tra le due tacche c'è al massimo 1,3 litri, quindi rabbocca un goccio alla volta e non andare mai sopra il MAX: il manuale avverte che anche troppo olio danneggia il motore.",
+          testo: "Accendi e lascia girare al minimo in folle per un minuto, così si riempie anche il filtro, poi spegni e aspetta cinque minuti. Con la moto dritta, non appoggiata sul cavalletto laterale, guarda l'oblò: il livello deve stare tra MIN e MAX. Tra le due tacche c'è al massimo 1,3 litri: se sei sotto il MIN aggiungi un goccio alla volta. Se invece sei sopra il MAX non scolarlo da solo: il manuale avverte che anche troppo olio danneggia il motore e consiglia di farlo correggere in officina.",
           immagine: { src: "/img/manuale/tagliando/passo-8.svg" }
         },
         {
@@ -480,36 +486,41 @@
           immagine: { src: "/img/manuale/tagliando/passo-9.svg" }
         },
         { tipo: "sottotitolo", testo: "Il filtro dell'aria" },
-        { tipo: "paragrafo", testo: "La scatola del filtro sta sotto la carena superiore del serbatoio, davanti alla sella. Per arrivarci bisogna liberare il serbatoio dell'olio delle sospensioni ESA, che le sta sopra." },
+        { tipo: "paragrafo", testo: "La scatola del filtro sta sotto la carena superiore del serbatoio, davanti alla sella. Per arrivarci bisogna liberare il serbatoio dell'olio delle sospensioni ESA, che le sta sopra. Il momento giusto per farlo è mentre l'olio motore scola nella bacinella." },
         {
           tipo: "consiglio", numero: 10, titolo: "Smonta la carena superiore del serbatoio",
           testo: "Togli le viti della carena superiore del serbatoio e sollevala con calma: sotto ci sono i cavi dell'ESA e il suo serbatoio dell'olio.",
           immagine: { src: "/img/manuale/tagliando/passo-10.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-10.jpg", alt: "Sollevo la carena superiore del serbatoio", caption: "La carena superiore del serbatoio appena sollevata." },
         {
           tipo: "consiglio", numero: 11, titolo: "Taglia le fascette dei cavi dell'ESA",
           testo: "I cavi del sistema ESA sono fissati all'alloggio del serbatoio con delle fascette: tagliale con il tronchesino, attento a non toccare i cavi. Al rimontaggio ne metterai di nuove.",
           immagine: { src: "/img/manuale/tagliando/passo-11.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-11.jpg", alt: "Taglio le fascette dei cavi dell'ESA", caption: "Le fascette che tengono i cavi dell'ESA, da tagliare." },
         {
           tipo: "consiglio", numero: 12, titolo: "Sposta il serbatoio dell'olio dell'ESA",
           testo: "Smonta il serbatoio dell'olio delle sospensioni ESA dal suo supporto e spostalo di lato, fuori dalla sua sede, senza staccare il tubo: deve solo lasciare spazio al coperchio del filtro.",
           immagine: { src: "/img/manuale/tagliando/passo-12.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-12.jpg", alt: "Smonto il serbatoio dell'olio delle sospensioni ESA", caption: "Smonto il serbatoio dell'olio dell'ESA per spostarlo di lato." },
         {
           tipo: "consiglio", numero: 13, titolo: "Alza il coperchio e cambia il filtro",
           testo: "Togli il coperchio della scatola del filtro alzandolo verso l'alto, tira su il filtro vecchio e metti quello nuovo nella stessa posizione, ben appoggiato nella sua sede.",
           immagine: { src: "/img/manuale/tagliando/passo-13.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-13.jpg", alt: "Il filtro dell'aria vecchio appena tolto", caption: "Il filtro vecchio appena tirato fuori. Oh, manco male!" },
         {
           tipo: "consiglio", numero: 14, titolo: "Richiudi tutto",
           testo: "Rimetti il coperchio, riporta il serbatoio dell'ESA nella sua sede e fissalo, blocca i cavi con fascette nuove come erano prima e rimonta la carena superiore del serbatoio.",
           immagine: { src: "/img/manuale/tagliando/passo-14.svg" }
         },
+        { tipo: "immagine", src: "/img/manuale/tagliando/foto-14.jpg", alt: "Rimonto tutto dopo il cambio del filtro dell'aria", caption: "Si richiude tutto: coperchio, serbatoio dell'ESA, fascette nuove e carena." },
         { tipo: "sottotitolo", testo: "L'avviso del service e l'olio vecchio" },
         { tipo: "paragrafo", testo: "Il tagliando fatto in casa non spegne l'avviso del service sul cruscotto: per azzerarlo serve il concessionario oppure un tester di diagnosi come il GS-911. L'olio vecchio e il filtro non vanno nel cassonetto: portali all'isola ecologica o da un'officina, che li smaltisce." },
         { tipo: "sottotitolo", testo: "In breve" },
-        { tipo: "paragrafo", testo: "Olio SAE 5W-40 API SJ / JASO MA2, circa 4 litri con il filtro. Filtro BMW 11425B70298, a mano più 11 Nm. Tappo di scarico Torx T50 con rondella nuova, 28 Nm. Livello a motore caldo, moto dritta, tra MIN e MAX. Filtro dell'aria BMW 13729444643. Tutto ogni 10.000 km o una volta l'anno." },
+        { tipo: "paragrafo", testo: "Olio SAE 5W-40 API SJ / JASO MA2, circa 4 litri con il filtro (quattro bottiglie da un litro). Filtro BMW 11425B70298, a mano più 11 Nm. Tappo di scarico Torx T50 con rondella nuova, 28 Nm. Livello a motore caldo, moto dritta, tra MIN e MAX. Filtro dell'aria BMW 13729444643. Tutto ogni 10.000 km o una volta l'anno." },
         { tipo: "paragrafo", testo: "Tu il tagliando lo fai da solo o lo lasci alla concessionaria? Se hai un trucco per non sporcare i collettori, scrivimelo." },
         { tipo: "link", label: "Guarda il video del mio tagliando", url: "https://www.instagram.com/reel/Dd6uiaXoSXY/" }
       ]

@@ -277,7 +277,7 @@ def tavole(OUT):
     pour = f'<path d="M496 92 C504 120 512 140 516 168" fill="none" stroke="{NEW}" stroke-width="10" stroke-linecap="round"/>'
     P['passo-7'] = tavola(7, [(bottle(), .62), (imbuto(), .55)],
                           motore(pannello=1, tappo=0, livello=.35) + at(517, 228, imbuto(), .8) + at(470, 60, bottle(), .8, 48) + pour,
-                          txt(90, 612, '≈ 3,5 L, poi rabbocca', 30, K, 'start'))
+                          txt(90, 612, '4 x 1 L, poi controlla il livello', 30, K, 'start'))
     # 8 livello: un minuto al minimo, spegni, cinque minuti, moto dritta
     P['passo-8'] = tavola(8, [(clock(48, 5/60), 1)],
                           motore(pannello=1, livello=.55),
@@ -432,7 +432,7 @@ def frame(t):
                 kk = seg(u, .5, .65)
                 body += at(plug[0] + 90, 672, dinamometrica('28 Nm'), .85*pop(kk), 0, kk)
         if st == 7 and u > .4:
-            body += f'<g opacity="{seg(u, .4, .55):.2f}">{txt(60, 420, "≈ 3,5 L", 40, K, "start")}{txt(60, 462, "poi rabbocca", 32, K, "start")}</g>'
+            body += f'<g opacity="{seg(u, .4, .55):.2f}">{txt(60, 420, "4 x 1 L", 40, K, "start")}{txt(60, 462, "poi il livello", 32, K, "start")}</g>'
         if st == 8:
             frac = (1/60)*seg(u, .0, .3) + (5/60)*seg(u, .35, .7)
             body += at(120, 470, clock(62, frac))
