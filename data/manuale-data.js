@@ -377,6 +377,46 @@
         { tipo: "paragrafo", testo: "Tu come pulisci la catena? Se hai un trucco che funziona, scrivimelo: potrebbe diventare il prossimo articolo." },
         { tipo: "link", label: "Guarda il video dove lo spiego", url: "https://www.instagram.com/reel/Ddriftvx0Ln/" }
       ]
+    },
+    {
+      titolo: "Le tue valigie sono a norma? La regola dei 50 cm che nessuno ti dice",
+      categoria: "Equipaggiamento",
+      excerpt: "Il Codice della Strada vieta bagagli che sporgano più di 50 cm per lato dal centro della moto, e tante valigie, per colpa del telaio, finiscono oltre. Come controllare le tue prima di comprarle, e l'alternativa che costa un ottavo se viaggi da solo.",
+      copertina: "/img/manuale/valigie/copertina.jpg",
+      autore: "Il Motonauta",
+      data: "2026-10-12",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Finalmente siamo pronti per partire in moto. Ma abbiamo davvero la certezza di avere la moto a norma? Le valigie laterali sono la cosa più comoda del mondo, chiariamoci, ma il fatto che tu le possa comprare non significa che le possa anche montare." },
+        { tipo: "paragrafo", testo: "Ad esempio: sai di quanto può sporgere il bagaglio della tua moto?" },
+        { tipo: "sottotitolo", testo: "Cosa dice il Codice della Strada" },
+        { tipo: "paragrafo", testo: "La regola sta nell'articolo 170, comma 5: sulle moto è vietato trasportare oggetti che non siano solidamente assicurati, «che sporgano lateralmente rispetto all'asse del veicolo o longitudinalmente rispetto alla sagoma di esso oltre i cinquanta centimetri». Tradotto: dal centro della moto, il bagaglio non può andare oltre i 50 cm per lato. Chi sgarra rischia una multa, prevista dal comma 6 dello stesso articolo." },
+        { tipo: "immagine", src: "/img/manuale/valigie/limiti.svg", alt: "Moto vista da dietro con i limiti dei 50 cm per lato: a sinistra valigie a 47 cm dal centro, a destra valigie spinte oltre il limite dal telaio", caption: "A sinistra le mie: 47 cm dal centro, dentro il limite. A destra il caso di tante valigie in commercio: il telaio le spinge oltre i 50 cm." },
+        { tipo: "sottotitolo", testo: "Le mie: 47 cm per lato" },
+        { tipo: "paragrafo", testo: "Io l'ho misurato con il metro: con le mie Givi Trekker Outback EVO da 37 litri l'una, sulla S1000XR arrivo a 47 cm dal centro, quindi sono dentro. Merito anche del telaio Camside, molto compatto, che tiene le valigie il più aderenti possibile alla moto: ne ho parlato nella recensione del tris." },
+        { tipo: "link", label: "La mia recensione del tris Givi Trekker Outback EVO", url: "/manuale/cosa-ne-penso-del-mio-tris-givi-trekker-outback-evo" },
+        { tipo: "sottotitolo", testo: "Il problema: telai che sporgono troppo" },
+        { tipo: "paragrafo", testo: "Il guaio è che è pieno di valigie che, per colpa del telaio che sporge troppo, finiscono di gran lunga oltre i 50 centimetri massimi. Un esempio sono le SW-Motech Urban per la Honda Hornet CB750. E spesso questa cosa non viene detta dai venditori, e soprattutto viene nascosta dalle case che le producono." },
+        { tipo: "sottotitolo", testo: "Prima di comprarle, controlla" },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Chiedi la larghezza con tutto montato",
+          testo: "Non basta la misura della valigia: conta quanto diventa larga la moto con valigie e telaio montati. Chiedila al venditore prima di ordinare, e se la risposta è vaga fate molta attenzione."
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Misura dal centro, per lato",
+          testo: "Il limite è di 50 cm per lato dall'asse della moto, non da un bordo all'altro: misura dal centro della moto fino al punto più esterno, che sia la valigia o il telaio."
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "L'eccezione è sul libretto",
+          testo: "Le uniche eccezioni riguardano le moto omologate dalla casa madre con una larghezza massima con i bagagli superiore, riportata nei documenti: è il caso, ad esempio, del GS 1250."
+        },
+        { tipo: "sottotitolo", testo: "Se viaggi da solo, prendi un borsone" },
+        { tipo: "paragrafo", testo: "Se volete evitare di spendere 600, 700, 800 euro per due valigie da 30 litri, piuttosto prendete un bel borsone da attaccare dietro: con un settimo, un ottavo della spesa avete gli stessi litri, ma sulla sella. Ovviamente parlo di viaggi in solitaria. Il mio è un borsone generico da 60 litri: l'importante è che sia impermeabile." },
+        { tipo: "immagine", src: "/img/manuale/valigie/peso.svg", alt: "A sinistra due valigie laterali da 30 litri con il peso ai lati, a destra un borsone da 60 litri sulla sella con il peso al centro", caption: "Stessi litri, ma il borsone tiene il peso al centro invece che ai lati." },
+        { tipo: "paragrafo", testo: "E la cosa migliore è che c'è meno rischio che vi sbilanci, o comunque non dovete fare un controllo dei carichi esagerato, perché il peso è al centro invece che il più esterno possibile alla moto." },
+        { tipo: "link", label: "Perché in solitaria le valigie sono sopravvalutate", url: "/manuale/le-valigie-nei-viaggi-in-solitaria-sono-sopravvalutate" },
+        { tipo: "paragrafo", testo: "E voi avete mai controllato la larghezza della vostra moto dopo aver montato le valigie? Scrivetemelo: se la misura vi ha sorpreso, potrebbe finire nel prossimo articolo." },
+        { tipo: "link", label: "Guarda il video dove lo spiego", url: "https://www.instagram.com/reel/Db8twTytuho/" }
+      ]
     }
   ];
 

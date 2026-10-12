@@ -12,6 +12,11 @@ solo a rigenerare tavole e video, o a farne di nuovi per altre guide.
 - `plates.py OUT` — scrive le tavole SVG (`passo-1..6`, `accortezze`,
   `copertina`)
 - `video.py OUT` — scrive i fotogrammi SVG del cartone (30 fps)
+- `valigie.py OUT` — tavole della guida sulle valigie a norma (`limiti`,
+  `peso`, in `img/manuale/valigie/`): la S1000XR vista da dietro (cupolino,
+  specchietti, fianchi rossi, codino col fanale, scarico a destra), con le
+  larghezze in scala vera (4 px per cm) così i limiti dei 50 cm per lato
+  tornano
 - `render.js` — trasforma i fotogrammi in PNG con Chromium (Playwright);
   poi si monta il video con ffmpeg:
 
