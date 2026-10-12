@@ -206,6 +206,18 @@
     font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
   }
   .macro-filter-empty[hidden]{ display:none; }
+  /* "Carica altro" sotto le prime 5 schede di ogni lista */
+  .macro-more{ align-self:center; margin-top:6px; cursor:pointer; }
+  .macro-more[hidden]{ display:none; }
+  .macro-more-count{ color:var(--cream-dim); letter-spacing:0.04em; text-transform:none; }
+  .macro-more:hover .macro-more-count{ color:inherit; }
+  @media (prefers-reduced-motion: no-preference){
+    .viaggio-item.is-new{ animation:macro-in .22s var(--ease-out) both; }
+  }
+  @keyframes macro-in{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:none; }
+  }
 
   .viaggio-item{
     display:flex; gap:20px; background:var(--asphalt); border:1px solid rgba(245,240,230,0.14);
@@ -1478,18 +1490,50 @@
     // solo tra le zone effettivamente presenti in quella lista (le zone degli
     // itinerari sono aree del Lazio, quelle dei viaggi da ricordare sono
     // paesi/regioni estere, non ha senso mescolarle in un filtro unico).
+    // 5 schede alla volta, con "Carica altro" sotto: con la lista tutta
+    // aperta, per arrivare al riquadro successivo bisognava scorrere ogni
+    // viaggio della sezione. Il filtro per zona riparte dalle prime 5
+    // schede che corrispondono
+    const PAGE = 5;
+    let shown = PAGE;
+    let matches = entries;
+    const moreBtn = document.createElement("button");
+    moreBtn.type = "button";
+    moreBtn.className = "btn macro-more";
+    list.appendChild(moreBtn);
+    function applyPaging(){
+      const visible = new Set(matches.slice(0, shown).map(e => e.card));
+      entries.forEach(({ card }) => { card.style.display = visible.has(card) ? "" : "none"; });
+      const rest = matches.length - shown;
+      moreBtn.hidden = rest <= 0;
+      moreBtn.innerHTML = `Carica altro <span class="macro-more-count">${Math.min(shown, matches.length)} / ${matches.length}</span>`;
+    }
+    moreBtn.addEventListener("click", () => {
+      const from = shown;
+      shown += PAGE;
+      applyPaging();
+      matches.slice(from, shown).forEach(({ card }, k) => {
+        card.style.animationDelay = `${k * 40}ms`;
+        card.classList.add("is-new");
+        card.addEventListener("animationend", () => {
+          card.classList.remove("is-new");
+          card.style.animationDelay = "";
+        }, { once: true });
+      });
+      // chi usa la tastiera riparte dalla prima scheda appena comparsa
+      if(matches[from]) matches[from].card.focus({ preventScroll: true });
+    });
+    applyPaging();
+
     const filterInput = document.getElementById(`${listId}-filter`);
     const emptyMsg = document.getElementById(`${listId}-empty`);
     if(filterInput){
       filterInput.addEventListener("input", () => {
         const query = normalizeFilterText(filterInput.value.trim());
-        let visibleCount = 0;
-        entries.forEach(({ card }) => {
-          const match = !query || card.dataset.filterText.includes(query);
-          card.style.display = match ? "" : "none";
-          if(match) visibleCount++;
-        });
-        if(emptyMsg) emptyMsg.hidden = visibleCount !== 0;
+        matches = entries.filter(({ card }) => !query || card.dataset.filterText.includes(query));
+        shown = PAGE;
+        applyPaging();
+        if(emptyMsg) emptyMsg.hidden = matches.length !== 0;
       });
     }
 
