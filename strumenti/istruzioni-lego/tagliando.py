@@ -55,8 +55,83 @@ def alluminio():
     return (f'<path d="M-60 -18 L-30 -24 L0 -16 L30 -26 L62 -16 L56 20 L24 14 L-6 24 L-36 16 L-62 22 Z" fill="{FOIL}" stroke="{K}" stroke-width="3" stroke-linejoin="round"/>'
             f'<path d="M-40 -10 L-20 6 M10 -12 L26 6 M40 -8 L44 10" stroke="#fff" stroke-width="3" stroke-linecap="round"/>')
 
+def tronchesino():
+    """tronchesino per tagliare le fascette"""
+    return (f'<path d="M-6 -6 L-34 70 M6 -6 L34 70" stroke="{K}" stroke-width="20" stroke-linecap="round"/>'
+            f'<path d="M-6 -6 L-34 70 M6 -6 L34 70" stroke="{RED}" stroke-width="13" stroke-linecap="round"/>'
+            f'<path d="M-4 -4 L-16 -52 L0 -40 Z M4 -4 L16 -52 L0 -40 Z" fill="{DBG}" stroke="{K}" stroke-width="3.5" stroke-linejoin="round"/>'
+            f'<circle cx="0" cy="-8" r="8" fill="{LBG}" stroke="{K}" stroke-width="3"/>')
+def fascetta():
+    return (f'<path d="M-20 -30 C-40 -30 -40 30 -20 30 L20 30 C40 30 40 -30 20 -30 Z" fill="none" stroke="{K}" stroke-width="12"/>'
+            f'<path d="M-20 -30 C-40 -30 -40 30 -20 30 L20 30 C40 30 40 -30 20 -30 Z" fill="none" stroke="#fff" stroke-width="6"/>'
+            f'<rect x="12" y="-40" width="20" height="20" rx="3" fill="#fff" stroke="{K}" stroke-width="3"/>')
+AIR_NEW, AIR_OLD = '#f0dfaa', '#8c7b5c'
+def filtro_aria(col=AIR_NEW):
+    return (f'<rect x="-80" y="-26" width="160" height="52" rx="6" fill="{K}"/>'
+            f'<rect x="-72" y="-20" width="144" height="40" rx="3" fill="{col}"/>'
+            + ''.join(f'<path d="M{x} -18 L{x} 18" stroke="{K}" stroke-width="2.5" opacity=".55"/>' for x in range(-64, 72, 12)))
+
 KIT_T = [(lambda: bottle(), 1.0, '4x'), (filtro, 1.0, '1x'), (rondella, 1.2, '1x'), (lambda: chiave_l('T50'), .8, '1x'),
-         (tazza, .9, '1x'), (lambda: dinamometrica(), .55, '1x'), (imbuto, .9, '1x'), (bacinella, .75, '1x'), (alluminio, 1.0, '1x')]
+         (tazza, .9, '1x'), (lambda: dinamometrica(), .55, '1x'), (imbuto, .9, '1x'), (bacinella, .75, '1x'), (alluminio, 1.0, '1x'),
+         (filtro_aria, .8, '1x'), (tronchesino, .8, '1x'), (fascetta, .8, '')]
+
+# ---------------------------------------------------------------- filtro dell'aria
+def serbatoio(carena=0.0, fascette=1.0, esa=0.0, coperchio=0.0, filtro_su=0.0, filtro_col=AIR_OLD, nuove=False, t=0.0):
+    """zona sotto la carena superiore del serbatoio, vista dal lato destro:
+    carena: 0 montata -> 1 tolta; fascette: 1 intere -> 0 tagliate;
+    esa: 0 al suo posto -> 1 spostato; coperchio: 0 chiuso -> 1 alzato;
+    filtro_su: 0 nella scatola -> 1 tirato fuori"""
+    g = []
+    # telaio e sella
+    g.append(f'<path d="M110 520 L300 330 L760 280 L870 380" fill="none" stroke="{K}" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>')
+    g.append(f'<path d="M110 520 L300 330 L760 280 L870 380" fill="none" stroke="{DBG}" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>')
+    g.append(f'<path d="M60 300 C90 262 200 254 290 268 L300 314 C200 306 110 318 70 336 Z" fill="{K}" stroke="{K}" stroke-width="4" stroke-linejoin="round"/>')
+    g.append(f'<path d="M96 300 C150 284 220 282 280 288" fill="none" stroke="#4d5258" stroke-width="4" stroke-dasharray="10 8"/>')
+    # scatola del filtro
+    g.append(f'<rect x="320" y="330" width="380" height="180" rx="14" fill="#2b3238" stroke="{K}" stroke-width="4"/>')
+    for x in (370, 450, 530, 610):
+        g.append(f'<path d="M{x} 362 L{x} 490" stroke="#3f474e" stroke-width="8" stroke-linecap="round"/>')
+    # filtro (sale quando si tira su)
+    fy = 322 - filtro_su*210
+    g.append(at(510, fy, filtro_aria(filtro_col), 1.6))
+    # coperchio della scatola (si alza)
+    cy = -150*coperchio
+    g.append(f'<g transform="translate({-230*coperchio:.1f} {cy:.1f}) rotate({-8*coperchio:.1f} 510 320)">'
+             f'<rect x="306" y="296" width="408" height="50" rx="12" fill="{K}"/>'
+             f'<path d="M330 312 L690 312" stroke="#4d5258" stroke-width="5" stroke-linecap="round"/>'
+             + ''.join(f'<rect x="{x}" y="334" width="26" height="20" rx="4" fill="{LBG}" stroke="{K}" stroke-width="3"/>' for x in (322, 672))
+             + '</g>')
+    # serbatoio dell'olio delle sospensioni ESA, con il suo tubo (si sposta di lato)
+    ex, ey = esa*190, -esa*70
+    g.append(f'<path d="M{590+ex:.1f} {262+ey:.1f} C{560+ex*.5:.1f} {300+ey*.5:.1f} 560 420 600 560" fill="none" stroke="{K}" stroke-width="10" stroke-linecap="round"/>')
+    g.append(f'<g transform="translate({ex:.1f} {ey:.1f})">'
+             f'<rect x="580" y="236" width="150" height="52" rx="24" fill="{LBG}" stroke="{K}" stroke-width="4"/>'
+             f'<rect x="580" y="236" width="150" height="52" rx="24" fill="url(#cyl)" opacity=".5"/>'
+             f'<rect x="640" y="230" width="18" height="64" rx="4" fill="{DBG}" stroke="{K}" stroke-width="3"/>'
+             + ''.join(f'<circle cx="{x}" cy="300" r="7" fill="{DBG}" stroke="{K}" stroke-width="2.5"/>' for x in (630, 668))
+             + '</g>')
+    # fascio di cavi dell'ESA con le fascette
+    cav = 'M290 300 C380 280 470 272 560 282 C620 290 680 300 760 290'
+    g.append(f'<path d="{cav}" fill="none" stroke="{K}" stroke-width="16" stroke-linecap="round"/>')
+    g.append(f'<path d="{cav}" fill="none" stroke="{BLU}" stroke-width="4" stroke-linecap="round" stroke-dasharray="20 14"/>')
+    for i, (x, y) in enumerate(((380, 285), (470, 276), (540, 279))):
+        if fascette >= .999 or nuove:
+            g.append(f'<rect x="{x-6}" y="{y-16}" width="12" height="32" rx="4" fill="#fff" stroke="{K}" stroke-width="3"/>')
+        else:   # tagliate: i due pezzi cadono
+            k = 1 - fascette
+            for s in (-1, 1):
+                g.append(f'<rect x="{x-6+s*10*k:.1f}" y="{y-16+90*k*k:.1f}" width="12" height="15" rx="4" fill="#fff" stroke="{K}" stroke-width="3" opacity="{max(0, 1-k*1.2):.2f}" transform="rotate({s*60*k:.1f} {x} {y})"/>')
+    # carena superiore del serbatoio (si alza e sparisce)
+    if carena < 1:
+        dy = -260*carena
+        op = 1 - carena*.65
+        g.append(f'<g transform="translate({60*carena:.1f} {dy:.1f})" opacity="{op:.2f}">'
+                 f'<path d="M280 306 C290 220 410 168 560 166 L748 196 C772 240 776 280 770 312 Z" fill="{RED}" stroke="{K}" stroke-width="4" stroke-linejoin="round"/>'
+                 f'<path d="M330 290 C352 232 440 200 560 198 L720 220" fill="none" stroke="{K}" stroke-width="22" stroke-linecap="round"/>'
+                 f'<path d="M340 214 C400 186 470 176 560 176" fill="none" stroke="#ff6b5a" stroke-width="6" stroke-linecap="round" opacity=".7"/>'
+                 + ''.join(f'<circle cx="{x}" cy="{y}" r="7" fill="{LBG}" stroke="{K}" stroke-width="2.5"/>' for x, y in ((300, 296), (500, 180), (650, 182), (756, 300)))
+                 + '</g>')
+    return ''.join(g)
 
 # ---------------------------------------------------------------- motore
 def motore(ox=0, oy=0, s=1.0, pannello=0.0, tappo=1.0, scarico=1.0, flusso=0.0, flusso_col=OLD,
@@ -161,17 +236,20 @@ def lente(cx, cy, livello, ok=True, r=96, to=(440, 418)):
 W, H = 900, 640
 SX, SY, SS = 80, 70, .8
 E = lambda x, y: (SX + x*SS, SY + y*SS)   # dal disegno del motore alla tavola
-def tavola(n, items, scena, extra=''):
-    return page(W, H, f'<g transform="translate({SX} {SY}) scale({SS})">{scena}</g>' + extra + callout(items) + step_num(n))
+def tavola(n, items, scena, extra='', tr=None):
+    tr = tr or (SX, SY, SS)
+    return page(W, H, f'<g transform="translate({tr[0]} {tr[1]}) scale({tr[2]})">{scena}</g>' + extra + (callout(items) if items else '') + step_num(n))
 
 def tavole(OUT):
     os.makedirs(OUT, exist_ok=True)
     P = {}
     # il kit di tutto quello che serve
     body = f'<rect x="30" y="30" width="840" height="580" rx="22" fill="{CALL}" stroke="{CALLB}" stroke-width="5"/>'
-    pos = [(120, 190), (290, 190), (450, 175), (600, 190), (770, 200), (175, 455), (400, 440), (590, 460), (770, 455)]
+    pos = [(130, 120), (330, 120), (520, 112), (720, 120),
+           (130, 338), (350, 338), (540, 332), (730, 338),
+           (150, 505), (350, 505), (540, 495), (730, 505)]
     for (fn, sc, q), (x, y) in zip(KIT_T, pos):
-        body += at(x, y, fn(), sc*1.45) + txt(x, y + 130, q, 34)
+        body += at(x, y, fn(), sc*1.1) + txt(x, y + 96, q, 28)
     P['kit'] = page(W, H, body)
     fil, plug, cap, obl = E(690, 408), E(480, 506), E(517, 312), E(440, 418)
     # 1 via il pannello basso destro (3 viti T25 + 2 incastri), a motore freddo
@@ -208,6 +286,22 @@ def tavole(OUT):
     P['passo-9'] = tavola(9, [(chiave_l('T25'), .62)],
                           motore(pannello=0, livello=.55),
                           badge(fil[0] + 120, fil[1] - 60, True) + badge(plug[0], 600, True))
+    # ---- filtro dell'aria (scena più piccola, così i numeri a due cifre non coprono la sella)
+    TA = (170, 120, .78)
+    EA = lambda x, y: (TA[0] + x*TA[2], TA[1] + y*TA[2])
+    cov, fas, esa, box = EA(520, 230), EA(470, 278), EA(660, 262), EA(510, 330)
+    # 10 via la carena superiore del serbatoio
+    P['passo-10'] = tavola(10, [(chiave_l('T25'), .62)], serbatoio(carena=.5), arrow(cov[0], cov[1] - 40, cov[0], cov[1] - 130, YEL, 12), TA)
+    # 11 tagliare le fascette dei cavi dell'ESA
+    P['passo-11'] = tavola(11, [(tronchesino(), .62)], serbatoio(carena=1, fascette=.45), at(fas[0], fas[1] - 70, tronchesino(), .8, 160), TA)
+    # 12 spostare il serbatoio dell'olio dell'ESA dalla sua sede (senza staccare il tubo)
+    P['passo-12'] = tavola(12, [], serbatoio(carena=1, fascette=0, esa=.8), arrow(esa[0] + 40, esa[1] - 110, esa[0] + 150, esa[1] - 150, YEL, 12), TA)
+    # 13 coperchio su, filtro vecchio fuori, filtro nuovo dentro
+    P['passo-13'] = tavola(13, [(filtro_aria(), .6)], serbatoio(carena=1, fascette=0, esa=1, coperchio=1, filtro_su=.55, filtro_col=AIR_OLD),
+                           badge(box[0] + 90, box[1] - 150, False) + at(800, 470, filtro_aria(), .75) + badge(840, 410, True)
+                           + arrow(760, 520, box[0] + 110, box[1] + 30, YEL, 12), TA)
+    # 14 richiudere tutto con fascette nuove
+    P['passo-14'] = tavola(14, [(fascetta(), .7)], serbatoio(carena=0, nuove=True, filtro_col=AIR_NEW), badge(810, 160, True), TA)
     for n, v in P.items():
         open(os.path.join(OUT, n + '.svg'), 'w').write(v)
     print('ok', list(P))
@@ -217,8 +311,11 @@ FPS = 30
 VW, VH = 1280, 720
 VX, VY, VS = 330, 40, .95
 EV = lambda x, y: (VX + x*VS, VY + y*VS)
-INTRO, STEP, OUTRO = 3.0, 3.4, 2.8
-TOTAL = INTRO + 9*STEP + OUTRO
+INTRO, STEP, OUTRO = 3.0, 3.2, 2.8
+NSTEP, FINE = 14, 15          # 9 passaggi dell'olio + 5 del filtro dell'aria
+TOTAL = INTRO + NSTEP*STEP + OUTRO
+AX, AY, AS = 330, 70, .95     # scena del filtro dell'aria nel video
+EA = lambda x, y: (AX + x*AS, AY + y*AS)
 clamp = lambda v, a=0, b=1: max(a, min(b, v))
 ease = lambda u: u*u*(3-2*u)
 def seg(u, a, b):          # avanzamento 0..1 dentro la finestra [a, b] del passaggio
@@ -228,15 +325,16 @@ def pop(u):
     return 1 + 0.14*math.sin(u*math.pi) if u < 1 else 1
 CALLS = {1: [(lambda: chiave_l('T25'), .62)], 2: [(lambda: clock(48, .12), 1)], 3: [(lambda: chiave_l('T50'), .62), (bacinella, .55)],
          4: [(tazza, .62), (alluminio, .65)], 5: [(filtro, .7)], 6: [(rondella, .9)], 7: [(bottle, .62), (imbuto, .55)],
-         8: [(lambda: clock(48, 5/60), 1)], 9: [(lambda: chiave_l('T25'), .62)]}
+         8: [(lambda: clock(48, 5/60), 1)], 9: [(lambda: chiave_l('T25'), .62)],
+         10: [(lambda: chiave_l('T25'), .62)], 11: [(tronchesino, .62)], 12: [], 13: [(filtro_aria, .6)], 14: [(fascetta, .7)]}
 
 def frame(t):
     if t < INTRO:
         st, u = 0, t / INTRO
-    elif t < INTRO + 9*STEP:
+    elif t < INTRO + NSTEP*STEP:
         st = int((t - INTRO) // STEP) + 1; u = (t - INTRO - (st-1)*STEP) / STEP
     else:
-        st, u = 10, (t - INTRO - 9*STEP) / OUTRO
+        st, u = FINE, (t - INTRO - NSTEP*STEP) / OUTRO
     m = dict(pannello=0.0, tappo=1.0, scarico=1.0, flusso=0.0, filtro_st=1.0, foil=False, livello=.55, vasca=False, gocce_filtro=0.0, t=t)
     over = ''
     fil, plug, cap, obl = EV(690, 408), EV(480, 506), EV(517, 312), EV(440, 418)
@@ -278,15 +376,27 @@ def frame(t):
             if u > .3 and u < .92:
                 scena += f'<path d="M496 92 C504 120 512 140 516 168" fill="none" stroke="{NEW}" stroke-width="10" stroke-linecap="round" stroke-dasharray="14 8" stroke-dashoffset="{-t*160:.1f}"/>'
     body = f'<g transform="translate({VX} {VY}) scale({VS})">{scena}</g>'
+    if 10 <= st <= 14:   # filtro dell'aria: stato accumulato come per l'olio
+        a = dict(carena=1.0, fascette=0.0, esa=1.0, coperchio=1.0, filtro_su=0.0, filtro_col=AIR_OLD, nuove=False, t=t)
+        if st == 10: a.update(carena=seg(u, .15, .7), fascette=1.0, esa=0.0, coperchio=0.0)
+        if st == 11: a.update(fascette=1 - seg(u, .25, .8), esa=0.0, coperchio=0.0)
+        if st == 12: a.update(esa=seg(u, .15, .7), coperchio=0.0)
+        if st == 13:
+            a['coperchio'] = seg(u, 0, .22)
+            if u < .55: a.update(filtro_su=seg(u, .25, .5))
+            else: a.update(filtro_su=1 - seg(u, .62, .92), filtro_col=AIR_NEW)
+        if st == 14:
+            a.update(coperchio=1 - seg(u, 0, .2), esa=1 - seg(u, .15, .4), filtro_col=AIR_NEW, nuove=u > .45, carena=1 - seg(u, .5, .85))
+        body = f'<g transform="translate({AX} {AY}) scale({AS})">{serbatoio(**a)}</g>'
     if st == 0:   # il kit: i pezzi compaiono uno alla volta
         body += f'<rect x="30" y="30" width="520" height="660" rx="24" fill="{CALL}" stroke="{CALLB}" stroke-width="5"/>'
-        pos = [(130, 140), (290, 140), (440, 130), (130, 330), (290, 330), (440, 330), (130, 530), (300, 530), (450, 530)]
-        order = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        pos = [(130, 110), (290, 110), (440, 100), (130, 268), (290, 268), (440, 260), (130, 420), (290, 420), (440, 420), (130, 575), (290, 570), (440, 575)]
+        order = list(range(12))
         for i, ((fn, sc, q), (x, y)) in enumerate(zip(KIT_T, pos)):
-            k = clamp((t - .15 - order[i]*.27)/.3)
+            k = clamp((t - .15 - order[i]*.2)/.28)
             if k > 0:
-                body += at(x, y, fn(), sc*1.05*pop(k)*(.6+.4*ease(k)), 0, ease(k)) + f'<g opacity="{ease(k):.2f}">{txt(x, y + 100, q, 28)}</g>'
-    elif st == 10:   # finale: spunta verde e intervallo
+                body += at(x, y, fn(), sc*.85*pop(k)*(.6+.4*ease(k)), 0, ease(k)) + f'<g opacity="{ease(k):.2f}">{txt(x, y + 78, q, 24)}</g>'
+    elif st == FINE:   # finale: spunta verde e intervallo
         k = clamp(u/.25)
         body += f'<g transform="translate(250 330) scale({pop(k)*ease(k):.3f})"><circle r="120" fill="{GREEN}" stroke="{K}" stroke-width="6"/><path d="M-54 0 L-14 40 L58 -44" fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/></g>'
         k2 = clamp((u-.25)/.25)
@@ -296,7 +406,8 @@ def frame(t):
         body += sparkle(EV(690, 300)[0], EV(690, 300)[1], 20*tw) + sparkle(EV(420, 260)[0], EV(420, 260)[1], 16*(1-tw))
     else:
         k = clamp(u/.1)
-        body += callout([(fn(), sc) for fn, sc in CALLS[st]], op=ease(k)) + step_num(st, y=330, op=ease(k))
+        if CALLS[st]: body += callout([(fn(), sc) for fn, sc in CALLS[st]], op=ease(k))
+        body += step_num(st, y=330, op=ease(k))
         if st == 2:
             body += f'<g opacity="{ease(k):.2f}">{txt(60, 420, "2-3 minuti", 34, K, "start")}{txt(60, 462, "al minimo", 34, K, "start")}</g>'
         if st == 1 and u < .75:
@@ -333,6 +444,20 @@ def frame(t):
             kk = seg(u, .6, .75)
             body += f'<g transform="translate({fil[0] + 150:.0f} {fil[1] - 80:.0f}) scale({pop(kk)*kk:.3f})">{badge(0, 0, True)}</g>'
             body += f'<g transform="translate({plug[0]:.0f} {plug[1] + 110:.0f}) scale({pop(kk)*kk:.3f})">{badge(0, 0, True)}</g>'
+        cov, fas, esa_p, box = EA(520, 230), EA(470, 278), EA(660, 262), EA(510, 330)
+        if st == 10 and .1 < u < .7:
+            body += arrow(cov[0], cov[1] - 40, cov[0], cov[1] - 140, YEL, 12)
+        if st == 11 and u < .9:
+            xs = [EA(380, 285)[0], EA(470, 276)[0], EA(540, 279)[0]]
+            i = min(2, int(clamp((u - .2) / .6) * 3))
+            body += at(xs[i], fas[1] - 70, tronchesino(), .8, 160 + 10*math.sin(u*60))
+        if st == 12 and .1 < u < .75:
+            body += arrow(esa_p[0] + 40, esa_p[1] - 110, esa_p[0] + 160, esa_p[1] - 160, YEL, 12)
+        if st == 13:
+            if .4 < u < .58: body += badge(box[0] + 90, box[1] - 200, False)
+            if u > .88: body += badge(box[0] + 90, box[1] - 60, True)
+        if st == 14 and u > .9:
+            body += badge(1180, 120, True)
     return page(VW, VH, body, rounded=False)
 
 def video(OUT):

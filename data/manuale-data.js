@@ -419,21 +419,21 @@
       ]
     },
     {
-      titolo: "Tagliando della S1000XR fai da te: olio e filtro passo per passo",
+      titolo: "Tagliando della S1000XR fai da te: olio e filtri passo per passo",
       categoria: "Manutenzione",
-      excerpt: "Olio giusto, quantità, coppie di serraggio e controllo del livello: come cambiare da soli olio e filtro alla BMW S1000XR di seconda generazione (2020-2021), passo per passo con le tavole a mattoncini.",
+      excerpt: "Olio giusto, quantità, coppie di serraggio, controllo del livello e filtro dell'aria: come fare da soli il tagliando alla BMW S1000XR di seconda generazione (2020-2021), passo per passo con le tavole a mattoncini.",
       copertina: "/img/manuale/tagliando/copertina.jpg",
       autore: "Il Motonauta",
       data: "2026-10-12",
       blocchi: [
-        { tipo: "paragrafo", testo: "Il cambio di olio e filtro è il lavoro di manutenzione più semplice da fare in garage sulla S1000XR, e fatto con calma porta via meno di un'ora, più il tempo per far scolare bene l'olio. Questa guida vale per la seconda generazione, quella dal 2020 in poi, quindi anche per la 2021." },
-        { tipo: "paragrafo", testo: "BMW prevede olio e filtro ogni 10.000 km o una volta l'anno, quello che arriva prima. Il primo controllo, quello di rodaggio tra 500 e 1.200 km, conviene farlo in concessionaria, perché oltre all'olio leggono anche la centralina." },
+        { tipo: "paragrafo", testo: "Il cambio di olio e filtro è il lavoro di manutenzione più semplice da fare in garage sulla S1000XR, e fatto con calma porta via meno di un'ora, più il tempo per far scolare bene l'olio. Il filtro dell'aria chiede un po' più di smontaggio, ma niente di impossibile. Questa guida vale per la seconda generazione, quella dal 2020 in poi, quindi anche per la 2021." },
+        { tipo: "paragrafo", testo: "BMW prevede olio, filtro dell'olio e filtro dell'aria ogni 10.000 km o una volta l'anno, quello che arriva prima. Il primo controllo, quello di rodaggio tra 500 e 1.200 km, conviene farlo in concessionaria, perché oltre all'olio leggono anche la centralina." },
         { tipo: "sottotitolo", testo: "Cosa serve" },
-        { tipo: "immagine", src: "/img/manuale/tagliando/kit.svg", alt: "Il kit del tagliando: quattro litri d'olio, filtro, rondella, chiave Torx, chiave a tazza, dinamometrica, imbuto, bacinella e alluminio" },
-        { tipo: "paragrafo", testo: "Olio: circa 4 litri di SAE 5W-40 con specifica API SJ / JASO MA2, senza additivi al molibdeno (il manuale li vieta). BMW consiglia il suo ADVANTEC Ultimate 5W-40. Filtro dell'olio: il codice BMW attuale è 11425B70298, che ha sostituito i vecchi 11427721779 e 11428409567. Una rondella nuova per il tappo di scarico. Attrezzi: chiave Torx T50 per il tappo, Torx T25 per il pannello, chiave a tazza per il filtro, chiave dinamometrica, bacinella, imbuto, un foglio di alluminio e qualche straccio." },
+        { tipo: "immagine", src: "/img/manuale/tagliando/kit.svg", alt: "Il kit del tagliando: quattro litri d'olio, filtro dell'olio, rondella, chiave Torx, chiave a tazza, dinamometrica, imbuto, bacinella, alluminio, filtro dell'aria, tronchesino e fascette" },
+        { tipo: "paragrafo", testo: "Olio: circa 4 litri di SAE 5W-40 con specifica API SJ / JASO MA2, senza additivi al molibdeno (il manuale li vieta). BMW consiglia il suo ADVANTEC Ultimate 5W-40. Filtro dell'olio: il codice BMW attuale è 11425B70298, che ha sostituito i vecchi 11427721779 e 11428409567. Una rondella nuova per il tappo di scarico. Filtro dell'aria: codice BMW 13729444643. Attrezzi: chiave Torx T50 per il tappo, Torx T25 per pannello e carena, chiave a tazza per il filtro, chiave dinamometrica, bacinella, imbuto, un foglio di alluminio, qualche straccio, un tronchesino e delle fascette nuove." },
         { tipo: "sottotitolo", testo: "Passo per passo" },
-        { tipo: "paragrafo", testo: "Prima tutto il tagliando in mezzo minuto, poi ogni passaggio nel dettaglio." },
-        { tipo: "video", animazione: true, src: "/img/manuale/tagliando/tagliando.mp4", srcWebm: "/img/manuale/tagliando/tagliando.webm", poster: "/img/manuale/tagliando/video-poster.jpg", alt: "Animazione del tagliando olio e filtro della S1000XR in nove passaggi" },
+        { tipo: "paragrafo", testo: "Prima tutto il tagliando in meno di un minuto, poi ogni passaggio nel dettaglio." },
+        { tipo: "video", animazione: true, src: "/img/manuale/tagliando/tagliando.mp4", srcWebm: "/img/manuale/tagliando/tagliando.webm", poster: "/img/manuale/tagliando/video-poster.jpg", alt: "Animazione del tagliando della S1000XR: olio, filtro dell'olio e filtro dell'aria in quattordici passaggi" },
         {
           tipo: "consiglio", numero: 1, titolo: "Togli il pannello basso destro",
           testo: "È il pannello in basso sul lato destro, quello dei collettori di scarico: tre viti Torx T25 e due incastri a pressione. Toglilo a motore freddo, così non rischi di toccare i collettori roventi.",
@@ -479,10 +479,37 @@
           testo: "Controlla che non goccioli niente da tappo e filtro, pulisci i collettori dall'olio (le prime volte fumeranno un po', è normale) e rimonta il pannello: prima i due incastri, poi le tre viti T25. Dopo il primo giro ricontrolla il livello a motore caldo.",
           immagine: { src: "/img/manuale/tagliando/passo-9.svg" }
         },
+        { tipo: "sottotitolo", testo: "Il filtro dell'aria" },
+        { tipo: "paragrafo", testo: "La scatola del filtro sta sotto la carena superiore del serbatoio, davanti alla sella. Per arrivarci bisogna liberare il serbatoio dell'olio delle sospensioni ESA, che le sta sopra." },
+        {
+          tipo: "consiglio", numero: 10, titolo: "Smonta la carena superiore del serbatoio",
+          testo: "Togli le viti della carena superiore del serbatoio e sollevala con calma: sotto ci sono i cavi dell'ESA e il suo serbatoio dell'olio.",
+          immagine: { src: "/img/manuale/tagliando/passo-10.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 11, titolo: "Taglia le fascette dei cavi dell'ESA",
+          testo: "I cavi del sistema ESA sono fissati all'alloggio del serbatoio con delle fascette: tagliale con il tronchesino, attento a non toccare i cavi. Al rimontaggio ne metterai di nuove.",
+          immagine: { src: "/img/manuale/tagliando/passo-11.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 12, titolo: "Sposta il serbatoio dell'olio dell'ESA",
+          testo: "Smonta il serbatoio dell'olio delle sospensioni ESA dal suo supporto e spostalo di lato, fuori dalla sua sede, senza staccare il tubo: deve solo lasciare spazio al coperchio del filtro.",
+          immagine: { src: "/img/manuale/tagliando/passo-12.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 13, titolo: "Alza il coperchio e cambia il filtro",
+          testo: "Togli il coperchio della scatola del filtro alzandolo verso l'alto, tira su il filtro vecchio e metti quello nuovo nella stessa posizione, ben appoggiato nella sua sede.",
+          immagine: { src: "/img/manuale/tagliando/passo-13.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 14, titolo: "Richiudi tutto",
+          testo: "Rimetti il coperchio, riporta il serbatoio dell'ESA nella sua sede e fissalo, blocca i cavi con fascette nuove come erano prima e rimonta la carena superiore del serbatoio.",
+          immagine: { src: "/img/manuale/tagliando/passo-14.svg" }
+        },
         { tipo: "sottotitolo", testo: "L'avviso del service e l'olio vecchio" },
         { tipo: "paragrafo", testo: "Il tagliando fatto in casa non spegne l'avviso del service sul cruscotto: per azzerarlo serve il concessionario oppure un tester di diagnosi come il GS-911. L'olio vecchio e il filtro non vanno nel cassonetto: portali all'isola ecologica o da un'officina, che li smaltisce." },
         { tipo: "sottotitolo", testo: "In breve" },
-        { tipo: "paragrafo", testo: "Olio SAE 5W-40 API SJ / JASO MA2, circa 4 litri con il filtro. Filtro BMW 11425B70298, a mano più 11 Nm. Tappo di scarico Torx T50 con rondella nuova, 28 Nm. Livello a motore caldo, moto dritta, tra MIN e MAX. Ogni 10.000 km o una volta l'anno." },
+        { tipo: "paragrafo", testo: "Olio SAE 5W-40 API SJ / JASO MA2, circa 4 litri con il filtro. Filtro BMW 11425B70298, a mano più 11 Nm. Tappo di scarico Torx T50 con rondella nuova, 28 Nm. Livello a motore caldo, moto dritta, tra MIN e MAX. Filtro dell'aria BMW 13729444643. Tutto ogni 10.000 km o una volta l'anno." },
         { tipo: "paragrafo", testo: "Tu il tagliando lo fai da solo o lo lasci alla concessionaria? Se hai un trucco per non sporcare i collettori, scrivimelo." }
       ]
     }
