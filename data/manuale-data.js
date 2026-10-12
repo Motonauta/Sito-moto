@@ -417,6 +417,74 @@
         { tipo: "paragrafo", testo: "E voi avete mai controllato la larghezza della vostra moto dopo aver montato le valigie? Scrivetemelo: se la misura vi ha sorpreso, potrebbe finire nel prossimo articolo." },
         { tipo: "link", label: "Guarda il video dove lo spiego", url: "https://www.instagram.com/reel/Db8twTytuho/" }
       ]
+    },
+    {
+      titolo: "Tagliando della S1000XR fai da te: olio e filtro passo per passo",
+      categoria: "Manutenzione",
+      excerpt: "Olio giusto, quantità, coppie di serraggio e controllo del livello: come cambiare da soli olio e filtro alla BMW S1000XR di seconda generazione (2020-2021), passo per passo con le tavole a mattoncini.",
+      copertina: "/img/manuale/tagliando/copertina.jpg",
+      autore: "Il Motonauta",
+      data: "2026-10-12",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Il cambio di olio e filtro è il lavoro di manutenzione più semplice da fare in garage sulla S1000XR, e fatto con calma porta via meno di un'ora, più il tempo per far scolare bene l'olio. Questa guida vale per la seconda generazione, quella dal 2020 in poi, quindi anche per la 2021." },
+        { tipo: "paragrafo", testo: "BMW prevede olio e filtro ogni 10.000 km o una volta l'anno, quello che arriva prima. Il primo controllo, quello di rodaggio tra 500 e 1.200 km, conviene farlo in concessionaria, perché oltre all'olio leggono anche la centralina." },
+        { tipo: "sottotitolo", testo: "Cosa serve" },
+        { tipo: "immagine", src: "/img/manuale/tagliando/kit.svg", alt: "Il kit del tagliando: quattro litri d'olio, filtro, rondella, chiave Torx, chiave a tazza, dinamometrica, imbuto, bacinella e alluminio" },
+        { tipo: "paragrafo", testo: "Olio: circa 4 litri di SAE 5W-40 con specifica API SJ / JASO MA2, senza additivi al molibdeno (il manuale li vieta). BMW consiglia il suo ADVANTEC Ultimate 5W-40. Filtro dell'olio: il codice BMW attuale è 11425B70298, che ha sostituito i vecchi 11427721779 e 11428409567. Una rondella nuova per il tappo di scarico. Attrezzi: chiave Torx T50 per il tappo, Torx T25 per il pannello, chiave a tazza per il filtro, chiave dinamometrica, bacinella, imbuto, un foglio di alluminio e qualche straccio." },
+        { tipo: "sottotitolo", testo: "Passo per passo" },
+        { tipo: "paragrafo", testo: "Prima tutto il tagliando in mezzo minuto, poi ogni passaggio nel dettaglio." },
+        { tipo: "video", animazione: true, src: "/img/manuale/tagliando/tagliando.mp4", srcWebm: "/img/manuale/tagliando/tagliando.webm", poster: "/img/manuale/tagliando/video-poster.jpg", alt: "Animazione del tagliando olio e filtro della S1000XR in nove passaggi" },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Togli il pannello basso destro",
+          testo: "È il pannello in basso sul lato destro, quello dei collettori di scarico: tre viti Torx T25 e due incastri a pressione. Toglilo a motore freddo, così non rischi di toccare i collettori roventi.",
+          immagine: { src: "/img/manuale/tagliando/passo-1.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Scalda il motore",
+          testo: "Con la moto sul cavalletto centrale, accendi e lascia girare al minimo per due o tre minuti: l'olio caldo scende meglio e porta via più sporco. Non serve che sia bollente, e usa i guanti: olio e collettori scottano.",
+          immagine: { src: "/img/manuale/tagliando/passo-2.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Scarica l'olio vecchio",
+          testo: "Metti la bacinella sotto la coppa e togli il tappo di riempimento: entrando aria, l'olio scende più veloce. Poi svita il tappo di scarico (Torx T50) sotto la coppa, tenendo la mano lontana dal getto. Lascia scolare con calma, anche mezz'ora.",
+          immagine: { src: "/img/manuale/tagliando/passo-3.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 4, titolo: "Svita il filtro",
+          testo: "Il filtro sta sul lato destro, attaccato ai collettori. Coprili con un foglio di alluminio, perché l'olio che cola li sporca e poi fuma. Svitalo con la chiave a tazza e fallo uscire inclinato, con calma: se non passa, allenta la piccola staffa accanto (vite Torx T30) per avere un po' più di spazio.",
+          immagine: { src: "/img/manuale/tagliando/passo-4.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 5, titolo: "Monta il filtro nuovo",
+          testo: "Pulisci bene la superficie dove appoggia, ungi con un velo d'olio nuovo la guarnizione di gomma del filtro, avvitalo a mano finché la guarnizione tocca e poi chiudilo con la chiave a 11 Nm. Non stringerlo di più: si rovinano la guarnizione e il filetto.",
+          immagine: { src: "/img/manuale/tagliando/passo-5.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 6, titolo: "Rimonta il tappo di scarico",
+          testo: "Pulisci il tappo, che ha un magnete: se ci trovi solo una polvere finissima è normale, se ci sono pezzetti di metallo fallo vedere. Metti sempre una rondella nuova e serralo a 28 Nm con la dinamometrica: la coppa è d'alluminio, il filetto non perdona.",
+          immagine: { src: "/img/manuale/tagliando/passo-6.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 7, titolo: "Olio nuovo",
+          testo: "Versalo con l'imbuto dal tappo di riempimento. Il manuale BMW indica circa 4 litri con il cambio del filtro, ma non versarli tutti alla cieca: metti circa 3,5 litri, chiudi il tappo e passa al controllo. Il resto si aggiunge poco alla volta.",
+          immagine: { src: "/img/manuale/tagliando/passo-7.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 8, titolo: "Controlla il livello",
+          testo: "Accendi e lascia girare al minimo in folle per un minuto, così si riempie anche il filtro, poi spegni e aspetta cinque minuti. Con la moto dritta, non appoggiata sul cavalletto laterale, guarda l'oblò: il livello deve stare tra MIN e MAX. Tra le due tacche c'è al massimo 1,3 litri, quindi rabbocca un goccio alla volta e non andare mai sopra il MAX: il manuale avverte che anche troppo olio danneggia il motore.",
+          immagine: { src: "/img/manuale/tagliando/passo-8.svg" }
+        },
+        {
+          tipo: "consiglio", numero: 9, titolo: "Niente perdite, pannello al suo posto",
+          testo: "Controlla che non goccioli niente da tappo e filtro, pulisci i collettori dall'olio (le prime volte fumeranno un po', è normale) e rimonta il pannello: prima i due incastri, poi le tre viti T25. Dopo il primo giro ricontrolla il livello a motore caldo.",
+          immagine: { src: "/img/manuale/tagliando/passo-9.svg" }
+        },
+        { tipo: "sottotitolo", testo: "L'avviso del service e l'olio vecchio" },
+        { tipo: "paragrafo", testo: "Il tagliando fatto in casa non spegne l'avviso del service sul cruscotto: per azzerarlo serve il concessionario oppure un tester di diagnosi come il GS-911. L'olio vecchio e il filtro non vanno nel cassonetto: portali all'isola ecologica o da un'officina, che li smaltisce." },
+        { tipo: "sottotitolo", testo: "In breve" },
+        { tipo: "paragrafo", testo: "Olio SAE 5W-40 API SJ / JASO MA2, circa 4 litri con il filtro. Filtro BMW 11425B70298, a mano più 11 Nm. Tappo di scarico Torx T50 con rondella nuova, 28 Nm. Livello a motore caldo, moto dritta, tra MIN e MAX. Ogni 10.000 km o una volta l'anno." },
+        { tipo: "paragrafo", testo: "Tu il tagliando lo fai da solo o lo lasci alla concessionaria? Se hai un trucco per non sporcare i collettori, scrivimelo." }
+      ]
     }
   ];
 

@@ -4,71 +4,151 @@
     "foto": "https://res.cloudinary.com/whqpxxz1/image/upload/f_jpg,q_92,w_2000,c_limit/v1786538784/IMG_4148_fmvzsw.jpg",
     "pos": "center 62%",
     "categoria": "Consigli di viaggio",
-    "titolo": ["In moto", "d'estate", "*senza cuocere*"],
+    "titolo": [
+      "In moto",
+      "d'estate",
+      "*senza cuocere*"
+    ],
     "sotto": "Sette consigli pratici contro il caldo, imparati sul campo",
-    "etichette": ["Viaggia di *notte*", "Maglietta bagnata", "Mini ventilatore"]
+    "etichette": [
+      "Viaggia di *notte*",
+      "Maglietta bagnata",
+      "Mini ventilatore"
+    ]
   },
   "solitaria": {
     "out": "img/manuale/solitaria/copertina.jpg",
     "foto": "https://res.cloudinary.com/whqpxxz1/image/upload/f_jpg,q_92,w_2000,c_limit/v1786625577/Manuale%20di%20bordo/qk8gqiz8gaxrhdn8tj6h.jpg",
     "pos": "58% center",
     "categoria": "Equipaggiamento",
-    "titolo": ["Valigie", "in solitaria?", "*Sopravvalutate*"],
+    "titolo": [
+      "Valigie",
+      "in solitaria?",
+      "*Sopravvalutate*"
+    ],
     "sotto": "Il confronto onesto con il borsone da sella",
-    "etichette": ["Prezzo", "Comodità", "Ingombro"]
+    "etichette": [
+      "Prezzo",
+      "Comodità",
+      "Ingombro"
+    ]
   },
   "mototendata": {
     "out": "img/manuale/mototendata/copertina.jpg",
     "foto": "https://res.cloudinary.com/whqpxxz1/image/upload/f_jpg,q_92,w_2000,c_limit/v1786960146/Manuale%20di%20bordo/tmaxijwofymhqdnmig0w.png",
     "pos": "62% center",
     "categoria": "Equipaggiamento",
-    "titolo": ["Mototendata", "*compatta*"],
+    "titolo": [
+      "Mototendata",
+      "*compatta*"
+    ],
     "sotto": "I 5 accessori definitivi per dormire in tenda dopo un giro in moto",
-    "etichette": ["Tenda *3 posti*", "Sacco a pelo", "Fornello"]
+    "etichette": [
+      "Tenda *3 posti*",
+      "Sacco a pelo",
+      "Fornello"
+    ]
   },
   "givi": {
     "out": "img/manuale/givi/copertina.jpg",
     "foto": "https://res.cloudinary.com/whqpxxz1/image/upload/f_jpg,q_92,w_2000,c_limit/v1787067434/Manuale%20di%20bordo/qdwtqzjnj3frchbklsph.jpg",
     "pos": "center 40%",
     "categoria": "Equipaggiamento",
-    "titolo": ["Tris Givi", "Outback EVO", "*com'è davvero*"],
+    "titolo": [
+      "Tris Givi",
+      "Outback EVO",
+      "*com'è davvero*"
+    ],
     "sotto": "La mia recensione dopo 15.000 km sulla S1000XR",
-    "etichette": ["*15.000* km", "Camside", "L'unico difetto"]
+    "etichette": [
+      "*15.000* km",
+      "Camside",
+      "L'unico difetto"
+    ]
   },
   "attrezzi": {
     "out": "img/manuale/attrezzi/copertina.jpg",
     "foto": "https://res.cloudinary.com/whqpxxz1/image/upload/f_jpg,q_92,w_2000,c_limit/v1787217568/Manuale%20di%20bordo/gtcwzywcl40vltll2cnc.jpg",
     "pos": "center 55%",
     "categoria": "Equipaggiamento",
-    "titolo": ["Gli attrezzi", "da avere", "*in viaggio*"],
+    "titolo": [
+      "Gli attrezzi",
+      "da avere",
+      "*in viaggio*"
+    ],
     "sotto": "Per cavarsela da soli quando si resta a piedi lontano da tutto",
-    "etichette": ["Kit gomme", "Compressore", "Bicomponente"]
+    "etichette": [
+      "Kit gomme",
+      "Compressore",
+      "Bicomponente"
+    ]
   },
   "interfono": {
     "out": "img/manuale/interfono/copertina.jpg",
     "foto": "https://res.cloudinary.com/whqpxxz1/image/upload/f_jpg,q_92,w_2000,c_limit/v1788790160/Manuale%20di%20bordo/r8d0hckoziqkweajhcoo.jpg",
     "pos": "40% center",
     "categoria": "Equipaggiamento",
-    "titolo": ["Un interfono", "gli ha salvato", "*la vita*"],
+    "titolo": [
+      "Un interfono",
+      "gli ha salvato",
+      "*la vita*"
+    ],
     "sotto": "La Crash Detection del Cardo Packtalk Pro, in Arizona",
-    "etichette": ["Cardo *Packtalk Pro*", "Crash Detection"]
+    "etichette": [
+      "Cardo *Packtalk Pro*",
+      "Crash Detection"
+    ]
   },
   "casco": {
     "out": "img/manuale/casco/copertina.jpg",
     "foto": "https://res.cloudinary.com/whqpxxz1/image/upload/f_jpg,q_92,w_2000,c_limit/v1788859019/Manuale%20di%20bordo/e15joy7gmctbrly3ffho.jpg",
     "pos": "center",
     "categoria": "Equipaggiamento",
-    "titolo": ["Il casco", "giusto per", "*viaggiare*"],
+    "titolo": [
+      "Il casco",
+      "giusto per",
+      "*viaggiare*"
+    ],
     "sotto": "Comfort, ventilazione, peso e omologazione: cosa guardare davvero",
-    "etichette": ["Integrale", "Modulare", "Jet"]
+    "etichette": [
+      "Integrale",
+      "Modulare",
+      "Jet"
+    ]
   },
   "rigide-morbide": {
     "out": "img/manuale/rigide-morbide/copertina.jpg",
     "foto": "https://res.cloudinary.com/whqpxxz1/image/upload/f_jpg,q_92,w_2000,c_limit/v1788949306/Manuale%20di%20bordo/qtag7w900ke6z3wuyy3k.jpg",
     "pos": "55% center",
     "categoria": "Equipaggiamento",
-    "titolo": ["Valigie rigide", "o borse", "*morbide?*"],
+    "titolo": [
+      "Valigie rigide",
+      "o borse",
+      "*morbide?*"
+    ],
     "sotto": "Pro, contro e la mia esperienza con entrambe",
-    "etichette": ["Rigide", "Morbide", "Quale scegliere"]
+    "etichette": [
+      "Rigide",
+      "Morbide",
+      "Quale scegliere"
+    ]
+  },
+  "tagliando": {
+    "out": "img/manuale/tagliando/copertina.jpg",
+    "foto": "strumenti/copertine/foto/tagliando.png",
+    "pos": "center 55%",
+    "filtro": "none",
+    "categoria": "Manutenzione",
+    "titolo": [
+      "Tagliando",
+      "S1000XR",
+      "*fai da te*"
+    ],
+    "sotto": "Olio e filtro passo per passo, con le coppie giuste",
+    "etichette": [
+      "*5W-40*",
+      "Tappo *28 Nm*",
+      "Filtro *11 Nm*"
+    ]
   }
 }
