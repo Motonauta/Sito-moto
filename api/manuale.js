@@ -13,6 +13,11 @@ function escapeHtml(str) {
 
 // stesso helper usato per i viaggi: Special:FilePath di Wikimedia Commons
 // supporta un parametro "width" per una miniatura già ridimensionata
+// le immagini salvate nel sito ("/img/...") per i social servono intere
+function assoluta(url) {
+  return url && url.startsWith('/') ? 'https://ilmotonauta.com' + url : url;
+}
+
 function wikiThumb(url, width) {
   if (!url) return url;
   if (!url.includes('wikimedia.org')) return url;
@@ -171,6 +176,7 @@ const STYLE = `<style>
     margin-top:14px; overflow:hidden; border:1px solid rgba(245,240,230,0.14);
   }
   .manuale-tip-img img, .manuale-tip-img video{ width:100%; height:auto; display:block; }
+  .manuale-tip-img:has(img[src$=".svg"]), .manuale-anim{ border-radius:14px; border-color:rgba(197,222,242,0.5); }
   .manuale-tip-img-caption{
     margin-top:10px; padding:10px 14px;
     background:var(--asphalt-2); border:1px solid rgba(245,240,230,0.14);
@@ -294,6 +300,18 @@ function renderBlocco(b) {
     ${b.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.caption)}</p>` : ''}`;
   }
   if (b.tipo === 'video') {
+    // animazione (es. il cartone "a mattoncini"): muta, in loop, parte da
+    // sola quando è nello schermo (vedi lo script in fondo alla pagina)
+    if (b.animazione) {
+      return `
+    <div class="manuale-tip-img manuale-anim">
+      <video${b.poster ? ` poster="${escapeHtml(b.poster)}"` : ''} muted loop playsinline controls preload="metadata" aria-label="${escapeHtml(b.alt || '')}">
+        <source src="${escapeHtml(b.src)}" type="video/mp4">
+        ${b.srcWebm ? `<source src="${escapeHtml(b.srcWebm)}" type="video/webm">` : ''}
+      </video>
+    </div>
+    ${b.caption ? `<p class="manuale-tip-img-caption">${escapeHtml(b.caption)}</p>` : ''}`;
+    }
     return `
     <div class="manuale-tip-img">
       <video src="${escapeHtml(b.src)}" controls playsinline preload="metadata"></video>
@@ -376,7 +394,7 @@ module.exports = async (req, res) => {
       logo: { '@type': 'ImageObject', url: LOGO_URL },
     },
     mainEntityOfPage: siteUrl,
-    ...(guida.copertina ? { image: [wikiThumb(guida.copertina, 1200)] } : {}),
+    ...(guida.copertina ? { image: [assoluta(wikiThumb(guida.copertina, 1200))] } : {}),
   };
 
   const breadcrumbLd = {
@@ -400,7 +418,7 @@ module.exports = async (req, res) => {
 <meta property="og:type" content="article">
 <meta property="og:title" content="${escapeHtml(guida.titolo)}">
 <meta property="og:description" content="${escapeHtml(description)}">
-<meta property="og:image" content="${guida.copertina ? escapeHtml(wikiThumb(guida.copertina, 1200)) : 'https://ilmotonauta.com/img/og-cover.jpg'}">
+<meta property="og:image" content="${guida.copertina ? escapeHtml(assoluta(wikiThumb(guida.copertina, 1200))) : 'https://ilmotonauta.com/img/og-cover.jpg'}">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="${siteUrl}">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
@@ -459,6 +477,19 @@ ${HEADER_HTML}
 </section>
 
 ${FOOTER_HTML}
+<script>
+  // animazioni della guida: partono quando sono nello schermo e si fermano
+  // quando escono; con "riduci movimento" restano ferme sulla locandina
+  (function(){
+    const vids = document.querySelectorAll(".manuale-anim video");
+    if (!vids.length || !("IntersectionObserver" in window)) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause();
+    }), { threshold: 0.5 });
+    vids.forEach(v => io.observe(v));
+  })();
+</script>
 <script>
   // barra di lettura: si riempie di rosso dall'inizio alla fine del testo
   // della guida, come la lancetta del serbatoio che sale
