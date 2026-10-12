@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/manuale/pulire-la-catena-con-il-petrolio-bianco-costa-un-quarto-e-funziona-meglio", "destination": "/manuale/non-facciamoci-fregare-pulire-la-catena-della-moto-alla-perfezione-con-pochi-euro", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/viaggi/:slug", "destination": "/api/viaggio?slug=:slug" },
     { "source": "/manuale/:slug", "destination": "/api/manuale?slug=:slug" },
