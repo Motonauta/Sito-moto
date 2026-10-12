@@ -510,7 +510,8 @@
         { tipo: "paragrafo", testo: "Il tagliando fatto in casa non spegne l'avviso del service sul cruscotto: per azzerarlo serve il concessionario oppure un tester di diagnosi come il GS-911. L'olio vecchio e il filtro non vanno nel cassonetto: portali all'isola ecologica o da un'officina, che li smaltisce." },
         { tipo: "sottotitolo", testo: "In breve" },
         { tipo: "paragrafo", testo: "Olio SAE 5W-40 API SJ / JASO MA2, circa 4 litri con il filtro. Filtro BMW 11425B70298, a mano più 11 Nm. Tappo di scarico Torx T50 con rondella nuova, 28 Nm. Livello a motore caldo, moto dritta, tra MIN e MAX. Filtro dell'aria BMW 13729444643. Tutto ogni 10.000 km o una volta l'anno." },
-        { tipo: "paragrafo", testo: "Tu il tagliando lo fai da solo o lo lasci alla concessionaria? Se hai un trucco per non sporcare i collettori, scrivimelo." }
+        { tipo: "paragrafo", testo: "Tu il tagliando lo fai da solo o lo lasci alla concessionaria? Se hai un trucco per non sporcare i collettori, scrivimelo." },
+        { tipo: "link", label: "Guarda il video del mio tagliando", url: "https://www.instagram.com/reel/Dd6uiaXoSXY/" }
       ]
     }
   ];

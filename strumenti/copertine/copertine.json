@@ -135,9 +135,8 @@
   },
   "tagliando": {
     "out": "img/manuale/tagliando/copertina.jpg",
-    "foto": "strumenti/copertine/foto/tagliando.png",
-    "pos": "center 55%",
-    "filtro": "none",
+    "foto": "strumenti/copertine/foto/tagliando.jpg",
+    "pos": "center",
     "categoria": "Manutenzione",
     "titolo": [
       "Tagliando",
