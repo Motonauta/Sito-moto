@@ -333,5 +333,18 @@
     return GUIDE.find(g => getSlug(g) === slug) || null;
   }
 
-  return { GUIDE, slugify, getSlug, findBySlug };
+  // minuti di lettura (~200 parole al minuto, tutto il testo della guida:
+  // paragrafi, sottotitoli, consigli e didascalie). Al posto della data,
+  // che su una guida farebbe sembrare "vecchio" un consiglio ancora valido
+  function tempoLettura(guida) {
+    const pezzi = [guida.titolo, guida.copertinaCaption];
+    (guida.blocchi || []).forEach(b => {
+      pezzi.push(b.testo, b.titolo, b.caption, b.label);
+      if (b.immagine) pezzi.push(b.immagine.caption);
+    });
+    const parole = pezzi.filter(Boolean).join(" ").split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(parole / 200));
+  }
+
+  return { GUIDE, slugify, getSlug, findBySlug, tempoLettura };
 });
