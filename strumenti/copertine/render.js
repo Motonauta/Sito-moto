@@ -52,6 +52,22 @@ p{ margin:30px 0 0; font-family:WorkSans; font-weight:500; font-size:41px; line-
 </div></body></html>`;
 }
 
+// accanto al JPG grande scrive "<nome>-800.webp" (800x450): è quella che usano
+// gli elenchi (Manuale, home, "altri articoli"), dieci volte più leggera
+async function piccola(p, jpg) {
+  const dataUrl = 'data:image/jpeg;base64,' + fs.readFileSync(jpg).toString('base64');
+  const webp = await p.evaluate(async (src) => {
+    const img = new Image(); img.src = src; await img.decode();
+    const c = document.createElement('canvas'); c.width = 800; c.height = 450;
+    const ctx = c.getContext('2d'); ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, 0, 0, 800, 450);
+    return c.toDataURL('image/webp', 0.82);
+  }, dataUrl);
+  const out = jpg.replace(/\.jpg$/, '-800.webp');
+  fs.writeFileSync(out, Buffer.from(webp.split(',')[1], 'base64'));
+  console.log('   + ' + path.relative(ROOT, out));
+}
+
 (async () => {
   const lista = JSON.parse(fs.readFileSync(path.resolve(process.argv[2] || path.join(DIR, 'copertine.json')), 'utf8'));
   const solo = process.argv[3];
@@ -74,6 +90,7 @@ p{ margin:30px 0 0; font-family:WorkSans; font-weight:500; font-size:41px; line-
     fs.mkdirSync(path.dirname(out), { recursive: true });
     await p.screenshot({ path: out, type: 'jpeg', quality: 84 });
     console.log(chiave, 'titolo', size + 'px', '->', path.relative(ROOT, out));
+    await piccola(p, out);
   }
   await b.close();
 })();

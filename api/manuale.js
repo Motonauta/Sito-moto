@@ -20,6 +20,9 @@ function assoluta(url) {
 
 function wikiThumb(url, width) {
   if (!url) return url;
+  // copertine delle guide salvate nel sito: per gli elenchi c'è accanto la
+  // versione piccola "-800.webp" (la fa strumenti/copertine/render.js)
+  if (url.startsWith('/img/manuale/') && /\/copertina[^/]*\.jpg$/.test(url) && width <= 800) return url.replace(/\.jpg$/, '-800.webp');
   if (!url.includes('wikimedia.org')) return url;
   return url + (url.includes('?') ? '&' : '?') + 'width=' + width;
 }
@@ -29,13 +32,13 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20261013a">
+<link rel="stylesheet" href="/style.css?v=20261013b">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
   <div class="wrap">
     <a href="/index.html" class="logo logo-wrap">
-      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
+      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_128,h_128,c_fill/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
       <span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span>
     </a>
     <nav class="nav-links">
@@ -90,7 +93,7 @@ const FOOTER_HTML = `<footer class="site-footer">
     </div>
   </div>
 </footer>
-<script src="/script.js?v=20261013a"></script>`;
+<script src="/script.js?v=20261013b"></script>`;
 
 const STYLE = `<style>
   /* stesso sistema di base delle altre pagine già fatte: grafite

@@ -41,17 +41,26 @@
     }
 
     banner.querySelector("#cookie-accept").addEventListener("click", () => {
-      localStorage.setItem(CONSENT_KEY, "accepted");
+      saveConsent("accepted");
       loadAnalytics();
       dismiss();
     });
     banner.querySelector("#cookie-reject").addEventListener("click", () => {
-      localStorage.setItem(CONSENT_KEY, "rejected");
+      saveConsent("rejected");
       dismiss();
     });
   }
 
-  const consent = localStorage.getItem(CONSENT_KEY);
+  // in navigazione privata o con i dati del sito bloccati localStorage può
+  // dare errore: in quel caso il banner si mostra e la scelta vale per la visita
+  function readConsent() {
+    try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
+  }
+  function saveConsent(value) {
+    try { localStorage.setItem(CONSENT_KEY, value); } catch (e) { /* niente */ }
+  }
+
+  const consent = readConsent();
   if (consent === "accepted") {
     loadAnalytics();
   } else if (consent !== "rejected") {

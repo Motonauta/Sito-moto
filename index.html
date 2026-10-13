@@ -23,7 +23,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013a">
+<link rel="preload" as="image" fetchpriority="high"
+  imagesrcset="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_800,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 800w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1200w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1600,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1600w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_2200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 2200w"
+  imagesizes="(min-width: 900px) 62vw, 100vw">
+<link rel="stylesheet" href="style.css?v=20261013b">
+<script src="formati.js?v=20261013b"></script>
 <script src="cookie-consent.js" defer></script>
 <style>
   /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
@@ -32,30 +36,6 @@
      anche all'header "sticky" di restare fisso in cima durante lo
      scroll. Risolto il vero problema (le 4 colonne), tolto il cerotto. */
   html, body{ max-width:100vw; }
-  /* COSA FACCIO: righe editoriali, numero grande rosso a contorno che
-     si riempie al passaggio del mouse */
-  .cf-grid{ list-style:none; margin-top:44px; border-top:1px solid rgba(245,240,230,0.12); }
-  .cf-row{
-    display:grid; grid-template-columns:clamp(84px, 11vw, 150px) minmax(0, 1fr) minmax(0, 1.1fr);
-    align-items:baseline; gap:12px 32px;
-    padding:28px 0; border-bottom:1px solid rgba(245,240,230,0.12);
-  }
-  .cf-num{
-    font-family:var(--font-display); font-weight:700; line-height:0.8;
-    font-size:clamp(3rem, 6.5vw, 5.2rem); letter-spacing:-0.01em;
-    color:transparent; -webkit-text-stroke:1.5px var(--rust);
-    transition:color .22s var(--ease-out);
-  }
-  .cf-row h3{ font-size:clamp(1.3rem, 2.4vw, 1.75rem); color:var(--sand); }
-  .cf-row p{ font-size:0.98rem; }
-  @media (hover: hover) and (pointer: fine){
-    .cf-row:hover .cf-num{ color:var(--rust); }
-  }
-  @media (max-width:760px){
-    .cf-row{ grid-template-columns:auto minmax(0, 1fr); gap:6px 20px; padding:22px 0; }
-    .cf-num{ grid-row:span 2; font-size:3rem; }
-  }
-
   /* DOVE VUOI ANDARE?: indice a righe, riga che si accende di rosso */
   .esplora-grid{ margin-top:40px; border-top:1px solid rgba(245,240,230,0.12); }
   .esplora-row{
@@ -73,7 +53,7 @@
   }
   .esplora-tag{
     font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.12em;
-    text-transform:uppercase; color:var(--rust);
+    text-transform:uppercase; color:var(--rust-text);
   }
   .esplora-title{
     font-family:var(--font-display); font-weight:600; text-transform:uppercase;
@@ -101,8 +81,8 @@
   /* stesso sistema di base delle altre pagine già fatte (Alleati,
      Canale aperto, Diario di bordo, Il Motonauta): grafite freddo,
      doppio filo rosso/blu sotto l'header e sulle sezioni alternate,
-     sweep diagonale dietro al primo titolo (qui l'hero è solo testo,
-     come su Alleati). Niente cornici sulle foto dinamiche degli
+     niente sweep diagonale dietro al primo titolo: qui l'apertura ha la
+     foto della XR (stile in style.css, "APERTURA DELLA HOME"). Niente cornici sulle foto dinamiche degli
      itinerari: sono tante e piccole, una cornice vistosa sommerebbe
      la lista invece di impreziosirla. */
   :root{
@@ -118,18 +98,6 @@
     content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px;
     background:linear-gradient(90deg, var(--rust), var(--racing-blue));
     pointer-events:none;
-  }
-  section:first-of-type{ position:relative; overflow:hidden; }
-  section:first-of-type::before,
-  section:first-of-type::after{
-    content:""; position:absolute; top:-20%; height:160%;
-    transform:rotate(14deg); z-index:0; pointer-events:none;
-  }
-  section:first-of-type::before{ right:14%; width:140px; background:var(--rust); opacity:0.1; }
-  section:first-of-type::after{ right:6%; width:46px; background:var(--racing-blue); opacity:0.16; }
-  section:first-of-type .wrap{ position:relative; z-index:1; }
-  @media (max-width:780px){
-    section:first-of-type::before, section:first-of-type::after{ display:none; }
   }
   .section-alt{ position:relative; }
   .section-alt::before{
@@ -284,7 +252,7 @@
   }
   .viaggio-item-badges{ display:flex; gap:12px; flex-shrink:0; font-family:var(--font-mono); font-size:0.72rem; white-space:nowrap; }
   .viaggio-item-badges .card-km{ color:var(--cream-dim); }
-  .viaggio-item-badges .card-price{ color:var(--rust); font-weight:700; }
+  .viaggio-item-badges .card-price{ color:var(--rust-text); font-weight:700; }
   .viaggio-item-zona{
     margin-top:8px; font-family:var(--font-mono); font-size:0.72rem;
     text-transform:uppercase; letter-spacing:0.04em; color:var(--cream-dim);
@@ -408,7 +376,7 @@
 <header class="site-header">
   <div class="wrap">
     <a href="index.html" class="logo logo-wrap">
-      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
+      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_128,h_128,c_fill/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
       <span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span>
     </a>
     <nav class="nav-links">
@@ -436,17 +404,33 @@
   </div>
 </header>
 
-<section style="padding-top:56px; padding-bottom:0;">
-  <div class="wrap">
+<!-- APERTURA: la XR di notte, col faro acceso (sul computer la foto sta a
+     destra e sfuma nell'asfalto come nelle copertine delle guide; sul
+     telefono sta sopra il titolo a tutta larghezza) ===================== -->
+<section class="home-hero" style="padding-top:0; padding-bottom:0;">
+  <div class="home-hero-photo hero-parallax-frame">
+    <img class="hero-parallax"
+      src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1600,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg"
+      srcset="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_800,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 800w,
+              https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1200w,
+              https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1600,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1600w,
+              https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_2200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 2200w"
+      sizes="(min-width: 900px) 62vw, 100vw"
+      width="2200" height="1467" fetchpriority="high" decoding="async"
+      alt="La mia BMW S1000XR di notte, col faro acceso">
+  </div>
+  <div class="wrap home-hero-text">
     <p class="marker">Da qui si parte</p>
-    <h2 style="font-size:clamp(2rem, 4.5vw, 3rem); color:var(--sand); max-width:32ch;">
-      Tutti gli itinerari e i viaggi che consiglio io
-    </h2>
-    <p style="margin-top:14px; font-size:0.98rem; max-width:65ch;">
-      Qui sotto trovi la mappa completa: gli itinerari e i viaggi consigliati
-      da me e dai miei amici di sella, dalle uscite brevi della domenica ai
-      giri più lunghi fuori regione. Scegli la tua prossima meta e parti.
+    <h1 class="home-hero-title">Tutti gli itinerari e i viaggi in moto che consiglio io</h1>
+    <p class="home-hero-sub">
+      Gli itinerari e i viaggi consigliati da me e dai miei amici di sella,
+      dalle uscite brevi della domenica ai giri più lunghi fuori regione,
+      con meteo, tappe e benzina già calcolati. Scegli la tua prossima meta e parti.
     </p>
+    <div class="home-hero-actions">
+      <a class="btn solid" href="#itinerari" data-open-macro>Scegli un itinerario</a>
+      <a class="btn" href="#dove-vado-oggi">Dove vado oggi?</a>
+    </div>
   </div>
 </section>
 
@@ -527,7 +511,7 @@
 </section>
 
 <!-- DOVE VADO OGGI? ==================================================== -->
-<section style="padding-top:32px; padding-bottom:0;">
+<section id="dove-vado-oggi" style="padding-top:32px; padding-bottom:0; scroll-margin-top:90px;">
   <div class="wrap">
     <div class="fuel-calc is-blue">
       <p class="marker">Hai qualche ora libera?</p>
@@ -554,15 +538,15 @@
 </section>
 
 <!-- ITINERARI ======================================================== -->
-<section style="padding-top:32px;">
+<section id="itinerari" style="padding-top:32px; scroll-margin-top:90px;">
   <div class="wrap">
     <div class="macro-box">
       <button type="button" class="macro-box-toggle" aria-expanded="false" aria-controls="itinerari-list">
         <div class="macro-box-text">
           <p class="marker">Uscite domenicali</p>
-          <h1 style="font-size:clamp(1.8rem, 4vw, 2.6rem); color:var(--sand); max-width:22ch;">
+          <h2 style="font-size:clamp(1.8rem, 4vw, 2.6rem); color:var(--sand); max-width:22ch;">
             Itinerari in moto nel Lazio
-          </h1>
+          </h2>
           <p class="macro-box-desc">
             Giri ad anello pensati per una domenica, tutti sotto i 300 km totali
             partendo da Roma. Meteo aggiornato (anche per i prossimi giorni),
@@ -798,34 +782,6 @@
     });
   })();
 </script>
-
-<!-- COSA FACCIO ===================================================== -->
-<!-- lista "editoriale" senza riquadri: grandi numeri rossi a contorno,
-     righe separate da un filo, così non è l'ennesima fila di card -->
-<section class="section-alt">
-  <div class="wrap">
-    <p class="marker">Cosa faccio</p>
-    <h2 style="max-width:16ch;">Contenuti on the road, dal casco allo schermo</h2>
-
-    <ol class="cf-grid">
-      <li class="cf-row">
-        <span class="cf-num" aria-hidden="true">01</span>
-        <h3>Itinerari e diari di viaggio</h3>
-        <p>Tappe, percorsi e consigli pratici da chi la strada l'ha davvero fatta.</p>
-      </li>
-      <li class="cf-row">
-        <span class="cf-num" aria-hidden="true">02</span>
-        <h3>Test e recensioni</h3>
-        <p>Prove su strada, equipaggiamento e attrezzatura da viaggio.</p>
-      </li>
-      <li class="cf-row">
-        <span class="cf-num" aria-hidden="true">03</span>
-        <h3>Community e collaborazioni</h3>
-        <p>Progetti con brand e altri rider per raccontare la cultura del viaggio in moto.</p>
-      </li>
-    </ol>
-  </div>
-</section>
 
 <!-- DOVE VUOI ANDARE? ================================================ -->
 <!-- indice a righe come i cartelli di una tangenziale: titolo grande,
@@ -1335,7 +1291,7 @@
     const kmEl = container.querySelector(".card-km");
     const priceEl = container.querySelector(".card-price");
     if(kmEl) kmEl.innerHTML = `${mnIcon("pin")} ${km} km`;
-    if(priceEl) priceEl.innerHTML = `${mnIcon("fuel")} €${costo.toFixed(2)}`;
+    if(priceEl) priceEl.innerHTML = `${mnIcon("fuel")} ${mnFmt.euro(costo)}`;
   }
 
   // Le foto di Itinerari/Miniviaggi/Viaggi da ricordare arrivano da Wikimedia
@@ -1345,6 +1301,12 @@
   // bisogno di nessun servizio esterno in più.
   function wikiThumb(url, width){
     if(!url) return url;
+    // copertine delle guide salvate nel sito: per gli elenchi c'è accanto la
+    // versione piccola "-800.webp" (la fa strumenti/copertine/render.js)
+    if(url.startsWith("/img/manuale/") && /\/copertina[^/]*\.jpg$/.test(url) && width <= 800) return url.replace(/\.jpg$/, "-800.webp");
+    // foto della Galleria (Cloudinary): la misura si chiede nell'indirizzo
+    if(url.includes("res.cloudinary.com") && url.includes("/image/upload/") && !/\/upload\/[^/]*(w_|c_)/.test(url)) return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width},c_limit/`);
+    if(!url.includes("wikimedia.org")) return url;
     return url + (url.includes("?") ? "&" : "?") + "width=" + width;
   }
 
@@ -1402,7 +1364,7 @@
       return;
     }
     if(kmEl) kmEl.innerHTML = `${mnIcon("pin")} ${km} km totali`;
-    if(priceEl) priceEl.innerHTML = `${mnIcon("fuel")} €${costo.toFixed(2)}`;
+    if(priceEl) priceEl.innerHTML = `${mnIcon("fuel")} ${mnFmt.euro(costo)}`;
   }
 
   function firstParagraph(desc){
@@ -1601,6 +1563,14 @@
     if(target) target.click();
   }
 
+  // "Scegli un itinerario" in apertura: scende agli Itinerari e ne apre l'elenco
+  document.querySelectorAll("a[data-open-macro]").forEach(link => {
+    link.addEventListener("click", () => {
+      const target = document.querySelector(`.macro-box-toggle[aria-controls="${link.hash.slice(1)}-list"]`);
+      if(target && target.getAttribute("aria-expanded") !== "true") target.click();
+    });
+  });
+
   // box "ultimi articoli" in home: le 3 guide più recenti del Manuale di bordo
   const ultimiArticoliSection = document.getElementById("ultimi-articoli");
   const ultimiArticoliGrid = document.getElementById("ultimi-articoli-grid");
@@ -1629,6 +1599,6 @@
 })();
 </script>
 
-<script src="script.js?v=20261013a"></script>
+<script src="script.js?v=20261013b"></script>
 </body>
 </html>
