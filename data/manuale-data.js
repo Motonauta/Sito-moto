@@ -499,6 +499,34 @@
         { tipo: "paragrafo", testo: "Tu il tagliando lo fai da solo o lo lasci alla concessionaria? Se hai un trucco per non sporcare i collettori, scrivimelo." },
         { tipo: "link", label: "Guarda il video del mio tagliando", url: "https://www.instagram.com/reel/Dd6uiaXoSXY/" }
       ]
+    },
+    {
+      titolo: "Hai un aereo in garage e non lo sai: le tecnologie della moto nate in aviazione",
+      categoria: "Tecnica",
+      excerpt: "Ride-by-wire, piattaforma inerziale a 6 assi e fibra di carbonio: tre tecnologie che le moto di oggi hanno preso in prestito dagli aerei, spiegate in parole semplici (e senza bisogno della scuola di volo).",
+      copertina: "/img/manuale/aereo/copertina.jpg",
+      autore: "Il Motonauta",
+      data: "2026-10-13",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Sei cosciente di avere un vero e proprio aereo in garage? Sembra una battuta, ma gran parte delle tecnologie che hanno queste belle bestioline, la mia S1000XR compresa, in realtà vengono dal campo aeronautico. Ecco le tre più importanti, e cosa fanno davvero sulla tua moto." },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Il ride-by-wire, figlio del fly-by-wire",
+          testo: "Negli aerei il fly-by-wire si usa dagli anni Settanta: lo Space Shuttle lo aveva già nei voli di prova del 1977. L'idea è che i comandi del pilota, cloche e pedaliera, non siano più collegati meccanicamente a cavi e tiranti, ma mandino solo impulsi elettrici a un computer, che poi muove le parti dell'aereo. Così si risparmiano parecchi chili di peso. Oggi lo troviamo su gran parte delle moto, applicato al gas: la manopola non tira più un cavo collegato al motore, ma manda un segnale alla centralina, che apre le farfalle con un motorino elettrico. È grazie a questo che la moto può avere le modalità di guida e il cruise control.",
+          immagine: { src: "/img/manuale/aereo/ride-by-wire.jpg", caption: "Sulla XR la manopola del gas non ha più il cavo: parla direttamente con la centralina." }
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "La piattaforma inerziale a 6 assi (IMU)",
+          testo: "IMU sta per inertial measurement unit, in italiano unità di misura inerziale. È una centralina che deriva dai sistemi di navigazione degli aerei: dentro ha accelerometri e giroscopi che misurano in ogni istante come si sta muovendo il mezzo. Sei assi vuol dire che misura le accelerazioni in tre direzioni (avanti e indietro, di lato, su e giù) e le rotazioni attorno a tre assi: quanto la moto è piegata, quanto si sta impennando o affondando in frenata, e quanto sta girando su se stessa. Su questi dati lavorano tutte le sicurezze della moto, come il cornering ABS (l'ABS che funziona anche in piega), il traction control e l'anti-impennata. Praticamente tutto ciò che questa moto ha di intelligente.",
+          immagine: { src: "/img/manuale/aereo/imu.jpg", caption: "Cornering ABS, traction control e anti-impennata: dietro c'è sempre la piattaforma inerziale." }
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "La fibra di carbonio",
+          testo: "E poi non parliamo della fibra di carbonio: è solo grazie al campo aeronautico se oggi si usa un materiale così leggero e così resistente. Ovviamente qui vi sto prendendo in giro, perché sulla mia moto non c'è neanche un singolo grammo di fibra di carbonio. Però, al contrario della mia moto, nei velivoli si trova davvero: il Boeing 787, per esempio, è costruito in parte proprio con materiali in fibra di carbonio.",
+          immagine: { src: "/img/manuale/aereo/carbonio.jpg", caption: "Carbonio? Sulla mia carena neanche un grammo." }
+        },
+        { tipo: "paragrafo", testo: "E tu lo sapevi di avere un aereo in garage? Se ti viene in mente un'altra tecnologia della moto nata in aviazione, scrivimela: la aggiungo qui." },
+        { tipo: "link", label: "Guarda il video originale", url: "https://www.instagram.com/reel/DcT3SSuNIfr/" }
+      ]
     }
   ];
 

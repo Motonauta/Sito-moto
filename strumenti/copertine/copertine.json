@@ -149,5 +149,22 @@
       "Tappo *28 Nm*",
       "Filtro *11 Nm*"
     ]
+  },
+  "aereo": {
+    "out": "img/manuale/aereo/copertina.jpg",
+    "foto": "strumenti/copertine/foto/aereo.jpg",
+    "pos": "center 45%",
+    "categoria": "Tecnica",
+    "titolo": [
+      "Hai un aereo",
+      "in garage",
+      "*e non lo sai*"
+    ],
+    "sotto": "Le tecnologie della moto che arrivano dall'aviazione",
+    "etichette": [
+      "*Ride*-by-wire",
+      "IMU *6 assi*",
+      "Carbonio"
+    ]
   }
 }
