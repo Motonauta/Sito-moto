@@ -2,7 +2,7 @@
    TOKENS
    ========================================================== */
 :root{
-  --css-build:"20261013c"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
+  --css-build:"20261013d"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
   /* curve di movimento condivise: --ease-out per entrate, hover e
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -780,19 +780,46 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   border:1px solid rgba(245,240,230,0.14);
   padding:16px;
 }
-/* riquadro TikTok (home): prima del caricamento una scheda con il pulsante,
-   poi il riquadro ufficiale del profilo, alto quanto serve */
-.tiktok-box{ min-height:420px; display:flex; }
+/* riquadri social della home. TikTok: prima del caricamento una scheda con
+   il pulsante, poi il riquadro ufficiale del profilo, alto quanto serve.
+   Instagram: la scheda resta finché il feed non arriva (lib/instagram.js) */
+.tiktok-box, .ig-box{ min-height:420px; display:flex; }
 .tiktok-box.is-loaded{ display:block; min-height:400px; }
-.tiktok-placeholder{
+.ig-box.is-loaded{ display:block; min-height:0; }
+.social-placeholder{
   flex:1; display:flex; flex-direction:column; justify-content:center; gap:10px;
   padding:28px 22px; border:1px dashed rgba(245,240,230,0.18);
   background:radial-gradient(120% 80% at 100% 0%, rgba(193,39,45,0.16), transparent 60%);
 }
-.tiktok-placeholder-icon{ font-size:2.4rem; color:var(--rust-text); }
-.tiktok-placeholder h3{ font-size:1.6rem; color:var(--sand); }
-.tiktok-placeholder p:not(.marker){ font-size:0.95rem; }
-.tiktok-placeholder-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; }
+.social-placeholder-icon{ font-size:2.4rem; color:var(--rust-text); }
+.social-placeholder h3{ font-size:1.6rem; color:var(--sand); }
+.social-placeholder p:not(.marker){ font-size:0.95rem; }
+.social-placeholder-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; }
+.ig-head{
+  display:flex; align-items:center; gap:14px; padding:6px 4px 16px;
+  border-bottom:1px solid rgba(245,240,230,0.1); color:var(--cream);
+}
+.ig-avatar{ width:56px; height:56px; border-radius:50%; object-fit:cover; flex-shrink:0; border:2px solid var(--rust); }
+.ig-avatar--icona{ display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:var(--rust-text); background:var(--asphalt); }
+.ig-head-text{ display:flex; flex-direction:column; gap:2px; min-width:0; flex:1; }
+.ig-head-text strong{ font-family:var(--font-display); font-size:1.15rem; letter-spacing:0.03em; color:var(--sand); overflow:hidden; text-overflow:ellipsis; }
+.ig-head-text span{ font-family:var(--font-mono); font-size:0.74rem; color:var(--cream-dim); }
+.ig-head .btn.ig-follow{ padding:9px 14px; font-size:0.7rem; flex-shrink:0; }
+.ig-head .btn.ig-follow::after{ display:none; } /* niente pallino con la freccia: pulsante piccolo */
+@media (max-width:420px){
+  .ig-avatar{ width:46px; height:46px; }
+  .ig-head-text strong{ font-size:1rem; }
+}
+.ig-grid{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:4px; margin-top:16px; }
+.ig-post{ position:relative; display:block; aspect-ratio:1; overflow:hidden; background:var(--asphalt); }
+.ig-post img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .22s var(--ease-out), opacity .22s var(--ease-out); }
+.ig-post-tipo{ position:absolute; top:6px; right:6px; display:flex; color:#fff; font-size:1.05rem; filter:drop-shadow(0 1px 3px rgba(0,0,0,0.7)); }
+@media (hover: hover) and (pointer: fine){
+  .ig-post:hover img{ transform:scale(1.04); opacity:0.88; }
+}
+@media (prefers-reduced-motion: reduce){
+  .ig-post img{ transition:none; }
+}
 .idea-card{
   background:var(--asphalt);
   border:1px solid rgba(245,240,230,0.14);
@@ -821,29 +848,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 }
 .idea-type-btn:hover{ border-color:var(--gold); color:var(--sand); }
 .idea-type-btn.active{ background:var(--rust); border-color:var(--rust); color:var(--cream); }
-.social-feed-frame{
-  position:relative;
-  height:880px;
-  overflow:hidden;
-}
-.social-feed-frame iframe{
-  display:block;
-  width:100%;
-  height:100% !important;
-  border:none;
-}
-.social-feed-cover{
-  position:absolute;
-  left:0; right:0; bottom:0;
-  height:60px;
-  background:linear-gradient(to bottom, rgba(35,32,25,0) 0%, rgba(35,32,25,0.9) 40%, var(--asphalt-2) 70%);
-  pointer-events:none;
-}
-@media (max-width:480px){
-  .social-feed-frame{ height:680px; }
-  .social-feed-cover{ height:48px; }
-}
-
 .logo-wrap{
   display:flex;
   align-items:center;

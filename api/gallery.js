@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary').v2;
 const { isAuthenticated } = require('../lib/auth');
 const { getRedisClient } = require('../lib/redis');
+const instagram = require('../lib/instagram');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -436,6 +437,35 @@ module.exports = async (req, res) => {
   if (action === 'move-album') {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo non consentito' });
     return handleMoveAlbum(req, res);
+  }
+  // riquadro Instagram della home (vedi lib/instagram.js)
+  if (action === 'instagram') {
+    if (req.method !== 'GET') return res.status(405).json({ error: 'Metodo non consentito' });
+    try {
+      const feed = await instagram.getFeed();
+      res.setHeader('Cache-Control', 'public, s-maxage=900, stale-while-revalidate=3600');
+      return res.status(200).json(feed);
+    } catch (err) {
+      return res.status(200).json({ collegato: false, profilo: null, post: [] });
+    }
+  }
+  if (action === 'instagram-status') {
+    if (req.method !== 'GET') return res.status(405).json({ error: 'Metodo non consentito' });
+    if (!(await isAuthenticated(req))) return res.status(401).json({ error: 'Non autorizzato' });
+    try {
+      return res.status(200).json(await instagram.stato());
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+  if (action === 'instagram-token') {
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo non consentito' });
+    if (!(await isAuthenticated(req))) return res.status(401).json({ error: 'Non autorizzato' });
+    try {
+      return res.status(200).json(await instagram.salvaToken(req.body && req.body.token));
+    } catch (err) {
+      return res.status(400).json({ error: `Instagram non accetta questo codice: ${err.message}` });
+    }
   }
   return res.status(400).json({ error: 'Azione non riconosciuta' });
 };

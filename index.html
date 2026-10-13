@@ -26,8 +26,8 @@
 <link rel="preload" as="image" fetchpriority="high"
   imagesrcset="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_800,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 800w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1200w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1600,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1600w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_2200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 2200w"
   imagesizes="(min-width: 900px) 62vw, 100vw">
-<link rel="stylesheet" href="style.css?v=20261013c">
-<script src="formati.js?v=20261013c"></script>
+<link rel="stylesheet" href="style.css?v=20261013d">
+<script src="formati.js?v=20261013d"></script>
 <script src="cookie-consent.js" defer></script>
 <style>
   /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
@@ -672,28 +672,77 @@
            del pulsante, e solo quando la sezione è vicina allo schermo -->
       <div class="social-feed-card">
         <div class="tiktok-box" id="tiktok-box">
-          <div class="tiktok-placeholder">
-            <svg class="icon tiktok-placeholder-icon" aria-hidden="true"><use href="/icons.svg#i-tiktok"/></svg>
+          <div class="social-placeholder">
+            <svg class="icon social-placeholder-icon" aria-hidden="true"><use href="/icons.svg#i-tiktok"/></svg>
             <p class="marker">TikTok</p>
             <h3>@ilmotonauta</h3>
             <p>Gli ultimi video, presi direttamente dal mio profilo. Si caricano da TikTok, che potrebbe usare dei cookie.</p>
-            <div class="tiktok-placeholder-actions">
+            <div class="social-placeholder-actions">
               <button type="button" class="btn solid" id="tiktok-load">Mostra i miei TikTok</button>
               <a class="btn" href="https://www.tiktok.com/@ilmotonauta" target="_blank" rel="noopener">Apri TikTok</a>
             </div>
           </div>
         </div>
       </div>
+      <!-- Instagram: gli ultimi post letti dal sito con le API ufficiali
+           (lib/instagram.js); le anteprime arrivano da Cloudinary, quindi
+           niente cookie di Instagram. Senza collegamento resta la scheda -->
       <div class="social-feed-card">
-        <div class="social-feed-frame instagram-frame">
-          <iframe onload="iFrameSetup(this)" src="https://app.mirror-app.com/feed-instagram/c299e648-ee4b-4942-bbeb-fb2c3460a714/preview" style="width:100%;border:none;overflow:hidden;" scrolling="no"></iframe>
-          <div class="social-feed-cover"></div>
+        <div class="ig-box" id="ig-box">
+          <div class="social-placeholder">
+            <svg class="icon social-placeholder-icon" aria-hidden="true"><use href="/icons.svg#i-instagram"/></svg>
+            <p class="marker">Instagram</p>
+            <h3>@motonautagram</h3>
+            <p>Foto, reel e dietro le quinte dei miei viaggi in moto.</p>
+            <div class="social-placeholder-actions">
+              <a class="btn solid" href="https://www.instagram.com/motonautagram/" target="_blank" rel="noopener">Seguimi su Instagram</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-<script src="https://cdn.jsdelivr.net/npm/@mirrorapp/iframe-bridge@latest/dist/index.umd.js"></script>
+<script>
+  (function instagramFeed(){
+    const box = document.getElementById("ig-box");
+    if(!box) return;
+    const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+    const icona = n => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${n}"/></svg>`;
+    async function carica(){
+      try{
+        const res = await fetch("/api/gallery?action=instagram");
+        const data = await res.json();
+        if(!data.collegato || !data.post || !data.post.length) return; // resta la scheda
+        const p = data.profilo || {};
+        const nome = p.username || "motonautagram";
+        const numeri = [
+          p.followers != null ? `${Number(p.followers).toLocaleString("it-IT")} follower` : "",
+          p.post != null ? `${Number(p.post).toLocaleString("it-IT")} post` : "",
+        ].filter(Boolean).join(" · ");
+        const griglia = data.post.map(x => `
+          <a class="ig-post" href="${esc(x.link)}" target="_blank" rel="noopener" title="${esc(x.didascalia)}">
+            <img src="${esc(x.img)}" srcset="${esc(x.img)} 480w, ${esc(x.img2x)} 800w" sizes="(max-width: 780px) 33vw, 190px" alt="${esc(x.didascalia || "Post su Instagram")}" loading="lazy" decoding="async">
+            ${x.tipo === "video" ? `<span class="ig-post-tipo">${icona("play")}</span>` : x.tipo === "album" ? `<span class="ig-post-tipo">${icona("layers")}</span>` : ""}
+          </a>`).join("");
+        box.classList.add("is-loaded");
+        box.innerHTML = `
+          <a class="ig-head" href="https://www.instagram.com/${esc(nome)}/" target="_blank" rel="noopener">
+            ${p.foto ? `<img class="ig-avatar" src="${esc(p.foto)}" alt="" width="56" height="56">` : `<span class="ig-avatar ig-avatar--icona">${icona("instagram")}</span>`}
+            <span class="ig-head-text"><strong>@${esc(nome)}</strong>${numeri ? `<span>${esc(numeri)}</span>` : ""}</span>
+            <span class="btn solid ig-follow">Segui</span>
+          </a>
+          <div class="ig-grid">${griglia}</div>`;
+      } catch(err){ /* resta la scheda con il link */ }
+    }
+    // solo quando la sezione si avvicina allo schermo
+    if(!("IntersectionObserver" in window)) return carica();
+    const io = new IntersectionObserver(entries => {
+      if(entries.some(e => e.isIntersecting)){ io.disconnect(); carica(); }
+    }, { rootMargin: "600px 0px" });
+    io.observe(box);
+  })();
+</script>
 <script>
   (function tiktokProfilo(){
     const box = document.getElementById("tiktok-box");
@@ -1640,6 +1689,6 @@
 })();
 </script>
 
-<script src="script.js?v=20261013c"></script>
+<script src="script.js?v=20261013d"></script>
 </body>
 </html>
