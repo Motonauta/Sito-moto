@@ -470,7 +470,7 @@
         {
           tipo: "consiglio", numero: 8, titolo: "Smonta la carena superiore del serbatoio",
           testo: "Togli le viti della carena superiore del serbatoio e sollevala con calma: sotto ci sono i cavi dell'ESA e il suo serbatoio dell'olio.",
-          immagine: { src: "/img/manuale/tagliando/foto-10.jpg", caption: "La carena superiore del serbatoio appena sollevata." }
+          immagine: { src: "/img/manuale/tagliando/foto-10.jpg", caption: "La carena superiore del serbatoio appena tolta: sotto c'è il serbatoio." }
         },
         {
           tipo: "consiglio", numero: 9, titolo: "Taglia le fascette dei cavi dell'ESA",
@@ -480,12 +480,12 @@
         {
           tipo: "consiglio", numero: 10, titolo: "Sposta il serbatoio dell'olio dell'ESA",
           testo: "Smonta il serbatoio dell'olio delle sospensioni ESA dal suo supporto e spostalo di lato, fuori dalla sua sede, senza staccare il tubo: deve solo lasciare spazio al coperchio del filtro.",
-          immagine: { src: "/img/manuale/tagliando/foto-12.jpg", caption: "Smonto il serbatoio dell'olio dell'ESA per spostarlo di lato." }
+          immagine: { src: "/img/manuale/tagliando/foto-12.jpg", caption: "Da sopra la moto smonto il serbatoio dell'olio dell'ESA e lo sposto dalla sua sede." }
         },
         {
           tipo: "consiglio", numero: 11, titolo: "Alza il coperchio e cambia il filtro",
           testo: "Togli il coperchio della scatola del filtro alzandolo verso l'alto, tira su il filtro vecchio e metti quello nuovo nella stessa posizione, ben appoggiato nella sua sede.",
-          immagine: { src: "/img/manuale/tagliando/foto-13.jpg", caption: "Il filtro vecchio appena tirato fuori. Oh, manco male!" }
+          immagine: { src: "/img/manuale/tagliando/foto-13.jpg", caption: "Le mani nella scatola del filtro: tiro su quello vecchio." }
         },
         {
           tipo: "consiglio", numero: 12, titolo: "Richiudi tutto",
