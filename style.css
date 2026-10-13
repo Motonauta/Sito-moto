@@ -2,7 +2,7 @@
    TOKENS
    ========================================================== */
 :root{
-  --css-build:"20261013b"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
+  --css-build:"20261013c"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
   /* curve di movimento condivise: --ease-out per entrate, hover e
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -780,6 +780,19 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   border:1px solid rgba(245,240,230,0.14);
   padding:16px;
 }
+/* riquadro TikTok (home): prima del caricamento una scheda con il pulsante,
+   poi il riquadro ufficiale del profilo, alto quanto serve */
+.tiktok-box{ min-height:420px; display:flex; }
+.tiktok-box.is-loaded{ display:block; min-height:400px; }
+.tiktok-placeholder{
+  flex:1; display:flex; flex-direction:column; justify-content:center; gap:10px;
+  padding:28px 22px; border:1px dashed rgba(245,240,230,0.18);
+  background:radial-gradient(120% 80% at 100% 0%, rgba(193,39,45,0.16), transparent 60%);
+}
+.tiktok-placeholder-icon{ font-size:2.4rem; color:var(--rust-text); }
+.tiktok-placeholder h3{ font-size:1.6rem; color:var(--sand); }
+.tiktok-placeholder p:not(.marker){ font-size:0.95rem; }
+.tiktok-placeholder-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; }
 .idea-card{
   background:var(--asphalt);
   border:1px solid rgba(245,240,230,0.14);

@@ -43,6 +43,8 @@
     banner.querySelector("#cookie-accept").addEventListener("click", () => {
       saveConsent("accepted");
       loadAnalytics();
+      // per i contenuti esterni che aspettano il consenso (es. il riquadro TikTok)
+      document.dispatchEvent(new CustomEvent("mn:cookie-accepted"));
       dismiss();
     });
     banner.querySelector("#cookie-reject").addEventListener("click", () => {
