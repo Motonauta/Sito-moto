@@ -517,7 +517,7 @@
         {
           tipo: "consiglio", numero: 2, titolo: "La piattaforma inerziale a 6 assi (IMU)",
           testo: "IMU sta per inertial measurement unit, in italiano unità di misura inerziale. È una centralina che deriva dai sistemi di navigazione degli aerei: dentro ha accelerometri e giroscopi che misurano in ogni istante come si sta muovendo il mezzo. Sei assi vuol dire che misura le accelerazioni in tre direzioni (avanti e indietro, di lato, su e giù) e le rotazioni attorno a tre assi: quanto la moto è piegata, quanto si sta impennando o affondando in frenata, e quanto sta girando su se stessa. Su questi dati lavorano tutte le sicurezze della moto, come il cornering ABS (l'ABS che funziona anche in piega), il traction control e l'anti-impennata. Praticamente tutto ciò che questa moto ha di intelligente.",
-          immagine: { src: "/img/manuale/aereo/imu.jpg", caption: "Cornering ABS, traction control e anti-impennata: dietro c'è sempre la piattaforma inerziale." }
+          immagine: { src: "/img/manuale/aereo/imu-2.jpg", caption: "Cornering ABS, traction control e anti-impennata: dietro c'è sempre la piattaforma inerziale." }
         },
         {
           tipo: "consiglio", numero: 3, titolo: "La fibra di carbonio",
