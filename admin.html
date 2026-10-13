@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013c">
+<link rel="stylesheet" href="style.css?v=20261013d">
 <style>
   .admin-label{
     font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase;
@@ -174,6 +174,7 @@
       <button type="button" class="admin-tab" data-tab="idee" onclick="switchAdminTab('idee')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-bulb"/></svg> Idee</button>
       <button type="button" class="admin-tab" data-tab="moto" onclick="switchAdminTab('moto')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-moto"/></svg> Moto</button>
       <button type="button" class="admin-tab" data-tab="stats" onclick="switchAdminTab('stats')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-chart"/></svg> Statistiche</button>
+      <button type="button" class="admin-tab" data-tab="instagram" onclick="switchAdminTab('instagram')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-instagram"/></svg> Instagram</button>
     </div>
   </div>
 </section>
@@ -302,6 +303,40 @@
       <button class="admin-btn outline" onclick="loadIdeas()">Aggiorna elenco</button>
       <div id="ideas-status" class="status-list"></div>
       <div id="ideas-list" style="margin-top:20px;"></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div data-tab-content="instagram" style="display:none;">
+<section class="section-alt" id="panel-instagram">
+  <div class="wrap">
+    <p class="marker">Riquadro della home</p>
+    <h2>Instagram</h2>
+    <p style="margin-top:14px;">Il riquadro "Ultimi contenuti social" in home mostra i tuoi ultimi 9 post presi direttamente da Instagram, e si aggiorna da solo (al massimo una volta l'ora). Il codice serve solo a <strong>leggere</strong> profilo e post: non può pubblicare, cancellare né leggere i messaggi. Resta qui sul server e nessun visitatore lo vede.</p>
+
+    <div class="contact-card" style="margin-top:28px; max-width:640px;">
+      <div id="ig-status" class="status-list"><div>Controllo il collegamento...</div></div>
+
+      <label class="admin-label" style="margin-top:18px;">Codice di accesso (token) di Instagram</label>
+      <textarea id="ig-token" class="admin-input" rows="3" placeholder="Incolla qui il codice generato da Meta (una lunga fila di lettere e numeri)" autocomplete="off" spellcheck="false" style="resize:vertical; font-family:var(--font-mono); font-size:0.8rem;"></textarea>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="admin-btn" onclick="saveInstagramToken()">Collega Instagram</button>
+        <button class="admin-btn outline" onclick="disconnectInstagram()">Scollega</button>
+      </div>
+      <div id="ig-save-status" class="status-list"></div>
+
+      <details style="margin-top:22px;">
+        <summary style="cursor:pointer; font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--gold);">Come si crea il codice (una volta sola)</summary>
+        <ol style="margin-top:14px; padding-left:20px; display:flex; flex-direction:column; gap:10px; color:var(--cream-dim); font-size:0.92rem;">
+          <li>Nell'app di Instagram: Impostazioni → "Tipo di account e strumenti" → passa ad account professionale e scegli <strong>Creator</strong> (non Business: Business limita la musica dei reel).</li>
+          <li>Vai su <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener" style="color:var(--gold);">developers.facebook.com/apps</a> (solo dal sito ufficiale) ed entra con Facebook; se te lo chiede, registrati come sviluppatore.</li>
+          <li>"Crea app" → caso d'uso per Instagram ("Gestisci messaggi e contenuti su Instagram" o simile) → dai un nome, es. "Sito Il Motonauta".</li>
+          <li>Nell'app: "API Instagram" → "Configurazione API con login aziendale di Instagram" → "Genera token di accesso" → "Aggiungi account" ed entra con @motonautagram. Se chiede i permessi, basta <strong>instagram_business_basic</strong>.</li>
+          <li>Premi "Genera token", copia il codice e incollalo qui sopra → "Collega Instagram".</li>
+        </ol>
+        <p style="margin-top:12px; font-size:0.85rem;">Il codice dura 60 giorni ma il sito lo rinnova da solo ogni settimana. Puoi revocarlo quando vuoi da Instagram (Impostazioni → App e siti web) o cancellando l'app su Meta.</p>
+      </details>
     </div>
   </div>
 </section>
@@ -449,7 +484,7 @@
   </div>
 </footer>
 
-<script src="script.js?v=20261013c"></script>
+<script src="script.js?v=20261013d"></script>
 <script>
   // { Paese: [Città, ...] } letto da /api/gallery ("countries"), più gli
   // album "standalone" caricati prima di questa organizzazione a due livelli
@@ -472,6 +507,63 @@
     loadViaggi();
     loadStats();
     populateAlbumSelects();
+    loadInstagramStatus();
+  }
+
+  // -------- Instagram (riquadro della home, vedi lib/instagram.js) --------
+  const escIg = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+  const dataIt = ms => ms ? new Date(ms).toLocaleString("it-IT", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "—";
+  async function loadInstagramStatus(){
+    const el = document.getElementById("ig-status");
+    try{
+      const res = await fetch("/api/gallery?action=instagram-status");
+      const d = await res.json();
+      if(!res.ok) throw new Error(d.error || "errore");
+      if(!d.collegato){
+        el.innerHTML = '<div>Non collegato: in home si vede la scheda "Seguimi su Instagram".</div>';
+        return;
+      }
+      el.innerHTML = `<div class="ok">Collegato come @${escIg(d.username || "?")} — ${d.post} post nel riquadro.</div>
+        <div>Ultimo aggiornamento dei post: ${dataIt(d.ultimoAggiornamento)}</div>
+        <div>Codice rinnovato il ${dataIt(d.tokenSalvatoIl)} (si rinnova da solo; scadrebbe il ${dataIt(d.scadeIl)})</div>
+        ${d.errore ? `<div class="err">Ultimo errore (${dataIt(d.erroreIl)}): ${escIg(d.errore)}. Se continua, genera un codice nuovo e incollalo qui.</div>` : ""}`;
+    } catch(err){
+      el.innerHTML = `<div class="err">Non riesco a leggere lo stato: ${err.message}</div>`;
+    }
+  }
+  async function saveInstagramToken(){
+    const input = document.getElementById("ig-token");
+    const statusEl = document.getElementById("ig-save-status");
+    const token = input.value.trim();
+    if(!token){ statusEl.innerHTML = '<div class="err">Incolla prima il codice.</div>'; return; }
+    statusEl.innerHTML = "<div>Provo il codice e scarico i post...</div>";
+    try{
+      const res = await fetch("/api/gallery?action=instagram-token", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token })
+      });
+      const d = await res.json();
+      if(!res.ok) throw new Error(d.error || "Errore sconosciuto");
+      input.value = "";
+      statusEl.innerHTML = `<div class="ok">Fatto ✓ — collegato come @${escIg(d.username)}, ${d.post} post pronti. In home li vedi entro qualche minuto.</div>`;
+      loadInstagramStatus();
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">${escIg(err.message)}</div>`;
+    }
+  }
+  async function disconnectInstagram(){
+    if(!confirm("Scollegare Instagram? In home tornerà la scheda con il link al profilo.")) return;
+    const statusEl = document.getElementById("ig-save-status");
+    try{
+      const res = await fetch("/api/gallery?action=instagram-token", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: "" })
+      });
+      const d = await res.json();
+      if(!res.ok) throw new Error(d.error || "Errore sconosciuto");
+      statusEl.innerHTML = '<div class="ok">Scollegato.</div>';
+      loadInstagramStatus();
+    } catch(err){
+      statusEl.innerHTML = `<div class="err">${err.message}</div>`;
+    }
   }
 
   async function checkPassword(){
