@@ -20,7 +20,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013a">
+<link rel="stylesheet" href="style.css?v=20261013b">
+<script src="formati.js?v=20261013b"></script>
 <script src="cookie-consent.js" defer></script>
 <style>
   /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
@@ -420,7 +421,7 @@
   .route-weather-loading, .route-weather-error, .route-weather-summary, .route-weather-note{
     font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
   }
-  .route-weather-error{ color:var(--rust); }
+  .route-weather-error{ color:var(--rust-text); }
   .route-weather-summary{ margin-bottom:6px; color:var(--gold); }
   .route-weather-note{ margin-bottom:14px; font-style:italic; }
   .route-weather-list{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
@@ -476,6 +477,31 @@
   .rotta-leg-links a:hover{ background:var(--gold); color:var(--asphalt); }
 
   .print-pdf-btn{ margin-top:16px; }
+  .rotta-result-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
+  /* menu dei tre assistenti, sotto il titolo */
+  .nostromo-menu{
+    display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px;
+    margin-top:30px; max-width:980px;
+  }
+  .nostromo-menu-item{
+    display:flex; align-items:center; gap:14px; padding:16px 18px;
+    border:1px solid rgba(245,240,230,0.14); border-left:3px solid var(--rust);
+    background:rgba(29,33,38,0.6); color:var(--cream);
+    transition:border-color .2s var(--ease-out), background-color .2s var(--ease-out);
+  }
+  .nostromo-menu-icon{ font-size:1.5rem; color:var(--rust-text); display:flex; }
+  .nostromo-menu-text{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .nostromo-menu-text strong{ font-family:var(--font-display); font-size:1.05rem; letter-spacing:0.04em; text-transform:uppercase; color:var(--sand); }
+  .nostromo-menu-text span{ font-size:0.84rem; color:var(--cream-dim); }
+  @media (hover: hover) and (pointer: fine){
+    .nostromo-menu-item:hover{ border-color:var(--rust); background:rgba(193,39,45,0.12); }
+  }
+  @media (max-width:760px){
+    .nostromo-menu{ grid-template-columns:1fr; gap:8px; }
+    .nostromo-menu-item{ padding:12px 14px; }
+  }
+  .route-weather-widget[id^="widget-"]{ scroll-margin-top:96px; }
+  .rotta-result-actions .btn{ margin-top:0; }
   #print-root{ display:none; }
 
   @media print {
@@ -540,7 +566,7 @@
 <header class="site-header">
   <div class="wrap">
     <a href="index.html" class="logo logo-wrap">
-      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
+      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_128,h_128,c_fill/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
       <span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span>
     </a>
     <nav class="nav-links">
@@ -579,10 +605,25 @@
       A bordo, il nostromo è chi si occupa di tutto il necessario perché la
       rotta vada liscia. Qui fa lo stesso per te: piccoli assistenti pensati
       per chi viaggia in moto, che calcolano percorsi, meteo e bagagli così
-      non devi pensarci tu. Qui sotto trovi l'assistente che pianifica il
-      meteo lungo tutta la strada e quello che prepara la
-      lista della valigia — altri arriveranno con il tempo.
+      non devi pensarci tu. Sono tre: scegli quello che ti serve.
     </p>
+
+    <!-- salto diretto ai tre assistenti: sul telefono sono uno sotto
+         l'altro e l'ultimo stava parecchio in basso -->
+    <nav class="nostromo-menu" aria-label="Gli assistenti di Nostromo">
+      <a href="#widget-viaggio" class="nostromo-menu-item">
+        <span class="nostromo-menu-icon"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-cloud-sun"/></svg></span>
+        <span class="nostromo-menu-text"><strong>Viaggio</strong><span>Meteo, benzina e pedaggi lungo la strada</span></span>
+      </a>
+      <a href="#widget-valigia" class="nostromo-menu-item">
+        <span class="nostromo-menu-icon"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-suitcase"/></svg></span>
+        <span class="nostromo-menu-text"><strong>Valigia</strong><span>Cosa portare in base al meteo previsto</span></span>
+      </a>
+      <a href="#widget-rotta" class="nostromo-menu-item">
+        <span class="nostromo-menu-icon"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-map"/></svg></span>
+        <span class="nostromo-menu-text"><strong>Rotta</strong><span>Tappe, distributori, Maps e file GPX</span></span>
+      </a>
+    </nav>
   </div>
 </section>
 
@@ -799,16 +840,19 @@
 
 <div id="print-root">
   <div class="print-watermark">Il Motonauta</div>
-  <img class="print-logo-corner" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="">
+  <img class="print-logo-corner" src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_400,c_limit/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="">
   <div id="print-content"></div>
 </div>
 
 <script>
   const mnIcon = name => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${name}"/></svg>`;
 
-  function weatherIcon(code){
-    if (code === 0) return mnIcon("sun");
-    if ([1,2].includes(code)) return mnIcon("cloud-sun");
+  // isDay (1/0 da Open-Meteo): di notte luna al posto del sole. Se manca
+  // (es. previsioni giornaliere della valigia) vale come giorno
+  function weatherIcon(code, isDay){
+    const notte = isDay === 0;
+    if (code === 0) return mnIcon(notte ? "moon" : "sun");
+    if ([1,2].includes(code)) return mnIcon(notte ? "cloud-moon" : "cloud-sun");
     if (code === 3) return mnIcon("cloud");
     if ([45,48].includes(code)) return mnIcon("fog");
     if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return mnIcon("rain");
@@ -1002,7 +1046,12 @@
     if(!Array.isArray(data)){
       throw new Error("Risposta inattesa dal servizio di ricerca luoghi.");
     }
-    const results = data.map(r => ({ label: r.display_name, lat: parseFloat(r.lat), lon: parseFloat(r.lon) }));
+    // Nominatim a volte restituisce lo stesso posto due volte (es. il comune
+    // e la sua area amministrativa, "Roma, Lazio, Italia" doppio): si tiene il primo
+    const visti = new Set();
+    const results = data
+      .map(r => ({ label: r.display_name, lat: parseFloat(r.lat), lon: parseFloat(r.lon) }))
+      .filter(r => { const k = r.label.toLowerCase(); if (visti.has(k)) return false; visti.add(k); return true; });
     nominatimSearchCache[key] = results;
     return results;
   }
@@ -1184,6 +1233,11 @@
       || (data.display_name ? data.display_name.split(",")[0] : "Zona sconosciuta");
   }
 
+  // "BRESCIA ovest" → "Brescia Ovest" (solo se il cartello è l'unico nome)
+  function titleCaseLabel(s){
+    return String(s).toLowerCase().replace(/(^|[\s'’-])\p{L}/gu, m => m.toUpperCase());
+  }
+
   function pad2(n){ return String(n).padStart(2, "0"); }
 
   function isoDateFromDate(dt){
@@ -1197,7 +1251,7 @@
   async function fetchWeatherForCoords(lat, lon, arrivalDate){
     const dateStr = isoDateFromDate(arrivalDate);
     const targetHour = pad2(arrivalDate.getHours());
-    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weather_code&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`);
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weather_code,is_day&timezone=auto&start_date=${dateStr}&end_date=${dateStr}`);
     const data = await res.json();
     const hourly = data.hourly || {};
     const times = hourly.time || [];
@@ -1209,8 +1263,9 @@
     if(idx === -1) idx = 0;
     const temp = (hourly.temperature_2m || [])[idx];
     const code = (hourly.weather_code || [])[idx];
+    const isDay = (hourly.is_day || [])[idx];
     return {
-      icon: weatherIcon(code),
+      icon: weatherIcon(code, isDay),
       temp: temp != null ? `${Math.round(temp)}°C` : "—",
       arrivalLabel: `${pad2(arrivalDate.getHours())}:${pad2(arrivalDate.getMinutes())}`
     };
@@ -1323,17 +1378,18 @@
 
     const middle = [];
     for(const p of spaced){
-      if(p.name){
-        middle.push({ name: p.name, lat: p.lat, lon: p.lon, cumKm: p.cumKm });
-        continue;
-      }
-      // se il reverse-geocoding di UN punto fallisce (rete lenta, posto non
+      // anche per le uscite autostradali si mostra il paese in cui si è
+      // davvero: il testo del cartello ("MILANO VENEZIA", "BRESCIA ovest")
+      // indica dove porta la strada, non dove sei. Resta solo di riserva.
+      // Se il reverse-geocoding di UN punto fallisce (rete lenta, posto non
       // trovato), si salta solo quel punto invece di far fallire tutto il
       // calcolo del meteo di percorso
       try{
         const name = await reverseGeocode(p.lat, p.lon);
         middle.push({ name, lat: p.lat, lon: p.lon, cumKm: p.cumKm });
-      } catch(err){ /* punto saltato */ }
+      } catch(err){
+        if(p.name) middle.push({ name: titleCaseLabel(p.name), lat: p.lat, lon: p.lon, cumKm: p.cumKm });
+      }
       await sleep(1100); // rispetta il rate limit di Nominatim (max 1 richiesta/sec)
     }
 
@@ -1413,7 +1469,7 @@
       const distanceKm = route.distance / 1000;
       const durationH = route.duration / 3600;
 
-      resultsEl.innerHTML = `<p class="route-weather-loading">Percorso trovato (${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} h) — cerco le località lungo la strada...</p>`;
+      resultsEl.innerHTML = `<p class="route-weather-loading">Percorso trovato (${mnFmt.km(distanceKm)}, circa ${mnFmt.ore(durationH)}) — cerco le località lungo la strada...</p>`;
 
       const stops = await buildRouteStops(route, startPlace, startCoords, endPlace, endCoords);
 
@@ -1443,18 +1499,18 @@
       const prezzoBenzina = parseFloat(document.getElementById("fuel-price").value) || 1.75;
       const fuelCost = (distanceKm / consumo) * prezzoBenzina;
 
-      let costsLine = `${mnIcon("fuel")} Carburante stimato: <strong>€${fuelCost.toFixed(2)}</strong> (sola andata)`;
+      let costsLine = `${mnIcon("fuel")} Carburante stimato: <strong>${mnFmt.euro(fuelCost)}</strong> (sola andata)`;
       if(!avoidTolls){
         const motorwayKm = estimateMotorwayKm(route);
         if(motorwayKm > 1){
           const tollCost = motorwayKm * 0.075; // tariffa media indicativa autostrade italiane, €/km
-          costsLine += ` &nbsp;·&nbsp; ${mnIcon("road")} Pedaggio stimato: <strong>€${tollCost.toFixed(2)}</strong>`;
+          costsLine += ` &nbsp;·&nbsp; ${mnIcon("road")} Pedaggio stimato: <strong>${mnFmt.euro(tollCost)}</strong>`;
         }
       }
 
       resultsEl.innerHTML = `
         <div class="print-capture">
-          <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida ${tollsNote}</p>
+          <p class="route-weather-summary">${mnFmt.km(distanceKm)}, circa ${mnFmt.ore(durationH)} di guida ${tollsNote}</p>
           <p class="route-weather-costs">${costsLine}</p>
           ${(avoidTolls && !tollsAvoided) ? `<p class="route-weather-note">Non sono riuscito a calcolare un percorso che eviti del tutto le autostrade su questa tratta${tollsFailReason ? ` (motivo: ${tollsFailReason})` : ""}: qui sotto vedi il percorso più veloce disponibile.</p>` : ""}
           <ul class="route-weather-list">
@@ -1979,7 +2035,7 @@
 
       resultsEl.innerHTML = `
         <div class="print-capture">
-          <p class="route-weather-summary">${Math.round(distanceKm)} km, circa ${durationH.toFixed(1)} ore di guida, ${allStops.length} tappe totali</p>
+          <p class="route-weather-summary">${mnFmt.km(distanceKm)}, circa ${mnFmt.ore(durationH)} di guida, ${allStops.length} tappe totali</p>
           ${wasCapped ? `<p class="route-weather-note">Il link "tutto in uno" di Google Maps supporta un numero limitato di tappe: qui sotto trovi comunque il dettaglio completo di ogni tratta, ma quel link ne include solo ${MAX_WAYPOINTS_GOOGLE}.</p>` : ""}
           <a href="${gmapsUrl}" target="_blank" rel="noopener" class="btn solid" style="margin-top:6px; display:inline-block;">${mnIcon("map")} Apri il percorso completo su Google Maps</a>
           <p class="route-weather-note" style="margin-top:14px;">Waze e Apple Maps non supportano un unico link con più tappe: qui sotto un link per ogni tratta, da aprire una alla volta man mano che arrivi.</p>
@@ -1987,8 +2043,22 @@
             ${legsHTML.join("")}
           </ol>
         </div>
-        <button type="button" class="btn print-pdf-btn" id="rotta-pdf-btn">${mnIcon("file")} Salva come PDF</button>
+        <div class="rotta-result-actions">
+          <button type="button" class="btn" id="rotta-gpx-btn">${mnIcon("download")} Scarica GPX</button>
+          <button type="button" class="btn print-pdf-btn" id="rotta-pdf-btn">${mnIcon("file")} Salva come PDF</button>
+        </div>
+        <p class="route-weather-note" style="margin-top:10px;">Il GPX contiene tutte le tappe (anche i distributori) e la traccia stradale: si apre sul navigatore della moto (Garmin, TomTom) o su app come Calimoto e Komoot.</p>
       `;
+      document.getElementById("rotta-gpx-btn").addEventListener("click", () => {
+        const da = startInputEl.value.trim(), a = endInputEl.value.trim();
+        const traccia = ((route.geometry && route.geometry.coordinates) || []).map(c => [c[1], c[0]]);
+        window.mnGpx.download({
+          nome: `${da} → ${a} — Il Motonauta`,
+          file: `rotta-${da}-${a}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+          tappe: allStops.map(st => ({ lat: st.lat, lon: st.lon, nome: st.name })),
+          traccia
+        });
+      });
       {
         const rottaStopsValues = stopInputs.map(el => el.value.trim()).filter(Boolean);
         saveNostromoHistoryEntry(
@@ -2062,6 +2132,6 @@
   })();
 </script>
 
-<script src="script.js?v=20261013a"></script>
+<script src="script.js?v=20261013b"></script>
 </body>
 </html>

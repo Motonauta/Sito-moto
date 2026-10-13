@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <!-- percorsi tutti assoluti: Vercel mostra questa pagina a qualunque
      indirizzo sbagliato, anche annidato (/a/b/c), non solo in cima -->
-<link rel="stylesheet" href="/style.css?v=20261013a">
+<link rel="stylesheet" href="/style.css?v=20261013b">
 <script src="/cookie-consent.js" defer></script>
 <style>
   /* stessa base delle altre pagine: grafite freddo e filo rosso/blu
@@ -55,7 +55,7 @@
     62%, 100%{ opacity:.16; }
   }
 
-  .lost .marker{ justify-content:center; color:var(--rust); }
+  .lost .marker{ justify-content:center; color:var(--rust-text); }
   .lost h1{
     font-size:clamp(2.1rem, 5.4vw, 3.8rem); color:var(--sand); max-width:18ch;
     padding-bottom:22px;
@@ -77,7 +77,7 @@
     .lost-fuel-bar span:first-child{ animation:fuel-blink 1.2s steps(1, end) infinite; }
   }
   @keyframes fuel-blink{ 50%{ background:rgba(193,39,45,0.25); box-shadow:none; } }
-  .lost-fuel strong{ color:var(--rust); font-weight:700; }
+  .lost-fuel strong{ color:var(--rust-text); font-weight:700; }
 
   .lost-actions{ margin-top:36px; display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
   .btn.solid{
@@ -109,7 +109,7 @@
 <header class="site-header">
   <div class="wrap">
     <a href="/index.html" class="logo logo-wrap">
-      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
+      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_128,h_128,c_fill/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
       <span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span>
     </a>
     <nav class="nav-links">
@@ -201,6 +201,6 @@
   </div>
 </footer>
 
-<script src="/script.js?v=20261013a"></script>
+<script src="/script.js?v=20261013b"></script>
 </body>
 </html>

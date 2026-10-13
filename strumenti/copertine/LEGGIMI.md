@@ -22,6 +22,10 @@ node strumenti/copertine/render.js strumenti/copertine/copertine.json casco    #
 
 Poi in `data/manuale-data.js` la guida punta a `copertina: "/img/manuale/…/copertina.jpg"`.
 
+`render.js` scrive anche `copertina-800.webp` accanto al JPG (800×450, ~40 KB):
+è quella che usano gli elenchi del sito. Se una copertina la fai a mano,
+crea anche la sua `-800.webp` (stesso nome + `-800.webp`).
+
 Per la foto: Angelo vuole un momento del lavoro (la catena, la mano, la
 valigia misurata), non la sua faccia. Dai reel Instagram si estrae il
 fotogramma con ffmpeg (vedi CLAUDE.md), ritagliando sopra i sottotitoli

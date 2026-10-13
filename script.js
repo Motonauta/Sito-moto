@@ -50,6 +50,54 @@
   window.mnCruscotto = { set };
 })();
 
+// File GPX di un percorso, da caricare sul navigatore della moto (Garmin
+// zūmo, TomTom Rider…) o su app come Calimoto e Komoot. Dentro ci sono:
+// le tappe come punti (wpt), il percorso per tappe (rte, chi lo apre lo
+// ricalcola con le sue strade) e, se c'è, la traccia stradale già
+// calcolata (trk). Usato dalle pagine dei viaggi e dall'Assistente di rotta.
+//   window.mnGpx.download({ nome, file, tappe: [{lat, lon, nome}], traccia: [[lat, lon], …] })
+window.mnGpx = (function(){
+  const esc = (s) => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const num = (n) => Number(n).toFixed(6);
+  function build({ nome, tappe = [], traccia = [] }){
+    // tracce lunghissime (viaggi di migliaia di km): al massimo ~8000 punti,
+    // più che sufficienti e leggeri per i navigatori più vecchi
+    const step = Math.max(1, Math.ceil(traccia.length / 8000));
+    const punti = traccia.filter((_, i) => i % step === 0 || i === traccia.length - 1);
+    const wpt = tappe.map(t => `  <wpt lat="${num(t.lat)}" lon="${num(t.lon)}"><name>${esc(t.nome)}</name></wpt>`).join("\n");
+    const rte = tappe.map(t => `    <rtept lat="${num(t.lat)}" lon="${num(t.lon)}"><name>${esc(t.nome)}</name></rtept>`).join("\n");
+    const trk = punti.length > 1
+      ? `\n  <trk>\n    <name>${esc(nome)}</name>\n    <trkseg>\n${punti.map(p => `      <trkpt lat="${num(p[0])}" lon="${num(p[1])}"/>`).join("\n")}\n    </trkseg>\n  </trk>`
+      : "";
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Il Motonauta - ilmotonauta.com" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>${esc(nome)}</name>
+    <link href="https://ilmotonauta.com"><text>Il Motonauta</text></link>
+    <time>${new Date().toISOString()}</time>
+  </metadata>
+${wpt}
+  <rte>
+    <name>${esc(nome)}</name>
+${rte}
+  </rte>${trk}
+</gpx>
+`;
+  }
+  function download(opts){
+    const blob = new Blob([build(opts)], { type: "application/gpx+xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (opts.file || "percorso") + ".gpx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+  return { build, download };
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -514,10 +562,15 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!item) return;
       const mediaEl = item.querySelector("img, video");
       const tag = item.querySelector(".tag");
-      if (mediaEl.tagName === "VIDEO") {
-        mediaContainer.innerHTML = `<video src="${mediaEl.currentSrc || mediaEl.src}" controls autoplay playsinline></video>`;
+      // nella Galleria la griglia ha solo miniature: la versione grande (o il
+      // video) sta in data-full e si scarica solo adesso
+      const full = item.dataset.full || mediaEl.currentSrc || mediaEl.src;
+      if (item.dataset.type === "video" || mediaEl.tagName === "VIDEO") {
+        const poster = mediaEl.tagName === "IMG" ? mediaEl.src : "";
+        const webm = item.dataset.fullWebm ? `<source src="${item.dataset.fullWebm}" type="video/webm">` : "";
+        mediaContainer.innerHTML = `<video poster="${poster}" controls autoplay playsinline><source src="${full}" type="video/mp4">${webm}</video>`;
       } else {
-        mediaContainer.innerHTML = `<img src="${mediaEl.src}" alt="${mediaEl.alt || ''}">`;
+        mediaContainer.innerHTML = `<img src="${full}" alt="${mediaEl.alt || ''}">`;
       }
       lbCaption.textContent = tag ? tag.textContent : "";
     };

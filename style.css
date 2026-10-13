@@ -2,7 +2,7 @@
    TOKENS
    ========================================================== */
 :root{
-  --css-build:"20261013a"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
+  --css-build:"20261013b"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
   /* curve di movimento condivise: --ease-out per entrate, hover e
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -15,6 +15,11 @@
      (--rust-dim non è usato da nessuna pagina, ma lo teniamo identico
      per sicurezza) */
   --rust: #C1272D;
+  /* lo stesso rosso, un filo più chiaro, per le SCRITTE piccole (titoletti,
+     etichette, errori): il --rust pieno sul fondo scuro arriva a 3:1 e al
+     sole sul telefono non si legge; questo supera 4,5:1 su tutti i fondi.
+     Pulsanti, fondi, bordi e testi grandi restano col --rust */
+  --rust-text: #E8545A;
   --rust-dim: #C1272D;
   /* "--gold" è rimasto il nome storico della variabile, ma dal
      restyling rosso/blu del logo il suo valore è diventato un blu —
@@ -265,8 +270,8 @@ ul{list-style:none;}
   letter-spacing:0.1em;
   text-transform:uppercase;
   /* rosso del logo (prima era il blu): Angelo vuole più rosso nel sito,
-     il blu resta per link e accenti */
-  color:var(--rust);
+     il blu resta per link e accenti. Versione "da testo" per leggibilità */
+  color:var(--rust-text);
   display:inline-flex;
   align-items:center;
   gap:10px;
@@ -318,12 +323,13 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   background:transparent;
   transition:background .25s ease, color .25s ease, transform .2s ease;
 }
-.btn:hover{background:var(--rust);}
-@media (hover: hover) and (pointer: fine){
-  .btn:hover{transform:translateY(-2px);}
-}
 .btn.solid{background:var(--rust); border-color:var(--rust);}
-.btn.solid:hover{background:var(--gold); border-color:var(--gold); color:var(--asphalt);}
+/* il colore al passaggio del mouse solo dove c'è davvero un mouse: sul
+   telefono, dopo un tocco, il pulsante restava "acceso" pieno di rosso */
+@media (hover: hover) and (pointer: fine){
+  .btn:hover{background:var(--rust); transform:translateY(-2px);}
+  .btn.solid:hover{background:var(--gold); border-color:var(--gold); color:var(--asphalt);}
+}
 
 /* ==========================================================
    COPIA LINK (bottone riusabile, gestito da script.js)
@@ -924,7 +930,7 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   margin:6px 0 0; font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.08em;
   color:var(--cream-dim); text-transform:uppercase; max-width:none;
 }
-.footer-coords span{ color:var(--rust); }
+.footer-coords span{ color:var(--rust-text); }
 .footer-social{ display:flex; flex-wrap:wrap; gap:10px; }
 .footer-social a{
   display:inline-flex; align-items:center; justify-content:center;
@@ -978,11 +984,13 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 .footer-note{
   font-family:var(--font-mono);
   font-size:0.72rem;
-  color:rgba(245,240,230,0.35);
+  color:rgba(245,240,230,0.55);
 }
 .footer-bottom a{
   font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.05em; text-transform:uppercase;
   color:var(--cream-dim); transition:color .2s ease;
+  /* area di tocco alta 44 px anche se la scritta è piccola */
+  display:inline-flex; align-items:center; min-height:44px;
 }
 .footer-bottom a:hover{ color:var(--sand); }
 @media (max-width:760px){
@@ -1031,6 +1039,73 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .cookie-banner{ padding:18px 20px; }
   .cookie-banner-actions{ width:100%; }
   .cookie-banner-actions .btn{ flex:1; justify-content:center; }
+}
+
+/* ==========================================================
+   COSA FACCIO — lista "editoriale" (pagina Il Motonauta): righe
+   separate da un filo, numero grande rosso a contorno che si riempie
+   al passaggio del mouse. Niente riquadri: non è l'ennesima fila di card
+   ========================================================== */
+.cf-grid{ list-style:none; margin-top:44px; border-top:1px solid rgba(245,240,230,0.12); }
+.cf-row{
+  display:grid; grid-template-columns:clamp(84px, 11vw, 150px) minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items:baseline; gap:12px 32px;
+  padding:28px 0; border-bottom:1px solid rgba(245,240,230,0.12);
+}
+.cf-num{
+  font-family:var(--font-display); font-weight:700; line-height:0.8;
+  font-size:clamp(3rem, 6.5vw, 5.2rem); letter-spacing:-0.01em;
+  color:transparent; -webkit-text-stroke:1.5px var(--rust);
+  transition:color .22s var(--ease-out);
+}
+.cf-row h3{ font-size:clamp(1.3rem, 2.4vw, 1.75rem); color:var(--sand); }
+.cf-row p{ font-size:0.98rem; }
+@media (hover: hover) and (pointer: fine){
+  .cf-row:hover .cf-num{ color:var(--rust); }
+}
+@media (max-width:760px){
+  .cf-row{ grid-template-columns:auto minmax(0, 1fr); gap:6px 20px; padding:22px 0; }
+  .cf-num{ grid-row:span 2; font-size:3rem; }
+}
+
+/* ==========================================================
+   APERTURA DELLA HOME — una foto vera della XR (di notte, col faro
+   acceso). Sul telefono la foto sta sopra a tutta larghezza e sfuma in
+   basso dentro l'asfalto, il titolo le sale un po' addosso; sul computer
+   segue lo schema delle copertine delle guide: titolo a sinistra, foto a
+   destra che sfuma verso il testo. Il parallasse leggero è quello già in
+   script.js (.hero-parallax dentro .hero-parallax-frame)
+   ========================================================== */
+.home-hero{ position:relative; overflow:hidden; isolation:isolate; }
+.home-hero-photo{
+  position:relative; aspect-ratio:4/3; overflow:hidden; background:var(--asphalt);
+  -webkit-mask-image:linear-gradient(to bottom, #000 48%, transparent 96%);
+          mask-image:linear-gradient(to bottom, #000 48%, transparent 96%);
+}
+.home-hero-photo img{
+  position:absolute; left:0; top:-6%; width:100%; height:112%;
+  object-fit:cover; object-position:46% 60%;
+}
+.home-hero-text{ position:relative; z-index:1; margin-top:-48px; width:100%; }
+.home-hero-title{
+  font-size:clamp(2.2rem, 8vw, 3.7rem); line-height:1.02; color:var(--sand);
+  max-width:15ch; text-wrap:balance;
+}
+.home-hero-sub{ margin-top:18px; font-size:1rem; max-width:52ch; }
+.home-hero-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
+@media (min-width:900px){
+  .home-hero{ min-height:clamp(560px, 76vh, 780px); display:flex; align-items:center; }
+  .home-hero-photo{
+    position:absolute; top:0; right:0; bottom:0; width:66%; aspect-ratio:auto;
+    -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 34%), linear-gradient(to top, transparent 0%, #000 20%);
+    -webkit-mask-composite:source-in;
+            mask-image:linear-gradient(to right, transparent 0%, #000 34%), linear-gradient(to top, transparent 0%, #000 20%);
+            mask-composite:intersect;
+  }
+  .home-hero-photo img{ object-position:40% 62%; }
+  .home-hero-text{ margin-top:0; padding-top:64px; padding-bottom:64px; }
+  .home-hero-title{ max-width:14ch; }
+  .home-hero-sub{ max-width:42ch; }
 }
 
 /* ==========================================================

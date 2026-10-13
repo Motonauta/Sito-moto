@@ -20,8 +20,16 @@ function mapsSearchUrl(query) {
 // stesso helper usato in index.html: Special:FilePath di Wikimedia Commons
 // supporta un parametro "width" che fa reindirizzare a una miniatura già
 // ridimensionata invece del file originale (spesso diversi MB)
-function wikiThumb(url, width) {
+// foto caricate in Galleria (Cloudinary, scelte dall'area riservata): la
+// misura giusta si chiede a Cloudinary nell'indirizzo. f_jpg per le anteprime
+// dei social, che non sempre leggono i formati moderni
+function wikiThumb(url, width, perSocial) {
   if (!url) return url;
+  if (url.includes('res.cloudinary.com') && url.includes('/image/upload/')) {
+    if (/\/upload\/[^/]*(w_|c_)/.test(url)) return url;
+    return url.replace('/upload/', `/upload/${perSocial ? 'f_jpg' : 'f_auto'},q_auto,w_${width},c_limit/`);
+  }
+  if (!url.includes('wikimedia.org')) return url;
   return url + (url.includes('?') ? '&' : '?') + 'width=' + width;
 }
 
@@ -92,13 +100,13 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20261013a">
+<link rel="stylesheet" href="/style.css?v=20261013b">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
   <div class="wrap">
     <a href="/index.html" class="logo logo-wrap">
-      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
+      <span class="logo-ring"><img src="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_128,h_128,c_fill/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png" alt="Logo Il Motonauta" style="height:40px; width:auto; display:block; border-radius:50%;"></span>
       <span class="logo-text">IL <span class="accent-moto">MOTO</span><span class="accent-nauta">NAUTA</span></span>
     </a>
     <nav class="nav-links">
@@ -153,7 +161,7 @@ const FOOTER_HTML = `<footer class="site-footer">
     </div>
   </div>
 </footer>
-<script src="/script.js?v=20261013a"></script>`;
+<script src="/script.js?v=20261013b"></script>`;
 
 function render404() {
   return `<!DOCTYPE html>
@@ -342,7 +350,7 @@ module.exports = async (req, res) => {
       logo: { '@type': 'ImageObject', url: LOGO_URL },
     },
     mainEntityOfPage: siteUrl,
-    ...(it.foto ? { image: [wikiThumb(it.foto, 1200)] } : {}),
+    ...(it.foto ? { image: [wikiThumb(it.foto, 1200, true)] } : {}),
   };
 
   const html = `<!DOCTYPE html>
@@ -356,7 +364,7 @@ module.exports = async (req, res) => {
 <meta property="og:type" content="article">
 <meta property="og:title" content="${escapeHtml(it.titolo)}">
 <meta property="og:description" content="${escapeHtml(description)}">
-<meta property="og:image" content="${escapeHtml(wikiThumb(it.foto, 1200))}">
+<meta property="og:image" content="${escapeHtml(wikiThumb(it.foto, 1200, true))}">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="${siteUrl}">
 <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
@@ -411,15 +419,16 @@ ${HEAD_COMMON}
     border:1px solid rgba(30,95,174,0.45); max-width:900px;
   }
   .viaggio-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
-  .viaggio-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; }
-  .viaggio-actions a{
-    font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
-    padding:12px 20px; border:1px solid var(--rust); color:var(--cream); background:transparent;
-    transition:background .2s ease, color .2s ease;
+  .viaggio-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; max-width:900px; }
+  .viaggio-actions .btn[disabled]{ opacity:0.45; cursor:progress; }
+  .viaggio-actions-minor{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .viaggio-actions-minor .print-pdf-btn, .viaggio-actions-minor .copy-link-btn{ padding:10px 16px; font-size:0.72rem; }
+  .viaggio-gpx-note{ margin-top:10px; font-size:0.82rem; color:var(--cream-dim); }
+  @media (max-width:600px){
+    /* sul telefono le tre azioni principali una sotto l'altra, larghe uguali */
+    .viaggio-actions{ flex-direction:column; }
+    .viaggio-actions .btn{ width:100%; justify-content:center; }
   }
-  .viaggio-actions a:hover{ background:var(--rust); }
-  .viaggio-actions a.waze{ border-color:rgba(245,240,230,0.3); }
-  .viaggio-actions a.waze:hover{ background:rgba(245,240,230,0.12); }
   .viaggio-stops{ margin-top:44px; max-width:720px; }
   .viaggio-stops p.label{
     font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase;
@@ -544,15 +553,18 @@ ${HEADER_HTML}
       <img src="${escapeHtml(wikiThumb(it.foto, 1200))}" alt="${escapeHtml(it.titolo)}">
     </div>
 
+    <!-- azioni: in alto quelle per partire (Maps, Waze, GPX per il
+         navigatore), sotto quelle di servizio, più piccole -->
     <div class="viaggio-actions">
-      <a href="${mapsUrl}" target="_blank" rel="noopener">Apri l'itinerario completo su Maps</a>
-      <a class="waze" href="${wazeUrl}" target="_blank" rel="noopener">Prima tappa su Waze</a>
+      <a class="btn solid" href="${mapsUrl}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-map"/></svg> Apri su Google Maps</a>
+      <a class="btn" href="${wazeUrl}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-pin"/></svg> Prima tappa su Waze</a>
+      <button type="button" class="btn" id="gpx-btn" disabled title="Sto calcolando il percorso…"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-download"/></svg> Scarica GPX</button>
     </div>
-
-    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
-      <button type="button" class="print-pdf-btn" onclick="window.print()"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-file"/></svg> Stampa / Salva come PDF</button>
+    <div class="viaggio-actions-minor">
+      <button type="button" class="print-pdf-btn" onclick="window.print()"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-file"/></svg> Stampa / PDF</button>
       <button type="button" class="copy-link-btn" data-copy="${siteUrl}"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-link"/></svg> Copia link</button>
     </div>
+    <p class="viaggio-gpx-note">Il GPX si apre sul navigatore della moto (Garmin, TomTom) o su app come Calimoto e Komoot.</p>
 
     <div class="viaggio-stops">
       <p class="label">Tappe consigliate</p>
@@ -702,6 +714,7 @@ ${FOOTER_HTML}
       // affatto: meglio mostrare comunque una linea indicativa che far
       // sparire tutta l'anteprima.
       let latlngs = coords.map(function(c){ return [c.lat, c.lon]; });
+      let tracciaStradale = null; // solo il percorso stradale vero finisce nel GPX
       try{
         const controller = new AbortController();
         const timeoutId = setTimeout(function(){ controller.abort(); }, 7000);
@@ -712,6 +725,7 @@ ${FOOTER_HTML}
         const legsOk = route && routePreviewLegsLookSane(route.legs, coords);
         if(legsOk && route.geometry && route.geometry.coordinates && route.geometry.coordinates.length > 1){
           latlngs = route.geometry.coordinates.map(function(c){ return [c[1], c[0]]; });
+          tracciaStradale = latlngs;
         }
       } catch(routeErr){
         // resta la linea diretta calcolata sopra
@@ -728,15 +742,15 @@ ${FOOTER_HTML}
       // Linea con "glow" (una copia più larga e sfocata sotto) e tratteggio
       // animato sopra, per dare l'idea di un percorso "in movimento" come
       // nell'anteprima di navigazione di un vero navigatore.
-      L.polyline(latlngs, { color: '#1E5FAE', weight: 10, opacity: 0.35, className: 'route-line-glow' }).addTo(map);
-      const line = L.polyline(latlngs, { color: '#1E5FAE', weight: 4, opacity: 0.95, className: 'route-line-main' }).addTo(map);
+      L.polyline(latlngs, { color: '#C1272D', weight: 10, opacity: 0.35, className: 'route-line-glow' }).addTo(map);
+      const line = L.polyline(latlngs, { color: '#E8545A', weight: 4, opacity: 0.95, className: 'route-line-main' }).addTo(map);
 
-      // Marker differenziati: partenza in verde, arrivo in rosso, tappe
-      // intermedie in blu (stesso colore della linea).
+      // Marker differenziati: partenza in verde, arrivo nel blu del logo,
+      // tappe intermedie color crema (la linea è rossa, come il sito)
       coords.forEach(function(c, i){
         const isStart = i === 0;
         const isEnd = i === coords.length - 1;
-        const fillColor = isStart ? '#4F7038' : (isEnd ? '#C1272D' : '#1E5FAE');
+        const fillColor = isStart ? '#4F7038' : (isEnd ? '#1E5FAE' : '#F5F0E6');
         const label = tappeOk[i].nome + (isStart ? ' (partenza)' : isEnd ? ' (arrivo)' : '');
         L.circleMarker([c.lat, c.lon], {
           radius: (isStart || isEnd) ? 8 : 6, fillColor: fillColor, color: '#1B1A17', weight: 2, fillOpacity: 1
@@ -744,10 +758,25 @@ ${FOOTER_HTML}
       });
 
       map.fitBounds(line.getBounds(), { padding: [24, 24] });
+      enableGpx(coords.map(function(c, i){ return { lat: c.lat, lon: c.lon, nome: tappeOk[i].nome }; }), tracciaStradale || []);
     } catch(err){
       const wrap = mapEl.closest('.viaggio-route-preview');
       if(wrap) wrap.style.display = 'none';
+      const gpx = document.getElementById('gpx-btn');
+      if(gpx) gpx.hidden = true;
     }
+  }
+
+  // Scarica GPX: si accende appena il percorso è calcolato (le tappe con le
+  // coordinate + la traccia stradale, se il calcolo stradale è riuscito)
+  function enableGpx(tappe, traccia){
+    const btn = document.getElementById('gpx-btn');
+    if(!btn || !window.mnGpx) return;
+    btn.disabled = false;
+    btn.removeAttribute('title');
+    btn.addEventListener('click', function(){
+      window.mnGpx.download({ nome: ${JSON.stringify(it.titolo).replace(/</g, '\\u003c')} + ' — Il Motonauta', file: ${JSON.stringify(slug).replace(/</g, '\\u003c')}, tappe: tappe, traccia: traccia });
+    });
   }
 
   loadRoutePreview();

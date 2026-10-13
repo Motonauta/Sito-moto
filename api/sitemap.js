@@ -1,4 +1,5 @@
-const { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE, getSlug: getViaggioSlug } = require('../data/viaggi-data');
+const seed = require('../data/viaggi-data');
+const { getViaggiData } = require('../lib/viaggi-store');
 const { GUIDE, getSlug: getGuidaSlug } = require('../data/manuale-data');
 
 const BASE = 'https://ilmotonauta.com';
@@ -31,8 +32,17 @@ function urlEntry(loc, changefreq, priority, lastmod) {
 module.exports = async (req, res) => {
   const entries = STATIC_PAGES.map(p => urlEntry(`${BASE}${p.path}`, p.changefreq, p.priority));
 
-  [...ITINERARI, ...MINIVIAGGI, ...VIAGGI_RICORDARE].forEach(it => {
-    entries.push(urlEntry(`${BASE}/viaggi/${getViaggioSlug(it)}`, 'monthly', '0.7'));
+  // i viaggi veri sono quelli su Redis (gestiti dall'area riservata), non il
+  // file di partenza: così Google trova anche quelli aggiunti dopo e non
+  // quelli tolti. Se Redis non risponde si ripiega sul file di partenza
+  let viaggi = seed;
+  try {
+    viaggi = await getViaggiData();
+  } catch (err) {
+    console.error('Sitemap: dati viaggi non disponibili, uso quelli di partenza', err);
+  }
+  [...(viaggi.ITINERARI || []), ...(viaggi.MINIVIAGGI || []), ...(viaggi.VIAGGI_RICORDARE || [])].forEach(it => {
+    entries.push(urlEntry(`${BASE}/viaggi/${seed.getSlug(it)}`, 'monthly', '0.7'));
   });
 
   GUIDE.forEach(guida => {
