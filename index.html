@@ -705,7 +705,10 @@
     const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
     const icona = n => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${n}"/></svg>`;
     const intero = n => Number(n).toLocaleString("it-IT");
-    const breve = n => Number(n).toLocaleString("it-IT", { notation: "compact", maximumFractionDigits: 1 });
+    // 1.900.000 → "1,9 Mln", 56.900 → "56.900" (il "Mio" automatico del browser in italiano si legge male)
+    const breve = n => Number(n) >= 1e6
+      ? `${(Number(n) / 1e6).toLocaleString("it-IT", { maximumFractionDigits: 1 })} Mln`
+      : intero(n);
 
     async function carica(box){
       try{
