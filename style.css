@@ -2,7 +2,7 @@
    TOKENS
    ========================================================== */
 :root{
-  --css-build:"20261013d"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
+  --css-build:"20261013e"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
   /* curve di movimento condivise: --ease-out per entrate, hover e
      pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -780,12 +780,10 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   border:1px solid rgba(245,240,230,0.14);
   padding:16px;
 }
-/* riquadri social della home. TikTok: prima del caricamento una scheda con
-   il pulsante, poi il riquadro ufficiale del profilo, alto quanto serve.
-   Instagram: la scheda resta finché il feed non arriva (lib/instagram.js) */
-.tiktok-box, .ig-box{ min-height:420px; display:flex; }
-.tiktok-box.is-loaded{ display:block; min-height:400px; }
-.ig-box.is-loaded{ display:block; min-height:0; }
+/* riquadri social della home (TikTok e Instagram, uguali): la scheda col
+   link resta finché il feed non arriva (lib/tiktok.js, lib/instagram.js) */
+.social-box{ min-height:420px; display:flex; }
+.social-box.is-loaded{ display:block; min-height:0; }
 .social-placeholder{
   flex:1; display:flex; flex-direction:column; justify-content:center; gap:10px;
   padding:28px 22px; border:1px dashed rgba(245,240,230,0.18);

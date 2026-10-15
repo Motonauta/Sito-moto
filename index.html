@@ -26,8 +26,8 @@
 <link rel="preload" as="image" fetchpriority="high"
   imagesrcset="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_800,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 800w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1200w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1600,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1600w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_2200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 2200w"
   imagesizes="(min-width: 900px) 62vw, 100vw">
-<link rel="stylesheet" href="style.css?v=20261013d">
-<script src="formati.js?v=20261013d"></script>
+<link rel="stylesheet" href="style.css?v=20261013e">
+<script src="formati.js?v=20261013e"></script>
 <script src="cookie-consent.js" defer></script>
 <style>
   /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
@@ -662,33 +662,30 @@
 </section>
 
 <!-- SOCIAL FEEDS ==================================================== -->
+<!-- TikTok e Instagram uguali: il sito legge profilo e ultimi 9 contenuti
+     (lib/tiktok.js, lib/instagram.js), copia le anteprime su Cloudinary e le
+     mostra da lì, quindi niente cookie dei social per chi visita. Finché i
+     dati non arrivano (o se un social non risponde) resta la scheda col link -->
 <section>
   <div class="wrap">
     <p class="marker">Seguimi</p>
     <h2>Ultimi contenuti social</h2>
     <div class="social-feeds-grid">
-      <!-- TikTok: il riquadro ufficiale del profilo (ultimi 10 video, si
-           aggiorna da solo). Parte solo col consenso ai cookie o al tocco
-           del pulsante, e solo quando la sezione è vicina allo schermo -->
       <div class="social-feed-card">
-        <div class="tiktok-box" id="tiktok-box">
+        <div class="social-box" id="tiktok-box" data-feed="tiktok" data-utente="ilmotonauta" data-profilo="https://www.tiktok.com/@ilmotonauta" data-icona="tiktok">
           <div class="social-placeholder">
             <svg class="icon social-placeholder-icon" aria-hidden="true"><use href="/icons.svg#i-tiktok"/></svg>
             <p class="marker">TikTok</p>
             <h3>@ilmotonauta</h3>
-            <p>Gli ultimi video, presi direttamente dal mio profilo. Si caricano da TikTok, che potrebbe usare dei cookie.</p>
+            <p>Video brevi da strada e da garage: prove, manutenzione e imprevisti.</p>
             <div class="social-placeholder-actions">
-              <button type="button" class="btn solid" id="tiktok-load">Mostra i miei TikTok</button>
-              <a class="btn" href="https://www.tiktok.com/@ilmotonauta" target="_blank" rel="noopener">Apri TikTok</a>
+              <a class="btn solid" href="https://www.tiktok.com/@ilmotonauta" target="_blank" rel="noopener">Seguimi su TikTok</a>
             </div>
           </div>
         </div>
       </div>
-      <!-- Instagram: gli ultimi post letti dal sito con le API ufficiali
-           (lib/instagram.js); le anteprime arrivano da Cloudinary, quindi
-           niente cookie di Instagram. Senza collegamento resta la scheda -->
       <div class="social-feed-card">
-        <div class="ig-box" id="ig-box">
+        <div class="social-box" id="ig-box" data-feed="instagram" data-utente="motonautagram" data-profilo="https://www.instagram.com/motonautagram/" data-icona="instagram">
           <div class="social-placeholder">
             <svg class="icon social-placeholder-icon" aria-hidden="true"><use href="/icons.svg#i-instagram"/></svg>
             <p class="marker">Instagram</p>
@@ -704,73 +701,47 @@
   </div>
 </section>
 <script>
-  (function instagramFeed(){
-    const box = document.getElementById("ig-box");
-    if(!box) return;
+  (function socialFeeds(){
     const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
     const icona = n => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${n}"/></svg>`;
-    async function carica(){
+    const intero = n => Number(n).toLocaleString("it-IT");
+    const breve = n => Number(n).toLocaleString("it-IT", { notation: "compact", maximumFractionDigits: 1 });
+
+    async function carica(box){
       try{
-        const res = await fetch("/api/gallery?action=instagram");
+        const res = await fetch(`/api/gallery?action=${box.dataset.feed}`);
         const data = await res.json();
         if(!data.collegato || !data.post || !data.post.length) return; // resta la scheda
         const p = data.profilo || {};
-        const nome = p.username || "motonautagram";
+        const nome = p.username || box.dataset.utente;
         const numeri = [
-          p.followers != null ? `${Number(p.followers).toLocaleString("it-IT")} follower` : "",
-          p.post != null ? `${Number(p.post).toLocaleString("it-IT")} post` : "",
+          p.followers != null ? `${intero(p.followers)} follower` : "",
+          p.likes != null ? `${breve(p.likes)} Mi piace` : "",
+          p.post != null ? `${intero(p.post)} post` : "",
         ].filter(Boolean).join(" · ");
         const griglia = data.post.map(x => `
           <a class="ig-post" href="${esc(x.link)}" target="_blank" rel="noopener" title="${esc(x.didascalia)}">
-            <img src="${esc(x.img)}" srcset="${esc(x.img)} 480w, ${esc(x.img2x)} 800w" sizes="(max-width: 780px) 33vw, 190px" alt="${esc(x.didascalia || "Post su Instagram")}" loading="lazy" decoding="async">
+            <img src="${esc(x.img)}" srcset="${esc(x.img)} 480w, ${esc(x.img2x)} 800w" sizes="(max-width: 780px) 33vw, 190px" alt="${esc(x.didascalia || "Contenuto social")}" loading="lazy" decoding="async">
             ${x.tipo === "video" ? `<span class="ig-post-tipo">${icona("play")}</span>` : x.tipo === "album" ? `<span class="ig-post-tipo">${icona("layers")}</span>` : ""}
           </a>`).join("");
         box.classList.add("is-loaded");
         box.innerHTML = `
-          <a class="ig-head" href="https://www.instagram.com/${esc(nome)}/" target="_blank" rel="noopener">
-            ${p.foto ? `<img class="ig-avatar" src="${esc(p.foto)}" alt="" width="56" height="56">` : `<span class="ig-avatar ig-avatar--icona">${icona("instagram")}</span>`}
+          <a class="ig-head" href="${esc(box.dataset.profilo)}" target="_blank" rel="noopener">
+            ${p.foto ? `<img class="ig-avatar" src="${esc(p.foto)}" alt="" width="56" height="56">` : `<span class="ig-avatar ig-avatar--icona">${icona(box.dataset.icona)}</span>`}
             <span class="ig-head-text"><strong>@${esc(nome)}</strong>${numeri ? `<span>${esc(numeri)}</span>` : ""}</span>
             <span class="btn solid ig-follow">Segui</span>
           </a>
           <div class="ig-grid">${griglia}</div>`;
       } catch(err){ /* resta la scheda con il link */ }
     }
+
     // solo quando la sezione si avvicina allo schermo
-    if(!("IntersectionObserver" in window)) return carica();
+    const boxes = document.querySelectorAll(".social-box[data-feed]");
+    if(!("IntersectionObserver" in window)) return boxes.forEach(carica);
     const io = new IntersectionObserver(entries => {
-      if(entries.some(e => e.isIntersecting)){ io.disconnect(); carica(); }
+      entries.forEach(e => { if(e.isIntersecting){ io.unobserve(e.target); carica(e.target); } });
     }, { rootMargin: "600px 0px" });
-    io.observe(box);
-  })();
-</script>
-<script>
-  (function tiktokProfilo(){
-    const box = document.getElementById("tiktok-box");
-    if(!box) return;
-    function carica(){
-      if(box.dataset.loaded) return;
-      box.dataset.loaded = "1";
-      box.classList.add("is-loaded");
-      box.innerHTML = '<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@ilmotonauta" data-unique-id="ilmotonauta" data-embed-type="creator" style="max-width:780px; min-width:288px; margin:0;"><section><a target="_blank" rel="noopener" href="https://www.tiktok.com/@ilmotonauta?refer=creator_embed">@ilmotonauta</a></section></blockquote>';
-      const s = document.createElement("script");
-      s.async = true;
-      s.src = "https://www.tiktok.com/embed.js";
-      document.body.appendChild(s);
-    }
-    // col consenso già dato si carica da solo, ma solo quando la sezione
-    // si avvicina allo schermo (lo script di TikTok è pesante)
-    function caricaQuandoVisibile(){
-      if(!("IntersectionObserver" in window)) return carica();
-      const io = new IntersectionObserver(entries => {
-        if(entries.some(e => e.isIntersecting)){ io.disconnect(); carica(); }
-      }, { rootMargin: "600px 0px" });
-      io.observe(box);
-    }
-    let consenso = null;
-    try { consenso = localStorage.getItem("motonauta_cookie_consent"); } catch(e) {}
-    if(consenso === "accepted") caricaQuandoVisibile();
-    document.addEventListener("mn:cookie-accepted", caricaQuandoVisibile);
-    document.getElementById("tiktok-load").addEventListener("click", carica);
+    boxes.forEach(b => io.observe(b));
   })();
 </script>
 
@@ -1689,6 +1660,6 @@
 })();
 </script>
 
-<script src="script.js?v=20261013d"></script>
+<script src="script.js?v=20261013e"></script>
 </body>
 </html>
