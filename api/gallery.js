@@ -2,6 +2,7 @@ const cloudinary = require('cloudinary').v2;
 const { isAuthenticated } = require('../lib/auth');
 const { getRedisClient } = require('../lib/redis');
 const instagram = require('../lib/instagram');
+const tiktok = require('../lib/tiktok');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -443,6 +444,17 @@ module.exports = async (req, res) => {
     if (req.method !== 'GET') return res.status(405).json({ error: 'Metodo non consentito' });
     try {
       const feed = await instagram.getFeed();
+      res.setHeader('Cache-Control', 'public, s-maxage=900, stale-while-revalidate=3600');
+      return res.status(200).json(feed);
+    } catch (err) {
+      return res.status(200).json({ collegato: false, profilo: null, post: [] });
+    }
+  }
+  // riquadro TikTok della home, uguale a Instagram (vedi lib/tiktok.js)
+  if (action === 'tiktok') {
+    if (req.method !== 'GET') return res.status(405).json({ error: 'Metodo non consentito' });
+    try {
+      const feed = await tiktok.getFeed();
       res.setHeader('Cache-Control', 'public, s-maxage=900, stale-while-revalidate=3600');
       return res.status(200).json(feed);
     } catch (err) {
