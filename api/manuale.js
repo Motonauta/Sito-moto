@@ -293,7 +293,9 @@ function renderBlocco(b) {
     return `<h2>${escapeHtml(b.testo)}</h2>`;
   }
   if (b.tipo === 'link') {
-    return `<p style="margin-top:8px;"><a class="manuale-cta-link" href="${escapeHtml(b.url)}" target="_blank" rel="noopener">${escapeHtml(b.label)} →</a></p>`;
+    // i link alle altre pagine del sito restano nella stessa scheda
+    const esterno = !String(b.url).startsWith('/');
+    return `<p style="margin-top:8px;"><a class="manuale-cta-link" href="${escapeHtml(b.url)}"${esterno ? ' target="_blank" rel="noopener"' : ''}>${escapeHtml(b.label)} →</a></p>`;
   }
   if (b.tipo === 'immagine') {
     return `

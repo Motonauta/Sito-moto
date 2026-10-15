@@ -527,6 +527,60 @@
         { tipo: "paragrafo", testo: "E tu lo sapevi di avere un aereo in garage? Se ti viene in mente un'altra tecnologia della moto nata in aviazione, scrivimela: la aggiungo qui." },
         { tipo: "link", label: "Guarda il video originale", url: "https://www.instagram.com/reel/DcT3SSuNIfr/" }
       ]
+    },
+    {
+      titolo: "Rimessaggio invernale della moto fatto bene: 8 cose da fare prima di fermarla",
+      categoria: "Manutenzione",
+      excerpt: "Il mio consiglio è non fermarla mai. Ma se proprio devi metterla a riposo per l'inverno, fallo bene: gomme, cavalletto, serbatoio, olio, carene, batteria, catena e telo, gli 8 passi per ritrovarla pronta a primavera.",
+      copertina: "/img/manuale/rimessaggio/copertina.jpg",
+      autore: "Il Motonauta",
+      data: "2026-10-15",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Il mio consiglio è sempre lo stesso: non fermare la moto. Ma se proprio devi metterla a riposo per l'inverno, fallo bene, così a primavera la ritrovi pronta a ripartire invece che piena di sorprese. Ecco cosa faccio, un passo alla volta." },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Gonfia le gomme di mezzo bar in più",
+          testo: "Prima di tutto porta gli pneumatici a mezzo bar in più rispetto alla pressione che usi di solito. Ferma per mesi, la moto pesa sempre sugli stessi punti delle gomme: partire un po' più gonfi le aiuta a non deformarsi. In primavera, prima di ripartire, rimetti la pressione giusta.",
+          immagine: { src: "/img/manuale/rimessaggio/gomme.jpg", caption: "Prima cosa: mezzo bar in più nelle gomme." }
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Sul cavalletto centrale, o su due alzamoto",
+          testo: "Metti la moto sul cavalletto centrale. Se non ce l'hai, usa due cavalletti alzamoto, uno davanti e uno dietro. Insomma, l'importante è che le gomme non restino appoggiate sempre nello stesso punto per tutto l'inverno.",
+          immagine: { src: "/img/manuale/rimessaggio/cavalletto.jpg", caption: "Niente centrale? Due cavalletti alzamoto come questo." }
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Serbatoio pieno fino all'orlo",
+          testo: "Riempi il serbatoio fino all'orlo: meno aria resta dentro, meno ossigeno c'è, e meno rischio c'è che si formi ruggine.",
+          immagine: { src: "/img/manuale/rimessaggio/serbatoio.jpg", caption: "Pieno fino all'orlo: meno ossigeno, meno ruggine." }
+        },
+        {
+          tipo: "consiglio", numero: 4, titolo: "Olio e filtri adesso, non a primavera",
+          testo: "Fai un bel cambio di olio e filtri prima di fermarla. Così nell'olio motore non restano i sedimenti che, fermi per mesi, possono danneggiare le parti interne, e la prossima stagione la moto è già pronta per partire.",
+          immagine: { src: "/img/manuale/rimessaggio/olio.jpg", caption: "Olio e filtri nuovi prima del letargo." }
+        },
+        {
+          tipo: "consiglio", numero: 5, titolo: "Pulisci bene tutte le carene",
+          testo: "Pulisci per bene tutte le carene. Ricordati che gli insetti spiaccicati sono molto acidi: lasciati lì per mesi possono rovinare le plastiche, soprattutto se hai le grafiche. Insomma, fateci attenzione.",
+          immagine: { src: "/img/manuale/rimessaggio/carene.jpg", caption: "Via gli insetti: sono acidi e rovinano plastiche e grafiche." }
+        },
+        {
+          tipo: "consiglio", numero: 6, titolo: "Batteria attaccata a un mantenitore di carica",
+          testo: "Attacca la batteria a un buon mantenitore di carica, così non si scarica durante l'inverno. Nel mio caso è semplicissimo, perché uso quello originale BMW.",
+          immagine: { src: "/img/manuale/rimessaggio/batteria.jpg", caption: "Il mantenitore di carica: il mio è quello originale BMW." }
+        },
+        {
+          tipo: "consiglio", numero: 7, titolo: "Catena pulita e ingrassata",
+          testo: "Dai una bella pulita alla catena e ingrassala, così resta protetta dal grasso per tutto il tempo in cui la moto sta ferma."
+        },
+        {
+          tipo: "consiglio", numero: 8, titolo: "Sotto un telo traspirante",
+          testo: "Alla fine di tutto mettila sotto un telo traspirante. Questo però non ve lo posso mostrare, perché la mia moto non la fermo. Mai."
+        },
+        { tipo: "sottotitolo", testo: "Per approfondire" },
+        { tipo: "link", label: "Il tagliando olio e filtri fatto da me, passo per passo", url: "/manuale/tagliando-della-s1000xr-fai-da-te-olio-e-filtri-passo-per-passo" },
+        { tipo: "link", label: "Come pulisco la catena con pochi euro", url: "/manuale/non-facciamoci-fregare-pulire-la-catena-della-moto-alla-perfezione-con-pochi-euro" },
+        { tipo: "paragrafo", testo: "E tu la moto d'inverno la fermi o sei come me? Se hai un trucco per il rimessaggio che qui manca, scrivimelo." },
+        { tipo: "link", label: "Guarda il video originale", url: "https://www.instagram.com/reel/Ded4uFHv-b7/" }
+      ]
     }
   ];
 

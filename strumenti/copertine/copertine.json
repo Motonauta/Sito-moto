@@ -166,5 +166,22 @@
       "IMU *6 assi*",
       "Carbonio"
     ]
+  },
+  "rimessaggio": {
+    "out": "img/manuale/rimessaggio/copertina.jpg",
+    "foto": "strumenti/copertine/foto/rimessaggio.jpg",
+    "pos": "35% 45%",
+    "categoria": "Manutenzione",
+    "titolo": [
+      "Rimessaggio",
+      "invernale",
+      "*fatto bene*"
+    ],
+    "sotto": "Otto cose da fare prima di fermare la moto per l'inverno",
+    "etichette": [
+      "Gomme *+0,5 bar*",
+      "Serbatoio *pieno*",
+      "Mantenitore"
+    ]
   }
 }
