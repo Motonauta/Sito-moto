@@ -26,8 +26,8 @@
 <link rel="preload" as="image" fetchpriority="high"
   imagesrcset="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_800,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 800w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1200w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1600,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1600w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_2200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 2200w"
   imagesizes="(min-width: 900px) 62vw, 100vw">
-<link rel="stylesheet" href="style.css?v=20261013e">
-<script src="formati.js?v=20261013e"></script>
+<link rel="stylesheet" href="style.css?v=20261013f">
+<script src="formati.js?v=20261013f"></script>
 <script src="cookie-consent.js" defer></script>
 <style>
   /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
@@ -671,8 +671,8 @@
     <p class="marker">Seguimi</p>
     <h2>Ultimi contenuti social</h2>
     <div class="social-feeds-grid">
-      <div class="social-feed-card">
-        <div class="social-box" id="tiktok-box" data-feed="tiktok" data-utente="ilmotonauta" data-profilo="https://www.tiktok.com/@ilmotonauta" data-icona="tiktok">
+      <div class="social-feed-card social-feed-card--tiktok">
+        <div class="social-box" id="tiktok-box" data-feed="tiktok" data-rete="TikTok" data-utente="ilmotonauta" data-profilo="https://www.tiktok.com/@ilmotonauta" data-icona="tiktok">
           <div class="social-placeholder">
             <svg class="icon social-placeholder-icon" aria-hidden="true"><use href="/icons.svg#i-tiktok"/></svg>
             <p class="marker">TikTok</p>
@@ -684,8 +684,8 @@
           </div>
         </div>
       </div>
-      <div class="social-feed-card">
-        <div class="social-box" id="ig-box" data-feed="instagram" data-utente="motonautagram" data-profilo="https://www.instagram.com/motonautagram/" data-icona="instagram">
+      <div class="social-feed-card social-feed-card--instagram">
+        <div class="social-box" id="ig-box" data-feed="instagram" data-rete="Instagram" data-utente="motonautagram" data-profilo="https://www.instagram.com/motonautagram/" data-icona="instagram">
           <div class="social-placeholder">
             <svg class="icon social-placeholder-icon" aria-hidden="true"><use href="/icons.svg#i-instagram"/></svg>
             <p class="marker">Instagram</p>
@@ -731,7 +731,7 @@
         box.innerHTML = `
           <a class="ig-head" href="${esc(box.dataset.profilo)}" target="_blank" rel="noopener">
             ${p.foto ? `<img class="ig-avatar" src="${esc(p.foto)}" alt="" width="56" height="56">` : `<span class="ig-avatar ig-avatar--icona">${icona(box.dataset.icona)}</span>`}
-            <span class="ig-head-text"><strong>@${esc(nome)}</strong>${numeri ? `<span>${esc(numeri)}</span>` : ""}</span>
+            <span class="ig-head-text"><span class="social-rete">${icona(box.dataset.icona)} ${esc(box.dataset.rete)}</span><strong>@${esc(nome)}</strong>${numeri ? `<span>${esc(numeri)}</span>` : ""}</span>
             <span class="btn solid ig-follow">Segui</span>
           </a>
           <div class="ig-grid">${griglia}</div>`;
@@ -1663,6 +1663,6 @@
 })();
 </script>
 
-<script src="script.js?v=20261013e"></script>
+<script src="script.js?v=20261013f"></script>
 </body>
 </html>
