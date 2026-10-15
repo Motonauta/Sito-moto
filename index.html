@@ -321,6 +321,133 @@
   }
   .oggi-note{ margin-top:16px; font-size:0.8rem; color:var(--cream-dim); }
 
+  /* ===== "Dove vado oggi?": ore su un orologio digitale, km su un
+     righello a tacche da 50 con la moto (stile GS) che si carica di
+     bagagli a ogni tacca e a 400 cade. Lo script è in fondo alla pagina. */
+  .oggi-grid{ grid-template-columns:minmax(250px, 300px) minmax(0, 1fr); gap:22px; }
+  @media (max-width:780px){ .oggi-grid{ grid-template-columns:minmax(0, 1fr); } }
+  .fuel-calc .oggi-label{
+    display:block; font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); margin-bottom:8px;
+  }
+
+  /* cifre a sette segmenti (anche quelle spente, appena accennate) */
+  .seg7{ display:inline-flex; height:40px; }
+  .seg7 svg{ height:100%; width:auto; overflow:visible; filter:drop-shadow(0 0 6px rgba(255,69,58,0.5)); }
+  .seg7 .on{ fill:#ff453a; }
+  .seg7 .off{ fill:rgba(255,69,58,0.08); }
+  .seg7 .colon{ animation:seg7-blink 1s steps(1) infinite; }
+  @keyframes seg7-blink{ 50%{ opacity:0.2; } }
+
+  .clock-set{
+    display:flex; align-items:center; gap:10px; padding:9px 10px;
+    background:#0b0b0a; border:1px solid rgba(245,240,230,0.16); border-radius:6px;
+  }
+  .clock-face{
+    flex:1; min-width:0; display:flex; align-items:center; justify-content:center;
+    height:58px; border-radius:4px; cursor:default;
+  }
+  .clock-face:focus-visible{ outline:2px solid var(--rust); outline-offset:2px; }
+  .clock-note{ margin:10px 0 0; font-family:var(--font-mono); font-size:0.72rem; color:var(--cream-dim); }
+  .clock-note strong{ color:var(--sand); font-weight:700; }
+
+  .km-ride{
+    --mw:clamp(124px, 32vw, 220px);
+    position:relative; padding:10px 14px 4px;
+    background:#0b0b0a; border:1px solid rgba(245,240,230,0.16); border-radius:6px;
+  }
+  .km-ride:has(.km-ride-input:focus-visible){ outline:2px solid var(--rust); outline-offset:2px; }
+  .km-ride-head{ display:grid; grid-template-columns:auto minmax(0, 1fr); align-items:center; gap:14px; }
+  .km-ride-value{ display:flex; align-items:flex-end; gap:6px; }
+  .km-ride-value .seg7{ height:28px; }
+  .km-ride-unit{
+    font-family:var(--font-mono); font-size:0.66rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--cream-dim); padding-bottom:2px;
+  }
+  .km-ride-load{ font-family:var(--font-mono); font-size:0.72rem; line-height:1.35; color:var(--sand); text-align:right; }
+  /* sul telefono la scritta può andare a capo: due righe sempre riservate,
+     così la strada non salta su e giù mentre si trascina */
+  @media (max-width:560px){ .km-ride-load{ min-height:2.7em; display:flex; align-items:center; justify-content:flex-end; } }
+  .km-ride[data-level="8"] .km-ride-load{ color:var(--rust-text); }
+
+  .km-ride-stage{
+    position:relative; margin-top:4px;
+    touch-action:pan-y; user-select:none; -webkit-user-select:none; -webkit-tap-highlight-color:transparent;
+    cursor:grab;
+  }
+  .km-ride.is-dragging .km-ride-stage{ cursor:grabbing; }
+  .km-ride-sky{ position:relative; height:calc(var(--mw) * 0.66); }
+  /* la moto: --x (px) e --spin (gradi delle ruote) li aggiorna lo script */
+  .km-ride-moto{
+    position:absolute; left:0; bottom:calc(-7px - var(--mw) * 0.0406);
+    width:var(--mw); aspect-ratio:320 / 210;
+    transform:translateX(var(--x, 0px));
+  }
+  .km-ride-moto > *{ position:absolute; inset:0; width:100%; height:100%; display:block; overflow:visible; }
+  .km-ride-rig{ transform-origin:50% 93.8%; transition:transform .5s var(--ease-in-out); }
+  .km-ride-rig svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .km-ride:not(.is-dragging) .km-ride-moto{ transition:transform .22s var(--ease-out); }
+
+  .km-ride-svg .mc-spin{ transform-box:fill-box; transform-origin:center; transform:rotate(var(--spin, 0deg)); }
+  .km-ride:not(.is-dragging) .km-ride-svg .mc-spin{ transition:transform .22s var(--ease-out); }
+  .km-ride-svg .mc-bag{
+    opacity:0; transform:translateY(-10px) scale(0.7);
+    transform-box:fill-box; transform-origin:50% 100%;
+    transition:opacity .18s var(--ease-out), transform .26s var(--ease-out);
+  }
+  .km-ride-svg .mc-bag.is-on{ opacity:1; transform:none; }
+  .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
+
+  /* 400 km: troppa roba, la moto si corica di lato */
+  .km-ride[data-level="8"] .km-ride-rig{ transform:perspective(600px) rotateX(62deg) rotate(-2deg); }
+  .km-ride-svg .mc-rider{ transition:opacity .15s var(--ease-out); }
+  .km-ride[data-level="8"] .km-ride-svg .mc-rider{ opacity:0; transition-delay:.2s; }
+  .km-ride-fx .mc-fallen{ opacity:0; transition:opacity .15s var(--ease-out); }
+  .km-ride[data-level="8"] .mc-fallen{ opacity:1; transition-delay:.3s; }
+  .km-ride-fx .mc-dust, .km-ride-fx .mc-stars{ opacity:0; transition:opacity .2s var(--ease-out); }
+  .km-ride[data-level="8"] .mc-dust{ opacity:.5; transition-delay:.35s; }
+  .km-ride[data-level="8"] .mc-stars{ opacity:1; transition-delay:.45s; }
+  .km-ride-fx .mc-stars path{ transform-box:fill-box; transform-origin:center; }
+  .km-ride[data-level="8"] .mc-stars path{ animation:km-star .5s var(--ease-out) .45s both; }
+  .km-ride[data-level="8"] .mc-stars path:nth-child(2){ animation-delay:.52s; }
+  .km-ride[data-level="8"] .mc-stars path:nth-child(3){ animation-delay:.58s; }
+  @keyframes km-star{ from{ transform:scale(0.4) rotate(-40deg); } to{ transform:none; } }
+
+  /* strada con la mezzeria e tacche ogni 50 km, allineate al centro della moto */
+  .km-ride-road{
+    position:relative; height:12px; background:#161614;
+    border-top:1px solid rgba(245,240,230,0.14); border-bottom:1px solid rgba(245,240,230,0.14);
+  }
+  .km-ride-road::after{
+    content:""; position:absolute; left:0; right:0; top:50%; height:2px; margin-top:-1px;
+    background:repeating-linear-gradient(90deg, rgba(245,240,230,0.4) 0 10px, transparent 10px 20px);
+  }
+  .km-ride-ticks{ position:relative; height:26px; }
+  .km-tick{
+    position:absolute; top:0; left:calc(var(--mw) / 2 + (100% - var(--mw)) * var(--i) / 8);
+    transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;
+    font-family:var(--font-mono); font-size:0.62rem; line-height:1; color:rgba(245,240,230,0.42);
+    transition:color .2s var(--ease-out);
+  }
+  .km-tick::before{ content:""; width:2px; height:6px; margin-bottom:4px; background:currentColor; }
+  .km-tick.is-passed{ color:var(--rust-text); }
+  @media (max-width:560px){ .km-tick:nth-child(even) > span{ visibility:hidden; } }
+
+  /* il range vero resta per tastiera e lettori di schermo */
+  .fuel-calc .km-ride-input{
+    position:absolute; left:50%; bottom:0; width:1px; height:1px; padding:0; margin:0;
+    opacity:0; pointer-events:none; border:0;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .seg7 .colon{ animation:none; }
+    .km-ride-moto, .km-ride:not(.is-dragging) .km-ride-moto, .km-ride-rig,
+    .km-ride-svg .mc-spin, .km-ride:not(.is-dragging) .km-ride-svg .mc-spin{ transition:none; }
+    .km-ride-svg .mc-bag{ transform:none; transition:opacity .2s ease; }
+    .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
+    .km-ride[data-level="8"] .mc-stars path{ animation:none; }
+  }
+
   .place-field{ position:relative; }
   .place-suggest-list{
     position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:20;
@@ -521,14 +648,245 @@
         gli itinerari che ci stanno, con il meteo di oggi già controllato,
         dal migliore in giù.
       </p>
-      <div class="fuel-calc-grid" style="grid-template-columns:repeat(2, 1fr);">
-        <div>
-          <label for="oggi-ore">Ore libere</label>
-          <input type="number" id="oggi-ore" value="3" min="1" max="12">
+      <div class="fuel-calc-grid oggi-grid">
+        <!-- ore libere: orologio digitale (le cifre le disegna lo script) -->
+        <div class="oggi-ore-field">
+          <span class="oggi-label" id="oggi-ore-label">Ore libere</span>
+          <div class="clock-set">
+            <button type="button" class="cc-dial-btn" data-ore-step="-0.5" aria-label="Mezz'ora in meno"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-minus"/></svg></button>
+            <div class="clock-face" id="oggi-ore-face" role="spinbutton" tabindex="0" aria-labelledby="oggi-ore-label" aria-valuemin="1" aria-valuemax="12" aria-valuenow="3" aria-valuetext="3 ore"><span class="seg7" id="oggi-ore-digits"></span></div>
+            <button type="button" class="cc-dial-btn" data-ore-step="0.5" aria-label="Mezz'ora in più"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-plus"/></svg></button>
+          </div>
+          <p class="clock-note" id="oggi-rientro" aria-live="polite"></p>
+          <input type="hidden" id="oggi-ore" value="3">
         </div>
-        <div>
-          <label for="oggi-km">Km che vuoi fare (al massimo)</label>
-          <input type="number" id="oggi-km" value="150" min="20" max="400" step="10">
+        <!-- km: righello a tacche da 50 km con la moto che si carica di bagagli -->
+        <div class="oggi-km-field">
+          <label class="oggi-label" for="oggi-km">Km che vuoi fare (al massimo)</label>
+          <div class="km-ride" id="km-ride" data-level="0">
+            <div class="km-ride-head" aria-hidden="true">
+              <span class="km-ride-value"><span class="seg7" id="km-ride-digits"></span><span class="km-ride-unit">km</span></span>
+              <span class="km-ride-load" id="km-ride-load">Senza bagagli: trascina la moto</span>
+            </div>
+            <div class="km-ride-stage" id="km-ride-stage">
+              <div class="km-ride-sky">
+                <div class="km-ride-moto" id="km-ride-moto">
+                  <svg class="km-ride-fx" viewBox="0 0 320 210" aria-hidden="true" focusable="false"><ellipse cx="160" cy="197" rx="128" ry="5" fill="#000" opacity=".5"/></svg>
+                  <div class="km-ride-rig">
+                  <svg class="km-ride-svg" viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                    <defs>
+                      <linearGradient id="mcAlu" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#e3e6ea"/><stop offset=".55" stop-color="#b7bcc4"/><stop offset="1" stop-color="#8d939c"/>
+                      </linearGradient>
+                      <linearGradient id="mcWhite" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfd4db"/>
+                      </linearGradient>
+                      <linearGradient id="mcBlack" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#3a3d44"/><stop offset="1" stop-color="#16171a"/>
+                      </linearGradient>
+                      <linearGradient id="mcVisor" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#5d7fa6"/><stop offset=".5" stop-color="#1b2a3c"/><stop offset="1" stop-color="#0d141d"/>
+                      </linearGradient>
+                      <g id="mcSpokes">
+                        <circle r="5.5" fill="#2a2c31"/>
+                        <path d="M0-21 0 21M-21 0 21 0M-14.8-14.8 14.8 14.8M-14.8 14.8 14.8-14.8M-8-19.4 8 19.4M-19.4-8 19.4 8M-8 19.4 8-19.4M-19.4 8 19.4-8" stroke="#c9ced6" stroke-width="1.1"/>
+                        <circle r="3" fill="#8d939c"/>
+                      </g>
+                    </defs>
+
+
+                      <!-- ===== RUOTA POSTERIORE ===== -->
+                      <g class="mc-wheel-rear">
+                        <circle cx="82" cy="162" r="33" fill="#121315"/>
+                        <circle cx="82" cy="162" r="33" fill="none" stroke="#26282c" stroke-width="3" stroke-dasharray="3 3.2"/>
+                        <circle cx="82" cy="162" r="23" fill="none" stroke="#c8a24a" stroke-width="3"/>
+                        <g transform="translate(82 162)"><g class="mc-spin"><use href="#mcSpokes"/></g></g>
+                      </g>
+                      <!-- ===== RUOTA ANTERIORE ===== -->
+                      <g class="mc-wheel-front">
+                        <circle cx="238" cy="159" r="36" fill="#121315"/>
+                        <circle cx="238" cy="159" r="36" fill="none" stroke="#26282c" stroke-width="3" stroke-dasharray="3 3.2"/>
+                        <circle cx="238" cy="159" r="25" fill="none" stroke="#c8a24a" stroke-width="3"/>
+                        <g transform="translate(238 159) scale(1.1)"><g class="mc-spin"><use href="#mcSpokes"/></g></g>
+                        <circle cx="238" cy="159" r="14" fill="none" stroke="#9aa0a8" stroke-width="3.5" opacity=".9"/>
+                        <rect x="244" y="146" width="9" height="13" rx="3" fill="#c1272d"/>
+                      </g>
+
+                      <!-- forcellone (Paralever) -->
+                      <path d="M144 138 L86 157 L80 165 L90 168 L148 150 Z" fill="url(#mcBlack)"/>
+                      <!-- scarico: collettore e silenziatore inclinato -->
+                      <path d="M186 150 C170 160 140 162 126 152" fill="none" stroke="#a9aeb6" stroke-width="5" stroke-linecap="round"/>
+                      <g transform="rotate(-20 96 132)">
+                        <rect x="70" y="124" width="58" height="16" rx="7" fill="url(#mcAlu)"/>
+                        <rect x="70" y="124" width="12" height="16" rx="5" fill="#2a2c31"/>
+                        <rect x="112" y="126" width="16" height="12" rx="5" fill="#2a2c31"/>
+                      </g>
+
+                      <!-- telaietto posteriore, portapacchi, codino -->
+                      <path d="M140 110 L70 100 M136 126 L82 106" stroke="#2b6cb8" stroke-width="4" stroke-linecap="round"/>
+                      <path d="M38 98 H92" stroke="#1d1f23" stroke-width="5" stroke-linecap="round"/>
+                      <path d="M64 104 Q56 112 54 122" stroke="#1d1f23" stroke-width="4" stroke-linecap="round" fill="none"/>
+                      <path d="M60 96 Q66 92 98 92 L104 100 L66 104 Z" fill="url(#mcWhite)"/>
+                      <rect x="56" y="97" width="10" height="5" rx="2" fill="#c1272d"/>
+
+                      <!-- motore boxer: blocco, cambio e testa del cilindro che sporge -->
+                      <path d="M140 116 L188 112 L196 150 L150 156 L138 142 Z" fill="#2a2c31"/>
+                      <path d="M148 120 L182 118 L186 146 L152 150 Z" fill="#3a3d44"/>
+                      <rect x="170" y="126" width="38" height="24" rx="8" fill="url(#mcAlu)"/>
+                      <rect x="176" y="130" width="27" height="16" rx="5" fill="#2a2c31"/>
+                      <path d="M180 134 H200 M180 138 H200 M180 142 H200" stroke="#4a4e57" stroke-width="1.2"/>
+                      <!-- paramotore (tubolare) -->
+                      <path d="M186 110 C214 112 222 132 214 150 C210 158 196 160 188 156" fill="none" stroke="#17181b" stroke-width="3.6" stroke-linecap="round"/>
+                      <!-- telaio blu -->
+                      <path d="M212 86 L170 110 L140 112 M212 90 L190 122" stroke="#2b6cb8" stroke-width="5" stroke-linecap="round"/>
+
+                      <!-- forcella Telelever -->
+                      <path d="M214 82 L236 156" stroke="#c8a24a" stroke-width="7" stroke-linecap="round"/>
+                      <path d="M226 118 L236 156" stroke="#2a2c31" stroke-width="8" stroke-linecap="round"/>
+                      <!-- parafango basso -->
+                      <path d="M214 128 Q236 112 262 124" fill="none" stroke="#e9ecef" stroke-width="4" stroke-linecap="round"/>
+
+                      <!-- sella (passeggero più alta, pilota rossa) -->
+                      <path d="M92 92 Q100 86 128 88 L132 96 L96 99 Z" fill="#17181b"/>
+                      <path d="M124 94 Q140 90 168 92 Q174 94 172 100 L128 103 Z" fill="#c1272d"/>
+                      <path d="M128 102 L172 99" stroke="#7e1a1e" stroke-width="1.5"/>
+
+                      <!-- serbatoio bianco con strisce Motorsport -->
+                      <path d="M164 92 Q166 80 186 78 L212 80 L220 98 L196 108 L168 104 Z" fill="url(#mcWhite)"/>
+                      <path d="M176 104 L208 79 L214 80 L184 106 Z" fill="#1E5FAE"/>
+                      <path d="M186 106 L214 82 L217 88 L194 107 Z" fill="#16325c"/>
+                      <path d="M196 107 L218 90 L220 98 L204 105 Z" fill="#c1272d"/>
+                      <!-- fiancata/convogliatore radiatore -->
+                      <path d="M196 108 L222 96 L236 106 L228 124 L200 122 Z" fill="#17181b"/>
+                      <path d="M204 112 L224 104 L230 110 L224 119 L206 118 Z" fill="#2a2c31"/>
+
+                      <!-- frontale: faro, becco, cupolino -->
+                      <path d="M216 74 L232 70 L242 84 L236 98 L220 96 Z" fill="url(#mcWhite)"/>
+                      <path d="M228 78 L240 82 L238 92 L230 94 Z" fill="#cfe3ff" stroke="#1b2a3c" stroke-width="1.6"/>
+                      <path d="M232 84 L238 86" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+                      <path d="M220 96 L272 106 L268 111 L230 120 Z" fill="url(#mcWhite)"/>
+                      <path d="M236 104 L270 107 L268 110 L238 112 Z" fill="#c1272d"/>
+                      <path d="M232 115 L264 111" stroke="#1E5FAE" stroke-width="2.6" stroke-linecap="round"/>
+                      <path d="M218 74 L210 44 L218 42 L232 70 Z" fill="#9fb3c8" opacity=".55"/>
+                      <path d="M210 44 L218 42" stroke="#d7e2ee" stroke-width="1.5" stroke-linecap="round"/>
+
+                      <!-- manubrio, paramani, specchio -->
+                      <path d="M212 84 L206 70" stroke="#1d1f23" stroke-width="4" stroke-linecap="round"/>
+                      <path d="M196 72 L210 70" stroke="#1d1f23" stroke-width="5" stroke-linecap="round"/>
+                      <path d="M206 64 Q216 66 212 76 L206 74 Z" fill="#17181b"/>
+                      <path d="M204 68 L198 54" stroke="#1d1f23" stroke-width="1.8"/>
+                      <ellipse cx="197" cy="52" rx="6" ry="3.5" fill="#17181b"/>
+
+                      <!-- ===== BAGAGLI DIETRO IL PILOTA ===== -->
+                      <!-- 200 km: borsa sulla sella posteriore (a 300 si ingrandisce) -->
+                      <g class="mc-bag mc-bag-roll" data-from="4">
+                        <rect x="90" y="70" width="44" height="22" rx="10" fill="#c1272d"/>
+                        <rect x="90" y="70" width="10" height="22" rx="5" fill="#8e1f24"/>
+                        <path d="M106 70 V92 M122 70 V92" stroke="#17181b" stroke-width="3"/>
+                        <path d="M96 74 H128" stroke="#e8545a" stroke-width="1.5" opacity=".7"/>
+                      </g>
+                      <!-- 50 km: bauletto in alluminio -->
+                      <g class="mc-bag mc-bag-top" data-from="1">
+                        <rect x="32" y="56" width="54" height="42" rx="4" fill="url(#mcAlu)"/>
+                        <rect x="32" y="56" width="54" height="9" rx="3" fill="#6f757e"/>
+                        <path d="M32 65 H86" stroke="#4a4e57" stroke-width="1.2"/>
+                        <path d="M37 72 V94 M81 72 V94" stroke="#8d939c" stroke-width="1.2"/>
+                        <rect x="54" y="68" width="10" height="5" rx="1.5" fill="#2a2c31"/>
+                      </g>
+                      <!-- 250 km: borsetta sopra il bauletto -->
+                      <g class="mc-bag mc-bag-topbag" data-from="5">
+                        <rect x="40" y="42" width="36" height="15" rx="5" fill="#2a2c31"/>
+                        <path d="M50 42 V57 M66 42 V57" stroke="#c1272d" stroke-width="2.2"/>
+                        <rect x="44" y="45" width="28" height="3" rx="1.5" fill="#4a4e57"/>
+                      </g>
+                      <!-- 150 km: valigie laterali -->
+                      <g class="mc-bag mc-bag-side" data-from="3">
+                        <rect x="46" y="102" width="66" height="44" rx="4" fill="url(#mcAlu)"/>
+                        <rect x="46" y="102" width="66" height="9" rx="3" fill="#6f757e"/>
+                        <path d="M46 111 H112" stroke="#4a4e57" stroke-width="1.2"/>
+                        <path d="M52 116 V140 M106 116 V140" stroke="#8d939c" stroke-width="1.2"/>
+                        <rect x="72" y="104" width="14" height="4" rx="2" fill="#2a2c31"/>
+                      </g>
+
+                      <!-- 100 km: borsa da serbatoio -->
+                      <g class="mc-bag mc-bag-tank" data-from="2">
+                        <path d="M170 84 Q170 66 186 63 L204 65 Q210 70 208 82 L198 92 L172 92 Z" fill="url(#mcBlack)"/>
+                        <path d="M172 72 Q186 66 206 70" stroke="#c1272d" stroke-width="3" fill="none"/>
+                        <path d="M176 84 L204 80" stroke="#9aa0a8" stroke-width="1.5"/>
+                      </g>
+                      <!-- 300 km: borse sul paramotore -->
+                      <g class="mc-bag mc-bag-guard" data-from="6">
+                        <rect x="200" y="118" width="24" height="28" rx="6" fill="url(#mcBlack)"/>
+                        <path d="M200 124 Q212 116 224 124 V129 H200 Z" fill="#c1272d"/>
+                        <rect x="205" y="135" width="14" height="3" rx="1.5" fill="#9aa0a8"/>
+                      </g>
+
+                      <!-- ===== PILOTA ===== -->
+                      <g class="mc-rider">
+                        <!-- gamba -->
+                        <path d="M146 98 L182 108" stroke="#23262c" stroke-width="17" stroke-linecap="round"/>
+                        <path d="M182 108 L160 146" stroke="#23262c" stroke-width="13" stroke-linecap="round"/>
+                        <path d="M152 140 L166 140 L172 152 L148 154 Z" fill="#17181b"/>
+                        <path d="M150 153 L172 151" stroke="#c1272d" stroke-width="2"/>
+                        <!-- busto -->
+                        <path d="M136 100 Q132 74 146 50 Q156 42 168 50 Q174 70 162 100 Z" fill="#2c3038"/>
+                        <path d="M150 52 Q160 72 156 98" stroke="#c1272d" stroke-width="3" fill="none"/>
+                        <path d="M140 64 Q148 60 156 64" stroke="#1E5FAE" stroke-width="2" fill="none" opacity=".9"/>
+                        <!-- 350 km: zaino -->
+                        <g class="mc-bag mc-bag-pack" data-from="7">
+                          <path d="M120 58 Q118 44 132 42 L146 46 Q150 50 148 62 L146 92 Q132 98 122 92 Z" fill="#c1272d"/>
+                          <path d="M120 58 Q118 44 132 42 L140 44 Q130 50 128 64 L126 94 L122 92 Z" fill="#8e1f24"/>
+                          <path d="M126 66 H146" stroke="#e8545a" stroke-width="2"/>
+                          <rect x="128" y="74" width="16" height="12" rx="3" fill="#8e1f24"/>
+                          <path d="M144 52 Q154 58 152 74" stroke="#17181b" stroke-width="3" fill="none"/>
+                        </g>
+                        <!-- braccio -->
+                        <path d="M160 56 L184 74" stroke="#2c3038" stroke-width="11" stroke-linecap="round"/>
+                        <path d="M184 74 L198 72" stroke="#2c3038" stroke-width="9" stroke-linecap="round"/>
+                        <circle cx="200" cy="72" r="5" fill="#17181b"/>
+                        <!-- casco da adventure con frontino -->
+                        <circle cx="166" cy="34" r="14" fill="url(#mcWhite)"/>
+                        <path d="M168 22 Q186 22 190 30 L176 30 Z" fill="#c1272d"/>
+                        <path d="M170 30 Q182 30 180 40 Q176 44 168 42 Z" fill="url(#mcVisor)"/>
+                        <path d="M170 44 Q178 46 178 50 L166 50 Z" fill="#17181b"/>
+                        <path d="M154 30 Q160 24 168 26" stroke="#1E5FAE" stroke-width="2" fill="none"/>
+                      </g>
+                  </svg>
+                  </div>
+                  <svg class="km-ride-fx km-ride-fx--top" viewBox="0 0 320 210" aria-hidden="true" focusable="false">
+                    <g class="mc-dust" fill="#cfc6b4"><circle cx="58" cy="190" r="8"/><circle cx="72" cy="186" r="10"/><circle cx="252" cy="188" r="9"/><circle cx="266" cy="191" r="6"/><circle cx="160" cy="192" r="7"/></g>
+                    <!-- il pilota disarcionato, a pancia in su accanto alla moto -->
+                    <g class="mc-fallen">
+                      <rect x="194" y="186" width="44" height="9" rx="4" fill="#8e1f24"/>
+                      <path d="M198 188 L178 164" stroke="#23262c" stroke-width="15" stroke-linecap="round"/>
+                      <path d="M178 164 L154 174" stroke="#23262c" stroke-width="12" stroke-linecap="round"/>
+                      <path d="M140 166 L154 164 L160 178 L144 182 Z" fill="#17181b"/>
+                      <path d="M190 194 Q188 178 204 176 L242 176 Q254 180 250 194 Z" fill="#2c3038"/>
+                      <path d="M206 181 H242" stroke="#c1272d" stroke-width="3"/>
+                      <path d="M238 186 L216 196" stroke="#2c3038" stroke-width="9" stroke-linecap="round"/>
+                      <circle cx="265" cy="183" r="13" fill="url(#mcWhite)"/>
+                      <path d="M258 172 Q262 160 274 162 L270 172 Z" fill="#c1272d"/>
+                      <path d="M268 172 Q280 172 278 184 Q272 188 268 182 Z" fill="url(#mcVisor)"/>
+                    </g>
+                    <g class="mc-stars" fill="#E8545A"><path d="M262 140l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M288 152l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M240 150l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z"/></g>
+                  </svg>
+                </div>
+              </div>
+              <div class="km-ride-road" aria-hidden="true"></div>
+              <div class="km-ride-ticks" aria-hidden="true">
+                <span class="km-tick" style="--i:0"><span>0</span></span>
+                <span class="km-tick" style="--i:1"><span>50</span></span>
+                <span class="km-tick" style="--i:2"><span>100</span></span>
+                <span class="km-tick" style="--i:3"><span>150</span></span>
+                <span class="km-tick" style="--i:4"><span>200</span></span>
+                <span class="km-tick" style="--i:5"><span>250</span></span>
+                <span class="km-tick" style="--i:6"><span>300</span></span>
+                <span class="km-tick" style="--i:7"><span>350</span></span>
+                <span class="km-tick" style="--i:8"><span>400</span></span>
+              </div>
+            </div>
+            <input type="range" class="km-ride-input" id="oggi-km" min="0" max="400" step="50" value="0" aria-valuetext="0 km">
+          </div>
         </div>
       </div>
       <button type="button" class="btn solid" id="oggi-btn" style="margin-top:18px;">Dove vado oggi?</button>
@@ -1041,7 +1399,12 @@
     const resultsEl = document.getElementById("oggi-results");
 
     const ore = Math.min(12, Math.max(1, parseFloat(oreEl.value) || 1));
-    const kmBudget = Math.min(400, Math.max(20, parseInt(kmEl.value, 10) || 20));
+    const kmBudget = Math.min(400, Math.max(0, parseInt(kmEl.value, 10) || 0));
+
+    if(!kmBudget){
+      resultsEl.innerHTML = `<p class="oggi-empty">Prima dimmi quanti km vuoi fare: trascina la moto lungo la strada, ogni tacca sono 50 km.</p>`;
+      return;
+    }
 
     btn.disabled = true;
     btn.textContent = "Guardo il meteo...";
@@ -1091,6 +1454,169 @@
   }
 
   document.getElementById("oggi-btn").addEventListener("click", calculateOggi);
+
+  // Cifre a sette segmenti come un orologio digitale: "03:00", " 150".
+  // Lo spazio è una cifra spenta (si vedono solo i segmenti accennati).
+  const SEG7_DIGITS = { "0":"abcdef", "1":"bc", "2":"abdeg", "3":"abcdg", "4":"bcfg", "5":"acdfg", "6":"acdefg", "7":"abc", "8":"abcdefg", "9":"abcdfg", " ":"" };
+  const SEG7_SHAPES = (() => {
+    const h = y => `2.2,${y} 3.5,${y-1.3} 10.5,${y-1.3} 11.8,${y} 10.5,${y+1.3} 3.5,${y+1.3}`;
+    const v = (x, y1, y2) => `${x},${y1+0.6} ${x+1.3},${y1+1.9} ${x+1.3},${y2-1.9} ${x},${y2-0.6} ${x-1.3},${y2-1.9} ${x-1.3},${y1+1.9}`;
+    return { a:h(1.6), g:h(12), d:h(22.4), f:v(1.6, 1.6, 12), b:v(12.4, 1.6, 12), e:v(1.6, 12, 22.4), c:v(12.4, 12, 22.4) };
+  })();
+  function seg7Svg(text){
+    let x = 0, out = "";
+    for(const ch of text){
+      if(ch === ":"){
+        out += `<g class="colon on"><rect x="${x + 0.5}" y="6.5" width="3" height="3" rx=".6"/><rect x="${x + 0.5}" y="14.5" width="3" height="3" rx=".6"/></g>`;
+        x += 7;
+        continue;
+      }
+      const on = SEG7_DIGITS[ch] || "";
+      out += `<g transform="translate(${x} 0)">` + Object.entries(SEG7_SHAPES)
+        .map(([seg, pts]) => `<polygon class="${on.includes(seg) ? "on" : "off"}" points="${pts}"/>`).join("") + "</g>";
+      x += 17;
+    }
+    const w = x - 3;
+    return `<svg viewBox="-2 0 ${w + 4} 24" aria-hidden="true" focusable="false"><g transform="translate(1.3 0) skewX(-5)">${out}</g></svg>`;
+  }
+
+  // ===== Ore libere: orologio digitale, mezz'ora alla volta (1–12 ore)
+  (function initOggiOre(){
+    const input = document.getElementById("oggi-ore");
+    const face = document.getElementById("oggi-ore-face");
+    const digits = document.getElementById("oggi-ore-digits");
+    const rientro = document.getElementById("oggi-rientro");
+    const btns = [...document.querySelectorAll("[data-ore-step]")];
+    if(!input || !face) return;
+    let ore = parseFloat(input.value) || 3;
+
+    function testo(v){
+      const h = Math.floor(v), m = v % 1 ? 30 : 0;
+      return (h === 1 ? "1 ora" : `${h} ore`) + (m ? " e 30 minuti" : "");
+    }
+    function set(v){
+      ore = Math.min(12, Math.max(1, Math.round(v * 2) / 2));
+      input.value = ore;
+      const h = Math.floor(ore), m = ore % 1 ? 30 : 0;
+      digits.innerHTML = seg7Svg(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
+      face.setAttribute("aria-valuenow", ore);
+      face.setAttribute("aria-valuetext", testo(ore));
+      btns.forEach(b => { b.disabled = Number(b.dataset.oreStep) < 0 ? ore <= 1 : ore >= 12; });
+      // a che ora si rientra partendo adesso (arrotondato ai 5 minuti)
+      const fine = new Date(Math.round((Date.now() + ore * 3600e3) / 300e3) * 300e3);
+      rientro.innerHTML = `Se parti adesso rientri verso le <strong>${fine.toLocaleTimeString("it-IT", { hour:"2-digit", minute:"2-digit" })}</strong>`;
+    }
+
+    // tenendo premuto il pulsante il tempo scorre da solo, come sulle sveglie
+    btns.forEach(btn => {
+      let attesa = null, giro = null;
+      const step = () => set(ore + Number(btn.dataset.oreStep));
+      const stop = () => { clearTimeout(attesa); clearInterval(giro); attesa = giro = null; };
+      btn.addEventListener("pointerdown", e => {
+        if(e.button !== 0) return;
+        step();
+        attesa = setTimeout(() => { giro = setInterval(() => { if(btn.disabled) stop(); else step(); }, 110); }, 420);
+      });
+      ["pointerup", "pointerleave", "pointercancel"].forEach(t => btn.addEventListener(t, stop));
+      btn.addEventListener("click", e => { if(e.detail === 0) step(); }); // da tastiera
+    });
+    face.addEventListener("keydown", e => {
+      const passi = { ArrowUp:0.5, ArrowRight:0.5, ArrowDown:-0.5, ArrowLeft:-0.5, PageUp:1, PageDown:-1 };
+      if(e.key in passi) set(ore + passi[e.key]);
+      else if(e.key === "Home") set(1);
+      else if(e.key === "End") set(12);
+      else return;
+      e.preventDefault();
+    });
+    set(ore);
+  })();
+
+  // ===== Km: la moto si trascina sulla strada, una tacca ogni 50 km; a ogni
+  // tacca si aggiunge un bagaglio (data-from nel disegno) e a 400 cade.
+  // Il valore vero sta nel range #oggi-km, che resta per tastiera e lettori
+  // di schermo; col dito la moto segue il dito e al rilascio si ferma
+  // sulla tacca più vicina.
+  (function initKmRide(){
+    const ride = document.getElementById("km-ride");
+    const stage = document.getElementById("km-ride-stage");
+    const moto = document.getElementById("km-ride-moto");
+    const input = document.getElementById("oggi-km");
+    const digits = document.getElementById("km-ride-digits");
+    const carico = document.getElementById("km-ride-load");
+    if(!ride || !stage || !moto || !input) return;
+    const TACCHE = 8, PASSO = 50;
+    const CARICO = [
+      "Senza bagagli: trascina la moto",
+      "+ bauletto",
+      "+ borsa da serbatoio",
+      "+ valigie laterali",
+      "+ borsa sulla sella",
+      "+ borsello sul bauletto",
+      "+ borse sul paramotore, sella più carica",
+      "+ zaino in spalla",
+      "Troppa roba: sei caduto!"
+    ];
+    const bagagli = [...ride.querySelectorAll(".mc-bag")];
+    const rotolo = ride.querySelector(".mc-bag-roll");
+    const tacche = [...ride.querySelectorAll(".km-tick")];
+    let p = 0, giri = 0, livello = -1, trascina = false, x0 = 0;
+
+    function misure(){
+      const mw = moto.offsetWidth;
+      return { mw, corsa: Math.max(1, stage.clientWidth - mw) };
+    }
+    function livelloA(l){
+      if(l === livello) return;
+      livello = l;
+      ride.dataset.level = l;
+      bagagli.forEach(b => b.classList.toggle("is-on", l >= Number(b.dataset.from)));
+      if(rotolo) rotolo.classList.toggle("is-big", l >= 6);
+      tacche.forEach((t, i) => t.classList.toggle("is-passed", l > 0 && i <= l));
+      digits.innerHTML = seg7Svg(String(l * PASSO).padStart(3, " "));
+      carico.textContent = CARICO[l];
+      input.value = l * PASSO;
+      input.setAttribute("aria-valuetext", l ? `${l * PASSO} km` + (l === TACCHE ? ", troppa roba: sei caduto" : "") : "0 km, trascina per scegliere");
+    }
+    function porta(nuovo){
+      const { mw, corsa } = misure();
+      // le ruote girano di quanto la moto avanza (raggio della ruota dietro)
+      giri += (nuovo - p) * corsa / (2 * Math.PI * 33 * mw / 320) * 360;
+      p = nuovo;
+      moto.style.setProperty("--x", `${(p * corsa).toFixed(1)}px`);
+      moto.style.setProperty("--spin", `${giri.toFixed(1)}deg`);
+      livelloA(Math.round(p * TACCHE));
+    }
+    function daDito(e){
+      const r = stage.getBoundingClientRect();
+      const { mw, corsa } = misure();
+      return Math.min(1, Math.max(0, (e.clientX - r.left - mw / 2) / corsa));
+    }
+    function fine(){
+      if(!trascina) return;
+      trascina = false;
+      ride.classList.remove("is-dragging");
+      porta(livello / TACCHE);
+    }
+
+    stage.addEventListener("pointerdown", e => {
+      if(e.button !== 0) return;
+      trascina = true; x0 = e.clientX;
+      try { stage.setPointerCapture(e.pointerId); } catch(err){}
+      porta(daDito(e)); // con un tocco la moto scivola fin lì
+    });
+    stage.addEventListener("pointermove", e => {
+      if(!trascina) return;
+      if(!ride.classList.contains("is-dragging")){
+        if(Math.abs(e.clientX - x0) < 3) return;
+        ride.classList.add("is-dragging");
+      }
+      porta(daDito(e));
+    });
+    ["pointerup", "pointercancel", "lostpointercapture"].forEach(t => stage.addEventListener(t, fine));
+    input.addEventListener("input", () => porta((Number(input.value) || 0) / (TACCHE * PASSO)));
+    window.addEventListener("resize", () => porta(p));
+    porta(0);
+  })();
 
   // ===== Ricerca luoghi con autocompletamento (Nominatim/OpenStreetMap) =====
   // Usata al posto della sola geocodifica "al buio": mostra un elenco di
