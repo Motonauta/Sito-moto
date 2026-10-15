@@ -581,6 +581,133 @@
         { tipo: "paragrafo", testo: "E tu la moto d'inverno la fermi o sei come me? Se hai un trucco per il rimessaggio che qui manca, scrivimelo." },
         { tipo: "link", label: "Guarda il video originale", url: "https://www.instagram.com/reel/Ded4uFHv-b7/" }
       ]
+    },
+    {
+      titolo: "Campeggio in moto senza rinunce: tutto quello che carico sulla XR per una notte in tenda",
+      categoria: "Equipaggiamento",
+      excerpt: "Con le altre moto portavo il minimo indispensabile, con la XR mi porto tutte le comodità che posso: dal materassino alla moka, valigia per valigia, e il trucco per non far pendere la moto da un lato.",
+      copertina: "/img/manuale/campeggio/copertina.jpg",
+      autore: "Il Motonauta",
+      data: "2026-10-15",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Qualche articolo fa vi ho spiegato come dormire in tenda anche quando lo spazio praticamente non c'è, con i 5 accessori per una mototendata compatta. Oggi facciamo l'esatto contrario. Con il GSX-R e con la XSR portavo il minimo indispensabile e il bagaglio totale era microscopico, ma adesso che ho una mucca come la S1000XR mi porto tutte le comodità che posso. Ecco tutto quello che carico per un weekend in tenda con gli amici, borsa per borsa." },
+        { tipo: "sottotitolo", testo: "La prima valigia: per dormire e per le emergenze" },
+        {
+          tipo: "consiglio", numero: 1, titolo: "Il materassino: ingombrante, ma comodo",
+          testo: "Il primo a entrare è il materassino. Lo ammetto: è ingombrante, ma è molto comodo. Nell'altro articolo vi consigliavo quello tascabile, che chiuso sta in una tasca ma non vi fa certo dormire come a casa. Qui il ragionamento è l'opposto: lo spazio c'è, e dopo una giornata intera in sella dormire bene vale tutti i litri che occupa.",
+          immagine: { src: "/img/manuale/campeggio/materassino.jpg", caption: "Il materassino comodo: occupa mezza valigia, ma ne vale la pena." }
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Il mio kit da campeggio (e un cuscino vero)",
+          testo: "Accanto al materassino ci va tutto il kit che uso per andare in campeggio, che ho messo insieme io pezzo per pezzo: ci farò un video a parte, perché merita. E poi il cuscino, comprato proprio il giorno del video. Sì, un cuscino vero: ve l'ho detto, qui non si rinuncia a niente."
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Pala, kit gomme e compressore: le emergenze",
+          testo: "Poi c'è la parte che spero sempre di non dover usare: una pala per le situazioni di emergenza, il kit per riparare le gomme e un compressore portatile. E quando dico portatile, intendo molto portatile. Una gomma a terra lontano da tutto trasforma la notte in tenda in un'avventura nel senso sbagliato: con kit e compressore in valigia ripartite da soli, senza aspettare nessuno.",
+          immagine: { src: "/img/manuale/campeggio/pala.jpg", caption: "La pala per le emergenze: spero sempre di non usarla." }
+        },
+        { tipo: "immagine", src: "/img/manuale/campeggio/compressore.jpg", caption: "Il compressore portatile, anzi molto portatile, accanto al kit per riparare le gomme." },
+        { tipo: "sottotitolo", testo: "La seconda valigia: la cucina (e la colazione)" },
+        {
+          tipo: "consiglio", numero: 4, titolo: "La sedia da campeggio",
+          testo: "Nell'altra valigia si parte dalla sedia da campeggio. Dopo ore in sella, la sera sedersi su una sedia vera invece che su un sasso è tutta un'altra vita.",
+          immagine: { src: "/img/manuale/campeggio/sedia.jpg", caption: "La sedia da campeggio: la prima cosa della seconda valigia." }
+        },
+        {
+          tipo: "consiglio", numero: 5, titolo: "Bollitore, pentole e padelle",
+          testo: "Poi il bollitore e il kit di pentole e padelle per cucinare. Ci metto anche del cibo disidratato, ma è solo per le emergenze: la sera di solito ci mangiamo la carne alla brace, e contro la brace il disidratato non ha speranze.",
+          immagine: { src: "/img/manuale/campeggio/pentole.jpg", caption: "Pentole e padelle: in tenda si cucina sul serio." }
+        },
+        {
+          tipo: "consiglio", numero: 6, titolo: "La pochette per la notte",
+          testo: "Una pochette con tutto il minimo indispensabile per dormire e qualche cosa varia. La comodità è che a fine serata prendete solo quella e la portate in tenda, senza dover svuotare mezza valigia al buio."
+        },
+        {
+          tipo: "consiglio", numero: 7, titolo: "Moka, borsa frigo e una signora crostata",
+          testo: "Non poteva mancare la moka con tutto il necessario per fare il caffè, perché la mattina in tenda senza caffè non si riparte. Poi la borsa frigo piena d'acqua e, ciliegina sulla torta, una signora crostata fatta in casa. Sì, anche quella.",
+          immagine: { src: "/img/manuale/campeggio/borsa-frigo.jpg", caption: "Borsa frigo piena d'acqua, e sotto c'è anche la crostata." }
+        },
+        {
+          tipo: "consiglio", numero: 8, titolo: "Gli attrezzi per smontare la moto",
+          testo: "Per ultimo, il necessario per smontare la moto in caso di emergenza. Non serve quasi mai, ma il giorno che serve, lontano da casa, siete contenti di averlo portato.",
+          immagine: { src: "/img/manuale/campeggio/attrezzi.jpg", caption: "Gli attrezzi, per ogni evenienza. E si chiude." }
+        },
+        { tipo: "sottotitolo", testo: "Il trucco: le due valigie devono pesare uguale" },
+        { tipo: "paragrafo", testo: "Guardandole sembra tutto messo a caso, ma in realtà è una pura questione di pesi: le mie due valigie hanno praticamente lo stesso identico peso. Una moto carica che pende da un lato la sentite in ogni curva e in ogni frenata, e con tutti questi chili nelle borse la differenza si fa sentire eccome. Quindi il consiglio è semplice: prima di chiuderle sollevatele tutte e due, e se una pesa più dell'altra spostate qualcosa finché non si bilanciano." },
+        { tipo: "sottotitolo", testo: "Bauletto, sella e borsa da serbatoio" },
+        {
+          tipo: "consiglio", numero: 9, titolo: "Nel bauletto: visiera trasparente, antipioggia e spazio per la giacca",
+          testo: "Nel bauletto ci va la visiera trasparente, che se si fa buio prima di arrivare al campo vi salva la serata, e l'antipioggia, che non si sa mai. I vestiti stanno in una sacca molto compatta, tanto per un weekend serve poco. Il resto lo lascio libero apposta: quando mi fermo ci metto dentro la giacca.",
+          immagine: { src: "/img/manuale/campeggio/antipioggia.jpg", caption: "L'antipioggia nel bauletto: che non si sa mai." }
+        },
+        {
+          tipo: "consiglio", numero: 10, titolo: "La tenda sul sedile posteriore",
+          testo: "Non dimentichiamo la tenda, legata sul sedile posteriore. Ovviamente insieme alla tenda c'è anche il sottotenda, che tengo piegato direttamente dentro: è il trucco che ci ha insegnato Stefano e che vi ho raccontato nell'articolo sulla mototendata compatta.",
+          immagine: { src: "/img/manuale/campeggio/tenda.jpg", caption: "La tenda sulla sella posteriore, con il sottotenda già dentro." }
+        },
+        {
+          tipo: "consiglio", numero: 11, titolo: "La borsa da serbatoio: la parte tecnologica",
+          testo: "E infine la borsa da serbatoio, con tutta la parte tecnologica: powerbank, telecamere e tutte queste cose qua. È quella che avete sempre sotto mano, quindi ci va quello che vi serve durante il viaggio e alle soste.",
+          immagine: { src: "/img/manuale/campeggio/borsa-serbatoio.jpg", caption: "La borsa da serbatoio: powerbank, telecamere e compagnia." }
+        },
+        { tipo: "paragrafo", testo: "Lo so, sembra tanto per un weekend. Ma con le altre moto ho dormito in tenda con il minimo indispensabile per anni, e adesso che lo spazio c'è me lo godo tutto." },
+        { tipo: "sottotitolo", testo: "Per approfondire" },
+        { tipo: "link", label: "I 5 accessori per una mototendata compatta (quando lo spazio non c'è)", url: "/manuale/i-5-accessori-definitivi-per-una-mototendata-compatta" },
+        { tipo: "link", label: "Gli attrezzi da portare in viaggio, kit gomme e compressore compresi", url: "/manuale/gli-attrezzi-necessari-da-portare-in-viaggio" },
+        { tipo: "link", label: "Con le valigie piene, la tua moto è a norma?", url: "/manuale/le-tue-valigie-sono-a-norma-la-regola-dei-50-cm-che-nessuno-ti-dice" },
+        { tipo: "paragrafo", testo: "E voi cosa portate nei campeggi in moto? Se c'è qualcosa di cui non potete fare a meno e qui manca, scrivetemelo." },
+        { tipo: "link", label: "Guarda il video originale", url: "https://www.instagram.com/reel/DeGtpT_P3qU/" }
+      ]
+    },
+    {
+      titolo: "Honda WN7, la mia prova su strada: divertente in curva, ma non l'ho capita",
+      categoria: "Prove su strada",
+      excerpt: "Ho provato la moto elettrica di Honda: accelerazione istantanea, telaio rigido che in curva diverte e un freno motore che ricarica la batteria. Ma tra sella, buche e città, non riesco proprio a capire per chi sia fatta.",
+      copertina: "/img/manuale/wn7/copertina.jpg",
+      autore: "Il Motonauta",
+      data: "2026-10-15",
+      blocchi: [
+        { tipo: "paragrafo", testo: "Finalmente ce l'abbiamo fatta: ho provato la Honda WN7, la moto elettrica di Honda. Ci sono salito con la testa di uno abituato al quattro cilindri della mia S1000XR (e prima ancora del GSX-R), quindi prendete questa prova per quello che è: le impressioni sincere di un motociclista a benzina dopo un giro su strada, tra rettilinei, curve e centri abitati. Ecco com'è andata, punto per punto." },
+        { tipo: "sottotitolo", testo: "Le mie impressioni, punto per punto" },
+        {
+          tipo: "consiglio", numero: 1, titolo: "La sella: la più scomoda dai tempi del GSX-R",
+          testo: "Partiamo dal punto dolente, letteralmente. È la seduta più scomoda su cui sia salito dai tempi del GSX-R: la sella è molto dura e molto fina, e dopo dieci minuti avevo già problemi all'osso sacro. Su una sportiva lo metti in conto, ma su una moto che dovrebbe portarti in giro tutti i giorni pesa parecchio.",
+          immagine: { src: "/img/manuale/wn7/in-sella.jpg", caption: "In sella alla WN7, pronti a partire. L'osso sacro ancora non sapeva cosa lo aspettava." }
+        },
+        {
+          tipo: "consiglio", numero: 2, titolo: "Il freno motore che ricarica la batteria",
+          testo: "Qui c'è la cosa più curiosa per chi viene dal motore a benzina. Il freno motore si regola: se lo porto dal minimo al livello tre, quando chiudo il gas la moto rallenta tantissimo, e quella frenata in realtà serve a ricaricare la batteria. Al massimo è paurosa: lasci l'acceleratore ed è praticamente un'inchiodata. Sarà che sono abituato al quattro cilindri, ma dopo qualche chilometro ho trovato il mio equilibrio: tenerlo a livello uno è l'ideale, perché la moto rallenta in modo più naturale, più simile a quello a cui sono abituato."
+        },
+        {
+          tipo: "consiglio", numero: 3, titolo: "Accelerazione istantanea (fino a 100 all'ora)",
+          testo: "L'accelerazione ovviamente è elettrica, quindi istantanea: giri la manopola e la spinta c'è subito, senza aspettare che salgano i giri. La potenza veramente non le manca, almeno fino ai 100 km/h. Dai 99 km/h in su però ho sentito come una differenza, come se cambiasse qualcosa: non so se c'è un limite elettronico o qualcosa del genere, ma la sensazione è stata quella.",
+          immagine: { src: "/img/manuale/wn7/accelerazione.jpg", caption: "Giri la manopola e la spinta arriva subito: niente da aspettare." }
+        },
+        {
+          tipo: "consiglio", numero: 4, titolo: "Sospensioni rigide: nelle buche paghi il conto",
+          testo: "Le sospensioni sono veramente, veramente rigide: le buche le senti tutte. Il rovescio della medaglia è che l'assetto ti permette di svicolare con un'agilità incredibile, e nei movimenti veloci sei molto più libero. Però poi arrivi nelle buche, e lì paghi il conto.",
+          immagine: { src: "/img/manuale/wn7/buche.jpg", caption: "Su un asfalto così, con queste sospensioni, le buche le conti una per una." }
+        },
+        {
+          tipo: "consiglio", numero: 5, titolo: "In curva il telaio diverte parecchio",
+          testo: "Ed esattamente come immaginavo, a discapito della comodità in città e nelle buche, questo telaio così rigido, bello tosto, in curva ti fa divertire parecchio. È il motivo per cui scendi con il sorriso, nonostante l'osso sacro.",
+          immagine: { src: "/img/manuale/wn7/curva.jpg", caption: "Dove il telaio rigido ripaga: in curva." }
+        },
+        {
+          tipo: "consiglio", numero: 6, titolo: "Niente marce (e l'abitudine è dura a morire)",
+          testo: "Una cosa che non pensavo mi desse così fastidio: non avendo marce, prima di ogni curva l'abitudine è quella di cercare la marcia per dare una scalata, e non c'è niente da scalare. È solo questione di abitudine, ma per chi guida da anni con il cambio è fastidiosissimo."
+        },
+        {
+          tipo: "consiglio", numero: 7, titolo: "Frenata promossa, e a terra ci si arriva bene",
+          testo: "La frenata funziona benissimo: ho provato anche una bella inchiodata, e pure in questo si comporta egregiamente. E per chi come me non è un gigante: sono alto un metro e settanta e a terra ci tocco molto, molto bene. Su questo aspetto, nessun problema."
+        },
+        { tipo: "sottotitolo", testo: "Il mio verdetto: una via di mezzo che non capisco" },
+        { tipo: "paragrafo", testo: "Nel complesso questa moto veramente non la capisco. Dovrebbe nascere come moto da città, da usare tutti i giorni: la sera la metti in carica e la mattina riparti, bella comoda. Però poi ti ritrovi un telaio molto rigido che, ripeto, in curva è veramente divertente, mentre in città è praticamente inutilizzabile, perché la sella è scomodissima e le buche le senti tutte." },
+        { tipo: "immagine", src: "/img/manuale/wn7/citta.jpg", caption: "In città dovrebbe essere a casa sua. Con questa sella e queste sospensioni, mica tanto." },
+        { tipo: "paragrafo", testo: "Il problema è che non riesco a trovarle un segmento. È praticamente una via di mezzo tra una moto e uno scooter, ma dei due prende i lati negativi: dalla moto la rigidità e una sella da sportiva, che in città non ti servono; dallo scooter l'idea del mezzo da tutti i giorni, che però con quella sella e quelle sospensioni non regge. Divertente? Sì, tanto, soprattutto in accelerazione e in curva. Ma se dovessi consigliarla a qualcuno, ancora non saprei dire a chi." },
+        { tipo: "paragrafo", testo: "Voi avete avuto modo di provarla? Se l'avete capita meglio di me, scrivetemi: sono curioso di sapere a chi la consigliereste." },
+        { tipo: "link", label: "Guarda il video della prova", url: "https://www.instagram.com/reel/DdmSEQXBXsG/" }
+      ]
     }
   ];
 

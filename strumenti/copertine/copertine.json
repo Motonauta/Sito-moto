@@ -183,5 +183,39 @@
       "Serbatoio *pieno*",
       "Mantenitore"
     ]
+  },
+  "campeggio": {
+    "out": "img/manuale/campeggio/copertina.jpg",
+    "foto": "strumenti/copertine/foto/campeggio.jpg",
+    "pos": "50% 50%",
+    "categoria": "Equipaggiamento",
+    "titolo": [
+      "Campeggio",
+      "in moto",
+      "*senza rinunce*"
+    ],
+    "sotto": "Tutto quello che carico sulla XR per una notte in tenda",
+    "etichette": [
+      "Valigie *stesso peso*",
+      "Tenda sulla sella",
+      "Moka *inclusa*"
+    ]
+  },
+  "wn7": {
+    "out": "img/manuale/wn7/copertina.jpg",
+    "foto": "strumenti/copertine/foto/wn7.jpg",
+    "pos": "50% 60%",
+    "categoria": "Prove su strada",
+    "titolo": [
+      "Honda WN7",
+      "prova su strada",
+      "*non l'ho capita*"
+    ],
+    "sotto": "La moto elettrica di Honda, provata da chi guida un quattro cilindri",
+    "etichette": [
+      "Elettrica",
+      "Telaio *rigido*",
+      "Sella *dura*"
+    ]
   }
 }
