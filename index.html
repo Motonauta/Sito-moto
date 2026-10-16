@@ -388,10 +388,10 @@
   .km-ride-rig svg, .km-ride-tq svg, .km-ride-front svg{ width:100%; height:100%; display:block; overflow:visible; }
   .km-ride-tq{ visibility:hidden; opacity:0; transform-origin:49% 93.8%; }
   .km-ride-front{ visibility:hidden; opacity:0; transform-origin:50% 93.8%; }
-  .km-ride:not(.is-dragging) .km-ride-moto{ transition:transform .22s var(--ease-out); }
+  .km-ride:not(.is-dragging):not(.is-driving) .km-ride-moto{ transition:transform .22s var(--ease-out); }
 
   .km-ride-svg .mc-spin{ transform-box:fill-box; transform-origin:center; transform:rotate(var(--spin, 0deg)); }
-  .km-ride:not(.is-dragging) .km-ride-svg .mc-spin{ transition:transform .22s var(--ease-out); }
+  .km-ride:not(.is-dragging):not(.is-driving) .km-ride-svg .mc-spin{ transition:transform .22s var(--ease-out); }
   .km-ride-svg .mc-bag{
     opacity:0; transform:translateY(-10px) scale(0.7);
     transform-box:fill-box; transform-origin:50% 100%;
@@ -526,6 +526,10 @@
   }
   .km-tick::before{ content:""; width:2px; height:6px; margin-bottom:4px; background:currentColor; }
   .km-tick.is-passed{ color:var(--rust-text); }
+  /* mentre la moto è a terra o torna indietro da sola, la tacca scelta si
+     accende in chiaro: si vede subito dove andrà */
+  .km-ride:is(.is-down, .is-driving) .km-tick.is-meta{ color:var(--sand); }
+  .km-ride:is(.is-down, .is-driving) .km-tick.is-meta::before{ height:9px; margin-bottom:1px; }
   @media (max-width:560px){ .km-tick:nth-child(even) > span{ visibility:hidden; } }
 
   /* il range vero resta per tastiera e lettori di schermo */
@@ -536,8 +540,8 @@
 
   @media (prefers-reduced-motion: reduce){
     .seg7 .colon{ animation:none; }
-    .km-ride-moto, .km-ride:not(.is-dragging) .km-ride-moto, .km-ride-rig,
-    .km-ride-svg .mc-spin, .km-ride:not(.is-dragging) .km-ride-svg .mc-spin{ transition:none; }
+    .km-ride-moto, .km-ride:not(.is-dragging):not(.is-driving) .km-ride-moto, .km-ride-rig,
+    .km-ride-svg .mc-spin, .km-ride:not(.is-dragging):not(.is-driving) .km-ride-svg .mc-spin{ transition:none; }
     .km-ride-svg .mc-bag{ transform:none; transition:opacity .2s ease; }
     .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
     /* con "riduci movimento" niente scena: si vede subito com'è finita,
@@ -1908,6 +1912,7 @@
     const carico = document.getElementById("km-ride-load");
     if(!ride || !stage || !moto || !input) return;
     const TACCHE = 8, PASSO = 50;
+    const MS_PER_TACCA = 240; // velocità della moto quando va da sola
     const CARICO = [
       "Senza bagagli: trascina la moto",
       "+ bauletto",
@@ -1922,28 +1927,50 @@
     const bagagli = [...ride.querySelectorAll(".mc-bag")];
     const rotolo = ride.querySelector(".mc-bag-roll");
     const tacche = [...ride.querySelectorAll(".km-tick")];
-    let p = 0, giri = 0, livello = -1, trascina = false, x0 = 0;
+    const riduci = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // p = dove sta la moto (0–1); livello = la tacca che si vede (bagagli,
+    // cifre); meta = la tacca scelta (il valore vero, quello della ricerca).
+    // Di solito coincidono; dopo la caduta no: la moto resta a 400 finché il
+    // pilota non l'ha rialzata, poi torna indietro da sola fino alla meta.
+    let p = 0, giri = 0, livello = -1, meta = 0, trascina = false, x0 = 0;
+    let bloccata = false, marcia = 0;
 
     function misure(){
       const mw = moto.offsetWidth;
       return { mw, corsa: Math.max(1, stage.clientWidth - mw) };
     }
-    // la scena dei 400 km (CSS, classe .is-down): si gioca in avanti quando si
-    // arriva all'ultima tacca e, tornando indietro, si riavvolge al contrario
-    // da dove è arrivata; se si torna a 400 mentre si riavvolge, riprende in
-    // avanti. Con "riduci movimento" non ci sono animazioni e si toglie subito.
+
+    // ----- la scena dei 400 km (CSS, classe .is-down) ---------------------
+    // Arrivati all'ultima tacca parte in avanti; scegliendo una tacca più
+    // bassa si riavvolge al contrario da dove è arrivata, con la moto ferma a
+    // 400, e solo dopo la moto torna indietro. Se si torna a 400 mentre si
+    // riavvolge, riprende in avanti. Con "riduci movimento" non ci sono
+    // animazioni: si toglie subito e la moto va direttamente alla tacca.
     let giroScena = 0;
     const animScena = () => ride.getAnimations({ subtree: true })
       .filter(a => a.animationName && (a.animationName.startsWith("gs-") || a.animationName === "km-dust"));
     function scenaGiu(){
-      giroScena++;
-      if(!ride.classList.contains("is-down")){ ride.classList.add("is-down"); return; }
-      animScena().forEach(a => { a.playbackRate = 1; a.play(); });
+      bloccata = true;
+      if(!ride.classList.contains("is-down")){
+        giroScena++;
+        valore(TACCHE);
+        fermaMarcia();
+        ride.classList.remove("is-dragging");
+        ride.classList.add("is-down");
+        porta(1); // si ferma proprio sulla tacca dei 400
+        return;
+      }
+      const anim = animScena();
+      if(anim.some(a => a.playbackRate < 0)){
+        giroScena++;
+        anim.forEach(a => { a.playbackRate = 1; a.play(); });
+      }
     }
     function scenaSu(){
-      if(!ride.classList.contains("is-down")) return;
-      const giro = ++giroScena;
+      if(!ride.classList.contains("is-down")){ bloccata = false; vaiA(meta); return; }
       const anim = animScena();
+      if(anim.length && anim.every(a => a.playbackRate < 0)) return; // sta già riavvolgendo
+      const giro = ++giroScena;
       anim.forEach(a => { a.playbackRate = -1.6; a.play(); });
       Promise.all(anim.map(a => a.finished))
         .then(() => {
@@ -1952,33 +1979,70 @@
           // dopo la scena riparte da capo
           anim.forEach(x => x.cancel());
           ride.classList.remove("is-down");
+          bloccata = false;
+          vaiA(meta); // e adesso indietro, tacca per tacca
         })
         .catch(() => {});
     }
-    function livelloA(l){
+
+    // ----- quello che si vede: bagagli, tacche accese, cifre, scritta -----
+    function mostra(l){
       if(l === livello) return;
-      const prima = livello;
       livello = l;
-      if(l === TACCHE) scenaGiu();
-      else if(prima === TACCHE) scenaSu();
       ride.dataset.level = l;
       bagagli.forEach(b => b.classList.toggle("is-on", l >= Number(b.dataset.from)));
       if(rotolo) rotolo.classList.toggle("is-big", l >= 6);
       tacche.forEach((t, i) => t.classList.toggle("is-passed", l > 0 && i <= l));
       digits.innerHTML = seg7Svg(String(l * PASSO).padStart(3, " "));
       carico.textContent = CARICO[l];
+      if(l === TACCHE && !bloccata) scenaGiu();
+    }
+    // ----- il valore scelto (ricerca, tastiera, lettori di schermo) -------
+    function valore(l){
+      meta = l;
+      tacche.forEach((t, i) => t.classList.toggle("is-meta", i === l));
       input.value = l * PASSO;
       input.setAttribute("aria-valuetext", l ? `${l * PASSO} km` + (l === TACCHE ? ", troppa roba: sei caduto" : "") : "0 km, trascina per scegliere");
     }
+    function scegli(l){
+      if(l !== meta) valore(l);
+      if(bloccata){ if(l === TACCHE) scenaGiu(); else scenaSu(); }
+    }
+
     function porta(nuovo){
       const { mw, corsa } = misure();
-      // le ruote girano di quanto la moto avanza (raggio della ruota dietro)
+      // le ruote girano di quanto la moto avanza (raggio della ruota dietro):
+      // all'indietro girano al contrario
       giri += (nuovo - p) * corsa / (2 * Math.PI * 33 * mw / 320) * 360;
       p = nuovo;
       moto.style.setProperty("--x", `${(p * corsa).toFixed(1)}px`);
       moto.style.setProperty("--spin", `${giri.toFixed(1)}deg`);
-      livelloA(Math.round(p * TACCHE));
+      mostra(Math.round(p * TACCHE));
     }
+    // la moto va da sola fino a una tacca, passando per quelle in mezzo: a
+    // ogni tacca compare o sparisce il suo bagaglio, come in un video
+    function fermaMarcia(){
+      if(marcia){ cancelAnimationFrame(marcia); marcia = 0; }
+      ride.classList.remove("is-driving");
+    }
+    function vaiA(l){
+      fermaMarcia();
+      const verso = l / TACCHE, da = p;
+      if(riduci.matches || Math.abs(verso - da) < 0.002){ porta(verso); return; }
+      const durata = Math.abs(verso - da) * TACCHE * MS_PER_TACCA;
+      const t0 = performance.now();
+      ride.classList.add("is-driving");
+      const passo = ora => {
+        const k = Math.min(1, (ora - t0) / durata);
+        const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        porta(da + (verso - da) * e);
+        if(bloccata) return; // è arrivata a 400 ed è caduta: ci pensa la scena
+        if(k < 1) marcia = requestAnimationFrame(passo);
+        else { marcia = 0; ride.classList.remove("is-driving"); }
+      };
+      marcia = requestAnimationFrame(passo);
+    }
+
     function daDito(e){
       const r = stage.getBoundingClientRect();
       const { mw, corsa } = misure();
@@ -1988,27 +2052,42 @@
       if(!trascina) return;
       trascina = false;
       ride.classList.remove("is-dragging");
+      if(bloccata || marcia) return;
       porta(livello / TACCHE);
+      scegli(livello);
     }
 
     stage.addEventListener("pointerdown", e => {
       if(e.button !== 0) return;
       trascina = true; x0 = e.clientX;
       try { stage.setPointerCapture(e.pointerId); } catch(err){}
+      // a terra la moto non si muove: il dito sceglie solo dove tornerà
+      if(bloccata){ scegli(Math.round(daDito(e) * TACCHE)); return; }
+      fermaMarcia();
       porta(daDito(e)); // con un tocco la moto scivola fin lì
+      scegli(livello);
     });
     stage.addEventListener("pointermove", e => {
       if(!trascina) return;
+      if(bloccata){ scegli(Math.round(daDito(e) * TACCHE)); return; }
       if(!ride.classList.contains("is-dragging")){
         if(Math.abs(e.clientX - x0) < 3) return;
+        fermaMarcia();
         ride.classList.add("is-dragging");
       }
       porta(daDito(e));
+      if(!bloccata) scegli(livello);
     });
     ["pointerup", "pointercancel", "lostpointercapture"].forEach(t => stage.addEventListener(t, fine));
-    input.addEventListener("input", () => porta((Number(input.value) || 0) / (TACCHE * PASSO)));
-    window.addEventListener("resize", () => porta(p));
+    // da tastiera la moto va da sola fino alla tacca, passando per le altre
+    input.addEventListener("input", () => {
+      const l = Math.round((Number(input.value) || 0) / PASSO);
+      scegli(l);
+      if(!bloccata) vaiA(l);
+    });
+    window.addEventListener("resize", () => { const { corsa } = misure(); moto.style.setProperty("--x", `${(p * corsa).toFixed(1)}px`); });
     porta(0);
+    scegli(0);
   })();
 
   // ===== Ricerca luoghi con autocompletamento (Nominatim/OpenStreetMap) =====
