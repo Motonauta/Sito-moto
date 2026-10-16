@@ -55,6 +55,9 @@
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
   // ---------- testo: righe e parole in rosso ------------------------------
+  const PAROLINE = new Set(("IL LO LA I GLI LE L UN UNO UNA DI DA IN CON SU PER TRA FRA A E ED O MA CHE " +
+    "DEL DELLO DELLA DEI DEGLI DELLE AL ALLO ALLA AI AGLI ALLE DAL DALLA DAI NEL NELLA NEI SUL SULLA SUI " +
+    "COME PIÙ NON SE").split(" "));
   function righe(testo, maxChar, ultimaRossa){
     const raw = String(testo || "").replace(/\r/g, "").trim();
     const conAsterischi = /\*[^*]+\*/.test(raw);
@@ -74,17 +77,32 @@
     if(aCapo){
       parole.forEach((p, i) => { if(i === 0 || p.aCapo) out.push([]); out[out.length - 1].push(p); });
     } else {
-      // a capo da soli, cercando righe di lunghezza simile
-      const tot = parole.reduce((n, p) => n + p.t.length + 1, -1);
-      const n = Math.max(1, Math.ceil(tot / maxChar));
-      const limite = Math.max(Math.ceil(tot / n) + 2, ...parole.map(p => p.t.length));
-      let riga = [], lung = 0;
-      parole.forEach(p => {
-        const add = (riga.length ? 1 : 0) + p.t.length;
-        if(riga.length && lung + add > limite){ out.push(riga); riga = []; lung = 0; }
-        riga.push(p); lung += (riga.length > 1 ? 1 : 0) + p.t.length;
-      });
-      if(riga.length) out.push(riga);
+      // a capo da soli: tra tutti i modi di spezzare sceglie quello con le
+      // righe più vicine alla lunghezza giusta, meglio se va a capo dopo una
+      // virgola o dove cambia colore, e mai lasciando in fondo alla riga
+      // un "la", "di", "su"... (né una parolina da sola sull'ultima riga)
+      const n = parole.length, obiettivo = maxChar * 0.85;
+      const massimo = Math.max(Math.ceil(maxChar * 1.35), ...parole.map(p => p.t.length));
+      const lung = (i, j) => parole.slice(i, j).reduce((s, p) => s + p.t.length, 0) + (j - i - 1);
+      const costo = new Array(n + 1).fill(Infinity), da = new Array(n + 1).fill(0);
+      costo[0] = 0;
+      for(let j = 1; j <= n; j++) for(let i = j - 1; i >= 0; i--){
+        const L = lung(i, j);
+        if(L > massimo && j - i > 1) break;
+        const scarto = j === n && L < obiettivo ? (obiettivo - L) * 0.7 : L - obiettivo;
+        let c = costo[i] + scarto * scarto * 0.5 + 8;
+        if(j < n){
+          const ultima = parole[j - 1];
+          if(/[,;:.!?]$/.test(ultima.t)) c -= 12;
+          if(ultima.rossa !== parole[j].rossa) c -= 20;
+          else if(ultima.rossa) c += 12; // meglio non spezzare il gruppo in rosso
+          if(PAROLINE.has(ultima.t.toUpperCase())) c += 30;
+        } else if(j - i === 1 && L <= 4 && n > 1) c += 15;
+        if(c < costo[j]){ costo[j] = c; da[j] = i; }
+      }
+      const tagli = [];
+      for(let j = n; j > 0; j = da[j]) tagli.unshift([da[j], j]);
+      tagli.forEach(([i, j]) => out.push(parole.slice(i, j)));
     }
     if(!conAsterischi && ultimaRossa){
       if(out.length > 1) out[out.length - 1].forEach(p => { p.rossa = true; });
@@ -535,6 +553,244 @@
     stato.innerHTML = `<div class="ok">Scaricati ${ultimeGreen.length} file SVG. Se il browser chiede il permesso di scaricare più file, rispondi di sì.</div>`;
   }
 
+  // ---------- generatore di copertine --------------------------------------
+  // La foto si apre dal disco con un indirizzo "blob:" che vale solo in questa
+  // pagina e si disegna su una tela (canvas): non va a nessun server e non si
+  // salva da nessuna parte (niente localStorage, a differenza dei titoli).
+  // Ogni stile mette sopra alla foto il titolo dello stile omonimo.
+  const COP_FORMATI = {
+    youtube: { w: 1280, h: 720 },
+    // nella griglia del profilo Instagram e TikTok si vede solo il 3:4 centrale
+    reel: { w: 1080, h: 1920, sicura: 0.125 },
+    post: { w: 1080, h: 1350 },
+    quadrato: { w: 1080, h: 1080 }
+  };
+  const FUOCHI = { centro: [0.5, 0.5], sinistra: [0, 0.5], destra: [1, 0.5], alto: [0.5, 0], basso: [0.5, 1] };
+  // la zona dove stanno le scritte: margini e, nei reel, la parte che si vede nella griglia
+  function zona(f){
+    const M = Math.min(f.w, f.h), m = M * 0.065, alto = f.sicura ? f.h * f.sicura : 0;
+    return { x: m, y: alto + m, w: f.w - m * 2, h: f.h - (alto + m) * 2, y2: f.h - alto - m, M, oriz: f.w > f.h * 1.2 };
+  }
+  const piena = f => ({ x: 0, y: 0, w: f.w, h: f.h });
+  const sfuma = (id, x2, y2, colore, da, a) => `<linearGradient id="${id}" x1="0" y1="0" x2="${x2}" y2="${y2}"><stop offset="0" stop-color="${colore}" stop-opacity="${da}"/><stop offset="1" stop-color="${colore}" stop-opacity="${a}"/></linearGradient>`;
+  const vignetta = (id, forza) => `<radialGradient id="${id}" cx="0.5" cy="0.5" r="0.75"><stop offset="0.4" stop-color="${C.nero}" stop-opacity="0"/><stop offset="1" stop-color="${C.nero}" stop-opacity="${forza}"/></radialGradient>`;
+  const velo = (f, y, h, colore) => `<rect y="${n2(y)}" width="${f.w}" height="${n2(h)}" fill="${colore}"/>`;
+
+  // ogni stile: dove va la foto, cosa ci va sopra (velo) e il riquadro del titolo
+  // (box, allineato con ax/ay: 0 = sinistra/alto, 0.5 = centro, 1 = destra/basso)
+  const COPERTINE = {
+    copertina(f, Z){
+      // come le copertine delle guide: foto che sfuma nell'asfalto, titolo accanto
+      if(Z.oriz){
+        const fx = f.w * 0.36;
+        return { foto: { x: fx, y: 0, w: f.w - fx, h: f.h }, defs: sfuma("cvA", 1, 0, C.asfalto, 1, 0),
+          velo: `<rect x="${n2(fx - 1)}" width="${n2(f.w * 0.34)}" height="${f.h}" fill="url(#cvA)"/>`,
+          box: { x: Z.x, y: Z.y, w: f.w * 0.5, h: Z.h }, ax: 0, ay: 0.5 };
+      }
+      const fh = f.h * (f.sicura ? 0.6 : 0.58);
+      return { foto: { x: 0, y: 0, w: f.w, h: fh }, defs: sfuma("cvA", 0, 1, C.asfalto, 0, 1),
+        velo: velo(f, fh * 0.6, fh * 0.4 + 1, "url(#cvA)"),
+        box: { x: Z.x, y: fh * 0.9, w: Z.w, h: Z.y2 - fh * 0.9 }, ax: 0, ay: 0.5 };
+    },
+    nastro(f, Z){
+      return { foto: piena(f), defs: sfuma("cvA", 0, 1, C.nero, 0, 0.7), velo: velo(f, f.h * 0.4, f.h * 0.6, "url(#cvA)"),
+        box: Z.oriz ? { x: Z.x, y: f.h * 0.38, w: f.w * 0.6, h: Z.y2 - f.h * 0.38 } : { x: Z.x, y: Z.y + Z.h * 0.45, w: Z.w, h: Z.h * 0.55 }, ax: 0, ay: 1 };
+    },
+    contorno(f, Z){
+      return { foto: piena(f), defs: vignetta("cvV", 0.75),
+        velo: `<rect width="${f.w}" height="${f.h}" fill="${C.nero}" fill-opacity="0.15"/><rect width="${f.w}" height="${f.h}" fill="url(#cvV)"/>`,
+        box: Z.oriz ? { x: f.w * 0.1, y: f.h * 0.18, w: f.w * 0.8, h: f.h * 0.64 } : { x: Z.x, y: Z.y + Z.h * 0.22, w: Z.w, h: Z.h * 0.56 }, ax: 0.5, ay: 0.5 };
+    },
+    cruscotto(f, Z){
+      return { foto: piena(f), defs: sfuma("cvA", 0, 1, C.nero, 0, 0.55),
+        velo: velo(f, f.h * 0.5, f.h * 0.5, "url(#cvA)") + velo(f, f.h - Z.M * 0.014, Z.M * 0.014, C.rosso),
+        box: Z.oriz ? { x: Z.x, y: f.h * 0.42, w: f.w * 0.56, h: Z.y2 - f.h * 0.42 } : { x: Z.x, y: Z.y + Z.h * 0.5, w: Z.w, h: Z.h * 0.5 },
+        ax: Z.oriz ? 0 : 0.5, ay: 1, car: 13 };
+    },
+    targa(f, Z){
+      return { foto: piena(f), defs: sfuma("cvA", 0, 1, C.nero, 0, 0.5), velo: velo(f, f.h * 0.55, f.h * 0.45, "url(#cvA)"),
+        box: Z.oriz ? { x: Z.x, y: f.h * 0.5, w: f.w * 0.5, h: Z.y2 - f.h * 0.5 } : { x: Z.x + Z.w * 0.05, y: Z.y + Z.h * 0.56, w: Z.w * 0.9, h: Z.h * 0.44 },
+        ax: Z.oriz ? 0 : 0.5, ay: 1 };
+    },
+    cartello(f, Z){
+      return { foto: piena(f), defs: sfuma("cvA", 0, 1, C.nero, 0.5, 0), velo: velo(f, 0, Z.y + Z.h * 0.5, "url(#cvA)"),
+        box: Z.oriz ? { x: Z.x, y: Z.y, w: f.w * 0.58, h: f.h * 0.5 } : { x: Z.x, y: Z.y, w: Z.w * 0.94, h: Z.h * 0.42 }, ax: 0, ay: 0 };
+    },
+    neon(f, Z){
+      // foto scurita e tinta di blu e rosso, come di sera sotto un'insegna
+      const tinta = `<linearGradient id="cvT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${C.blu}" stop-opacity="0.32"/><stop offset="1" stop-color="${C.rosso}" stop-opacity="0.26"/></linearGradient>`;
+      return { foto: piena(f), defs: tinta + vignetta("cvV", 0.8),
+        velo: `<rect width="${f.w}" height="${f.h}" fill="${C.nero}" fill-opacity="0.5"/><rect width="${f.w}" height="${f.h}" fill="url(#cvT)"/><rect width="${f.w}" height="${f.h}" fill="url(#cvV)"/>`,
+        box: Z.oriz ? { x: f.w * 0.08, y: f.h * 0.14, w: f.w * 0.84, h: f.h * 0.72 } : { x: Z.x, y: Z.y + Z.h * 0.2, w: Z.w, h: Z.h * 0.6 }, ax: 0.5, ay: 0.5 };
+    },
+    toppa(f, Z){
+      return { foto: piena(f), defs: vignetta("cvV", 0.55), velo: `<rect width="${f.w}" height="${f.h}" fill="url(#cvV)"/>`,
+        box: Z.oriz ? { x: Z.x, y: f.h * 0.16, w: f.w * 0.5, h: f.h * 0.68 } : { x: Z.x, y: Z.y + Z.h * 0.48, w: Z.w, h: Z.h * 0.52 },
+        ax: Z.oriz ? 0 : 0.5, ay: Z.oriz ? 0.5 : 1 };
+    },
+    diario(f, Z){
+      // la foto come una polaroid storta, attaccata con lo scotch, sulla stessa
+      // foto sfocata e scurita; la firma scritta sul bordo bianco
+      let pw, ph, cx, cy, ang, box;
+      if(Z.oriz){
+        pw = f.w * 0.48; ph = pw * 0.75; ang = 3;
+        cx = f.w * 0.7; cy = f.h * 0.5;
+        box = { x: Z.x, y: Z.y, w: f.w * 0.42, h: Z.h };
+      } else {
+        ph = Z.h * 0.58 / (1 + 0.17 * 1.2); pw = ph * 1.2;
+        if(pw > Z.w * 0.9){ pw = Z.w * 0.9; ph = pw / 1.2; }
+        ang = -2.5; cx = f.w / 2;
+        const fh = ph + pw * 0.17;
+        cy = Z.y + fh / 2 + Z.M * 0.02;
+        box = { x: Z.x, y: Z.y + fh + Z.M * 0.06, w: Z.w, h: Z.y2 - (Z.y + fh + Z.M * 0.06) };
+      }
+      const pad = pw * 0.04, basso = pw * 0.13, fw = pw + pad * 2, fh = ph + pad + basso;
+      const k = { x: cx - fw / 2, y: cy - fh / 2, w: fw, h: fh };
+      const scotch = (x, y, a) => `<rect x="${n2(x - fw * 0.11)}" y="${n2(y - fw * 0.028)}" width="${n2(fw * 0.22)}" height="${n2(fw * 0.056)}" fill="#E6DCC6" fill-opacity="0.82" transform="rotate(${a} ${n2(x)} ${n2(y)})"/>`;
+      const df = basso * 0.26, sp = df * 0.3, wf = larghezza(M, FIRMA, df, sp);
+      const sopra = scotch(k.x + fw * 0.06, k.y + fw * 0.02, -32) + scotch(k.x + fw * 0.94, k.y + fw * 0.02, 32) +
+        `<path d="${tracciato(M, FIRMA, cx - wf / 2, k.y + fh - basso / 2 + maiuscole(M, df) / 2, df, sp)}" fill="${C.nero}" fill-opacity="0.7"/>`;
+      return { sfocato: true, foto: { x: cx - pw / 2, y: k.y + pad, w: pw, h: ph, cx, cy, ang, cornice: k },
+        velo: `<g transform="rotate(${ang} ${n2(cx)} ${n2(cy)})">${sopra}</g>`, box, ax: Z.oriz ? 0 : 0.5, ay: 0.5 };
+    },
+    evidenziatore(f, Z){
+      if(Z.oriz) return { foto: piena(f), defs: sfuma("cvA", 1, 0, C.nero, 0.75, 0),
+        velo: `<rect width="${n2(f.w * 0.68)}" height="${f.h}" fill="url(#cvA)"/>`, box: { x: Z.x, y: Z.y, w: f.w * 0.55, h: Z.h }, ax: 0, ay: 0.5 };
+      return { foto: piena(f), defs: sfuma("cvA", 0, 1, C.nero, 0, 0.75), velo: velo(f, f.h * 0.38, f.h * 0.62, "url(#cvA)"),
+        box: { x: Z.x, y: Z.y + Z.h * 0.42, w: Z.w, h: Z.h * 0.58 }, ax: 0, ay: 1 };
+    }
+  };
+
+  const caricaImg = src => new Promise((ok, ko) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ko(new Error("img")); im.src = src; });
+  // la foto ritagliata per riempire il riquadro r, tenendo la parte scelta
+  function disegnaFoto(ctx, img, r, fuoco){
+    const iw = img.naturalWidth, ih = img.naturalHeight, s = Math.max(r.w / iw, r.h / ih), sw = r.w / s, sh = r.h / s;
+    ctx.drawImage(img, (iw - sw) * fuoco[0], (ih - sh) * fuoco[1], sw, sh, r.x, r.y, r.w, r.h);
+  }
+  async function rendiCopertina(stile, img, testo, formato, fuoco){
+    const f = COP_FORMATI[formato], Z = zona(f), L = COPERTINE[stile](f, Z), fc = FUOCHI[fuoco] || FUOCHI.centro;
+    const tela = document.createElement("canvas"); tela.width = f.w; tela.height = f.h;
+    const ctx = tela.getContext("2d"); ctx.imageSmoothingQuality = "high";
+    ctx.fillStyle = C.asfalto; ctx.fillRect(0, 0, f.w, f.h);
+    if(L.sfocato){
+      // sfocatura alla buona ma uguale su tutti i browser: foto minuscola ingrandita
+      const pic = document.createElement("canvas"); pic.width = 40; pic.height = Math.max(1, Math.round(40 * f.h / f.w));
+      disegnaFoto(pic.getContext("2d"), img, { x: 0, y: 0, w: pic.width, h: pic.height }, fc);
+      ctx.drawImage(pic, 0, 0, f.w, f.h);
+      ctx.fillStyle = "rgba(11,11,10,0.6)"; ctx.fillRect(0, 0, f.w, f.h);
+    }
+    const p = L.foto;
+    if(p.cornice){
+      ctx.save();
+      ctx.translate(p.cx, p.cy); ctx.rotate(p.ang * Math.PI / 180); ctx.translate(-p.cx, -p.cy);
+      ctx.shadowColor = "rgba(0,0,0,0.55)"; ctx.shadowBlur = Z.M * 0.04; ctx.shadowOffsetY = Z.M * 0.012;
+      ctx.fillStyle = C.crema; ctx.fillRect(p.cornice.x, p.cornice.y, p.cornice.w, p.cornice.h);
+      ctx.shadowColor = "transparent";
+      disegnaFoto(ctx, img, p, fc);
+      ctx.restore();
+    } else disegnaFoto(ctx, img, p, fc);
+    // sopra la foto: veli, decorazioni e titolo, disegnati in vettoriale
+    const t = DISEGNA[stile](righe(testo, L.car || 12, true));
+    const s = Math.min(L.box.w / t.w, L.box.h / t.h);
+    const x = L.box.x + (L.box.w - t.w * s) * L.ax, y = L.box.y + (L.box.h - t.h * s) * L.ay;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${f.w}" height="${f.h}" viewBox="0 0 ${f.w} ${f.h}"><defs>${L.defs || ""}${t.defs}</defs>${L.velo || ""}` +
+      `<g transform="translate(${n2(x)} ${n2(y)}) scale(${+s.toFixed(4)})">${t.corpo}</g></svg>`;
+    const u = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+    try{ ctx.drawImage(await caricaImg(u), 0, 0, f.w, f.h); } finally { URL.revokeObjectURL(u); }
+    return tela;
+  }
+  const aBlob = (tela, tipo, q) => new Promise((ok, ko) => tela.toBlob(b => b ? ok(b) : ko(new Error("blob")), tipo, q));
+  async function inJpg(tela, formato){
+    let b = await aBlob(tela, "image/jpeg", 0.9);
+    // YouTube accetta miniature fino a 2 MB
+    if(formato === "youtube" && b.size > 2e6) b = await aBlob(tela, "image/jpeg", 0.8);
+    return b;
+  }
+  const svuotaTela = tela => { tela.width = 0; tela.height = 0; };
+
+  // tutto quello che c'è in memoria: la foto e le anteprime (indirizzi blob:)
+  const cop = { img: null, url: null, anteprime: [], giro: 0 };
+  const el = id => document.getElementById(id);
+  function liberaCopertine(){
+    cop.anteprime.forEach(u => URL.revokeObjectURL(u)); cop.anteprime = [];
+    if(el("cg-out")) el("cg-out").innerHTML = "";
+  }
+  function lasciaFoto(){
+    if(cop.url) URL.revokeObjectURL(cop.url);
+    cop.img = null; cop.url = null;
+    const info = el("cg-foto-info");
+    if(info){ info.hidden = true; info.querySelector("img").removeAttribute("src"); info.querySelector("span").textContent = ""; }
+  }
+  function cancellaCopertine(avvisa){
+    cop.giro++; // ferma una generazione ancora in corso
+    liberaCopertine(); lasciaFoto();
+    if(!el("cg-foto")) return;
+    el("cg-foto").value = ""; el("cg-titolo").value = "";
+    el("cg-stato").innerHTML = avvisa ? `<div class="ok">Cancellato: la foto, il testo e le copertine non sono più nella pagina.</div>` : "";
+  }
+  async function sceltaFoto(){
+    const file = el("cg-foto").files[0], stato = el("cg-stato"), info = el("cg-foto-info");
+    cop.giro++; liberaCopertine(); lasciaFoto(); stato.innerHTML = "";
+    if(!file) return;
+    const url = URL.createObjectURL(file);
+    try{
+      const img = await caricaImg(url);
+      cop.img = img; cop.url = url;
+      info.querySelector("img").src = url;
+      info.querySelector("span").textContent = `${file.name} · ${img.naturalWidth}×${img.naturalHeight}`;
+      info.hidden = false;
+      if(Math.max(img.naturalWidth, img.naturalHeight) < 1000)
+        stato.innerHTML = `<div class="err">La foto è piccola (${img.naturalWidth}×${img.naturalHeight}): la copertina potrebbe venire sgranata.</div>`;
+    } catch(err){
+      URL.revokeObjectURL(url);
+      el("cg-foto").value = "";
+      stato.innerHTML = `<div class="err">Non riesco ad aprire questa foto: prova con un JPG o un PNG (le foto HEIC dell'iPhone sul computer a volte non si aprono).</div>`;
+    }
+  }
+  function schedaCopertina(blob, st, testo, formato, fuoco){
+    const f = COP_FORMATI[formato], nome = `copertina-${st.id}-${nomeFile(testo)}`;
+    const fig = document.createElement("figure");
+    fig.className = "sg-card";
+    fig.innerHTML = `<div class="sg-preview"></div><figcaption><strong></strong><span></span></figcaption>` +
+      `<div class="sg-azioni"><button type="button" class="admin-btn" data-jpg>Scarica JPG</button><button type="button" class="admin-btn outline" data-png>PNG</button></div>`;
+    const u = URL.createObjectURL(blob); cop.anteprime.push(u);
+    const im = new Image(); im.alt = `Copertina in stile ${st.nome}`; im.src = u;
+    fig.querySelector(".sg-preview").appendChild(im);
+    fig.querySelector("strong").textContent = st.nome;
+    fig.querySelector("span").textContent = `${f.w}×${f.h} · ${Math.max(1, Math.round(blob.size / 1024))} KB`;
+    fig.querySelector("[data-jpg]").addEventListener("click", () => scarica(blob, `${nome}.jpg`));
+    fig.querySelector("[data-png]").addEventListener("click", async e => {
+      if(!cop.img) return;
+      const b = e.currentTarget; b.disabled = true;
+      try{ const tela = await rendiCopertina(st.id, cop.img, testo, formato, fuoco); const png = await aBlob(tela, "image/png"); svuotaTela(tela); scarica(png, `${nome}.png`); }
+      catch(err){ el("cg-stato").innerHTML = `<div class="err">Non sono riuscito a preparare il PNG: riprova o scarica il JPG.</div>`; }
+      finally{ b.disabled = false; }
+    });
+    return fig;
+  }
+  async function generaCopertine(){
+    const testo = el("cg-titolo").value, formato = el("cg-formato").value, fuoco = el("cg-fuoco").value;
+    const stato = el("cg-stato"), out = el("cg-out"), btn = el("cg-btn");
+    if(!cop.img){ stato.innerHTML = `<div class="err">Scegli prima una foto.</div>`; return; }
+    if(!righe(testo, 12, true).length){ stato.innerHTML = `<div class="err">Scrivi cosa vuoi sulla copertina.</div>`; return; }
+    liberaCopertine();
+    const giro = ++cop.giro;
+    btn.disabled = true;
+    try{
+      if(!await pronti(stato)) return;
+      for(let i = 0; i < STILI.length; i++){
+        stato.innerHTML = `<div>Preparo la copertina ${i + 1} di ${STILI.length}...</div>`;
+        const tela = await rendiCopertina(STILI[i].id, cop.img, testo, formato, fuoco);
+        const blob = await inJpg(tela, formato); svuotaTela(tela);
+        if(giro !== cop.giro) return; // nel frattempo è stato cancellato tutto o cambiata foto
+        out.appendChild(schedaCopertina(blob, STILI[i], testo, formato, fuoco));
+      }
+      stato.innerHTML = `<div class="ok">Fatto: ${STILI.length} copertine. Scarica quella che ti piace; quando hai finito premi "Cancella tutto" (o chiudi la pagina) e la foto sparisce dalla memoria.</div>`;
+    } catch(err){
+      if(giro === cop.giro) stato.innerHTML = `<div class="err">Qualcosa è andato storto nel disegnare le copertine: riprova.</div>`;
+    } finally { btn.disabled = false; }
+  }
+
   // ---------- avvio --------------------------------------------------------
   function init(){
     if(!document.getElementById("panel-social")) return;
@@ -563,11 +819,19 @@
     document.getElementById("sg-titoli-btn").addEventListener("click", generaTitoli);
     document.getElementById("sg-green-btn").addEventListener("click", generaGreen);
     document.getElementById("sg-green-tutte").addEventListener("click", scaricaTutte);
+    if(el("cg-foto")){
+      el("cg-foto").addEventListener("change", sceltaFoto);
+      el("cg-btn").addEventListener("click", generaCopertine);
+      el("cg-cancella").addEventListener("click", () => cancellaCopertine(true));
+      // chiudendo o lasciando la pagina non resta niente in memoria
+      window.addEventListener("pagehide", () => cancellaCopertine(false));
+    }
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 
   // per le prove: await mnSocialGen.svg("copertina", "testo *rosso*", "titolo", "asfalto")
   window.mnSocialGen = {
+    righe: (testo, maxChar = 14) => righe(testo, maxChar, true).map(r => r.map(p => p.rossa ? `*${p.t}*` : p.t).join(" ")),
     svg: async (stile, testo, formato = "titolo", sfondo = "trasparente", posizione = "centro", opz) => {
       await caratteri();
       return inquadra(DISEGNA[stile](righe(testo, 14, true), opz), formato, sfondo, posizione).svg;
