@@ -352,7 +352,7 @@
   .clock-note strong{ color:var(--sand); font-weight:700; }
 
   .km-ride{
-    --mw:clamp(124px, 32vw, 220px);
+    --mw:clamp(134px, 34vw, 224px);
     position:relative; padding:10px 14px 4px;
     background:#0b0b0a; border:1px solid rgba(245,240,230,0.16); border-radius:6px;
   }
@@ -384,8 +384,9 @@
     transform:translateX(var(--x, 0px));
   }
   .km-ride-moto > *{ position:absolute; inset:0; width:100%; height:100%; display:block; overflow:visible; }
-  .km-ride-rig{ transform-origin:50% 93.8%; transition:transform .5s var(--ease-in-out); }
-  .km-ride-rig svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .km-ride-rig{ transform-origin:50% 93.8%; transition:transform .16s var(--ease-in-out), opacity .08s linear .08s; }
+  .km-ride-rig svg, .km-ride-front svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .km-ride-front{ visibility:hidden; opacity:0; transform-origin:50% 93.8%; }
   .km-ride:not(.is-dragging) .km-ride-moto{ transition:transform .22s var(--ease-out); }
 
   .km-ride-svg .mc-spin{ transform-box:fill-box; transform-origin:center; transform:rotate(var(--spin, 0deg)); }
@@ -398,20 +399,33 @@
   .km-ride-svg .mc-bag.is-on{ opacity:1; transform:none; }
   .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
 
-  /* 400 km: troppa roba, la moto si corica di lato */
-  .km-ride[data-level="8"] .km-ride-rig{ transform:perspective(600px) rotateX(62deg) rotate(-2deg); }
-  .km-ride-svg .mc-rider{ transition:opacity .15s var(--ease-out); }
-  .km-ride[data-level="8"] .km-ride-svg .mc-rider{ opacity:0; transition-delay:.2s; }
-  .km-ride-fx .mc-fallen{ opacity:0; transition:opacity .15s var(--ease-out); }
-  .km-ride[data-level="8"] .mc-fallen{ opacity:1; transition-delay:.3s; }
+  /* 400 km: troppa roba. La moto si gira verso chi guarda (si stringe di
+     profilo e si apre di fronte) e poi si corica di lato sulle borse e sul
+     paramotore, come cade davvero un GS carico; il sollevamento segue
+     l'angolo perché a terra ci vanno le borse, non la ruota. */
+  .km-ride[data-level="8"] .km-ride-rig{ transform:scaleX(0.04); opacity:0; }
+  .km-ride[data-level="8"] .km-ride-front{ visibility:visible; opacity:1; animation:gs-face .18s var(--ease-out) .14s both; }
+  .km-ride-svg--front .mc-front-fall{ transform-box:view-box; transform-origin:152px 196px; }
+  .km-ride[data-level="8"] .mc-front-fall{ animation:gs-tip .65s .34s both; }
+  @keyframes gs-face{ from{ transform:scaleX(0.04); opacity:0; } to{ transform:none; opacity:1; } }
+  @keyframes gs-tip{
+    0%{ transform:none; animation-timing-function:var(--ease-in-out); }
+    30%{ transform:rotate(-30deg); animation-timing-function:linear; }
+    72%{ transform:translate(0px, -51px) rotate(-82deg); animation-timing-function:var(--ease-out); }
+    86%{ transform:translate(0px, -41px) rotate(-73deg); animation-timing-function:var(--ease-in-out); }
+    100%{ transform:translate(0px, -46.5px) rotate(-78deg); }
+  }
   .km-ride-fx .mc-dust, .km-ride-fx .mc-stars{ opacity:0; transition:opacity .2s var(--ease-out); }
-  .km-ride[data-level="8"] .mc-dust{ opacity:.5; transition-delay:.35s; }
-  .km-ride[data-level="8"] .mc-stars{ opacity:1; transition-delay:.45s; }
+  .km-ride[data-level="8"] .mc-dust{ opacity:.55; transition-delay:.78s; }
+  .km-ride[data-level="8"] .mc-stars{ opacity:1; transition-delay:.9s; }
   .km-ride-fx .mc-stars path{ transform-box:fill-box; transform-origin:center; }
-  .km-ride[data-level="8"] .mc-stars path{ animation:km-star .5s var(--ease-out) .45s both; }
-  .km-ride[data-level="8"] .mc-stars path:nth-child(2){ animation-delay:.52s; }
-  .km-ride[data-level="8"] .mc-stars path:nth-child(3){ animation-delay:.58s; }
+  .km-ride[data-level="8"] .mc-stars path{ animation:km-star .5s var(--ease-out) .9s both; }
+  .km-ride[data-level="8"] .mc-stars path:nth-child(2){ animation-delay:.97s; }
+  .km-ride[data-level="8"] .mc-stars path:nth-child(3){ animation-delay:1.03s; }
+  .km-ride-fx .mc-dust circle{ transform-box:fill-box; transform-origin:center; }
+  .km-ride[data-level="8"] .mc-dust circle{ animation:km-dust .6s var(--ease-out) .78s both; }
   @keyframes km-star{ from{ transform:scale(0.4) rotate(-40deg); } to{ transform:none; } }
+  @keyframes km-dust{ from{ transform:scale(0.5); } to{ transform:none; } }
 
   /* strada con la mezzeria e tacche ogni 50 km, allineate al centro della moto */
   .km-ride-road{
@@ -445,7 +459,11 @@
     .km-ride-svg .mc-spin, .km-ride:not(.is-dragging) .km-ride-svg .mc-spin{ transition:none; }
     .km-ride-svg .mc-bag{ transform:none; transition:opacity .2s ease; }
     .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
-    .km-ride[data-level="8"] .mc-stars path{ animation:none; }
+    .km-ride[data-level="8"] .mc-stars path, .km-ride[data-level="8"] .mc-dust circle{ animation:none; }
+    /* con "riduci movimento" niente capriola: si vede subito la moto a terra */
+    .km-ride[data-level="8"] .km-ride-front{ animation:none; }
+    .km-ride[data-level="8"] .mc-front-fall{ animation:none; transform:translate(0px, -46.5px) rotate(-78deg); }
+    .km-ride[data-level="8"] .mc-dust, .km-ride[data-level="8"] .mc-stars{ transition-delay:0s; }
   }
 
   .place-field{ position:relative; }
@@ -673,202 +691,300 @@
                 <div class="km-ride-moto" id="km-ride-moto">
                   <svg class="km-ride-fx" viewBox="0 0 320 210" aria-hidden="true" focusable="false"><ellipse cx="160" cy="197" rx="128" ry="5" fill="#000" opacity=".5"/></svg>
                   <div class="km-ride-rig">
-                  <svg class="km-ride-svg" viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                    <defs>
-                      <linearGradient id="mcAlu" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#e3e6ea"/><stop offset=".55" stop-color="#b7bcc4"/><stop offset="1" stop-color="#8d939c"/>
-                      </linearGradient>
-                      <linearGradient id="mcWhite" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfd4db"/>
-                      </linearGradient>
-                      <linearGradient id="mcBlack" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#3a3d44"/><stop offset="1" stop-color="#16171a"/>
-                      </linearGradient>
-                      <linearGradient id="mcVisor" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0" stop-color="#5d7fa6"/><stop offset=".5" stop-color="#1b2a3c"/><stop offset="1" stop-color="#0d141d"/>
-                      </linearGradient>
-                      <g id="mcSpokes">
-                        <circle r="5.5" fill="#2a2c31"/>
-                        <path d="M0-21 0 21M-21 0 21 0M-14.8-14.8 14.8 14.8M-14.8 14.8 14.8-14.8M-8-19.4 8 19.4M-19.4-8 19.4 8M-8 19.4 8-19.4M-19.4 8 19.4-8" stroke="#c9ced6" stroke-width="1.1"/>
-                        <circle r="3" fill="#8d939c"/>
-                      </g>
-                    </defs>
-
-
-                      <!-- ===== RUOTA POSTERIORE ===== -->
-                      <g class="mc-wheel-rear">
-                        <circle cx="82" cy="162" r="33" fill="#121315"/>
-                        <circle cx="82" cy="162" r="33" fill="none" stroke="#26282c" stroke-width="3" stroke-dasharray="3 3.2"/>
-                        <circle cx="82" cy="162" r="23" fill="none" stroke="#c8a24a" stroke-width="3"/>
-                        <g transform="translate(82 162)"><g class="mc-spin"><use href="#mcSpokes"/></g></g>
-                      </g>
-                      <!-- ===== RUOTA ANTERIORE ===== -->
-                      <g class="mc-wheel-front">
-                        <circle cx="238" cy="159" r="36" fill="#121315"/>
-                        <circle cx="238" cy="159" r="36" fill="none" stroke="#26282c" stroke-width="3" stroke-dasharray="3 3.2"/>
-                        <circle cx="238" cy="159" r="25" fill="none" stroke="#c8a24a" stroke-width="3"/>
-                        <g transform="translate(238 159) scale(1.1)"><g class="mc-spin"><use href="#mcSpokes"/></g></g>
-                        <circle cx="238" cy="159" r="14" fill="none" stroke="#9aa0a8" stroke-width="3.5" opacity=".9"/>
-                        <rect x="244" y="146" width="9" height="13" rx="3" fill="#c1272d"/>
-                      </g>
-
-                      <!-- forcellone (Paralever) -->
-                      <path d="M144 138 L86 157 L80 165 L90 168 L148 150 Z" fill="url(#mcBlack)"/>
-                      <!-- scarico: collettore e silenziatore inclinato -->
-                      <path d="M186 150 C170 160 140 162 126 152" fill="none" stroke="#a9aeb6" stroke-width="5" stroke-linecap="round"/>
-                      <g transform="rotate(-20 96 132)">
-                        <rect x="70" y="124" width="58" height="16" rx="7" fill="url(#mcAlu)"/>
-                        <rect x="70" y="124" width="12" height="16" rx="5" fill="#2a2c31"/>
-                        <rect x="112" y="126" width="16" height="12" rx="5" fill="#2a2c31"/>
-                      </g>
-
-                      <!-- telaietto posteriore, portapacchi, codino -->
-                      <path d="M140 110 L70 100 M136 126 L82 106" stroke="#2b6cb8" stroke-width="4" stroke-linecap="round"/>
-                      <path d="M38 98 H92" stroke="#1d1f23" stroke-width="5" stroke-linecap="round"/>
-                      <path d="M64 104 Q56 112 54 122" stroke="#1d1f23" stroke-width="4" stroke-linecap="round" fill="none"/>
-                      <path d="M60 96 Q66 92 98 92 L104 100 L66 104 Z" fill="url(#mcWhite)"/>
-                      <rect x="56" y="97" width="10" height="5" rx="2" fill="#c1272d"/>
-
-                      <!-- motore boxer: blocco, cambio e testa del cilindro che sporge -->
-                      <path d="M140 116 L188 112 L196 150 L150 156 L138 142 Z" fill="#2a2c31"/>
-                      <path d="M148 120 L182 118 L186 146 L152 150 Z" fill="#3a3d44"/>
-                      <rect x="170" y="126" width="38" height="24" rx="8" fill="url(#mcAlu)"/>
-                      <rect x="176" y="130" width="27" height="16" rx="5" fill="#2a2c31"/>
-                      <path d="M180 134 H200 M180 138 H200 M180 142 H200" stroke="#4a4e57" stroke-width="1.2"/>
-                      <!-- paramotore (tubolare) -->
-                      <path d="M186 110 C214 112 222 132 214 150 C210 158 196 160 188 156" fill="none" stroke="#17181b" stroke-width="3.6" stroke-linecap="round"/>
-                      <!-- telaio blu -->
-                      <path d="M212 86 L170 110 L140 112 M212 90 L190 122" stroke="#2b6cb8" stroke-width="5" stroke-linecap="round"/>
-
-                      <!-- forcella Telelever -->
-                      <path d="M214 82 L236 156" stroke="#c8a24a" stroke-width="7" stroke-linecap="round"/>
-                      <path d="M226 118 L236 156" stroke="#2a2c31" stroke-width="8" stroke-linecap="round"/>
-                      <!-- parafango basso -->
-                      <path d="M214 128 Q236 112 262 124" fill="none" stroke="#e9ecef" stroke-width="4" stroke-linecap="round"/>
-
-                      <!-- sella (passeggero più alta, pilota rossa) -->
-                      <path d="M92 92 Q100 86 128 88 L132 96 L96 99 Z" fill="#17181b"/>
-                      <path d="M124 94 Q140 90 168 92 Q174 94 172 100 L128 103 Z" fill="#c1272d"/>
-                      <path d="M128 102 L172 99" stroke="#7e1a1e" stroke-width="1.5"/>
-
-                      <!-- serbatoio bianco con strisce Motorsport -->
-                      <path d="M164 92 Q166 80 186 78 L212 80 L220 98 L196 108 L168 104 Z" fill="url(#mcWhite)"/>
-                      <path d="M176 104 L208 79 L214 80 L184 106 Z" fill="#1E5FAE"/>
-                      <path d="M186 106 L214 82 L217 88 L194 107 Z" fill="#16325c"/>
-                      <path d="M196 107 L218 90 L220 98 L204 105 Z" fill="#c1272d"/>
-                      <!-- fiancata/convogliatore radiatore -->
-                      <path d="M196 108 L222 96 L236 106 L228 124 L200 122 Z" fill="#17181b"/>
-                      <path d="M204 112 L224 104 L230 110 L224 119 L206 118 Z" fill="#2a2c31"/>
-
-                      <!-- frontale: faro, becco, cupolino -->
-                      <path d="M216 74 L232 70 L242 84 L236 98 L220 96 Z" fill="url(#mcWhite)"/>
-                      <path d="M228 78 L240 82 L238 92 L230 94 Z" fill="#cfe3ff" stroke="#1b2a3c" stroke-width="1.6"/>
-                      <path d="M232 84 L238 86" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
-                      <path d="M220 96 L272 106 L268 111 L230 120 Z" fill="url(#mcWhite)"/>
-                      <path d="M236 104 L270 107 L268 110 L238 112 Z" fill="#c1272d"/>
-                      <path d="M232 115 L264 111" stroke="#1E5FAE" stroke-width="2.6" stroke-linecap="round"/>
-                      <path d="M218 74 L210 44 L218 42 L232 70 Z" fill="#9fb3c8" opacity=".55"/>
-                      <path d="M210 44 L218 42" stroke="#d7e2ee" stroke-width="1.5" stroke-linecap="round"/>
-
-                      <!-- manubrio, paramani, specchio -->
-                      <path d="M212 84 L206 70" stroke="#1d1f23" stroke-width="4" stroke-linecap="round"/>
-                      <path d="M196 72 L210 70" stroke="#1d1f23" stroke-width="5" stroke-linecap="round"/>
-                      <path d="M206 64 Q216 66 212 76 L206 74 Z" fill="#17181b"/>
-                      <path d="M204 68 L198 54" stroke="#1d1f23" stroke-width="1.8"/>
-                      <ellipse cx="197" cy="52" rx="6" ry="3.5" fill="#17181b"/>
-
-                      <!-- ===== BAGAGLI DIETRO IL PILOTA ===== -->
-                      <!-- 200 km: borsa sulla sella posteriore (a 300 si ingrandisce) -->
-                      <g class="mc-bag mc-bag-roll" data-from="4">
-                        <rect x="90" y="70" width="44" height="22" rx="10" fill="#c1272d"/>
-                        <rect x="90" y="70" width="10" height="22" rx="5" fill="#8e1f24"/>
-                        <path d="M106 70 V92 M122 70 V92" stroke="#17181b" stroke-width="3"/>
-                        <path d="M96 74 H128" stroke="#e8545a" stroke-width="1.5" opacity=".7"/>
-                      </g>
-                      <!-- 50 km: bauletto in alluminio -->
-                      <g class="mc-bag mc-bag-top" data-from="1">
-                        <rect x="32" y="56" width="54" height="42" rx="4" fill="url(#mcAlu)"/>
-                        <rect x="32" y="56" width="54" height="9" rx="3" fill="#6f757e"/>
-                        <path d="M32 65 H86" stroke="#4a4e57" stroke-width="1.2"/>
-                        <path d="M37 72 V94 M81 72 V94" stroke="#8d939c" stroke-width="1.2"/>
-                        <rect x="54" y="68" width="10" height="5" rx="1.5" fill="#2a2c31"/>
-                      </g>
-                      <!-- 250 km: borsetta sopra il bauletto -->
-                      <g class="mc-bag mc-bag-topbag" data-from="5">
-                        <rect x="40" y="42" width="36" height="15" rx="5" fill="#2a2c31"/>
-                        <path d="M50 42 V57 M66 42 V57" stroke="#c1272d" stroke-width="2.2"/>
-                        <rect x="44" y="45" width="28" height="3" rx="1.5" fill="#4a4e57"/>
-                      </g>
-                      <!-- 150 km: valigie laterali -->
-                      <g class="mc-bag mc-bag-side" data-from="3">
-                        <rect x="46" y="102" width="66" height="44" rx="4" fill="url(#mcAlu)"/>
-                        <rect x="46" y="102" width="66" height="9" rx="3" fill="#6f757e"/>
-                        <path d="M46 111 H112" stroke="#4a4e57" stroke-width="1.2"/>
-                        <path d="M52 116 V140 M106 116 V140" stroke="#8d939c" stroke-width="1.2"/>
-                        <rect x="72" y="104" width="14" height="4" rx="2" fill="#2a2c31"/>
-                      </g>
-
-                      <!-- 100 km: borsa da serbatoio -->
-                      <g class="mc-bag mc-bag-tank" data-from="2">
-                        <path d="M170 84 Q170 66 186 63 L204 65 Q210 70 208 82 L198 92 L172 92 Z" fill="url(#mcBlack)"/>
-                        <path d="M172 72 Q186 66 206 70" stroke="#c1272d" stroke-width="3" fill="none"/>
-                        <path d="M176 84 L204 80" stroke="#9aa0a8" stroke-width="1.5"/>
-                      </g>
-                      <!-- 300 km: borse sul paramotore -->
-                      <g class="mc-bag mc-bag-guard" data-from="6">
-                        <rect x="200" y="118" width="24" height="28" rx="6" fill="url(#mcBlack)"/>
-                        <path d="M200 124 Q212 116 224 124 V129 H200 Z" fill="#c1272d"/>
-                        <rect x="205" y="135" width="14" height="3" rx="1.5" fill="#9aa0a8"/>
-                      </g>
-
-                      <!-- ===== PILOTA ===== -->
-                      <g class="mc-rider">
-                        <!-- gamba -->
-                        <path d="M146 98 L182 108" stroke="#23262c" stroke-width="17" stroke-linecap="round"/>
-                        <path d="M182 108 L160 146" stroke="#23262c" stroke-width="13" stroke-linecap="round"/>
-                        <path d="M152 140 L166 140 L172 152 L148 154 Z" fill="#17181b"/>
-                        <path d="M150 153 L172 151" stroke="#c1272d" stroke-width="2"/>
-                        <!-- busto -->
-                        <path d="M136 100 Q132 74 146 50 Q156 42 168 50 Q174 70 162 100 Z" fill="#2c3038"/>
-                        <path d="M150 52 Q160 72 156 98" stroke="#c1272d" stroke-width="3" fill="none"/>
-                        <path d="M140 64 Q148 60 156 64" stroke="#1E5FAE" stroke-width="2" fill="none" opacity=".9"/>
-                        <!-- 350 km: zaino -->
-                        <g class="mc-bag mc-bag-pack" data-from="7">
-                          <path d="M120 58 Q118 44 132 42 L146 46 Q150 50 148 62 L146 92 Q132 98 122 92 Z" fill="#c1272d"/>
-                          <path d="M120 58 Q118 44 132 42 L140 44 Q130 50 128 64 L126 94 L122 92 Z" fill="#8e1f24"/>
-                          <path d="M126 66 H146" stroke="#e8545a" stroke-width="2"/>
-                          <rect x="128" y="74" width="16" height="12" rx="3" fill="#8e1f24"/>
-                          <path d="M144 52 Q154 58 152 74" stroke="#17181b" stroke-width="3" fill="none"/>
+                    <svg class="km-ride-svg" viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <defs>
+                        <linearGradient id="gsAlu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef0f3"/><stop offset=".5" stop-color="#bfc4cc"/><stop offset="1" stop-color="#8e949e"/></linearGradient>
+                        <linearGradient id="gsWhite" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#e6e9ee"/><stop offset="1" stop-color="#c3c9d2"/></linearGradient>
+                        <linearGradient id="gsDark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#43474f"/><stop offset="1" stop-color="#1a1b1f"/></linearGradient>
+                        <linearGradient id="gsSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f3f5"/><stop offset=".45" stop-color="#a9afb8"/><stop offset="1" stop-color="#6b717b"/></linearGradient>
+                        <linearGradient id="gsRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2443f"/><stop offset="1" stop-color="#9c1d22"/></linearGradient>
+                        <linearGradient id="gsJacket" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a2e36"/><stop offset=".6" stop-color="#3b414c"/><stop offset="1" stop-color="#2a2e36"/></linearGradient>
+                        <linearGradient id="gsVisor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7d9cc0"/><stop offset=".45" stop-color="#22344b"/><stop offset="1" stop-color="#0c131c"/></linearGradient>
+                        <linearGradient id="gsScreen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9fb4c9" stop-opacity=".25"/><stop offset="1" stop-color="#c9d8e6" stop-opacity=".6"/></linearGradient>
+                        <g id="gsSpokes">
+                          <path d="M0-20.5V20.5M-20.5 0H20.5M-14.5-14.5 14.5 14.5M-14.5 14.5 14.5-14.5M-7.8-19 7.8 19M-19-7.8 19 7.8M-7.8 19 7.8-19M-19 7.8 19-7.8" stroke="#d5d9df" stroke-width="1"/>
+                          <circle r="6.5" fill="#2a2c31" stroke="#0c0c0b" stroke-width="1"/>
+                          <circle r="3" fill="#c3c9d2"/>
                         </g>
-                        <!-- braccio -->
-                        <path d="M160 56 L184 74" stroke="#2c3038" stroke-width="11" stroke-linecap="round"/>
-                        <path d="M184 74 L198 72" stroke="#2c3038" stroke-width="9" stroke-linecap="round"/>
-                        <circle cx="200" cy="72" r="5" fill="#17181b"/>
-                        <!-- casco da adventure con frontino -->
-                        <circle cx="166" cy="34" r="14" fill="url(#mcWhite)"/>
-                        <path d="M168 22 Q186 22 190 30 L176 30 Z" fill="#c1272d"/>
-                        <path d="M170 30 Q182 30 180 40 Q176 44 168 42 Z" fill="url(#mcVisor)"/>
-                        <path d="M170 44 Q178 46 178 50 L166 50 Z" fill="#17181b"/>
-                        <path d="M154 30 Q160 24 168 26" stroke="#1E5FAE" stroke-width="2" fill="none"/>
+                      </defs>
+                      <g stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+
+                        <!-- ========= RUOTE ========= -->
+                        <g>
+                          <circle cx="80" cy="164" r="32" fill="#141416"/>
+                          <circle cx="80" cy="164" r="30" fill="none" stroke="#2e3036" stroke-width="3.5" stroke-dasharray="3.4 3"/>
+                          <circle cx="80" cy="164" r="22" fill="none" stroke="#d4aa4c" stroke-width="3.6"/>
+                          <circle cx="80" cy="164" r="20.2" fill="none" stroke="#8c6b26" stroke-width=".8"/>
+                          <g transform="translate(80 164)"><g class="mc-spin"><use href="#gsSpokes" stroke="none"/></g></g>
+                        </g>
+                        <g>
+                          <circle cx="232" cy="161" r="33" fill="#141416"/>
+                          <circle cx="232" cy="161" r="31" fill="none" stroke="#2e3036" stroke-width="3.5" stroke-dasharray="3.4 3"/>
+                          <circle cx="232" cy="161" r="24.5" fill="none" stroke="#d4aa4c" stroke-width="3.6"/>
+                          <circle cx="232" cy="161" r="22.7" fill="none" stroke="#8c6b26" stroke-width=".8"/>
+                          <g transform="translate(232 161) scale(1.12)"><g class="mc-spin"><use href="#gsSpokes" stroke="none"/></g></g>
+                          <circle cx="232" cy="161" r="14.5" fill="none" stroke="#b9bfc7" stroke-width="3.2"/>
+                          <path d="M241 146 l9 3 -2 12 -9 -2z" fill="#2a2c31"/>
+                        </g>
+
+                        <!-- ========= CODA: telaietto blu, portapacchi, fanalino ========= -->
+                        <path d="M136 120 L66 106 M128 140 L92 112" stroke="#2f6fbf" stroke-width="4.2" fill="none"/>
+                        <path d="M114 138 h10" stroke="#1a1b1f" stroke-width="4"/>
+                        <path d="M38 100 H92 V104 H40 Z" fill="#26282d"/>
+                        <path d="M62 104 Q56 112 54 124" stroke="#1a1b1f" stroke-width="4" fill="none"/>
+                        <path d="M60 106 h10 l-1 4 h-8z" fill="#d23a33"/>
+
+                        <!-- ========= MOTORE BOXER (blocco e cambio) ========= -->
+                        <path d="M128 120 L180 114 L188 148 L178 168 L140 168 L124 150 Z" fill="url(#gsDark)"/>
+                        <path d="M136 126 L174 122 L178 146 L144 152 Z" fill="#4a4e57" stroke="none"/>
+                        <path d="M140 160 h30" stroke="#5b616b" stroke-width="2" fill="none"/>
+
+                        <!-- ========= SCARICO: collettore sotto il motore e silenziatore inclinato ========= -->
+                        <path d="M196 162 Q182 172 150 170 Q130 168 122 158" fill="none" stroke="#7e848e" stroke-width="5.5"/>
+                        <path d="M196 162 Q182 172 150 170 Q130 168 122 158" fill="none" stroke="#c9ced5" stroke-width="2" />
+                        <g transform="rotate(-24 104 140)">
+                          <path d="M76 132 H124 Q132 132 132 140 Q132 148 124 148 H76 Q70 148 70 140 Q70 132 76 132 Z" fill="url(#gsSteel)"/>
+                          <path d="M70 134 h10 v12 h-10z" fill="#1a1b1f"/>
+                          <path d="M84 136 H122" stroke="#ffffff" stroke-width="1.2" opacity=".7" fill="none"/>
+                          <circle cx="68" cy="140" r="3.4" fill="#0c0c0b"/>
+                        </g>
+
+                        <!-- ========= TELELEVER ========= -->
+                        <path d="M208 100 L230 160" stroke="#1d1e22" stroke-width="7.5" fill="none"/>
+                        <path d="M220 128 L231 160" stroke="#c7ccd3" stroke-width="5" fill="none"/>
+
+                        <!-- ========= SELLA ========= -->
+                        <path d="M86 104 Q88 98 104 98 L126 100 L128 108 L90 108 Z" fill="#1d1e22"/>
+                        <path d="M122 106 Q126 101 140 102 L168 104 Q172 107 168 112 L126 114 Z" fill="url(#gsRed)"/>
+                        <path d="M128 112 L166 110" stroke="#6f1418" stroke-width="1.2" fill="none"/>
+
+                        <!-- ========= SERBATOIO E FIANCATE (livrea HP) ========= -->
+                        <path d="M164 106 L172 96 L204 88 L214 94 L212 104 L170 110 Z" fill="url(#gsWhite)"/>
+                        <path d="M172 97 L204 89" stroke="#ffffff" stroke-width="1.4" fill="none"/>
+                        <!-- ala del radiatore, l'angolo tipico del GS -->
+                        <path d="M168 110 L212 100 L226 106 L230 122 L214 136 L180 132 Z" fill="url(#gsWhite)"/>
+                        <path d="M176 130 L214 102 L220 104 L186 132 Z" fill="#2f6fbf" stroke="none"/>
+                        <path d="M188 132 L221 105 L225 107 L196 133 Z" fill="#16325c" stroke="none"/>
+                        <path d="M199 134 L226 109 L229 116 L208 135 Z" fill="#d23a33" stroke="none"/>
+                        <path d="M168 110 L212 100 L226 106 L230 122 L214 136 L180 132 Z" fill="none"/>
+                        <path d="M214 136 L230 122" stroke="#1a1b1f" stroke-width="3" fill="none"/>
+
+                        <!-- ========= TESTA DEL CILINDRO BOXER che sporge, con paramotore ========= -->
+                        <rect x="166" y="140" width="20" height="20" rx="4" fill="#3a3e46"/>
+                        <path d="M169 144 h14 M169 148 h14 M169 152 h14 M169 156 h14" stroke="#6b717b" stroke-width="1" fill="none"/>
+                        <path d="M182 138 H202 Q212 138 212 149 Q212 160 202 160 H182 Z" fill="url(#gsSteel)"/>
+                        <path d="M188 142 H202 Q207 142 207 149 Q207 156 202 156 H188 Z" fill="#26282d"/>
+                        <path d="M190 146 h12" stroke="#8e949e" stroke-width="1" fill="none"/>
+                        <!-- paramotore tubolare attorno al cilindro -->
+                        <path d="M178 128 Q210 128 216 144 Q220 160 200 168" stroke="#0c0c0b" stroke-width="5" fill="none"/>
+                        <path d="M178 128 Q210 128 216 144 Q220 160 200 168" stroke="#4a4e57" stroke-width="2.6" fill="none"/>
+
+                        <!-- ========= FRONTALE: faro, becco, cupolino ========= -->
+                        <path d="M208 86 L232 92 L240 106 L234 114 L218 112 L210 98 Z" fill="url(#gsWhite)"/>
+                        <path d="M232 94 L240 106 L236 110 L230 100 Z" fill="#e8f2ff" stroke-width="1.2"/>
+                        <path d="M233 99 L237 105" stroke="#ffffff" stroke-width="1.4"/>
+                        <!-- il becco -->
+                        <path d="M220 108 L274 124 L268 129 L244 132 L226 127 Z" fill="url(#gsWhite)"/>
+                        <path d="M236 116 L272 125 L269 127 L240 121 Z" fill="#d23a33" stroke="none"/>
+                        <path d="M236 127 L264 128" stroke="#2f6fbf" stroke-width="2.6" fill="none"/>
+                        <path d="M220 108 L274 124 L268 129 L244 132 L226 127 Z" fill="none"/>
+                        <!-- cupolino alto -->
+                        <path d="M214 88 L203 52 L211 50 L226 92 Z" fill="url(#gsScreen)" stroke-width="1.2"/>
+                        <path d="M204 54 L210 52" stroke="#e6eef6" stroke-width="1.5"/>
+
+                        <!-- ========= MANUBRIO, PARAMANI, SPECCHIO ========= -->
+                        <path d="M206 98 L202 86" stroke="#1a1b1f" stroke-width="4" fill="none"/>
+                        <path d="M190 86 H206" stroke="#1a1b1f" stroke-width="4.5" fill="none"/>
+                        <path d="M202 78 Q214 80 210 92 L203 90 Z" fill="#26282d"/>
+                        <path d="M200 80 L192 64" stroke="#1a1b1f" stroke-width="1.8" fill="none"/>
+                        <ellipse cx="191" cy="62" rx="6.5" ry="3.6" fill="#26282d"/>
+
+                        <!-- ========= BAGAGLI DIETRO ========= -->
+                        <!-- 200 km: borsa a rotolo sulla sella posteriore (a 300 si gonfia) -->
+                        <g class="mc-bag mc-bag-roll" data-from="4">
+                          <rect x="88" y="78" width="42" height="21" rx="10" fill="url(#gsRed)"/>
+                          <ellipse cx="96" cy="88.5" rx="5" ry="10" fill="#8a1a1f"/>
+                          <path d="M106 78 V99 M120 78 V99" stroke="#141416" stroke-width="3" fill="none"/>
+                          <path d="M100 82 H126" stroke="#f08a86" stroke-width="1.2" opacity=".8" fill="none"/>
+                        </g>
+                        <!-- 50 km: bauletto in alluminio -->
+                        <g class="mc-bag mc-bag-top" data-from="1">
+                          <rect x="28" y="60" width="58" height="41" rx="3" fill="url(#gsAlu)"/>
+                          <path d="M28 70 H86" fill="none"/>
+                          <path d="M28 60 h8 v8 h-8z M78 60 h8 v8 h-8z M28 93 h8 v8 h-8z M78 93 h8 v8 h-8z" fill="#1a1b1f" stroke="none"/>
+                          <path d="M34 76 v18 M80 76 v18" stroke="#9aa0a9" stroke-width="1" fill="none"/>
+                          <rect x="51" y="72" width="12" height="6" rx="1.5" fill="#26282d"/>
+                          <path d="M40 63 H74" stroke="#ffffff" stroke-width="1.2" opacity=".8" fill="none"/>
+                        </g>
+                        <!-- 250 km: borsello sopra il bauletto -->
+                        <g class="mc-bag mc-bag-topbag" data-from="5">
+                          <rect x="38" y="45" width="38" height="16" rx="5" fill="url(#gsDark)"/>
+                          <path d="M48 45 V61 M66 45 V61" stroke="#d23a33" stroke-width="2.4" fill="none"/>
+                          <path d="M42 49 H72" stroke="#7a808a" stroke-width="1.2" fill="none"/>
+                        </g>
+                        <!-- 150 km: valigie laterali in alluminio -->
+                        <g class="mc-bag mc-bag-side" data-from="3">
+                          <rect x="42" y="106" width="74" height="50" rx="3" fill="url(#gsAlu)"/>
+                          <path d="M42 116 H116" fill="none"/>
+                          <path d="M42 106 h8 v8 h-8z M108 106 h8 v8 h-8z M42 148 h8 v8 h-8z M108 148 h8 v8 h-8z" fill="#1a1b1f" stroke="none"/>
+                          <path d="M48 122 v24 M110 122 v24" stroke="#9aa0a9" stroke-width="1" fill="none"/>
+                          <rect x="72" y="118" width="14" height="6" rx="1.5" fill="#26282d"/>
+                          <path d="M54 109 H104" stroke="#ffffff" stroke-width="1.2" opacity=".8" fill="none"/>
+                        </g>
+                        <!-- 100 km: borsa da serbatoio -->
+                        <g class="mc-bag mc-bag-tank" data-from="2">
+                          <path d="M168 96 Q168 80 184 77 L202 78 Q209 82 207 92 L200 100 L171 102 Z" fill="url(#gsDark)"/>
+                          <path d="M169 90 Q170 79 184 77 L202 78 Q208 81 207 88 Q188 84 169 90 Z" fill="url(#gsRed)" stroke-width="1.2"/>
+                          <rect x="178" y="88" width="20" height="6" rx="1.5" fill="#5d7fa6" stroke-width="1" opacity=".85"/>
+                        </g>
+                        <!-- 300 km: borse sul paramotore -->
+                        <g class="mc-bag mc-bag-guard" data-from="6">
+                          <path d="M200 132 h20 q5 0 5 5 v18 q0 5 -5 5 h-20 q-5 0 -5 -5 v-18 q0 -5 5 -5z" fill="url(#gsDark)"/>
+                          <path d="M195 141 Q210 130 225 141 V144 H195 Z" fill="#d23a33"/>
+                          <path d="M201 151 h18" stroke="#9aa0a9" stroke-width="1.6" fill="none"/>
+                        </g>
+
+                        <!-- ========= PILOTA ========= -->
+                        <g class="mc-rider">
+                          <!-- 350 km: zaino -->
+                          <g class="mc-bag mc-bag-pack" data-from="7">
+                            <path d="M118 66 Q116 54 128 52 L140 54 L142 100 Q130 106 120 100 Z" fill="url(#gsRed)"/>
+                            <path d="M118 66 Q116 54 128 52 L134 53 Q126 60 125 72 L124 103 L120 100 Z" fill="#8a1a1f" stroke="none"/>
+                            <path d="M122 74 H140" stroke="#f08a86" stroke-width="1.4" fill="none"/>
+                            <rect x="124" y="82" width="15" height="12" rx="3" fill="#8a1a1f"/>
+                          </g>
+                          <!-- gamba -->
+                          <path d="M138 106 L172 116" stroke="#22252b" stroke-width="18" fill="none"/>
+                          <path d="M138 106 L172 116" stroke="#2f333b" stroke-width="15" fill="none"/>
+                          <path d="M172 116 L154 150" stroke="#22252b" stroke-width="14" fill="none"/>
+                          <path d="M172 116 L154 150" stroke="#2f333b" stroke-width="11" fill="none"/>
+                          <circle cx="171" cy="116" r="5" fill="#4a4e57" stroke="none"/>
+                          <!-- stivale da adventure -->
+                          <path d="M146 144 L162 142 L170 154 L170 159 L144 160 Z" fill="#17181b"/>
+                          <path d="M147 150 L164 148" stroke="#d23a33" stroke-width="1.8" fill="none"/>
+                          <!-- busto con giacca da adventure -->
+                          <path d="M126 110 Q124 84 136 62 Q146 52 158 56 Q170 66 166 88 L160 110 Z" fill="url(#gsJacket)"/>
+                          <path d="M150 58 Q162 74 156 108" stroke="#d23a33" stroke-width="2.6" fill="none"/>
+                          <path d="M132 76 Q142 72 152 76" stroke="#2f6fbf" stroke-width="2" fill="none"/>
+                          <!-- spallacci dello zaino (con lo zaino) -->
+                          <path class="mc-bag mc-bag-pack" data-from="7" d="M138 56 Q152 64 150 86" stroke="#8a1a1f" stroke-width="3.2" fill="none"/>
+                          <!-- braccio -->
+                          <path d="M154 62 L176 80" stroke="#22252b" stroke-width="12" fill="none"/>
+                          <path d="M154 62 L176 80" stroke="url(#gsJacket)" stroke-width="9.5" fill="none"/>
+                          <path d="M176 80 L194 86" stroke="#22252b" stroke-width="10" fill="none"/>
+                          <path d="M176 80 L194 86" stroke="#3b414c" stroke-width="7.5" fill="none"/>
+                          <circle cx="196" cy="86" r="5" fill="#17181b"/>
+                          <!-- casco da adventure: frontino, visiera, mentoniera a punta -->
+                          <path d="M150 38 Q150 22 164 21 Q178 22 178 36 L178 44 Q176 52 166 54 L156 54 Q150 50 150 38 Z" fill="url(#gsWhite)"/>
+                          <path d="M160 24 Q176 18 190 24 L186 30 L166 30 Z" fill="#d23a33"/>
+                          <path d="M166 31 L181 32 Q183 40 178 44 L166 42 Z" fill="url(#gsVisor)" stroke-width="1.2"/>
+                          <path d="M168 34 L176 34" stroke="#cfe0f2" stroke-width="1.2" opacity=".8"/>
+                          <path d="M168 44 L186 49 L178 57 L162 55 Z" fill="url(#gsWhite)"/>
+                          <path d="M172 50 L180 52" stroke="#26282d" stroke-width="2.2"/>
+                          <path d="M152 32 Q158 26 166 28" stroke="#2f6fbf" stroke-width="2" fill="none"/>
+                        </g>
                       </g>
-                  </svg>
+                    </svg>
+                  </div>
+                  <!-- a 400 km la moto si gira verso chi guarda e cade di lato -->
+                  <div class="km-ride-front">
+                    <svg class="km-ride-svg km-ride-svg--front" viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <g class="mc-front-fall" stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+                        <!-- bauletto e borsello dietro le spalle -->
+                        <rect x="132" y="58" width="56" height="42" rx="3" fill="url(#gsAlu)"/>
+                        <rect x="140" y="44" width="40" height="16" rx="5" fill="url(#gsDark)"/>
+                        <path d="M150 44 V60 M170 44 V60" stroke="#d23a33" stroke-width="2.4" fill="none"/>
+                        <!-- valigie laterali, viste di taglio -->
+                        <rect x="100" y="104" width="26" height="52" rx="3" fill="url(#gsAlu)"/>
+                        <rect x="194" y="104" width="26" height="52" rx="3" fill="url(#gsAlu)"/>
+                        <path d="M100 104 h7 v7 h-7z M119 104 h7 v7 h-7z M100 149 h7 v7 h-7z M119 149 h7 v7 h-7z M194 104 h7 v7 h-7z M213 104 h7 v7 h-7z M194 149 h7 v7 h-7z M213 149 h7 v7 h-7z" fill="#1a1b1f" stroke="none"/>
+                        <!-- borsa a rotolo che sporge ai lati del pilota -->
+                        <rect x="128" y="84" width="64" height="20" rx="9" fill="url(#gsRed)"/>
+
+                        <!-- gambe del pilota -->
+                        <path d="M150 108 L134 122 L126 152" stroke="#22252b" stroke-width="15" fill="none"/>
+                        <path d="M150 108 L134 122 L126 152" stroke="#2f333b" stroke-width="12" fill="none"/>
+                        <path d="M170 108 L186 122 L194 152" stroke="#22252b" stroke-width="15" fill="none"/>
+                        <path d="M170 108 L186 122 L194 152" stroke="#2f333b" stroke-width="12" fill="none"/>
+                        <path d="M118 148 h16 v12 h-18z M186 148 h16 l2 12 h-18z" fill="#17181b"/>
+
+                        <!-- blocco motore al centro -->
+                        <path d="M138 134 H182 L186 168 L174 176 H146 L134 168 Z" fill="url(#gsDark)"/>
+                        <!-- i due cilindri del boxer che sporgono ai lati -->
+                        <rect x="122" y="140" width="18" height="22" rx="4" fill="#3a3e46"/>
+                        <rect x="180" y="140" width="18" height="22" rx="4" fill="#3a3e46"/>
+                        <path d="M125 145 v12 M129 145 v12 M133 145 v12 M187 145 v12 M191 145 v12 M195 145 v12" stroke="#6b717b" stroke-width="1" fill="none"/>
+                        <path d="M124 138 H108 Q102 138 102 151 Q102 164 108 164 H124 Z" fill="url(#gsSteel)"/>
+                        <path d="M196 138 H212 Q218 138 218 151 Q218 164 212 164 H196 Z" fill="url(#gsSteel)"/>
+                        <path d="M120 142 H110 Q106 142 106 151 Q106 160 110 160 H120 Z M200 142 H210 Q214 142 214 151 Q214 160 210 160 H200 Z" fill="#26282d"/>
+                        <!-- paramotore -->
+                        <path d="M138 128 Q100 126 96 146 Q94 166 128 172 M182 128 Q220 126 224 146 Q226 166 192 172" stroke="#0c0c0b" stroke-width="5" fill="none"/>
+                        <path d="M138 128 Q100 126 96 146 Q94 166 128 172 M182 128 Q220 126 224 146 Q226 166 192 172" stroke="#4a4e57" stroke-width="2.6" fill="none"/>
+                        <!-- borse sul paramotore -->
+                        <rect x="92" y="124" width="22" height="24" rx="5" fill="url(#gsDark)"/>
+                        <rect x="206" y="124" width="22" height="24" rx="5" fill="url(#gsDark)"/>
+                        <path d="M92 131 Q103 121 114 131 V134 H92 Z M206 131 Q217 121 228 131 V134 H206 Z" fill="#d23a33"/>
+
+                        <!-- ruota anteriore vista di fronte, forcella e dischi -->
+                        <rect x="152" y="128" width="16" height="68" rx="8" fill="#141416"/>
+                        <path d="M154 140 h12 M154 148 h12 M154 156 h12 M154 164 h12 M154 172 h12 M154 180 h12 M154 188 h12" stroke="#2e3036" stroke-width="2.2" fill="none"/>
+                        <path d="M147 116 V166 M173 116 V166" stroke="#1d1e22" stroke-width="5" fill="none"/>
+                        <path d="M147 140 V166 M173 140 V166" stroke="#c7ccd3" stroke-width="3.2" fill="none"/>
+                        <path d="M150 148 v24 M170 148 v24" stroke="#b9bfc7" stroke-width="1.6" fill="none"/>
+
+                        <!-- ali dei radiatori e serbatoio (livrea HP) -->
+                        <path d="M140 88 H180 L184 100 H136 Z" fill="url(#gsWhite)"/>
+                        <path d="M124 96 L146 98 L146 128 L130 126 L118 110 Z" fill="url(#gsWhite)"/>
+                        <path d="M196 96 L174 98 L174 128 L190 126 L202 110 Z" fill="url(#gsWhite)"/>
+                        <path d="M122 104 L146 112 V117 L124 110 Z M198 104 L174 112 V117 L196 110 Z" fill="#2f6fbf" stroke="none"/>
+                        <path d="M126 113 L146 120 V124 L130 119 Z M194 113 L174 120 V124 L190 119 Z" fill="#d23a33" stroke="none"/>
+
+                        <!-- il becco visto davanti -->
+                        <path d="M146 112 H174 L168 132 L160 140 L152 132 Z" fill="url(#gsWhite)"/>
+                        <path d="M158 114 H162 L161 136 H159 Z" fill="#d23a33" stroke="none"/>
+                        <path d="M153 116 L157 132 M167 116 L163 132" stroke="#2f6fbf" stroke-width="1.8" fill="none"/>
+
+                        <!-- pilota: busto e braccia verso il manubrio largo -->
+                        <path d="M136 112 Q132 80 140 62 Q160 54 180 62 Q188 80 184 112 Z" fill="url(#gsJacket)"/>
+                        <path d="M146 60 V96 M174 60 V96" stroke="#8a1a1f" stroke-width="3.4" fill="none"/>
+                        <path d="M142 66 L118 84 M178 66 L202 84" stroke="#22252b" stroke-width="12" fill="none"/>
+                        <path d="M142 66 L118 84 M178 66 L202 84" stroke="#3b414c" stroke-width="9" fill="none"/>
+
+                        <!-- borsa da serbatoio, si vede attraverso il cupolino -->
+                        <path d="M144 92 Q144 80 160 79 Q176 80 176 92 Z" fill="url(#gsDark)"/>
+                        <path d="M146 86 H174" stroke="#d23a33" stroke-width="2" fill="none"/>
+
+                        <!-- mascherina col faro asimmetrico -->
+                        <path d="M142 82 H178 L182 96 L176 112 H144 L138 96 Z" fill="url(#gsWhite)"/>
+                        <path d="M146 90 H174 L172 108 H148 Z" fill="#1a1b1f"/>
+                        <circle cx="155" cy="99" r="6" fill="#e8f2ff" stroke-width="1.2"/>
+                        <circle cx="167" cy="98.5" r="4.4" fill="#e8f2ff" stroke-width="1.2"/>
+                        <path d="M147.5 92 Q160 89 172.5 92 M148.5 106.5 Q160 109 171 106.5" stroke="#ffffff" stroke-width="1.6" fill="none"/>
+                        <!-- cupolino -->
+                        <path d="M142 82 L146 48 H174 L178 82 Z" fill="url(#gsScreen)" stroke-width="1.2"/>
+                        <path d="M147 52 H173" stroke="#e6eef6" stroke-width="1.4" fill="none"/>
+
+                        <!-- manubrio, paramani, specchi -->
+                        <path d="M110 86 Q160 80 210 86" stroke="#1a1b1f" stroke-width="4.5" fill="none"/>
+                        <path d="M100 78 L116 80 L116 94 L104 96 Q98 88 100 78 Z M220 78 L204 80 L204 94 L216 96 Q222 88 220 78 Z" fill="url(#gsWhite)"/>
+                        <path d="M114 82 L108 62 M206 82 L212 62" stroke="#1a1b1f" stroke-width="1.8" fill="none"/>
+                        <ellipse cx="106" cy="60" rx="6" ry="4" fill="#26282d"/>
+                        <ellipse cx="214" cy="60" rx="6" ry="4" fill="#26282d"/>
+                        <circle cx="116" cy="86" r="5" fill="#17181b"/>
+                        <circle cx="204" cy="86" r="5" fill="#17181b"/>
+
+                        <!-- casco visto davanti: frontino, visiera, mentoniera -->
+                        <path d="M146 38 Q146 20 160 20 Q174 20 174 38 L172 50 Q166 56 160 56 Q154 56 148 50 Z" fill="url(#gsWhite)"/>
+                        <path d="M142 26 Q160 18 178 26 L174 32 Q160 28 146 32 Z" fill="#d23a33"/>
+                        <path d="M149 33 Q160 30 171 33 L169 43 Q160 45 151 43 Z" fill="url(#gsVisor)" stroke-width="1.2"/>
+                        <path d="M153 36 H162" stroke="#cfe0f2" stroke-width="1.2" opacity=".8" fill="none"/>
+                        <path d="M156 49 H164" stroke="#26282d" stroke-width="2.2" fill="none"/>
+                      </g>
+                    </svg>
                   </div>
                   <svg class="km-ride-fx km-ride-fx--top" viewBox="0 0 320 210" aria-hidden="true" focusable="false">
-                    <g class="mc-dust" fill="#cfc6b4"><circle cx="58" cy="190" r="8"/><circle cx="72" cy="186" r="10"/><circle cx="252" cy="188" r="9"/><circle cx="266" cy="191" r="6"/><circle cx="160" cy="192" r="7"/></g>
-                    <!-- il pilota disarcionato, a pancia in su accanto alla moto -->
-                    <g class="mc-fallen">
-                      <rect x="194" y="186" width="44" height="9" rx="4" fill="#8e1f24"/>
-                      <path d="M198 188 L178 164" stroke="#23262c" stroke-width="15" stroke-linecap="round"/>
-                      <path d="M178 164 L154 174" stroke="#23262c" stroke-width="12" stroke-linecap="round"/>
-                      <path d="M140 166 L154 164 L160 178 L144 182 Z" fill="#17181b"/>
-                      <path d="M190 194 Q188 178 204 176 L242 176 Q254 180 250 194 Z" fill="#2c3038"/>
-                      <path d="M206 181 H242" stroke="#c1272d" stroke-width="3"/>
-                      <path d="M238 186 L216 196" stroke="#2c3038" stroke-width="9" stroke-linecap="round"/>
-                      <circle cx="265" cy="183" r="13" fill="url(#mcWhite)"/>
-                      <path d="M258 172 Q262 160 274 162 L270 172 Z" fill="#c1272d"/>
-                      <path d="M268 172 Q280 172 278 184 Q272 188 268 182 Z" fill="url(#mcVisor)"/>
-                    </g>
-                    <g class="mc-stars" fill="#E8545A"><path d="M262 140l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M288 152l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M240 150l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z"/></g>
+                    <g class="mc-dust" fill="#cfc6b4"><circle cx="-26" cy="190" r="8"/><circle cx="-8" cy="187" r="10"/><circle cx="40" cy="191" r="7"/><circle cx="104" cy="189" r="9"/><circle cx="146" cy="192" r="6"/></g>
+                    <g class="mc-stars" fill="#E8545A"><path d="M-6 76l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M18 86l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M-28 90l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z"/></g>
                   </svg>
                 </div>
               </div>
