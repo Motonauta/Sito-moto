@@ -131,6 +131,28 @@
   }
   .admin-tab:hover{ color:var(--sand); }
   .admin-tab.active{ color:var(--sand); border-bottom-color:var(--rust); }
+
+  /* scheda Social: generatori di titoli e green screen */
+  .sg-opzioni{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0 16px; }
+  .sg-opzioni [hidden]{ display:none; }
+  .sg-punti{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:0 16px; margin-bottom:6px; }
+  .sg-punto-riga{ display:flex; align-items:center; gap:10px; }
+  .sg-punto-riga span{ width:2.2em; flex-shrink:0; font-family:var(--font-mono); font-weight:700; color:var(--rust-text); margin-bottom:20px; }
+  .sg-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:18px; margin-top:24px; }
+  .sg-card{ margin:0; display:flex; flex-direction:column; gap:10px; }
+  .sg-card .sg-preview{
+    display:flex; align-items:center; justify-content:center; padding:10px; min-height:160px;
+    border:1px solid rgba(245,240,230,0.16);
+    /* scacchiera: si vede cosa è trasparente */
+    background:repeating-conic-gradient(#2b2a26 0% 25%, #1f1e1b 0% 50%) 50% / 18px 18px;
+  }
+  .sg-card .sg-preview img{ display:block; max-width:100%; max-height:340px; object-fit:contain; }
+  .sg-card figcaption{ display:flex; flex-direction:column; gap:2px; font-size:0.85rem; min-width:0; }
+  .sg-card figcaption strong{ color:var(--sand); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sg-card figcaption span{ font-family:var(--font-mono); font-size:0.7rem; color:var(--cream-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sg-azioni{ display:flex; gap:8px; }
+  .sg-azioni .admin-btn{ padding:10px 16px; font-size:0.74rem; }
+  .sg-azioni [data-svg]{ flex:1; }
 </style>
 </head>
 <body>
@@ -175,6 +197,7 @@
       <button type="button" class="admin-tab" data-tab="moto" onclick="switchAdminTab('moto')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-moto"/></svg> Moto</button>
       <button type="button" class="admin-tab" data-tab="stats" onclick="switchAdminTab('stats')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-chart"/></svg> Statistiche</button>
       <button type="button" class="admin-tab" data-tab="instagram" onclick="switchAdminTab('instagram')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-instagram"/></svg> Instagram</button>
+      <button type="button" class="admin-tab" data-tab="social" onclick="switchAdminTab('social')"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-video"/></svg> Social</button>
     </div>
   </div>
 </section>
@@ -342,6 +365,98 @@
 </section>
 </div>
 
+<div data-tab-content="social" style="display:none;">
+<!-- GENERATORI PER I SOCIAL (admin-social.js): si disegna tutto qui nel
+     browser, nei colori e coi caratteri del sito, e si scarica in PNG -->
+<section id="panel-social">
+  <div class="wrap">
+    <p class="marker">Per i tuoi video</p>
+    <h2>Generatore di titoli</h2>
+    <p style="margin-top:14px; max-width:68ch;">Scrivi il titolo e premi "Genera": te lo preparo in quattro stili del sito, da scaricare come immagine vettoriale (SVG, si ingrandisce senza perdere qualità) e mettere sopra al video. Le parole tra <strong>*asterischi*</strong> vengono in rosso (senza asterischi diventa rossa l'ultima riga); se vai a capo decidi tu dove spezzare le righe.</p>
+
+    <div class="contact-card" style="margin-top:28px;">
+      <label class="admin-label" for="sg-titolo">Cosa vuoi scritto</label>
+      <textarea id="sg-titolo" class="admin-input" rows="3" maxlength="160" placeholder="Es. Rimessaggio invernale *fatto bene*" style="resize:vertical;"></textarea>
+      <div class="sg-opzioni">
+        <div>
+          <label class="admin-label" for="sg-formato">Formato</label>
+          <select id="sg-formato" class="admin-select">
+            <option value="titolo">Solo il titolo (ritagliato)</option>
+            <option value="reel">Reel e TikTok (1080×1920)</option>
+            <option value="youtube">YouTube (1920×1080)</option>
+            <option value="quadrato">Quadrato (1080×1080)</option>
+          </select>
+        </div>
+        <div>
+          <label class="admin-label" for="sg-sfondo">Sfondo</label>
+          <select id="sg-sfondo" class="admin-select">
+            <option value="trasparente">Trasparente</option>
+            <option value="verde">Verde (green screen)</option>
+            <option value="asfalto">Nero asfalto</option>
+          </select>
+        </div>
+        <div id="sg-posizione-wrap">
+          <label class="admin-label" for="sg-posizione">Posizione</label>
+          <select id="sg-posizione" class="admin-select">
+            <option value="alto">In alto</option>
+            <option value="centro">Al centro</option>
+            <option value="basso">In basso</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" class="admin-btn" id="sg-titoli-btn">Genera titoli</button>
+      <div id="sg-titoli-stato" class="status-list"></div>
+      <div id="sg-titoli-out" class="sg-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="panel-green">
+  <div class="wrap">
+    <p class="marker">Video a punti</p>
+    <h2>Green screen numerati</h2>
+    <p style="margin-top:14px; max-width:68ch;">Scrivi gli argomenti del video, uno per casella: per ogni casella compilata ti preparo un'immagine su verde pieno con "1) …", "2) …" e così via, da scontornare col chroma key nel montaggio. Se ne compili 6, ne escono 6, numerati nell'ordine.</p>
+
+    <div class="contact-card" style="margin-top:28px;">
+      <div id="sg-punti" class="sg-punti"></div>
+      <div class="sg-opzioni">
+        <div>
+          <label class="admin-label" for="sg-g-stile">Stile</label>
+          <select id="sg-g-stile" class="admin-select">
+            <option value="copertina">Copertina</option>
+            <option value="nastro">Nastro</option>
+            <option value="contorno">Contorno</option>
+            <option value="cruscotto">Cruscotto</option>
+          </select>
+        </div>
+        <div>
+          <label class="admin-label" for="sg-g-formato">Formato</label>
+          <select id="sg-g-formato" class="admin-select">
+            <option value="reel">Reel e TikTok (1080×1920)</option>
+            <option value="youtube">YouTube (1920×1080)</option>
+            <option value="quadrato">Quadrato (1080×1080)</option>
+          </select>
+        </div>
+        <div>
+          <label class="admin-label" for="sg-g-posizione">Posizione</label>
+          <select id="sg-g-posizione" class="admin-select">
+            <option value="alto">In alto</option>
+            <option value="centro">Al centro</option>
+            <option value="basso">In basso</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button type="button" class="admin-btn" id="sg-green-btn">Genera</button>
+        <button type="button" class="admin-btn outline" id="sg-green-tutte" hidden>Scarica tutte (un file per punto)</button>
+      </div>
+      <div id="sg-green-stato" class="status-list"></div>
+      <div id="sg-green-out" class="sg-grid"></div>
+    </div>
+  </div>
+</section>
+</div>
+
 <div data-tab-content="moto" style="display:none;">
 <section class="section-alt" id="panel-bike">
   <div class="wrap">
@@ -485,6 +600,8 @@
 </footer>
 
 <script src="script.js?v=20261013f"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/opentype.js/1.3.4/opentype.min.js" defer></script>
+<script src="/admin-social.js" defer></script>
 <script>
   // { Paese: [Città, ...] } letto da /api/gallery ("countries"), più gli
   // album "standalone" caricati prima di questa organizzazione a due livelli
