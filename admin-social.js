@@ -461,6 +461,20 @@
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }
+  // su iPad e iPhone un'immagine scaricata finisce in File > Download, dove
+  // CapCut e la Galleria non la vedono: per PNG e JPG si apre invece il menu
+  // Condividi, con "Salva immagine" che la mette in Foto. Sul computer si scarica.
+  const tocco = navigator.maxTouchPoints > 1;
+  async function condividi(files){
+    if(!tocco || !navigator.canShare || !files.every(f => /^image\/(png|jpeg)$/.test(f.type)) || !navigator.canShare({ files })) return false;
+    try{ await navigator.share({ files }); }
+    catch(err){ if(err.name !== "AbortError") return false; } // annullato dal menu: va bene così
+    return true;
+  }
+  async function salvaImmagine(blob, nome){
+    if(!await condividi([new File([blob], nome, { type: blob.type })])) scarica(blob, nome);
+  }
+  const notaTocco = () => tocco ? " Su iPad e iPhone si apre il menu Condividi: «Salva immagine» la mette in Foto." : "";
   const blobSvg = img => new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${img.svg}`], { type: "image/svg+xml" });
   function blobPng(img){
     return new Promise((ok, ko) => {
@@ -488,7 +502,7 @@
     fig.querySelector("strong").textContent = titolo;
     fig.querySelector("span").textContent = sotto;
     fig.querySelector("[data-svg]").addEventListener("click", () => scarica(blobSvg(img), `${nome}.svg`));
-    fig.querySelector("[data-png]").addEventListener("click", async () => scarica(await blobPng(img), `${nome}.png`));
+    fig.querySelector("[data-png]").addEventListener("click", async () => salvaImmagine(await blobPng(img), `${nome}.png`));
     return fig;
   }
   function salva(chiave, valore){ try{ localStorage.setItem(chiave, JSON.stringify(valore)); } catch(err){} }
@@ -514,11 +528,11 @@
       const img = inquadra(DISEGNA[st.id](righe(testo, 14, true)), formato, sfondo, posizione);
       out.appendChild(scheda(img, st.nome, st.nota, `titolo-${st.id}-${nomeFile(testo)}`));
     });
-    stato.innerHTML = `<div class="ok">Fatto: ${STILI.length} stili, scegli quello che ti piace e scaricalo.</div>`;
+    stato.innerHTML = `<div class="ok">Fatto: ${STILI.length} stili, scegli quello che ti piace e scaricalo.${notaTocco()}</div>`;
   }
 
   // ---------- green screen a punti ----------------------------------------
-  let ultimeGreen = [];
+  let ultimeGreen = [], giroGreen = 0;
   async function generaGreen(){
     const campi = [...document.querySelectorAll(".sg-punto")];
     const stile = document.getElementById("sg-g-stile").value;
@@ -528,7 +542,9 @@
     salva("mn-sg-green", { punti: campi.map(i => i.value), stile, formato, posizione });
     const pieni = campi.map(i => i.value.trim()).filter(Boolean);
     out.innerHTML = ""; ultimeGreen = [];
+    const giro = ++giroGreen;
     document.getElementById("sg-green-tutte").hidden = true;
+    document.getElementById("sg-green-tutte-png").hidden = true;
     if(!pieni.length){ stato.innerHTML = `<div class="err">Scrivi almeno un argomento in una casella.</div>`; return; }
     stato.innerHTML = `<div>Disegno ${pieni.length === 1 ? "il green screen" : `${pieni.length} green screen`}...</div>`;
     if(!await pronti(stato)) return;
@@ -541,7 +557,14 @@
       out.appendChild(scheda(img, `${i + 1}) ${arg}`, `${nome}.svg`, nome));
     });
     document.getElementById("sg-green-tutte").hidden = false;
-    stato.innerHTML = `<div class="ok">Fatto: ${pieni.length === 1 ? "un green screen" : `${pieni.length} green screen`}, numerati nell'ordine delle caselle compilate.</div>`;
+    document.getElementById("sg-green-tutte-png").hidden = false;
+    stato.innerHTML = `<div class="ok">Fatto: ${pieni.length === 1 ? "un green screen" : `${pieni.length} green screen`}, numerati nell'ordine delle caselle compilate.${notaTocco()}</div>`;
+    // i PNG si preparano subito, così "Tutte in PNG" apre il menu Condividi al primo tocco
+    const lista = ultimeGreen;
+    for(const g of lista){
+      if(giro !== giroGreen) return;
+      try{ g.png = g.png || await blobPng(g.img); } catch(err){ /* lo rifà al clic */ }
+    }
   }
   // un file SVG per ogni punto, uno dopo l'altro (niente ZIP)
   async function scaricaTutte(){
@@ -551,6 +574,19 @@
       await new Promise(r => setTimeout(r, 350));
     }
     stato.innerHTML = `<div class="ok">Scaricati ${ultimeGreen.length} file SVG. Se il browser chiede il permesso di scaricare più file, rispondi di sì.</div>`;
+  }
+  async function scaricaTuttePng(){
+    const stato = document.getElementById("sg-green-stato"), lista = ultimeGreen;
+    const pronti = lista.every(g => g.png);
+    if(!pronti) stato.innerHTML = `<div>Preparo i PNG...</div>`;
+    for(const g of lista) g.png = g.png || await blobPng(g.img);
+    const files = lista.map(g => new File([g.png], `${g.nome}.png`, { type: "image/png" }));
+    if(await condividi(files)){
+      stato.innerHTML = `<div class="ok">Scegli «Salva ${files.length} immagini» per metterle in Foto.</div>`;
+      return;
+    }
+    for(const f of files){ scarica(f, f.name); await new Promise(r => setTimeout(r, 350)); }
+    stato.innerHTML = `<div class="ok">Scaricati ${files.length} file PNG. Se il browser chiede il permesso di scaricare più file, rispondi di sì.</div>`;
   }
 
   // ---------- generatore di copertine --------------------------------------
@@ -758,11 +794,11 @@
     fig.querySelector(".sg-preview").appendChild(im);
     fig.querySelector("strong").textContent = st.nome;
     fig.querySelector("span").textContent = `${f.w}×${f.h} · ${Math.max(1, Math.round(blob.size / 1024))} KB`;
-    fig.querySelector("[data-jpg]").addEventListener("click", () => scarica(blob, `${nome}.jpg`));
+    fig.querySelector("[data-jpg]").addEventListener("click", () => salvaImmagine(blob, `${nome}.jpg`));
     fig.querySelector("[data-png]").addEventListener("click", async e => {
       if(!cop.img) return;
       const b = e.currentTarget; b.disabled = true;
-      try{ const tela = await rendiCopertina(st.id, cop.img, testo, formato, fuoco); const png = await aBlob(tela, "image/png"); svuotaTela(tela); scarica(png, `${nome}.png`); }
+      try{ const tela = await rendiCopertina(st.id, cop.img, testo, formato, fuoco); const png = await aBlob(tela, "image/png"); svuotaTela(tela); await salvaImmagine(png, `${nome}.png`); }
       catch(err){ el("cg-stato").innerHTML = `<div class="err">Non sono riuscito a preparare il PNG: riprova o scarica il JPG.</div>`; }
       finally{ b.disabled = false; }
     });
@@ -785,15 +821,44 @@
         if(giro !== cop.giro) return; // nel frattempo è stato cancellato tutto o cambiata foto
         out.appendChild(schedaCopertina(blob, STILI[i], testo, formato, fuoco));
       }
-      stato.innerHTML = `<div class="ok">Fatto: ${STILI.length} copertine. Scarica quella che ti piace; quando hai finito premi "Cancella tutto" (o chiudi la pagina) e la foto sparisce dalla memoria.</div>`;
+      stato.innerHTML = `<div class="ok">Fatto: ${STILI.length} copertine. Scarica quella che ti piace; quando hai finito premi "Cancella tutto" (o chiudi la pagina) e la foto sparisce dalla memoria.${notaTocco()}</div>`;
     } catch(err){
       if(giro === cop.giro) stato.innerHTML = `<div class="err">Qualcosa è andato storto nel disegnare le copertine: riprova.</div>`;
     } finally { btn.disabled = false; }
   }
 
   // ---------- avvio --------------------------------------------------------
+  // ---------- i tre generatori, uno alla volta -----------------------------
+  function viste(){
+    const bottoni = [...document.querySelectorAll(".sg-vista")];
+    if(!bottoni.length) return;
+    const mostra = (v, fuoco) => {
+      bottoni.forEach(b => {
+        const on = b.dataset.vista === v;
+        b.classList.toggle("active", on); b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1;
+        document.querySelector(`[data-vista-panel="${b.dataset.vista}"]`).hidden = !on;
+        if(on && fuoco) b.focus();
+      });
+      try{ sessionStorage.setItem("mn-sg-vista", v); } catch(err){}
+    };
+    bottoni.forEach((b, i) => {
+      b.addEventListener("click", () => mostra(b.dataset.vista));
+      // frecce come nelle schede vere
+      b.addEventListener("keydown", e => {
+        const passo = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if(!passo) return;
+        e.preventDefault();
+        mostra(bottoni[(i + passo + bottoni.length) % bottoni.length].dataset.vista, true);
+      });
+    });
+    let v = "titoli";
+    try{ v = sessionStorage.getItem("mn-sg-vista") || v; } catch(err){}
+    mostra(bottoni.some(b => b.dataset.vista === v) ? v : "titoli");
+  }
+
   function init(){
     if(!document.getElementById("panel-social")) return;
+    viste();
     const sceltaStile = document.getElementById("sg-g-stile");
     STILI.forEach(st => sceltaStile.add(new Option(`${st.nome} — ${st.nota}`, st.id)));
     const lista = document.getElementById("sg-punti");
@@ -819,6 +884,7 @@
     document.getElementById("sg-titoli-btn").addEventListener("click", generaTitoli);
     document.getElementById("sg-green-btn").addEventListener("click", generaGreen);
     document.getElementById("sg-green-tutte").addEventListener("click", scaricaTutte);
+    document.getElementById("sg-green-tutte-png").addEventListener("click", scaricaTuttePng);
     if(el("cg-foto")){
       el("cg-foto").addEventListener("change", sceltaFoto);
       el("cg-btn").addEventListener("click", generaCopertine);
