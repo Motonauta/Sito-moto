@@ -384,7 +384,7 @@
     transform:translateX(var(--x, 0px));
   }
   .km-ride-moto > *{ position:absolute; inset:0; width:100%; height:100%; display:block; overflow:visible; }
-  .km-ride-rig{ transform-origin:50% 93.8%; transition:transform .16s var(--ease-in-out), opacity .08s linear .08s; }
+  .km-ride-rig{ transform-origin:48% 93.8%; }
   .km-ride-rig svg, .km-ride-front svg{ width:100%; height:100%; display:block; overflow:visible; }
   .km-ride-front{ visibility:hidden; opacity:0; transform-origin:50% 93.8%; }
   .km-ride:not(.is-dragging) .km-ride-moto{ transition:transform .22s var(--ease-out); }
@@ -399,33 +399,104 @@
   .km-ride-svg .mc-bag.is-on{ opacity:1; transform:none; }
   .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
 
-  /* 400 km: troppa roba. La moto si gira verso chi guarda (si stringe di
-     profilo e si apre di fronte) e poi si corica di lato sulle borse e sul
-     paramotore, come cade davvero un GS carico; il sollevamento segue
-     l'angolo perché a terra ci vanno le borse, non la ruota. */
-  .km-ride[data-level="8"] .km-ride-rig{ transform:scaleX(0.04); opacity:0; }
-  .km-ride[data-level="8"] .km-ride-front{ visibility:visible; opacity:1; animation:gs-face .18s var(--ease-out) .14s both; }
-  .km-ride-svg--front .mc-front-fall{ transform-box:view-box; transform-origin:152px 196px; }
-  .km-ride[data-level="8"] .mc-front-fall{ animation:gs-tip .65s .34s both; }
-  @keyframes gs-face{ from{ transform:scaleX(0.04); opacity:0; } to{ transform:none; opacity:1; } }
-  @keyframes gs-tip{
-    0%{ transform:none; animation-timing-function:var(--ease-in-out); }
-    30%{ transform:rotate(-30deg); animation-timing-function:linear; }
-    72%{ transform:translate(0px, -51px) rotate(-82deg); animation-timing-function:var(--ease-out); }
-    86%{ transform:translate(0px, -41px) rotate(-73deg); animation-timing-function:var(--ease-in-out); }
-    100%{ transform:translate(0px, -46.5px) rotate(-78deg); }
+  /* 400 km: troppa roba. Una sola scena di 3 secondi, tutte le animazioni
+     partono insieme (le percentuali sono i tempi: 10% = 0,3 s):
+     - 0–0,3 s il pilota allunga la gamba destra fino a terra (il GS è alto:
+       ci arriva in punta di piedi);
+     - 0,28–0,72 s la moto non si tiene e gira verso chi guarda: il profilo e
+       il frontale sono due cartoncini a 90° che ruotano insieme in
+       prospettiva (il muso viene verso di noi) e si scambiano in un attimo
+       a metà giro, quando sono larghi uguali, così il movimento è continuo;
+     - 0,66–1,42 s cade di lato sulle borse e sul paramotore (il
+       sollevamento segue l'angolo perché a terra ci vanno le borse);
+     - 0,86 s il pilota scende, rotola, si rialza (1,5–1,74 s), si gratta il
+       casco e scuote la testa, con le stelline che girano e poi spariscono. */
+  .km-ride[data-level="8"] .km-ride-rig{ animation:gs-turn-side 3s linear both; }
+  .km-ride[data-level="8"] .km-ride-front{ visibility:visible; animation:gs-turn-front 3s linear both; }
+  @keyframes gs-turn-side{
+    0%, 9.33%{ transform:perspective(700px) rotateY(0deg); }
+    12%{ transform:perspective(700px) rotateY(-12deg); }
+    14.5%{ transform:perspective(700px) rotateY(-30deg); }
+    16.7%{ transform:perspective(700px) rotateY(-47deg); }
+    18.7%{ transform:perspective(700px) rotateY(-62deg); }
+    21%{ transform:perspective(700px) rotateY(-78deg); }
+    24%, 100%{ transform:perspective(700px) rotateY(-90deg); }
+    0%, 16%{ opacity:1; }
+    16.8%, 100%{ opacity:0; }
   }
-  .km-ride-fx .mc-dust, .km-ride-fx .mc-stars{ opacity:0; transition:opacity .2s var(--ease-out); }
-  .km-ride[data-level="8"] .mc-dust{ opacity:.55; transition-delay:.78s; }
-  .km-ride[data-level="8"] .mc-stars{ opacity:1; transition-delay:.9s; }
-  .km-ride-fx .mc-stars path{ transform-box:fill-box; transform-origin:center; }
-  .km-ride[data-level="8"] .mc-stars path{ animation:km-star .5s var(--ease-out) .9s both; }
-  .km-ride[data-level="8"] .mc-stars path:nth-child(2){ animation-delay:.97s; }
-  .km-ride[data-level="8"] .mc-stars path:nth-child(3){ animation-delay:1.03s; }
-  .km-ride-fx .mc-dust circle{ transform-box:fill-box; transform-origin:center; }
-  .km-ride[data-level="8"] .mc-dust circle{ animation:km-dust .6s var(--ease-out) .78s both; }
-  @keyframes km-star{ from{ transform:scale(0.4) rotate(-40deg); } to{ transform:none; } }
-  @keyframes km-dust{ from{ transform:scale(0.5); } to{ transform:none; } }
+  @keyframes gs-turn-front{
+    0%, 9.33%{ transform:perspective(700px) rotateY(90deg); }
+    12%{ transform:perspective(700px) rotateY(78deg); }
+    14.5%{ transform:perspective(700px) rotateY(60deg); }
+    16.7%{ transform:perspective(700px) rotateY(43deg); }
+    18.7%{ transform:perspective(700px) rotateY(28deg); }
+    21%{ transform:perspective(700px) rotateY(12deg); }
+    24%, 100%{ transform:perspective(700px) rotateY(0deg); }
+    0%, 16%{ opacity:0; }
+    16.8%, 100%{ opacity:1; }
+  }
+
+  /* la gamba destra di profilo: anca, ginocchio e caviglia */
+  .km-ride-svg .mc-leg-up{ transform-box:view-box; transform-origin:138px 106px; }
+  .km-ride-svg .mc-leg-low{ transform-box:view-box; transform-origin:172px 116px; }
+  .km-ride-svg .mc-leg-foot{ transform-box:view-box; transform-origin:154px 150px; }
+  .km-ride[data-level="8"] .mc-leg-up{ animation:gs-leg-up 3s both; }
+  .km-ride[data-level="8"] .mc-leg-low{ animation:gs-leg-low 3s both; }
+  .km-ride[data-level="8"] .mc-leg-foot{ animation:gs-leg-foot 3s both; }
+  @keyframes gs-leg-up{ 0%{ transform:none; animation-timing-function:var(--ease-out); } 10%, 100%{ transform:rotate(53.6deg); } }
+  @keyframes gs-leg-low{ 0%{ transform:none; animation-timing-function:var(--ease-out); } 10%, 100%{ transform:rotate(-86.5deg); } }
+  @keyframes gs-leg-foot{ 0%{ transform:none; animation-timing-function:var(--ease-out); } 10%, 100%{ transform:rotate(78deg); } }
+
+  /* la caduta di lato */
+  .km-ride-svg--front .mc-front-fall{ transform-box:view-box; transform-origin:152px 196px; }
+  .km-ride[data-level="8"] .mc-front-fall{ animation:gs-tip 3s both; }
+  @keyframes gs-tip{
+    0%, 22%{ transform:none; animation-timing-function:var(--ease-in-out); }
+    29.3%{ transform:rotate(-30deg); animation-timing-function:linear; }
+    39.3%{ transform:translate(0px, -51px) rotate(-82deg); animation-timing-function:var(--ease-out); }
+    43.3%{ transform:translate(0px, -41px) rotate(-73deg); animation-timing-function:var(--ease-in-out); }
+    47.3%, 100%{ transform:translate(0px, -46.5px) rotate(-78deg); }
+  }
+
+  /* il pilota: scende dalla moto, rotola, si rialza */
+  .km-ride[data-level="8"] .mc-front-rider{ animation:gs-seat 3s linear both; }
+  @keyframes gs-seat{ 0%, 28.6%{ opacity:1; } 30%, 100%{ opacity:0; } }
+  .km-ride-svg--front .mc-tumble{ opacity:0; transform-box:view-box; transform-origin:0 0; }
+  .km-ride[data-level="8"] .mc-tumble{ animation:gs-roll 3s both; }
+  @keyframes gs-roll{
+    0%, 28.6%{ opacity:0; transform:translate(105px, 90px) rotate(-28deg); }
+    28.7%{ opacity:1; transform:translate(105px, 90px) rotate(-28deg); animation-timing-function:var(--ease-out); }
+    33.3%{ transform:translate(62px, 82px) rotate(-150deg); animation-timing-function:var(--ease-in-out); }
+    39%{ transform:translate(-18px, 166px) rotate(-290deg); animation-timing-function:var(--ease-out); }
+    49.3%{ opacity:1; transform:translate(-86px, 166px) rotate(-416deg); }
+    50.7%, 100%{ opacity:0; transform:translate(-86px, 166px) rotate(-416deg); }
+  }
+  .km-ride-svg--front .mc-stand{ opacity:0; transform-box:fill-box; transform-origin:50% 100%; }
+  .km-ride[data-level="8"] .mc-stand{ animation:gs-stand 3s both; }
+  @keyframes gs-stand{
+    0%, 49.3%{ opacity:0; transform:scale(1.08, 0.42); }
+    50.7%{ opacity:1; transform:scale(1.08, 0.5); animation-timing-function:var(--ease-out); }
+    54%{ transform:scale(0.96, 1.06); animation-timing-function:var(--ease-in-out); }
+    58%, 100%{ opacity:1; transform:none; }
+  }
+  .km-ride-svg--front .mc-stand-head{ transform-box:fill-box; transform-origin:30% 90%; }
+  .km-ride[data-level="8"] .mc-stand-head{ animation:gs-shake 3s var(--ease-in-out) both; }
+  @keyframes gs-shake{ 0%, 62%{ transform:none; } 66%{ transform:rotate(-9deg); } 70%{ transform:rotate(7deg); } 74%{ transform:rotate(-5deg); } 78%, 100%{ transform:none; } }
+  .km-ride-svg--front .mc-dizzy{ opacity:0; transform-box:fill-box; transform-origin:center; }
+  .km-ride[data-level="8"] .mc-dizzy{ animation:gs-dizzy 3s linear both; }
+  @keyframes gs-dizzy{
+    0%, 58%{ opacity:0; transform:rotate(0deg); }
+    62%{ opacity:1; }
+    90%{ opacity:1; }
+    100%{ opacity:0; transform:rotate(300deg); }
+  }
+
+  /* la polvere quando la moto e il pilota toccano terra */
+  .km-ride-fx .mc-dust{ opacity:0; }
+  .km-ride[data-level="8"] .mc-dust{ opacity:1; }
+  .km-ride-fx .mc-dust circle{ opacity:0; transform-box:fill-box; transform-origin:center; }
+  .km-ride[data-level="8"] .mc-dust circle{ animation:km-dust .7s var(--ease-out) 1.12s both; }
+  @keyframes km-dust{ from{ opacity:0; transform:scale(0.4); } 30%{ opacity:.6; } to{ opacity:.4; transform:none; } }
 
   /* strada con la mezzeria e tacche ogni 50 km, allineate al centro della moto */
   .km-ride-road{
@@ -459,11 +530,16 @@
     .km-ride-svg .mc-spin, .km-ride:not(.is-dragging) .km-ride-svg .mc-spin{ transition:none; }
     .km-ride-svg .mc-bag{ transform:none; transition:opacity .2s ease; }
     .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
-    .km-ride[data-level="8"] .mc-stars path, .km-ride[data-level="8"] .mc-dust circle{ animation:none; }
-    /* con "riduci movimento" niente capriola: si vede subito la moto a terra */
-    .km-ride[data-level="8"] .km-ride-front{ animation:none; }
-    .km-ride[data-level="8"] .mc-front-fall{ animation:none; transform:translate(0px, -46.5px) rotate(-78deg); }
-    .km-ride[data-level="8"] .mc-dust, .km-ride[data-level="8"] .mc-stars{ transition-delay:0s; }
+    /* con "riduci movimento" niente scena: si vede subito com'è finita,
+       la moto a terra e il pilota in piedi accanto */
+    .km-ride[data-level="8"] :is(.km-ride-rig, .km-ride-front, .mc-leg-up, .mc-leg-low, .mc-leg-foot,
+      .mc-front-fall, .mc-front-rider, .mc-tumble, .mc-stand, .mc-stand-head, .mc-dizzy, .mc-dust circle){ animation:none; }
+    .km-ride[data-level="8"] .km-ride-rig{ opacity:0; }
+    .km-ride[data-level="8"] .km-ride-front{ opacity:1; }
+    .km-ride[data-level="8"] .mc-front-fall{ transform:translate(0px, -46.5px) rotate(-78deg); }
+    .km-ride[data-level="8"] .mc-front-rider{ opacity:0; }
+    .km-ride[data-level="8"] .mc-stand{ opacity:1; transform:none; }
+    .km-ride[data-level="8"] .mc-dust circle{ opacity:.4; }
   }
 
   .place-field{ position:relative; }
@@ -853,15 +929,21 @@
                             <path d="M122 74 H140" stroke="#f08a86" stroke-width="1.4" fill="none"/>
                             <rect x="124" y="82" width="15" height="12" rx="3" fill="#8a1a1f"/>
                           </g>
-                          <!-- gamba -->
-                          <path d="M138 106 L172 116" stroke="#22252b" stroke-width="18" fill="none"/>
-                          <path d="M138 106 L172 116" stroke="#2f333b" stroke-width="15" fill="none"/>
-                          <path d="M172 116 L154 150" stroke="#22252b" stroke-width="14" fill="none"/>
-                          <path d="M172 116 L154 150" stroke="#2f333b" stroke-width="11" fill="none"/>
-                          <circle cx="171" cy="116" r="5" fill="#4a4e57" stroke="none"/>
-                          <!-- stivale da adventure -->
-                          <path d="M146 144 L162 142 L170 154 L170 159 L144 160 Z" fill="#17181b"/>
-                          <path d="M147 150 L164 148" stroke="#d23a33" stroke-width="1.8" fill="none"/>
+                          <!-- gamba destra: a 400 km la allunga fino a terra (anca, ginocchio, caviglia) -->
+                          <g class="mc-leg-up">
+                            <path d="M138 106 L172 116" stroke="#22252b" stroke-width="18" fill="none"/>
+                            <path d="M138 106 L172 116" stroke="#2f333b" stroke-width="15" fill="none"/>
+                            <g class="mc-leg-low">
+                              <path d="M172 116 L154 150" stroke="#22252b" stroke-width="14" fill="none"/>
+                              <path d="M172 116 L154 150" stroke="#2f333b" stroke-width="11" fill="none"/>
+                              <!-- stivale da adventure -->
+                              <g class="mc-leg-foot">
+                                <path d="M146 144 L162 142 L170 154 L170 159 L144 160 Z" fill="#17181b"/>
+                                <path d="M147 150 L164 148" stroke="#d23a33" stroke-width="1.8" fill="none"/>
+                              </g>
+                            </g>
+                            <circle cx="171" cy="116" r="5" fill="#4a4e57" stroke="none"/>
+                          </g>
                           <!-- busto con giacca da adventure -->
                           <path d="M126 110 Q124 84 136 62 Q146 52 158 56 Q170 66 166 88 L160 110 Z" fill="url(#gsJacket)"/>
                           <path d="M150 58 Q162 74 156 108" stroke="#d23a33" stroke-width="2.6" fill="none"/>
@@ -902,11 +984,14 @@
                         <rect x="128" y="84" width="64" height="20" rx="9" fill="url(#gsRed)"/>
 
                         <!-- gambe del pilota -->
-                        <path d="M150 108 L134 122 L126 152" stroke="#22252b" stroke-width="15" fill="none"/>
-                        <path d="M150 108 L134 122 L126 152" stroke="#2f333b" stroke-width="12" fill="none"/>
+                        <g class="mc-front-rider">
+                        <path d="M150 108 L137 140 L131 176" stroke="#22252b" stroke-width="15" fill="none"/>
+                        <path d="M150 108 L137 140 L131 176" stroke="#2f333b" stroke-width="12" fill="none"/>
                         <path d="M170 108 L186 122 L194 152" stroke="#22252b" stroke-width="15" fill="none"/>
                         <path d="M170 108 L186 122 L194 152" stroke="#2f333b" stroke-width="12" fill="none"/>
-                        <path d="M118 148 h16 v12 h-18z M186 148 h16 l2 12 h-18z" fill="#17181b"/>
+                        <path d="M123 172 h16 l1 24 h-18z M186 148 h16 l2 12 h-18z" fill="#17181b"/>
+                        <path d="M124 186 h15" stroke="#d23a33" stroke-width="1.8" fill="none"/>
+                        </g>
 
                         <!-- blocco motore al centro -->
                         <path d="M138 134 H182 L186 168 L174 176 H146 L134 168 Z" fill="url(#gsDark)"/>
@@ -945,10 +1030,12 @@
                         <path d="M153 116 L157 132 M167 116 L163 132" stroke="#2f6fbf" stroke-width="1.8" fill="none"/>
 
                         <!-- pilota: busto e braccia verso il manubrio largo -->
+                        <g class="mc-front-rider">
                         <path d="M136 112 Q132 80 140 62 Q160 54 180 62 Q188 80 184 112 Z" fill="url(#gsJacket)"/>
                         <path d="M146 60 V96 M174 60 V96" stroke="#8a1a1f" stroke-width="3.4" fill="none"/>
                         <path d="M142 66 L118 84 M178 66 L202 84" stroke="#22252b" stroke-width="12" fill="none"/>
                         <path d="M142 66 L118 84 M178 66 L202 84" stroke="#3b414c" stroke-width="9" fill="none"/>
+                        </g>
 
                         <!-- borsa da serbatoio, si vede attraverso il cupolino -->
                         <path d="M144 92 Q144 80 160 79 Q176 80 176 92 Z" fill="url(#gsDark)"/>
@@ -970,21 +1057,87 @@
                         <path d="M114 82 L108 62 M206 82 L212 62" stroke="#1a1b1f" stroke-width="1.8" fill="none"/>
                         <ellipse cx="106" cy="60" rx="6" ry="4" fill="#26282d"/>
                         <ellipse cx="214" cy="60" rx="6" ry="4" fill="#26282d"/>
-                        <circle cx="116" cy="86" r="5" fill="#17181b"/>
-                        <circle cx="204" cy="86" r="5" fill="#17181b"/>
+                        <g class="mc-front-rider"><circle cx="116" cy="86" r="5" fill="#17181b"/><circle cx="204" cy="86" r="5" fill="#17181b"/></g>
 
                         <!-- casco visto davanti: frontino, visiera, mentoniera -->
+                        <g class="mc-front-rider">
                         <path d="M146 38 Q146 20 160 20 Q174 20 174 38 L172 50 Q166 56 160 56 Q154 56 148 50 Z" fill="url(#gsWhite)"/>
                         <path d="M142 26 Q160 18 178 26 L174 32 Q160 28 146 32 Z" fill="#d23a33"/>
                         <path d="M149 33 Q160 30 171 33 L169 43 Q160 45 151 43 Z" fill="url(#gsVisor)" stroke-width="1.2"/>
                         <path d="M153 36 H162" stroke="#cfe0f2" stroke-width="1.2" opacity=".8" fill="none"/>
                         <path d="M156 49 H164" stroke="#26282d" stroke-width="2.2" fill="none"/>
+                        </g>
+                      </g>
+                      <!-- il pilota che rotola giù: appallottolato, gira su se stesso -->
+                      <g class="mc-tumble" stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+                        <path d="M-8 -22 Q-34 -14 -26 12" stroke="#22252b" stroke-width="23" fill="none"/>
+                        <path d="M-8 -22 Q-34 -14 -26 12" stroke="url(#gsJacket)" stroke-width="19.5" fill="none"/>
+                        <path d="M-12 -24 Q-22 -6 -22 8" stroke="#d23a33" stroke-width="2.6" fill="none"/>
+                        <path d="M-22 14 L12 16" stroke="#22252b" stroke-width="17" fill="none"/>
+                        <path d="M-22 14 L12 16" stroke="#2f333b" stroke-width="14" fill="none"/>
+                        <path d="M12 16 L18 -6" stroke="#22252b" stroke-width="14" fill="none"/>
+                        <path d="M12 16 L18 -6" stroke="#2f333b" stroke-width="11" fill="none"/>
+                        <path d="M10 -12 L26 -14 L28 -2 L14 2 Z" fill="#17181b"/>
+                        <path d="M-10 -4 L14 6" stroke="#22252b" stroke-width="11" fill="none"/>
+                        <path d="M-10 -4 L14 6" stroke="#3b414c" stroke-width="8.5" fill="none"/>
+                        <circle cx="16" cy="7" r="4.6" fill="#17181b"/>
+                        <circle cx="2" cy="-22" r="14" fill="url(#gsWhite)"/>
+                        <path d="M-8 -34 Q4 -40 16 -32 L12 -27 Q2 -32 -6 -28 Z" fill="#d23a33"/>
+                        <path d="M6 -28 Q16 -24 14 -14 L4 -16 Z" fill="url(#gsVisor)" stroke-width="1.2"/>
+                      </g>
+
+                      <!-- il pilota rialzato: in piedi accanto alla moto, mano sul casco, guarda giù -->
+                      <g transform="translate(-92 196)">
+                        <g class="mc-stand" stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+                          <ellipse cx="2" cy="0" rx="26" ry="3.5" fill="#000" opacity=".45" stroke="none"/>
+                          <!-- gamba dietro -->
+                          <path d="M-5 -84 L-9 -46 L-7 -16" stroke="#1b1d22" stroke-width="18" fill="none"/>
+                          <path d="M-5 -84 L-9 -46 L-7 -16" stroke="#272a31" stroke-width="15" fill="none"/>
+                          <path d="M-17 -26 L1 -26 L6 -5 L6 0 L-17 0 Z" fill="#141416"/>
+                          <!-- braccio dietro, lungo il fianco -->
+                          <path d="M-8 -140 L-14 -114 L-10 -92" stroke="#1b1d22" stroke-width="11" fill="none"/>
+                          <path d="M-8 -140 L-14 -114 L-10 -92" stroke="#2c3038" stroke-width="8.5" fill="none"/>
+                          <circle cx="-10" cy="-90" r="4.6" fill="#17181b"/>
+                          <!-- gamba davanti -->
+                          <path d="M3 -84 L9 -46 L7 -16" stroke="#22252b" stroke-width="18" fill="none"/>
+                          <path d="M3 -84 L9 -46 L7 -16" stroke="#2f333b" stroke-width="15" fill="none"/>
+                          <circle cx="8" cy="-48" r="5" fill="#4a4e57" stroke="none"/>
+                          <path d="M-4 -26 L13 -26 L20 -6 L20 0 L-4 0 Z" fill="#17181b"/>
+                          <path d="M-2 -12 L16 -13" stroke="#d23a33" stroke-width="1.8" fill="none"/>
+                          <!-- busto con la giacca -->
+                          <path d="M-17 -80 Q-24 -112 -15 -141 Q0 -154 16 -146 Q25 -126 19 -80 Z" fill="url(#gsJacket)"/>
+                          <path d="M4 -146 Q14 -120 10 -84" stroke="#d23a33" stroke-width="2.6" fill="none"/>
+                          <path d="M-12 -126 Q0 -132 14 -126" stroke="#2f6fbf" stroke-width="2" fill="none"/>
+                          <path d="M-18 -86 H20" stroke="#1b1d22" stroke-width="3" fill="none"/>
+                          <!-- testa che si scuote un po' -->
+                          <g class="mc-stand-head">
+                            <g transform="translate(10 -164) rotate(22) translate(-164 -38)">
+                              <path d="M150 38 Q150 22 164 21 Q178 22 178 36 L178 44 Q176 52 166 54 L156 54 Q150 50 150 38 Z" fill="url(#gsWhite)"/>
+                              <path d="M160 24 Q176 18 190 24 L186 30 L166 30 Z" fill="#d23a33"/>
+                              <path d="M166 31 L181 32 Q183 40 178 44 L166 42 Z" fill="url(#gsVisor)" stroke-width="1.2"/>
+                              <path d="M168 44 L186 49 L178 57 L162 55 Z" fill="url(#gsWhite)"/>
+                              <path d="M172 50 L180 52" stroke="#26282d" stroke-width="2.2"/>
+                              <path d="M152 32 Q158 26 166 28" stroke="#2f6fbf" stroke-width="2" fill="none"/>
+                            </g>
+                          </g>
+                          <!-- braccio davanti: la mano sul casco, "che ho combinato" -->
+                          <path d="M6 -140 L-14 -160 L-6 -180" stroke="#22252b" stroke-width="11.5" fill="none"/>
+                          <path d="M6 -140 L-14 -160 L-6 -180" stroke="#3b414c" stroke-width="9" fill="none"/>
+                          <circle cx="-5" cy="-181" r="5" fill="#17181b"/>
+                        </g>
+                        <!-- stelline che girano sopra il casco -->
+                        <g transform="translate(4 -190)">
+                          <g class="mc-dizzy" fill="#E8545A" stroke="none">
+                            <path d="M16 0l2.4 5.6 5.6 2.4-5.6 2.4-2.4 5.6-2.4-5.6-5.6-2.4 5.6-2.4z" transform="translate(0 -8)"/>
+                            <path d="M-8 -14l2 4.6 4.6 2-4.6 2-2 4.6-2-4.6-4.6-2 4.6-2z" transform="translate(0 8)"/>
+                            <path d="M-12 6l1.8 4.2 4.2 1.8-4.2 1.8-1.8 4.2-1.8-4.2-4.2-1.8 4.2-1.8z" transform="translate(4 -6)"/>
+                          </g>
+                        </g>
                       </g>
                     </svg>
                   </div>
                   <svg class="km-ride-fx km-ride-fx--top" viewBox="0 0 320 210" aria-hidden="true" focusable="false">
-                    <g class="mc-dust" fill="#cfc6b4"><circle cx="-26" cy="190" r="8"/><circle cx="-8" cy="187" r="10"/><circle cx="40" cy="191" r="7"/><circle cx="104" cy="189" r="9"/><circle cx="146" cy="192" r="6"/></g>
-                    <g class="mc-stars" fill="#E8545A"><path d="M-6 76l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M18 86l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M-28 90l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z"/></g>
+                    <g class="mc-dust" fill="#cfc6b4"><circle cx="-44" cy="192" r="6"/><circle cx="-26" cy="190" r="8"/><circle cx="-8" cy="187" r="10"/><circle cx="40" cy="191" r="7"/><circle cx="104" cy="189" r="9"/><circle cx="146" cy="192" r="6"/></g>
                   </svg>
                 </div>
               </div>
