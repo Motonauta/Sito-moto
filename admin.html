@@ -85,7 +85,9 @@
   }
 
   #gate{ text-align:center; }
-  #gate input{ max-width:280px; margin:0 auto 20px; }
+  #gate h1::after{ left:50%; transform:translateX(-50%); }
+  #gate .admin-input{ display:block; }
+  #gate #login-btn{ width:100%; margin-top:4px; }
   #panel{ display:none; }
 
   .caption-row{
@@ -171,10 +173,14 @@
     <p class="marker" style="justify-content:center;">Area riservata</p>
     <h1 style="font-size:clamp(2rem, 5vw, 2.8rem); color:var(--sand);">Accesso</h1>
     <div class="contact-card" style="margin-top:28px; text-align:left;">
-      <label class="admin-label">Password</label>
-      <input type="password" id="password-input" class="admin-input" autocomplete="off">
-      <button class="admin-btn" id="login-btn" onclick="checkPassword()">Entra</button>
-      <p id="gate-error" style="color:var(--rust-text); margin-top:14px; display:none;">Password errata.</p>
+      <form id="login-form" onsubmit="checkPassword(event)" novalidate>
+        <label class="admin-label" for="email-input">Email</label>
+        <input type="email" id="email-input" class="admin-input" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required>
+        <label class="admin-label" for="password-input">Password</label>
+        <input type="password" id="password-input" class="admin-input" autocomplete="current-password" required>
+        <button type="submit" class="admin-btn" id="login-btn">Entra</button>
+      </form>
+      <p id="gate-error" style="color:var(--rust-text); margin-top:14px; display:none;" role="alert">Email o password errata.</p>
     </div>
   </div>
 </section>
@@ -202,6 +208,10 @@
   </div>
 </section>
 
+<!-- tutte le schede stanno qui dentro: nascoste finché il server non
+     conferma l'accesso (prima la Galleria si vedeva sotto la schermata della
+     password). Le modifiche le blocca comunque il server senza sessione -->
+<div id="panel-content" hidden>
 <div data-tab-content="galleria">
 <section style="padding-top:32px;" id="panel-upload">
   <div class="wrap">
@@ -367,12 +377,13 @@
 
 <div data-tab-content="social" style="display:none;">
 <!-- GENERATORI PER I SOCIAL (admin-social.js): si disegna tutto qui nel
-     browser, nei colori e coi caratteri del sito, e si scarica in PNG -->
+     browser, nei colori e coi caratteri del sito, e si scarica in SVG
+     (o PNG) -->
 <section id="panel-social">
   <div class="wrap">
     <p class="marker">Per i tuoi video</p>
     <h2>Generatore di titoli</h2>
-    <p style="margin-top:14px; max-width:68ch;">Scrivi il titolo e premi "Genera": te lo preparo in quattro stili del sito, da scaricare come immagine vettoriale (SVG, si ingrandisce senza perdere qualità) e mettere sopra al video. Le parole tra <strong>*asterischi*</strong> vengono in rosso (senza asterischi diventa rossa l'ultima riga); se vai a capo decidi tu dove spezzare le righe.</p>
+    <p style="margin-top:14px; max-width:68ch;">Scrivi il titolo e premi "Genera": te lo preparo in dieci stili del sito, da scaricare come immagine vettoriale (SVG, si ingrandisce senza perdere qualità) e mettere sopra al video. Le parole tra <strong>*asterischi*</strong> vengono in rosso (senza asterischi diventa rossa l'ultima riga); se vai a capo decidi tu dove spezzare le righe.</p>
 
     <div class="contact-card" style="margin-top:28px;">
       <label class="admin-label" for="sg-titolo">Cosa vuoi scritto</label>
@@ -422,12 +433,8 @@
       <div class="sg-opzioni">
         <div>
           <label class="admin-label" for="sg-g-stile">Stile</label>
-          <select id="sg-g-stile" class="admin-select">
-            <option value="copertina">Copertina</option>
-            <option value="nastro">Nastro</option>
-            <option value="contorno">Contorno</option>
-            <option value="cruscotto">Cruscotto</option>
-          </select>
+          <!-- le voci le mette admin-social.js, dall'elenco STILI -->
+          <select id="sg-g-stile" class="admin-select"></select>
         </div>
         <div>
           <label class="admin-label" for="sg-g-formato">Formato</label>
@@ -570,6 +577,7 @@
   </div>
 </section>
 </div>
+</div><!-- /panel-content -->
 
 <footer class="site-footer">
   <div class="wrap">
@@ -618,6 +626,7 @@
   function showPanel(){
     document.getElementById("gate").style.display = "none";
     document.getElementById("panel").style.display = "block";
+    document.getElementById("panel-content").hidden = false;
     switchAdminTab("galleria");
     loadIdeas();
     loadKm();
@@ -683,7 +692,9 @@
     }
   }
 
-  async function checkPassword(){
+  async function checkPassword(e){
+    if(e) e.preventDefault();
+    const email = document.getElementById("email-input").value.trim();
     const val = document.getElementById("password-input").value;
     const btn = document.getElementById("login-btn");
     btn.disabled = true;
@@ -692,10 +703,11 @@
       const res = await fetch("/api/auth?action=login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: val })
+        body: JSON.stringify({ email, password: val })
       });
       const data = await res.json();
-      if(!res.ok) throw new Error(data.error || "Password errata.");
+      if(!res.ok) throw new Error(data.error || "Email o password errata.");
+      document.getElementById("password-input").value = "";
       showPanel();
     } catch(err){
       const errEl = document.getElementById("gate-error");
