@@ -154,7 +154,11 @@
   .sg-card figcaption span{ font-family:var(--font-mono); font-size:0.7rem; color:var(--cream-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .sg-azioni{ display:flex; gap:8px; }
   .sg-azioni .admin-btn{ padding:10px 16px; font-size:0.74rem; }
-  .sg-azioni [data-svg]{ flex:1; }
+  .sg-azioni [data-svg], .sg-azioni [data-jpg]{ flex:1; }
+  .cg-foto-info{ display:flex; align-items:center; gap:14px; margin:-6px 0 20px; }
+  .cg-foto-info[hidden]{ display:none; }
+  .cg-foto-info img{ width:96px; height:64px; object-fit:cover; border:1px solid rgba(245,240,230,0.16); }
+  .cg-foto-info span{ font-family:var(--font-mono); font-size:0.74rem; color:var(--cream-dim); min-width:0; overflow-wrap:anywhere; }
 </style>
 </head>
 <body>
@@ -459,6 +463,52 @@
       </div>
       <div id="sg-green-stato" class="status-list"></div>
       <div id="sg-green-out" class="sg-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- GENERATORE DI COPERTINE (admin-social.js): la foto non lascia mai il
+     browser, niente Cloudinary e niente localStorage; "Cancella tutto" (e la
+     chiusura della pagina) la toglie dalla memoria insieme alle copertine -->
+<section id="panel-copertine">
+  <div class="wrap">
+    <p class="marker">Miniature e copertine</p>
+    <h2>Generatore di copertine</h2>
+    <p style="margin-top:14px; max-width:68ch;">Scegli una foto, scrivi il titolo e premi "Genera": ti preparo la copertina in dieci stili, poi scarichi quella che ti piace (JPG, o PNG). Come per i titoli, le parole tra <strong>*asterischi*</strong> vengono in rosso. La foto <strong>non viene caricata da nessuna parte</strong>: resta solo in questa pagina e sparisce, insieme alle copertine, quando premi "Cancella tutto" o chiudi la pagina.</p>
+
+    <div class="contact-card" style="margin-top:28px;">
+      <label class="admin-label" for="cg-foto">Foto</label>
+      <input type="file" id="cg-foto" class="admin-file" accept="image/*">
+      <div id="cg-foto-info" class="cg-foto-info" hidden><img alt="La foto scelta"><span></span></div>
+      <label class="admin-label" for="cg-titolo">Cosa vuoi scritto</label>
+      <textarea id="cg-titolo" class="admin-input" rows="2" maxlength="120" placeholder="Es. Honda WN7, la mia *prova su strada*" style="resize:vertical;"></textarea>
+      <div class="sg-opzioni">
+        <div>
+          <label class="admin-label" for="cg-formato">Formato</label>
+          <select id="cg-formato" class="admin-select">
+            <option value="youtube">Miniatura YouTube (1280×720)</option>
+            <option value="reel">Reel e TikTok (1080×1920)</option>
+            <option value="post">Post Instagram (1080×1350)</option>
+            <option value="quadrato">Quadrato (1080×1080)</option>
+          </select>
+        </div>
+        <div>
+          <label class="admin-label" for="cg-fuoco">Parte della foto da tenere</label>
+          <select id="cg-fuoco" class="admin-select">
+            <option value="centro">Il centro</option>
+            <option value="sinistra">La parte sinistra</option>
+            <option value="destra">La parte destra</option>
+            <option value="alto">La parte in alto</option>
+            <option value="basso">La parte in basso</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button type="button" class="admin-btn" id="cg-btn">Genera copertine</button>
+        <button type="button" class="admin-btn outline" id="cg-cancella">Cancella tutto</button>
+      </div>
+      <div id="cg-stato" class="status-list"></div>
+      <div id="cg-out" class="sg-grid"></div>
     </div>
   </div>
 </section>
