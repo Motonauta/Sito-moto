@@ -1,7 +1,3 @@
-// Dati condivisi di Itinerari, Miniviaggi e Viaggi da ricordare: un solo file
-// caricato sia dal browser (index.html, per i caroselli) sia dalle funzioni
-// serverless (api/viaggio.js, per generare la pagina dedicata di ogni
-// viaggio) — così i due posti restano sempre allineati senza duplicare nulla.
 (function (root, factory) {
   if (typeof module !== "undefined" && module.exports) {
     module.exports = factory();
@@ -9,9 +5,6 @@
     root.VIAGGI_DATA = factory();
   }
 })(typeof self !== "undefined" ? self : this, function () {
-  // data in cui i dati di itinerari/miniviaggi/viaggi da ricordare sono stati
-  // verificati/aggiornati l'ultima volta (mostrata nelle pagine dedicate) —
-  // aggiornala a mano quando modifichi voci in questo file
   const ULTIMO_AGGIORNAMENTO_DATI = "2026-08-13";
 
   const ITINERARI = [
@@ -785,12 +778,8 @@
     }
   ];
 
-  // Slug stabile e leggibile per l'URL di ogni viaggio (es. /viaggi/il-classico-dei-due-laghi),
-  // ricavato dal titolo: non serve un campo a parte da tenere aggiornato a mano.
   function slugify(text) {
     return String(text)
-      // lettere non scomponibili con NFD (\u00d8, \u00c6, ecc.) vanno sostituite a mano,
-      // altrimenti finiscono silenziosamente eliminate dallo slug
       .replace(/[\u00f8\u00d8]/g, "o").replace(/[\u00e6\u00c6]/g, "ae").replace(/[\u0153\u0152]/g, "oe")
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
@@ -803,8 +792,6 @@
     return slugify(item.titolo);
   }
 
-  // tipo ("itinerario" | "miniviaggio" | "ricordare") + slug -> voce, per
-  // trovare rapidamente un viaggio dato lo slug nell'URL
   function findBySlug(slug) {
     const all = [
       ...ITINERARI.map(it => ({ tipo: "itinerario", it })),

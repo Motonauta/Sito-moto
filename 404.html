@@ -10,13 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<!-- percorsi tutti assoluti: Vercel mostra questa pagina a qualunque
-     indirizzo sbagliato, anche annidato (/a/b/c), non solo in cima -->
-<link rel="stylesheet" href="/style.css?v=20261013f">
+<link rel="stylesheet" href="/style.css?v=20261017a">
 <script src="/cookie-consent.js" defer></script>
 <style>
-  /* stessa base delle altre pagine: grafite freddo e filo rosso/blu
-     sotto l'header */
   :root{
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
@@ -29,8 +25,6 @@
     pointer-events:none;
   }
 
-  /* PAGINA 404 — "carburante finito": il segnale wifi che si spegne
-     tacca dopo tacca e l'indicatore della benzina fermo sulla riserva */
   .lost{ min-height:calc(100dvh - 160px); display:flex; align-items:center; padding:64px 0 80px; }
   .lost .wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; }
 
@@ -39,8 +33,6 @@
   .lost-signal path, .lost-signal circle{ fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; }
   .lost-signal circle{ fill:currentColor; stroke:none; }
   .lost-signal .arc{ opacity:.16; }
-  /* le tacche si accendono dal centro verso fuori e poi muoiono insieme,
-     come un segnale che cerca la rete e non la trova */
   @media (prefers-reduced-motion: no-preference){
     .lost-signal .arc{ animation:signal-search 2.6s var(--ease-out) infinite; }
     .lost-signal .arc-2{ animation-delay:.18s; }
@@ -63,7 +55,6 @@
   .lost h1::after{ left:50%; transform:translateX(-50%); }
   .lost-sub{ margin:18px auto 0; font-size:1.08rem; max-width:44ch; }
 
-  /* indicatore della benzina, stile cruscotto: lancetta sulla riserva */
   .lost-fuel{
     margin-top:34px; display:flex; align-items:center; gap:14px;
     background:#0b0b0a; border:1px solid rgba(245,240,230,0.14); border-radius:10px;
@@ -201,6 +192,6 @@
   </div>
 </footer>
 
-<script src="/script.js?v=20261013f"></script>
+<script src="/script.js?v=20261017a"></script>
 </body>
 </html>

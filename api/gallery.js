@@ -1,8 +1,8 @@
 const cloudinary = require('cloudinary').v2;
-const { isAuthenticated } = require('../lib/auth');
-const { getRedisClient } = require('../lib/redis');
-const instagram = require('../lib/instagram');
-const tiktok = require('../lib/tiktok');
+const { isAuthenticated } = require('./_lib/auth');
+const { getRedisClient } = require('./_lib/redis');
+const instagram = require('./_lib/instagram');
+const tiktok = require('./_lib/tiktok');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -439,7 +439,7 @@ module.exports = async (req, res) => {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo non consentito' });
     return handleMoveAlbum(req, res);
   }
-  // riquadro Instagram della home (vedi lib/instagram.js)
+  // riquadro Instagram della home (vedi _lib/instagram.js)
   if (action === 'instagram') {
     if (req.method !== 'GET') return res.status(405).json({ error: 'Metodo non consentito' });
     try {
@@ -450,7 +450,7 @@ module.exports = async (req, res) => {
       return res.status(200).json({ collegato: false, profilo: null, post: [] });
     }
   }
-  // riquadro TikTok della home, uguale a Instagram (vedi lib/tiktok.js)
+  // riquadro TikTok della home, uguale a Instagram (vedi _lib/tiktok.js)
   if (action === 'tiktok') {
     if (req.method !== 'GET') return res.status(405).json({ error: 'Metodo non consentito' });
     try {

@@ -20,23 +20,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013f">
+<link rel="stylesheet" href="style.css?v=20261017a">
 <style>
-  /* v12: rosso e blu come protagonisti veri (su indicazione di Angelo,
-     riferimento Ducati/KTM/Dainese), ma con un motivo unico e ricorrente
-     — il doppio filo rosso+blu da livrea — invece di sparsi a caso. */
   :root{
-    /* niente più rosso diverso qui: eredita --rust dal sito (stesso
-       rosso del logo), così resta identico ovunque */
     --sand:#F2EEE7;
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
     --asphalt-2:#1D2126;
   }
 
-  /* doppio filo da livrea sotto l'header, ripreso in fondo pagina —
-     e lo sfondo dell'header allineato al grafite freddo del resto
-     della pagina (prima restava il vecchio nero-marrone, stonava) */
   .site-header{
     background:rgba(21,23,27,0.92);
     border-bottom:none;
@@ -47,7 +39,6 @@
     pointer-events:none;
   }
 
-  /* sweep diagonale rosso+blu dietro al titolo, solo desktop */
   section:first-of-type{ position:relative; overflow:hidden; }
   section:first-of-type::before,
   section:first-of-type::after{
@@ -70,9 +61,6 @@
       "eicma eicma foto";
     gap:22px;
   }
-  /* card "a doppia cornice": guscio sottile + pannello interno con
-     il proprio sfondo e una barra colore in alto, rosso/blu alternati
-     card per card — qui il blu diventa presenza reale, non solo logo */
   .sponsor-bento > div{
     position:relative;
     border:1px solid rgba(245,240,230,0.1);
@@ -109,9 +97,6 @@
   .sponsor-bento > div:nth-child(5){ grid-area:eicma; }
   .sponsor-bento > div:nth-child(6){ grid-area:foto; }
 
-  /* le due card "larghe" (AllianzDirect, EICMA) usano un layout
-     orizzontale — logo a sinistra, testo a destra — invece di essere
-     solo una versione più larga della stessa card verticale */
   .sponsor-bento > div:nth-child(2),
   .sponsor-bento > div:nth-child(5){
     display:grid;
@@ -128,9 +113,6 @@
     grid-column:2;
   }
 
-  /* il logo EICMA ha uno sfondo bianco pieno nel file originale, che
-     stonava a vista sulla card scura — qui diventa un chip bianco
-     intenzionale invece di un rettangolo bianco "accidentale" */
   .sponsor-bento > div:nth-child(5) .sponsor-logo-link{
     background:#fff;
     border-radius:12px;
@@ -159,7 +141,6 @@
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(8,10,18,0.28); }
 }
 
-  /* stesso filo da livrea in cima al blocco finale, per "chiudere" la pagina */
   .section-alt{ position:relative; }
   .section-alt::before{
     content:""; position:absolute; top:0; left:0; right:0; height:5px;
@@ -233,7 +214,6 @@
   <div class="wrap">
     <div class="sponsor-bento">
 
-      <!-- BEP'S -->
       <div style="padding:40px 30px;">
         <a href="https://www.beps.it/it/" target="_blank" rel="noopener sponsored" class="sponsor-logo-link">
           <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784642431/Bep_s_lso56m.png" alt="Logo Bep's" style="max-height:100%; max-width:100%; object-fit:contain;">
@@ -243,7 +223,6 @@
         <p style="margin-top:10px; font-size:0.9rem;">Catena italiana di negozi specializzati in abbigliamento e accessori moto, con marchi come Alpinestars, Dainese e Acerbis — il mio punto di riferimento per giacche, protezioni e attrezzatura da viaggio.</p>
       </div>
 
-      <!-- ALLIANZ DIRECT -->
       <div style="padding:40px 30px;">
         <a href="https://www.allianzdirect.it/" target="_blank" rel="noopener sponsored" class="sponsor-logo-link">
           <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784642431/Allianzdirect_mmfbbu.jpg" alt="Logo AllianzDirect" style="max-height:100%; max-width:100%; object-fit:contain;">
@@ -253,7 +232,6 @@
         <p style="margin-top:10px; font-size:0.9rem;">Compagnia assicurativa online del gruppo Allianz, con polizze moto attivabili in pochi minuti direttamente da smartphone — la copertura che mi segue in ogni viaggio.</p>
       </div>
 
-      <!-- EASYBLOCK -->
       <div style="padding:40px 30px;">
         <a href="https://it.easyblock.com/" target="_blank" rel="noopener sponsored" class="sponsor-logo-link">
           <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784642431/Easyblock_jepgb1.png" alt="Logo Easyblock" style="max-height:100%; max-width:100%; object-fit:contain;">
@@ -267,7 +245,6 @@
         </div>
       </div>
 
-      <!-- CARPURIDE -->
       <div style="padding:40px 30px;">
         <a href="https://carpuride.com/discount/Motonauta30?ref=Motonauta30" target="_blank" rel="noopener sponsored" class="sponsor-logo-link">
           <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784642431/Carpuride_e6jljf.png" alt="Logo Carpuride" style="max-height:100%; max-width:100%; object-fit:contain;">
@@ -281,7 +258,6 @@
         </div>
       </div>
 
-      <!-- EICMA -->
       <div style="padding:40px 30px;">
         <a href="https://www.eicma.it/it/" target="_blank" rel="noopener sponsored" class="sponsor-logo-link">
           <img src="https://res.cloudinary.com/whqpxxz1/image/upload/v1784642431/Eicma_phytax.png" alt="Logo EICMA" style="max-height:100%; max-width:100%; object-fit:contain;">
@@ -291,7 +267,6 @@
         <p style="margin-top:10px; font-size:0.9rem;">Il Salone Internazionale del Motociclo di Milano, l'evento fieristico più importante al mondo per il settore delle due ruote — ci sono ogni anno per raccontarvi anteprime e novità.</p>
       </div>
 
-      <!-- FOTORADAR -->
       <div style="padding:40px 30px;">
         <a href="https://www.fotoradar.it/" target="_blank" rel="noopener sponsored" class="sponsor-logo-link">
           <img src="https://www.fotoradar.it/logo-icon.png" alt="Logo Fotoradar" style="max-height:100%; max-width:100%; object-fit:contain;">
@@ -345,6 +320,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=20261013f"></script>
+<script src="script.js?v=20261017a"></script>
 </body>
 </html>

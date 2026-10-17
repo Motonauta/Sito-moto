@@ -26,17 +26,11 @@
 <link rel="preload" as="image" fetchpriority="high"
   imagesrcset="https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_800,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 800w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1200w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_1600,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 1600w, https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto,w_2200,c_limit/v1784896612/IMG_0242_TIF_qfhllm.jpg 2200w"
   imagesizes="(min-width: 900px) 62vw, 100vw">
-<link rel="stylesheet" href="style.css?v=20261013f">
-<script src="formati.js?v=20261013f"></script>
+<link rel="stylesheet" href="style.css?v=20261017a">
+<script src="formati.js?v=20261017a"></script>
 <script src="cookie-consent.js" defer></script>
 <style>
-  /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
-     orizzontale causato da una card a 4 colonne che non si adattava
-     al telefono (vedi sotto) — ma "overflow" su html/body impedisce
-     anche all'header "sticky" di restare fisso in cima durante lo
-     scroll. Risolto il vero problema (le 4 colonne), tolto il cerotto. */
   html, body{ max-width:100vw; }
-  /* DOVE VUOI ANDARE?: indice a righe, riga che si accende di rosso */
   .esplora-grid{ margin-top:40px; border-top:1px solid rgba(245,240,230,0.12); }
   .esplora-row{
     position:relative; isolation:isolate;
@@ -78,13 +72,6 @@
     .esplora-go{ grid-column:2; grid-row:1 / span 3; width:40px; height:40px; }
   }
 
-  /* stesso sistema di base delle altre pagine già fatte (Alleati,
-     Canale aperto, Diario di bordo, Il Motonauta): grafite freddo,
-     doppio filo rosso/blu sotto l'header e sulle sezioni alternate,
-     niente sweep diagonale dietro al primo titolo: qui l'apertura ha la
-     foto della XR (stile in style.css, "APERTURA DELLA HOME"). Niente cornici sulle foto dinamiche degli
-     itinerari: sono tante e piccole, una cornice vistosa sommerebbe
-     la lista invece di impreziosirla. */
   :root{
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
@@ -126,9 +113,6 @@
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(8,10,18,0.28); }
 }
 
-  /* stesso trattamento "a doppia cornice" delle card di Alleati, qui
-     applicato ai pannelli funzionali del sito (prima erano piatti:
-     un bordo sottile e basta) */
   .macro-box{
     position:relative;
     margin-top:34px; border:1px solid rgba(245,240,230,0.1); border-radius:24px;
@@ -174,7 +158,6 @@
     font-family:var(--font-mono); font-size:0.85rem; color:var(--cream-dim);
   }
   .macro-filter-empty[hidden]{ display:none; }
-  /* "Carica altro" sotto le prime 5 schede di ogni lista */
   .macro-more{ align-self:center; margin-top:6px; cursor:pointer; }
   .macro-more[hidden]{ display:none; }
   .macro-more-count{ color:var(--cream-dim); letter-spacing:0.04em; text-transform:none; }
@@ -194,9 +177,6 @@
   }
   .viaggio-item:hover{ border-color:var(--gold); }
 
-  /* Solo su desktop/mouse (esclude i touchscreen, dove l'hover non ha
-     senso): la scheda sotto il cursore si ingrandisce leggermente e si
-     solleva sopra le altre, come se venisse incontro a chi guarda. */
   @media (hover:hover) and (pointer:fine){
     .viaggio-item:hover{
       transform:scale(1.035) translateY(-4px);
@@ -204,10 +184,6 @@
       box-shadow:0 26px 54px -22px rgba(8,10,18,0.7);
     }
   }
-  /* Le foto arrivano da fonti diverse (Wikimedia, Cloudinary) con colori e
-     luce molto diversi tra loro: un'unica "correzione colore" leggermente
-     desaturata + una velatura rosso/blu le fa sembrare della stessa serie.
-     Al passaggio del mouse la foto torna più viva. */
   .viaggio-item-photo{
     flex:0 0 240px; aspect-ratio:4/3; overflow:hidden; position:relative;
     background:var(--asphalt-2);
@@ -229,8 +205,6 @@
     transform:scale(1.04);
   }
 }
-  /* riserva quando la foto manca o non si carica: niente icona "immagine
-     rotta" del browser, ma un riquadro coerente con il resto */
   .viaggio-item-photo.is-missing{
     display:flex; align-items:center; justify-content:center;
     background:
@@ -321,9 +295,6 @@
   }
   .oggi-note{ margin-top:16px; font-size:0.8rem; color:var(--cream-dim); }
 
-  /* ===== "Dove vado oggi?": ore su un orologio digitale, km su un
-     righello a tacche da 50 con la moto (stile GS) che si carica di
-     bagagli a ogni tacca e a 400 cade. Lo script è in fondo alla pagina. */
   .oggi-grid{ grid-template-columns:minmax(250px, 300px) minmax(0, 1fr); gap:22px; }
   @media (max-width:780px){ .oggi-grid{ grid-template-columns:minmax(0, 1fr); } }
   .fuel-calc .oggi-label{
@@ -331,7 +302,6 @@
     letter-spacing:0.05em; color:var(--cream-dim); margin-bottom:8px;
   }
 
-  /* cifre a sette segmenti (anche quelle spente, appena accennate) */
   .seg7{ display:inline-flex; height:40px; }
   .seg7 svg{ height:100%; width:auto; overflow:visible; filter:drop-shadow(0 0 6px rgba(255,69,58,0.5)); }
   .seg7 .on{ fill:#ff453a; }
@@ -365,8 +335,6 @@
     letter-spacing:0.05em; color:var(--cream-dim); padding-bottom:2px;
   }
   .km-ride-load{ font-family:var(--font-mono); font-size:0.72rem; line-height:1.35; color:var(--sand); text-align:right; }
-  /* sul telefono la scritta può andare a capo: due righe sempre riservate,
-     così la strada non salta su e giù mentre si trascina */
   @media (max-width:560px){ .km-ride-load{ min-height:2.7em; display:flex; align-items:center; justify-content:flex-end; } }
   .km-ride[data-level="8"] .km-ride-load{ color:var(--rust-text); }
 
@@ -377,7 +345,6 @@
   }
   .km-ride.is-dragging .km-ride-stage{ cursor:grabbing; }
   .km-ride-sky{ position:relative; height:calc(var(--mw) * 0.66); }
-  /* la moto: --x (px) e --spin (gradi delle ruote) li aggiorna lo script */
   .km-ride-moto{
     position:absolute; left:0; bottom:calc(-7px - var(--mw) * 0.0406);
     width:var(--mw); aspect-ratio:320 / 210;
@@ -400,26 +367,9 @@
   .km-ride-svg .mc-bag.is-on{ opacity:1; transform:none; }
   .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
 
-  /* 400 km: troppa roba. Una sola scena di 3 secondi, tutte le animazioni
-     partono insieme quando lo script mette .is-down (le percentuali sono i
-     tempi: 10% = 0,3 s). Tornando sotto i 400 lo script la riavvolge al
-     contrario, più veloce, e alla fine toglie .is-down:
-     - 0–0,3 s il pilota allunga la gamba destra fino a terra (il GS è alto:
-       ci arriva in punta di piedi);
-     - 0,28–0,72 s la moto non si tiene e gira verso chi guarda: profilo,
-       tre quarti e frontale ruotano in prospettiva (il muso viene verso di
-       noi) e si danno il cambio quando sono girati uguali;
-     - 0,66–1,42 s cade di lato sulle borse e sul paramotore (il
-       sollevamento segue l'angolo perché a terra ci vanno le borse);
-     - 0,86 s il pilota scende, rotola, si rialza (1,5–1,74 s), si gratta il
-       casco e scuote la testa, con le stelline che girano e poi spariscono. */
   .km-ride.is-down .km-ride-rig{ animation:gs-turn-side 3s linear both; }
   .km-ride.is-down .km-ride-tq{ visibility:visible; animation:gs-turn-tq 3s linear both; }
   .km-ride.is-down .km-ride-front{ visibility:visible; animation:gs-turn-front 3s linear both; }
-  /* il giro: la moto ruota di 90° (0,28–0,72 s). Ogni cartoncino copre un
-     terzo del giro ruotando attorno al suo angolo: il profilo da 0 a 22°,
-     i tre quarti (disegnati a 45°) da 22 a 68°, il frontale da 68 a 90°, e
-     si danno il cambio in 20 ms quando sono girati uguali */
   @keyframes gs-turn-side{
     0%, 9.33%{ transform:perspective(700px) rotateY(0deg); }
     12%{ transform:perspective(700px) rotateY(-12deg); }
@@ -446,7 +396,6 @@
     19.9%, 100%{ opacity:1; }
   }
 
-  /* la gamba destra di profilo: anca, ginocchio e caviglia */
   .km-ride-svg .mc-leg-up{ transform-box:view-box; transform-origin:138px 106px; }
   .km-ride-svg .mc-leg-low{ transform-box:view-box; transform-origin:172px 116px; }
   .km-ride-svg .mc-leg-foot{ transform-box:view-box; transform-origin:154px 150px; }
@@ -457,7 +406,6 @@
   @keyframes gs-leg-low{ 0%{ transform:none; animation-timing-function:var(--ease-out); } 10%, 100%{ transform:rotate(-86.5deg); } }
   @keyframes gs-leg-foot{ 0%{ transform:none; animation-timing-function:var(--ease-out); } 10%, 100%{ transform:rotate(78deg); } }
 
-  /* la caduta di lato */
   .km-ride-svg--front .mc-front-fall{ transform-box:view-box; transform-origin:152px 196px; }
   .km-ride.is-down .mc-front-fall{ animation:gs-tip 3s both; }
   @keyframes gs-tip{
@@ -468,7 +416,6 @@
     47.3%, 100%{ transform:translate(0px, -46.5px) rotate(-78deg); }
   }
 
-  /* il pilota: scende dalla moto, rotola, si rialza */
   .km-ride.is-down .mc-front-rider{ animation:gs-seat 3s linear both; }
   @keyframes gs-seat{ 0%, 28.6%{ opacity:1; } 30%, 100%{ opacity:0; } }
   .km-ride-svg--front .mc-tumble{ opacity:0; transform-box:view-box; transform-origin:0 0; }
@@ -501,14 +448,12 @@
     100%{ opacity:0; transform:rotate(300deg); }
   }
 
-  /* la polvere quando la moto e il pilota toccano terra */
   .km-ride-fx .mc-dust{ opacity:0; }
   .km-ride.is-down .mc-dust{ opacity:1; }
   .km-ride-fx .mc-dust circle{ opacity:0; transform-box:fill-box; transform-origin:center; }
   .km-ride.is-down .mc-dust circle{ animation:km-dust .7s var(--ease-out) 1.12s both; }
   @keyframes km-dust{ from{ opacity:0; transform:scale(0.4); } 30%{ opacity:.6; } to{ opacity:.4; transform:none; } }
 
-  /* strada con la mezzeria e tacche ogni 50 km, allineate al centro della moto */
   .km-ride-road{
     position:relative; height:12px; background:#161614;
     border-top:1px solid rgba(245,240,230,0.14); border-bottom:1px solid rgba(245,240,230,0.14);
@@ -526,13 +471,10 @@
   }
   .km-tick::before{ content:""; width:2px; height:6px; margin-bottom:4px; background:currentColor; }
   .km-tick.is-passed{ color:var(--rust-text); }
-  /* mentre la moto è a terra o torna indietro da sola, la tacca scelta si
-     accende in chiaro: si vede subito dove andrà */
   .km-ride:is(.is-down, .is-driving) .km-tick.is-meta{ color:var(--sand); }
   .km-ride:is(.is-down, .is-driving) .km-tick.is-meta::before{ height:9px; margin-bottom:1px; }
   @media (max-width:560px){ .km-tick:nth-child(even) > span{ visibility:hidden; } }
 
-  /* il range vero resta per tastiera e lettori di schermo */
   .fuel-calc .km-ride-input{
     position:absolute; left:50%; bottom:0; width:1px; height:1px; padding:0; margin:0;
     opacity:0; pointer-events:none; border:0;
@@ -544,8 +486,6 @@
     .km-ride-svg .mc-spin, .km-ride:not(.is-dragging):not(.is-driving) .km-ride-svg .mc-spin{ transition:none; }
     .km-ride-svg .mc-bag{ transform:none; transition:opacity .2s ease; }
     .km-ride-svg .mc-bag-roll.is-on.is-big{ transform:scale(1.28); }
-    /* con "riduci movimento" niente scena: si vede subito com'è finita,
-       la moto a terra e il pilota in piedi accanto */
     .km-ride.is-down :is(.km-ride-rig, .km-ride-tq, .km-ride-front, .mc-leg-up, .mc-leg-low, .mc-leg-foot,
       .mc-front-fall, .mc-front-rider, .mc-tumble, .mc-stand, .mc-stand-head, .mc-dizzy, .mc-dust circle){ animation:none; }
     .km-ride.is-down .km-ride-rig, .km-ride.is-down .km-ride-tq{ opacity:0; }
@@ -639,9 +579,6 @@
   </div>
 </header>
 
-<!-- APERTURA: la XR di notte, col faro acceso (sul computer la foto sta a
-     destra e sfuma nell'asfalto come nelle copertine delle guide; sul
-     telefono sta sopra il titolo a tutta larghezza) ===================== -->
 <section class="home-hero" style="padding-top:0; padding-bottom:0;">
   <div class="home-hero-photo hero-parallax-frame">
     <img class="hero-parallax"
@@ -669,7 +606,6 @@
   </div>
 </section>
 
-<!-- CRUSCOTTO: i numeri veri del sito, come un quadro strumenti ======== -->
 <section style="padding-top:36px; padding-bottom:0;">
   <div class="wrap">
     <div class="cruscotto" role="group" aria-label="I numeri del sito" style="--cols:3;">
@@ -692,7 +628,6 @@
   </div>
 </section>
 
-<!-- CALCOLATORE BENZINA, condiviso da tutte le categorie qui sotto ===== -->
 <section style="padding-top:32px; padding-bottom:0;">
   <div class="wrap">
     <div class="fuel-calc">
@@ -745,7 +680,6 @@
   </div>
 </section>
 
-<!-- DOVE VADO OGGI? ==================================================== -->
 <section id="dove-vado-oggi" style="padding-top:32px; padding-bottom:0; scroll-margin-top:90px;">
   <div class="wrap">
     <div class="fuel-calc is-blue">
@@ -757,7 +691,6 @@
         dal migliore in giù.
       </p>
       <div class="fuel-calc-grid oggi-grid">
-        <!-- ore libere: orologio digitale (le cifre le disegna lo script) -->
         <div class="oggi-ore-field">
           <span class="oggi-label" id="oggi-ore-label">Ore libere</span>
           <div class="clock-set">
@@ -768,7 +701,6 @@
           <p class="clock-note" id="oggi-rientro" aria-live="polite"></p>
           <input type="hidden" id="oggi-ore" value="3">
         </div>
-        <!-- km: righello a tacche da 50 km con la moto che si carica di bagagli -->
         <div class="oggi-km-field">
           <label class="oggi-label" for="oggi-km">Km che vuoi fare (al massimo)</label>
           <div class="km-ride" id="km-ride" data-level="0">
@@ -799,7 +731,6 @@
                       </defs>
                       <g stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
 
-                        <!-- ========= RUOTE ========= -->
                         <g>
                           <circle cx="80" cy="164" r="32" fill="#141416"/>
                           <circle cx="80" cy="164" r="30" fill="none" stroke="#2e3036" stroke-width="3.5" stroke-dasharray="3.4 3"/>
@@ -817,19 +748,16 @@
                           <path d="M241 146 l9 3 -2 12 -9 -2z" fill="#2a2c31"/>
                         </g>
 
-                        <!-- ========= CODA: telaietto blu, portapacchi, fanalino ========= -->
                         <path d="M136 120 L66 106 M128 140 L92 112" stroke="#2f6fbf" stroke-width="4.2" fill="none"/>
                         <path d="M114 138 h10" stroke="#1a1b1f" stroke-width="4"/>
                         <path d="M38 100 H92 V104 H40 Z" fill="#26282d"/>
                         <path d="M62 104 Q56 112 54 124" stroke="#1a1b1f" stroke-width="4" fill="none"/>
                         <path d="M60 106 h10 l-1 4 h-8z" fill="#d23a33"/>
 
-                        <!-- ========= MOTORE BOXER (blocco e cambio) ========= -->
                         <path d="M128 120 L180 114 L188 148 L178 168 L140 168 L124 150 Z" fill="url(#gsDark)"/>
                         <path d="M136 126 L174 122 L178 146 L144 152 Z" fill="#4a4e57" stroke="none"/>
                         <path d="M140 160 h30" stroke="#5b616b" stroke-width="2" fill="none"/>
 
-                        <!-- ========= SCARICO: collettore sotto il motore e silenziatore inclinato ========= -->
                         <path d="M196 162 Q182 172 150 170 Q130 168 122 158" fill="none" stroke="#7e848e" stroke-width="5.5"/>
                         <path d="M196 162 Q182 172 150 170 Q130 168 122 158" fill="none" stroke="#c9ced5" stroke-width="2" />
                         <g transform="rotate(-24 104 140)">
@@ -839,19 +767,15 @@
                           <circle cx="68" cy="140" r="3.4" fill="#0c0c0b"/>
                         </g>
 
-                        <!-- ========= TELELEVER ========= -->
                         <path d="M208 100 L230 160" stroke="#1d1e22" stroke-width="7.5" fill="none"/>
                         <path d="M220 128 L231 160" stroke="#c7ccd3" stroke-width="5" fill="none"/>
 
-                        <!-- ========= SELLA ========= -->
                         <path d="M86 104 Q88 98 104 98 L126 100 L128 108 L90 108 Z" fill="#1d1e22"/>
                         <path d="M122 106 Q126 101 140 102 L168 104 Q172 107 168 112 L126 114 Z" fill="url(#gsRed)"/>
                         <path d="M128 112 L166 110" stroke="#6f1418" stroke-width="1.2" fill="none"/>
 
-                        <!-- ========= SERBATOIO E FIANCATE (livrea HP) ========= -->
                         <path d="M164 106 L172 96 L204 88 L214 94 L212 104 L170 110 Z" fill="url(#gsWhite)"/>
                         <path d="M172 97 L204 89" stroke="#ffffff" stroke-width="1.4" fill="none"/>
-                        <!-- ala del radiatore, l'angolo tipico del GS -->
                         <path d="M168 110 L212 100 L226 106 L230 122 L214 136 L180 132 Z" fill="url(#gsWhite)"/>
                         <path d="M176 130 L214 102 L220 104 L186 132 Z" fill="#2f6fbf" stroke="none"/>
                         <path d="M188 132 L221 105 L225 107 L196 133 Z" fill="#16325c" stroke="none"/>
@@ -859,45 +783,36 @@
                         <path d="M168 110 L212 100 L226 106 L230 122 L214 136 L180 132 Z" fill="none"/>
                         <path d="M214 136 L230 122" stroke="#1a1b1f" stroke-width="3" fill="none"/>
 
-                        <!-- ========= TESTA DEL CILINDRO BOXER che sporge, con paramotore ========= -->
                         <rect x="166" y="140" width="20" height="20" rx="4" fill="#3a3e46"/>
                         <path d="M169 144 h14 M169 148 h14 M169 152 h14 M169 156 h14" stroke="#6b717b" stroke-width="1" fill="none"/>
                         <path d="M182 138 H202 Q212 138 212 149 Q212 160 202 160 H182 Z" fill="url(#gsSteel)"/>
                         <path d="M188 142 H202 Q207 142 207 149 Q207 156 202 156 H188 Z" fill="#26282d"/>
                         <path d="M190 146 h12" stroke="#8e949e" stroke-width="1" fill="none"/>
-                        <!-- paramotore tubolare attorno al cilindro -->
                         <path d="M178 128 Q210 128 216 144 Q220 160 200 168" stroke="#0c0c0b" stroke-width="5" fill="none"/>
                         <path d="M178 128 Q210 128 216 144 Q220 160 200 168" stroke="#4a4e57" stroke-width="2.6" fill="none"/>
 
-                        <!-- ========= FRONTALE: faro, becco, cupolino ========= -->
                         <path d="M208 86 L232 92 L240 106 L234 114 L218 112 L210 98 Z" fill="url(#gsWhite)"/>
                         <path d="M232 94 L240 106 L236 110 L230 100 Z" fill="#e8f2ff" stroke-width="1.2"/>
                         <path d="M233 99 L237 105" stroke="#ffffff" stroke-width="1.4"/>
-                        <!-- il becco -->
                         <path d="M220 108 L274 124 L268 129 L244 132 L226 127 Z" fill="url(#gsWhite)"/>
                         <path d="M236 116 L272 125 L269 127 L240 121 Z" fill="#d23a33" stroke="none"/>
                         <path d="M236 127 L264 128" stroke="#2f6fbf" stroke-width="2.6" fill="none"/>
                         <path d="M220 108 L274 124 L268 129 L244 132 L226 127 Z" fill="none"/>
-                        <!-- cupolino alto -->
                         <path d="M214 88 L203 52 L211 50 L226 92 Z" fill="url(#gsScreen)" stroke-width="1.2"/>
                         <path d="M204 54 L210 52" stroke="#e6eef6" stroke-width="1.5"/>
 
-                        <!-- ========= MANUBRIO, PARAMANI, SPECCHIO ========= -->
                         <path d="M206 98 L202 86" stroke="#1a1b1f" stroke-width="4" fill="none"/>
                         <path d="M190 86 H206" stroke="#1a1b1f" stroke-width="4.5" fill="none"/>
                         <path d="M202 78 Q214 80 210 92 L203 90 Z" fill="#26282d"/>
                         <path d="M200 80 L192 64" stroke="#1a1b1f" stroke-width="1.8" fill="none"/>
                         <ellipse cx="191" cy="62" rx="6.5" ry="3.6" fill="#26282d"/>
 
-                        <!-- ========= BAGAGLI DIETRO ========= -->
-                        <!-- 200 km: borsa a rotolo sulla sella posteriore (a 300 si gonfia) -->
                         <g class="mc-bag mc-bag-roll" data-from="4">
                           <rect x="88" y="78" width="42" height="21" rx="10" fill="url(#gsRed)"/>
                           <ellipse cx="96" cy="88.5" rx="5" ry="10" fill="#8a1a1f"/>
                           <path d="M106 78 V99 M120 78 V99" stroke="#141416" stroke-width="3" fill="none"/>
                           <path d="M100 82 H126" stroke="#f08a86" stroke-width="1.2" opacity=".8" fill="none"/>
                         </g>
-                        <!-- 50 km: bauletto in alluminio -->
                         <g class="mc-bag mc-bag-top" data-from="1">
                           <rect x="28" y="60" width="58" height="41" rx="3" fill="url(#gsAlu)"/>
                           <path d="M28 70 H86" fill="none"/>
@@ -906,13 +821,11 @@
                           <rect x="51" y="72" width="12" height="6" rx="1.5" fill="#26282d"/>
                           <path d="M40 63 H74" stroke="#ffffff" stroke-width="1.2" opacity=".8" fill="none"/>
                         </g>
-                        <!-- 250 km: borsello sopra il bauletto -->
                         <g class="mc-bag mc-bag-topbag" data-from="5">
                           <rect x="38" y="45" width="38" height="16" rx="5" fill="url(#gsDark)"/>
                           <path d="M48 45 V61 M66 45 V61" stroke="#d23a33" stroke-width="2.4" fill="none"/>
                           <path d="M42 49 H72" stroke="#7a808a" stroke-width="1.2" fill="none"/>
                         </g>
-                        <!-- 150 km: valigie laterali in alluminio -->
                         <g class="mc-bag mc-bag-side" data-from="3">
                           <rect x="42" y="106" width="74" height="50" rx="3" fill="url(#gsAlu)"/>
                           <path d="M42 116 H116" fill="none"/>
@@ -921,36 +834,30 @@
                           <rect x="72" y="118" width="14" height="6" rx="1.5" fill="#26282d"/>
                           <path d="M54 109 H104" stroke="#ffffff" stroke-width="1.2" opacity=".8" fill="none"/>
                         </g>
-                        <!-- 100 km: borsa da serbatoio -->
                         <g class="mc-bag mc-bag-tank" data-from="2">
                           <path d="M168 96 Q168 80 184 77 L202 78 Q209 82 207 92 L200 100 L171 102 Z" fill="url(#gsDark)"/>
                           <path d="M169 90 Q170 79 184 77 L202 78 Q208 81 207 88 Q188 84 169 90 Z" fill="url(#gsRed)" stroke-width="1.2"/>
                           <rect x="178" y="88" width="20" height="6" rx="1.5" fill="#5d7fa6" stroke-width="1" opacity=".85"/>
                         </g>
-                        <!-- 300 km: borse sul paramotore -->
                         <g class="mc-bag mc-bag-guard" data-from="6">
                           <path d="M200 132 h20 q5 0 5 5 v18 q0 5 -5 5 h-20 q-5 0 -5 -5 v-18 q0 -5 5 -5z" fill="url(#gsDark)"/>
                           <path d="M195 141 Q210 130 225 141 V144 H195 Z" fill="#d23a33"/>
                           <path d="M201 151 h18" stroke="#9aa0a9" stroke-width="1.6" fill="none"/>
                         </g>
 
-                        <!-- ========= PILOTA ========= -->
                         <g class="mc-rider">
-                          <!-- 350 km: zaino -->
                           <g class="mc-bag mc-bag-pack" data-from="7">
                             <path d="M118 66 Q116 54 128 52 L140 54 L142 100 Q130 106 120 100 Z" fill="url(#gsRed)"/>
                             <path d="M118 66 Q116 54 128 52 L134 53 Q126 60 125 72 L124 103 L120 100 Z" fill="#8a1a1f" stroke="none"/>
                             <path d="M122 74 H140" stroke="#f08a86" stroke-width="1.4" fill="none"/>
                             <rect x="124" y="82" width="15" height="12" rx="3" fill="#8a1a1f"/>
                           </g>
-                          <!-- gamba destra: a 400 km la allunga fino a terra (anca, ginocchio, caviglia) -->
                           <g class="mc-leg-up">
                             <path d="M138 106 L172 116" stroke="#22252b" stroke-width="18" fill="none"/>
                             <path d="M138 106 L172 116" stroke="#2f333b" stroke-width="15" fill="none"/>
                             <g class="mc-leg-low">
                               <path d="M172 116 L154 150" stroke="#22252b" stroke-width="14" fill="none"/>
                               <path d="M172 116 L154 150" stroke="#2f333b" stroke-width="11" fill="none"/>
-                              <!-- stivale da adventure -->
                               <g class="mc-leg-foot">
                                 <path d="M146 144 L162 142 L170 154 L170 159 L144 160 Z" fill="#17181b"/>
                                 <path d="M147 150 L164 148" stroke="#d23a33" stroke-width="1.8" fill="none"/>
@@ -958,19 +865,15 @@
                             </g>
                             <circle cx="171" cy="116" r="5" fill="#4a4e57" stroke="none"/>
                           </g>
-                          <!-- busto con giacca da adventure -->
                           <path d="M126 110 Q124 84 136 62 Q146 52 158 56 Q170 66 166 88 L160 110 Z" fill="url(#gsJacket)"/>
                           <path d="M150 58 Q162 74 156 108" stroke="#d23a33" stroke-width="2.6" fill="none"/>
                           <path d="M132 76 Q142 72 152 76" stroke="#2f6fbf" stroke-width="2" fill="none"/>
-                          <!-- spallacci dello zaino (con lo zaino) -->
                           <path class="mc-bag mc-bag-pack" data-from="7" d="M138 56 Q152 64 150 86" stroke="#8a1a1f" stroke-width="3.2" fill="none"/>
-                          <!-- braccio -->
                           <path d="M154 62 L176 80" stroke="#22252b" stroke-width="12" fill="none"/>
                           <path d="M154 62 L176 80" stroke="url(#gsJacket)" stroke-width="9.5" fill="none"/>
                           <path d="M176 80 L194 86" stroke="#22252b" stroke-width="10" fill="none"/>
                           <path d="M176 80 L194 86" stroke="#3b414c" stroke-width="7.5" fill="none"/>
                           <circle cx="196" cy="86" r="5" fill="#17181b"/>
-                          <!-- casco da adventure: frontino, visiera, mentoniera a punta -->
                           <path d="M150 38 Q150 22 164 21 Q178 22 178 36 L178 44 Q176 52 166 54 L156 54 Q150 50 150 38 Z" fill="url(#gsWhite)"/>
                           <path d="M160 24 Q176 18 190 24 L186 30 L166 30 Z" fill="#d23a33"/>
                           <path d="M166 31 L181 32 Q183 40 178 44 L166 42 Z" fill="url(#gsVisor)" stroke-width="1.2"/>
@@ -982,7 +885,6 @@
                       </g>
                     </svg>
                   </div>
-                  <!-- a 400 km, a metà del giro: la moto di tre quarti col piede a terra -->
                   <div class="km-ride-tq">
                     <svg class="km-ride-svg km-ride-svg--tq" viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                       <g stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
@@ -1066,22 +968,17 @@
                       </g>
                     </svg>
                   </div>
-                  <!-- a 400 km la moto si gira verso chi guarda e cade di lato -->
                   <div class="km-ride-front">
                     <svg class="km-ride-svg km-ride-svg--front" viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                       <g class="mc-front-fall" stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
-                        <!-- bauletto e borsello dietro le spalle -->
                         <rect x="132" y="58" width="56" height="42" rx="3" fill="url(#gsAlu)"/>
                         <rect x="140" y="44" width="40" height="16" rx="5" fill="url(#gsDark)"/>
                         <path d="M150 44 V60 M170 44 V60" stroke="#d23a33" stroke-width="2.4" fill="none"/>
-                        <!-- valigie laterali, viste di taglio -->
                         <rect x="100" y="104" width="26" height="52" rx="3" fill="url(#gsAlu)"/>
                         <rect x="194" y="104" width="26" height="52" rx="3" fill="url(#gsAlu)"/>
                         <path d="M100 104 h7 v7 h-7z M119 104 h7 v7 h-7z M100 149 h7 v7 h-7z M119 149 h7 v7 h-7z M194 104 h7 v7 h-7z M213 104 h7 v7 h-7z M194 149 h7 v7 h-7z M213 149 h7 v7 h-7z" fill="#1a1b1f" stroke="none"/>
-                        <!-- borsa a rotolo che sporge ai lati del pilota -->
                         <rect x="128" y="84" width="64" height="20" rx="9" fill="url(#gsRed)"/>
 
-                        <!-- gambe del pilota -->
                         <g class="mc-front-rider">
                         <path d="M150 108 L137 140 L131 176" stroke="#22252b" stroke-width="15" fill="none"/>
                         <path d="M150 108 L137 140 L131 176" stroke="#2f333b" stroke-width="12" fill="none"/>
@@ -1091,43 +988,35 @@
                         <path d="M124 186 h15" stroke="#d23a33" stroke-width="1.8" fill="none"/>
                         </g>
 
-                        <!-- blocco motore al centro -->
                         <path d="M138 134 H182 L186 168 L174 176 H146 L134 168 Z" fill="url(#gsDark)"/>
-                        <!-- i due cilindri del boxer che sporgono ai lati -->
                         <rect x="122" y="140" width="18" height="22" rx="4" fill="#3a3e46"/>
                         <rect x="180" y="140" width="18" height="22" rx="4" fill="#3a3e46"/>
                         <path d="M125 145 v12 M129 145 v12 M133 145 v12 M187 145 v12 M191 145 v12 M195 145 v12" stroke="#6b717b" stroke-width="1" fill="none"/>
                         <path d="M124 138 H108 Q102 138 102 151 Q102 164 108 164 H124 Z" fill="url(#gsSteel)"/>
                         <path d="M196 138 H212 Q218 138 218 151 Q218 164 212 164 H196 Z" fill="url(#gsSteel)"/>
                         <path d="M120 142 H110 Q106 142 106 151 Q106 160 110 160 H120 Z M200 142 H210 Q214 142 214 151 Q214 160 210 160 H200 Z" fill="#26282d"/>
-                        <!-- paramotore -->
                         <path d="M138 128 Q100 126 96 146 Q94 166 128 172 M182 128 Q220 126 224 146 Q226 166 192 172" stroke="#0c0c0b" stroke-width="5" fill="none"/>
                         <path d="M138 128 Q100 126 96 146 Q94 166 128 172 M182 128 Q220 126 224 146 Q226 166 192 172" stroke="#4a4e57" stroke-width="2.6" fill="none"/>
-                        <!-- borse sul paramotore -->
                         <rect x="92" y="124" width="22" height="24" rx="5" fill="url(#gsDark)"/>
                         <rect x="206" y="124" width="22" height="24" rx="5" fill="url(#gsDark)"/>
                         <path d="M92 131 Q103 121 114 131 V134 H92 Z M206 131 Q217 121 228 131 V134 H206 Z" fill="#d23a33"/>
 
-                        <!-- ruota anteriore vista di fronte, forcella e dischi -->
                         <rect x="152" y="128" width="16" height="68" rx="8" fill="#141416"/>
                         <path d="M154 140 h12 M154 148 h12 M154 156 h12 M154 164 h12 M154 172 h12 M154 180 h12 M154 188 h12" stroke="#2e3036" stroke-width="2.2" fill="none"/>
                         <path d="M147 116 V166 M173 116 V166" stroke="#1d1e22" stroke-width="5" fill="none"/>
                         <path d="M147 140 V166 M173 140 V166" stroke="#c7ccd3" stroke-width="3.2" fill="none"/>
                         <path d="M150 148 v24 M170 148 v24" stroke="#b9bfc7" stroke-width="1.6" fill="none"/>
 
-                        <!-- ali dei radiatori e serbatoio (livrea HP) -->
                         <path d="M140 88 H180 L184 100 H136 Z" fill="url(#gsWhite)"/>
                         <path d="M124 96 L146 98 L146 128 L130 126 L118 110 Z" fill="url(#gsWhite)"/>
                         <path d="M196 96 L174 98 L174 128 L190 126 L202 110 Z" fill="url(#gsWhite)"/>
                         <path d="M122 104 L146 112 V117 L124 110 Z M198 104 L174 112 V117 L196 110 Z" fill="#2f6fbf" stroke="none"/>
                         <path d="M126 113 L146 120 V124 L130 119 Z M194 113 L174 120 V124 L190 119 Z" fill="#d23a33" stroke="none"/>
 
-                        <!-- il becco visto davanti -->
                         <path d="M146 112 H174 L168 132 L160 140 L152 132 Z" fill="url(#gsWhite)"/>
                         <path d="M158 114 H162 L161 136 H159 Z" fill="#d23a33" stroke="none"/>
                         <path d="M153 116 L157 132 M167 116 L163 132" stroke="#2f6fbf" stroke-width="1.8" fill="none"/>
 
-                        <!-- pilota: busto e braccia verso il manubrio largo -->
                         <g class="mc-front-rider">
                         <path d="M136 112 Q132 80 140 62 Q160 54 180 62 Q188 80 184 112 Z" fill="url(#gsJacket)"/>
                         <path d="M146 60 V96 M174 60 V96" stroke="#8a1a1f" stroke-width="3.4" fill="none"/>
@@ -1135,21 +1024,17 @@
                         <path d="M142 66 L118 84 M178 66 L202 84" stroke="#3b414c" stroke-width="9" fill="none"/>
                         </g>
 
-                        <!-- borsa da serbatoio, si vede attraverso il cupolino -->
                         <path d="M144 92 Q144 80 160 79 Q176 80 176 92 Z" fill="url(#gsDark)"/>
                         <path d="M146 86 H174" stroke="#d23a33" stroke-width="2" fill="none"/>
 
-                        <!-- mascherina col faro asimmetrico -->
                         <path d="M142 82 H178 L182 96 L176 112 H144 L138 96 Z" fill="url(#gsWhite)"/>
                         <path d="M146 90 H174 L172 108 H148 Z" fill="#1a1b1f"/>
                         <circle cx="155" cy="99" r="6" fill="#e8f2ff" stroke-width="1.2"/>
                         <circle cx="167" cy="98.5" r="4.4" fill="#e8f2ff" stroke-width="1.2"/>
                         <path d="M147.5 92 Q160 89 172.5 92 M148.5 106.5 Q160 109 171 106.5" stroke="#ffffff" stroke-width="1.6" fill="none"/>
-                        <!-- cupolino -->
                         <path d="M142 82 L146 48 H174 L178 82 Z" fill="url(#gsScreen)" stroke-width="1.2"/>
                         <path d="M147 52 H173" stroke="#e6eef6" stroke-width="1.4" fill="none"/>
 
-                        <!-- manubrio, paramani, specchi -->
                         <path d="M110 86 Q160 80 210 86" stroke="#1a1b1f" stroke-width="4.5" fill="none"/>
                         <path d="M100 78 L116 80 L116 94 L104 96 Q98 88 100 78 Z M220 78 L204 80 L204 94 L216 96 Q222 88 220 78 Z" fill="url(#gsWhite)"/>
                         <path d="M114 82 L108 62 M206 82 L212 62" stroke="#1a1b1f" stroke-width="1.8" fill="none"/>
@@ -1157,7 +1042,6 @@
                         <ellipse cx="214" cy="60" rx="6" ry="4" fill="#26282d"/>
                         <g class="mc-front-rider"><circle cx="116" cy="86" r="5" fill="#17181b"/><circle cx="204" cy="86" r="5" fill="#17181b"/></g>
 
-                        <!-- casco visto davanti: frontino, visiera, mentoniera -->
                         <g class="mc-front-rider">
                         <path d="M146 38 Q146 20 160 20 Q174 20 174 38 L172 50 Q166 56 160 56 Q154 56 148 50 Z" fill="url(#gsWhite)"/>
                         <path d="M142 26 Q160 18 178 26 L174 32 Q160 28 146 32 Z" fill="#d23a33"/>
@@ -1166,7 +1050,6 @@
                         <path d="M156 49 H164" stroke="#26282d" stroke-width="2.2" fill="none"/>
                         </g>
                       </g>
-                      <!-- il pilota che rotola giù: appallottolato, gira su se stesso -->
                       <g class="mc-tumble" stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
                         <path d="M-8 -22 Q-34 -14 -26 12" stroke="#22252b" stroke-width="23" fill="none"/>
                         <path d="M-8 -22 Q-34 -14 -26 12" stroke="url(#gsJacket)" stroke-width="19.5" fill="none"/>
@@ -1184,30 +1067,24 @@
                         <path d="M6 -28 Q16 -24 14 -14 L4 -16 Z" fill="url(#gsVisor)" stroke-width="1.2"/>
                       </g>
 
-                      <!-- il pilota rialzato: in piedi accanto alla moto, mano sul casco, guarda giù -->
                       <g transform="translate(-92 196)">
                         <g class="mc-stand" stroke="#0c0c0b" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
                           <ellipse cx="2" cy="0" rx="26" ry="3.5" fill="#000" opacity=".45" stroke="none"/>
-                          <!-- gamba dietro -->
                           <path d="M-5 -84 L-9 -46 L-7 -16" stroke="#1b1d22" stroke-width="18" fill="none"/>
                           <path d="M-5 -84 L-9 -46 L-7 -16" stroke="#272a31" stroke-width="15" fill="none"/>
                           <path d="M-17 -26 L1 -26 L6 -5 L6 0 L-17 0 Z" fill="#141416"/>
-                          <!-- braccio dietro, lungo il fianco -->
                           <path d="M-8 -140 L-14 -114 L-10 -92" stroke="#1b1d22" stroke-width="11" fill="none"/>
                           <path d="M-8 -140 L-14 -114 L-10 -92" stroke="#2c3038" stroke-width="8.5" fill="none"/>
                           <circle cx="-10" cy="-90" r="4.6" fill="#17181b"/>
-                          <!-- gamba davanti -->
                           <path d="M3 -84 L9 -46 L7 -16" stroke="#22252b" stroke-width="18" fill="none"/>
                           <path d="M3 -84 L9 -46 L7 -16" stroke="#2f333b" stroke-width="15" fill="none"/>
                           <circle cx="8" cy="-48" r="5" fill="#4a4e57" stroke="none"/>
                           <path d="M-4 -26 L13 -26 L20 -6 L20 0 L-4 0 Z" fill="#17181b"/>
                           <path d="M-2 -12 L16 -13" stroke="#d23a33" stroke-width="1.8" fill="none"/>
-                          <!-- busto con la giacca -->
                           <path d="M-17 -80 Q-24 -112 -15 -141 Q0 -154 16 -146 Q25 -126 19 -80 Z" fill="url(#gsJacket)"/>
                           <path d="M4 -146 Q14 -120 10 -84" stroke="#d23a33" stroke-width="2.6" fill="none"/>
                           <path d="M-12 -126 Q0 -132 14 -126" stroke="#2f6fbf" stroke-width="2" fill="none"/>
                           <path d="M-18 -86 H20" stroke="#1b1d22" stroke-width="3" fill="none"/>
-                          <!-- testa che si scuote un po' -->
                           <g class="mc-stand-head">
                             <g transform="translate(10 -164) rotate(22) translate(-164 -38)">
                               <path d="M150 38 Q150 22 164 21 Q178 22 178 36 L178 44 Q176 52 166 54 L156 54 Q150 50 150 38 Z" fill="url(#gsWhite)"/>
@@ -1218,12 +1095,10 @@
                               <path d="M152 32 Q158 26 166 28" stroke="#2f6fbf" stroke-width="2" fill="none"/>
                             </g>
                           </g>
-                          <!-- braccio davanti: la mano sul casco, "che ho combinato" -->
                           <path d="M6 -140 L-14 -160 L-6 -180" stroke="#22252b" stroke-width="11.5" fill="none"/>
                           <path d="M6 -140 L-14 -160 L-6 -180" stroke="#3b414c" stroke-width="9" fill="none"/>
                           <circle cx="-5" cy="-181" r="5" fill="#17181b"/>
                         </g>
-                        <!-- stelline che girano sopra il casco -->
                         <g transform="translate(4 -190)">
                           <g class="mc-dizzy" fill="#E8545A" stroke="none">
                             <path d="M16 0l2.4 5.6 5.6 2.4-5.6 2.4-2.4 5.6-2.4-5.6-5.6-2.4 5.6-2.4z" transform="translate(0 -8)"/>
@@ -1262,7 +1137,6 @@
   </div>
 </section>
 
-<!-- ITINERARI ======================================================== -->
 <section id="itinerari" style="padding-top:32px; scroll-margin-top:90px;">
   <div class="wrap">
     <div class="macro-box">
@@ -1298,7 +1172,6 @@
   </div>
 </section>
 
-<!-- MINIVIAGGI ======================================================== -->
 <section id="miniviaggi" style="padding-top:32px;">
   <div class="wrap">
     <div class="macro-box">
@@ -1338,7 +1211,6 @@
   </div>
 </section>
 
-<!-- VIAGGI DA RICORDARE ================================================ -->
 <section id="viaggi-ricordare" style="padding-top:32px;">
   <div class="wrap">
     <div class="macro-box">
@@ -1376,7 +1248,6 @@
   </div>
 </section>
 
-<!-- ULTIMI ARTICOLI DAL MANUALE DI BORDO ============================= -->
 <section id="ultimi-articoli" style="padding-top:56px; padding-bottom:0;">
   <div class="wrap">
     <p class="marker">Dal Manuale di bordo</p>
@@ -1386,11 +1257,6 @@
   </div>
 </section>
 
-<!-- SOCIAL FEEDS ==================================================== -->
-<!-- TikTok e Instagram uguali: il sito legge profilo e ultimi 9 contenuti
-     (lib/tiktok.js, lib/instagram.js), copia le anteprime su Cloudinary e le
-     mostra da lì, quindi niente cookie dei social per chi visita. Finché i
-     dati non arrivano (o se un social non risponde) resta la scheda col link -->
 <section>
   <div class="wrap">
     <p class="marker">Seguimi</p>
@@ -1427,7 +1293,6 @@
 </section>
 <script src="/social-feeds.js" defer></script>
 
-<!-- SUGGERISCI UN'IDEA ============================================== -->
 <section class="section-alt" id="idea">
   <div class="wrap" style="max-width:560px;">
     <p class="marker">Hai un'idea?</p>
@@ -1480,7 +1345,6 @@
       });
     });
 
-    // se ha già mandato un'idea da questo browser, lo ricordiamo (il vero blocco resta lato server sull'IP)
     if(localStorage.getItem("motonauta_idea_sent")){
       form.style.display = "none";
       message.style.display = "block";
@@ -1526,10 +1390,6 @@
   })();
 </script>
 
-<!-- DOVE VUOI ANDARE? ================================================ -->
-<!-- indice a righe come i cartelli di una tangenziale: titolo grande,
-     una riga di spiegazione, freccia; al passaggio del mouse la riga si
-     accende di rosso da sinistra -->
 <section>
   <div class="wrap">
     <p class="marker">Esplora</p>
@@ -1596,12 +1456,6 @@
 <script src="data/manuale-data.js"></script>
 <script>
 (async function initViaggiHome(){
-  // Itinerari/Miniviaggi/Viaggi da ricordare non sono più fissi nel file
-  // data/viaggi-data.js: quello resta solo come dati di partenza/fallback,
-  // la versione vera e aggiornabile dall'area riservata vive su Redis.
-  // Qui sovrascriviamo le liste con quelle live prima di usarle — tutto il
-  // resto di questo script (filtri, "dove vado oggi", ecc.) resta invariato,
-  // parte semplicemente un attimo dopo invece che subito.
   try {
     const res = await fetch('/api/viaggio?action=list');
     if (res.ok) Object.assign(window.VIAGGI_DATA, await res.json());
@@ -1611,8 +1465,6 @@
 
   const { ITINERARI, MINIVIAGGI, VIAGGI_RICORDARE } = window.VIAGGI_DATA;
 
-  // cruscotto in cima (contachilometri in script.js): rotte, km tracciati (i miniviaggi hanno giorni, non
-  // km, e restano fuori dalla somma) e guide, dai dati appena caricati
   {
     const tutte = [...ITINERARI, ...MINIVIAGGI, ...VIAGGI_RICORDARE];
     const aggiorna = () => {
@@ -1621,7 +1473,6 @@
       window.mnCruscotto.set("cr-kmrotte", tutte.reduce((t, it) => t + (Number(it.kmNum) || 0), 0));
       window.mnCruscotto.set("cr-guide", ((window.MANUALE_DATA && window.MANUALE_DATA.GUIDE) || []).length);
     };
-    // il contachilometri vive in script.js, caricato in fondo alla pagina
     if (window.mnCruscotto) aggiorna(); else document.addEventListener("DOMContentLoaded", aggiorna);
   }
 
@@ -1646,11 +1497,6 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  // ===== "Dove vado oggi?" =============================================
-  // Filtra gli Itinerari (uscite in giornata) per ore libere e km che si
-  // vogliono fare, poi li ordina dal meteo migliore di oggi in giù. La
-  // velocità media è volutamente prudente: sono strade di collina/paese
-  // vicino Roma, non autostrada, con soste fotografiche incluse.
   const OGGI_RAIN_CODES = new Set([51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99]);
   const OGGI_AVG_SPEED_KMH = 45;
 
@@ -1671,9 +1517,6 @@
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   }
 
-  // Punteggio "bel meteo": parte da 100, penalizza pioggia/probabilità di
-  // pioggia e si allontana da una temperatura di riferimento comoda in moto
-  // (23°C) — serve solo a ordinare i risultati, non è mostrato all'utente.
   async function fetchOggiWeather(place){
     const coords = await geocodePlace(place);
     if(!coords) return null;
@@ -1745,7 +1588,6 @@
       return;
     }
 
-    // un solo controllo meteo per ogni meteoPlace, alcuni itinerari lo condividono
     const weatherByPlace = {};
     await Promise.all(
       [...new Set(candidates.map(it => it.meteoPlace))].map(async (place) => {
@@ -1776,8 +1618,6 @@
 
   document.getElementById("oggi-btn").addEventListener("click", calculateOggi);
 
-  // Cifre a sette segmenti come un orologio digitale: "03:00", " 150".
-  // Lo spazio è una cifra spenta (si vedono solo i segmenti accennati).
   const SEG7_DIGITS = { "0":"abcdef", "1":"bc", "2":"abdeg", "3":"abcdg", "4":"bcfg", "5":"acdfg", "6":"acdefg", "7":"abc", "8":"abcdefg", "9":"abcdfg", " ":"" };
   const SEG7_SHAPES = (() => {
     const h = y => `2.2,${y} 3.5,${y-1.3} 10.5,${y-1.3} 11.8,${y} 10.5,${y+1.3} 3.5,${y+1.3}`;
@@ -1801,7 +1641,6 @@
     return `<svg viewBox="-2 0 ${w + 4} 24" aria-hidden="true" focusable="false"><g transform="translate(1.3 0) skewX(-5)">${out}</g></svg>`;
   }
 
-  // ===== Ore libere: orologio digitale, mezz'ora alla volta (1–12 ore)
   (function initOggiOre(){
     const input = document.getElementById("oggi-ore");
     const face = document.getElementById("oggi-ore-face");
@@ -1823,12 +1662,10 @@
       face.setAttribute("aria-valuenow", ore);
       face.setAttribute("aria-valuetext", testo(ore));
       btns.forEach(b => { b.disabled = Number(b.dataset.oreStep) < 0 ? ore <= 1 : ore >= 12; });
-      // a che ora si rientra partendo adesso (arrotondato ai 5 minuti)
       const fine = new Date(Math.round((Date.now() + ore * 3600e3) / 300e3) * 300e3);
       rientro.innerHTML = `Se parti adesso rientri verso le <strong>${fine.toLocaleTimeString("it-IT", { hour:"2-digit", minute:"2-digit" })}</strong>`;
     }
 
-    // tenendo premuto il pulsante il tempo scorre da solo, come sulle sveglie
     btns.forEach(btn => {
       let attesa = null, giro = null;
       const step = () => set(ore + Number(btn.dataset.oreStep));
@@ -1839,7 +1676,7 @@
         attesa = setTimeout(() => { giro = setInterval(() => { if(btn.disabled) stop(); else step(); }, 110); }, 420);
       });
       ["pointerup", "pointerleave", "pointercancel"].forEach(t => btn.addEventListener(t, stop));
-      btn.addEventListener("click", e => { if(e.detail === 0) step(); }); // da tastiera
+      btn.addEventListener("click", e => { if(e.detail === 0) step(); });
     });
     face.addEventListener("keydown", e => {
       const passi = { ArrowUp:0.5, ArrowRight:0.5, ArrowDown:-0.5, ArrowLeft:-0.5, PageUp:1, PageDown:-1 };
@@ -1852,11 +1689,6 @@
     set(ore);
   })();
 
-  // ===== Km: la moto si trascina sulla strada, una tacca ogni 50 km; a ogni
-  // tacca si aggiunge un bagaglio (data-from nel disegno) e a 400 cade.
-  // Il valore vero sta nel range #oggi-km, che resta per tastiera e lettori
-  // di schermo; col dito la moto segue il dito e al rilascio si ferma
-  // sulla tacca più vicina.
   (function initKmRide(){
     const ride = document.getElementById("km-ride");
     const stage = document.getElementById("km-ride-stage");
@@ -1866,7 +1698,7 @@
     const carico = document.getElementById("km-ride-load");
     if(!ride || !stage || !moto || !input) return;
     const TACCHE = 8, PASSO = 50;
-    const MS_PER_TACCA = 240; // velocità della moto quando va da sola
+    const MS_PER_TACCA = 240;
     const CARICO = [
       "Senza bagagli: trascina la moto",
       "+ bauletto",
@@ -1882,10 +1714,6 @@
     const rotolo = ride.querySelector(".mc-bag-roll");
     const tacche = [...ride.querySelectorAll(".km-tick")];
     const riduci = window.matchMedia("(prefers-reduced-motion: reduce)");
-    // p = dove sta la moto (0–1); livello = la tacca che si vede (bagagli,
-    // cifre); meta = la tacca scelta (il valore vero, quello della ricerca).
-    // Di solito coincidono; dopo la caduta no: la moto resta a 400 finché il
-    // pilota non l'ha rialzata, poi torna indietro da sola fino alla meta.
     let p = 0, giri = 0, livello = -1, meta = 0, trascina = false, x0 = 0;
     let bloccata = false, marcia = 0;
 
@@ -1894,12 +1722,6 @@
       return { mw, corsa: Math.max(1, stage.clientWidth - mw) };
     }
 
-    // ----- la scena dei 400 km (CSS, classe .is-down) ---------------------
-    // Arrivati all'ultima tacca parte in avanti; scegliendo una tacca più
-    // bassa si riavvolge al contrario da dove è arrivata, con la moto ferma a
-    // 400, e solo dopo la moto torna indietro. Se si torna a 400 mentre si
-    // riavvolge, riprende in avanti. Con "riduci movimento" non ci sono
-    // animazioni: si toglie subito e la moto va direttamente alla tacca.
     let giroScena = 0;
     const animScena = () => ride.getAnimations({ subtree: true })
       .filter(a => a.animationName && (a.animationName.startsWith("gs-") || a.animationName === "km-dust"));
@@ -1911,7 +1733,7 @@
         fermaMarcia();
         ride.classList.remove("is-dragging");
         ride.classList.add("is-down");
-        porta(1); // si ferma proprio sulla tacca dei 400
+        porta(1);
         return;
       }
       const anim = animScena();
@@ -1923,23 +1745,20 @@
     function scenaSu(){
       if(!ride.classList.contains("is-down")){ bloccata = false; vaiA(meta); return; }
       const anim = animScena();
-      if(anim.length && anim.every(a => a.playbackRate < 0)) return; // sta già riavvolgendo
+      if(anim.length && anim.every(a => a.playbackRate < 0)) return;
       const giro = ++giroScena;
       anim.forEach(a => { a.playbackRate = -1.6; a.play(); });
       Promise.all(anim.map(a => a.finished))
         .then(() => {
           if(giro !== giroScena) return;
-          // finite all'indietro restano "in vita": si chiudono, così la volta
-          // dopo la scena riparte da capo
           anim.forEach(x => x.cancel());
           ride.classList.remove("is-down");
           bloccata = false;
-          vaiA(meta); // e adesso indietro, tacca per tacca
+          vaiA(meta);
         })
         .catch(() => {});
     }
 
-    // ----- quello che si vede: bagagli, tacche accese, cifre, scritta -----
     function mostra(l){
       if(l === livello) return;
       livello = l;
@@ -1951,7 +1770,6 @@
       carico.textContent = CARICO[l];
       if(l === TACCHE && !bloccata) scenaGiu();
     }
-    // ----- il valore scelto (ricerca, tastiera, lettori di schermo) -------
     function valore(l){
       meta = l;
       tacche.forEach((t, i) => t.classList.toggle("is-meta", i === l));
@@ -1965,16 +1783,12 @@
 
     function porta(nuovo){
       const { mw, corsa } = misure();
-      // le ruote girano di quanto la moto avanza (raggio della ruota dietro):
-      // all'indietro girano al contrario
       giri += (nuovo - p) * corsa / (2 * Math.PI * 33 * mw / 320) * 360;
       p = nuovo;
       moto.style.setProperty("--x", `${(p * corsa).toFixed(1)}px`);
       moto.style.setProperty("--spin", `${giri.toFixed(1)}deg`);
       mostra(Math.round(p * TACCHE));
     }
-    // la moto va da sola fino a una tacca, passando per quelle in mezzo: a
-    // ogni tacca compare o sparisce il suo bagaglio, come in un video
     function fermaMarcia(){
       if(marcia){ cancelAnimationFrame(marcia); marcia = 0; }
       ride.classList.remove("is-driving");
@@ -1990,7 +1804,7 @@
         const k = Math.min(1, (ora - t0) / durata);
         const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
         porta(da + (verso - da) * e);
-        if(bloccata) return; // è arrivata a 400 ed è caduta: ci pensa la scena
+        if(bloccata) return;
         if(k < 1) marcia = requestAnimationFrame(passo);
         else { marcia = 0; ride.classList.remove("is-driving"); }
       };
@@ -2015,10 +1829,9 @@
       if(e.button !== 0) return;
       trascina = true; x0 = e.clientX;
       try { stage.setPointerCapture(e.pointerId); } catch(err){}
-      // a terra la moto non si muove: il dito sceglie solo dove tornerà
       if(bloccata){ scegli(Math.round(daDito(e) * TACCHE)); return; }
       fermaMarcia();
-      porta(daDito(e)); // con un tocco la moto scivola fin lì
+      porta(daDito(e));
       scegli(livello);
     });
     stage.addEventListener("pointermove", e => {
@@ -2033,7 +1846,6 @@
       if(!bloccata) scegli(livello);
     });
     ["pointerup", "pointercancel", "lostpointercapture"].forEach(t => stage.addEventListener(t, fine));
-    // da tastiera la moto va da sola fino alla tacca, passando per le altre
     input.addEventListener("input", () => {
       const l = Math.round((Number(input.value) || 0) / PASSO);
       scegli(l);
@@ -2044,21 +1856,12 @@
     scegli(0);
   })();
 
-  // ===== Ricerca luoghi con autocompletamento (Nominatim/OpenStreetMap) =====
-  // Usata al posto della sola geocodifica "al buio": mostra un elenco di
-  // luoghi reali mentre si scrive, così non si può sbagliare a interpretare
-  // un nome di paese poco conosciuto (bug corretto: prima capitava che nomi
-  // di frazioni piccole venissero geocodificati nel posto sbagliato).
   const placeResolvedCoords = {};
   const nominatimSearchCache = {};
 
   async function nominatimSearch(query){
     const key = query.toLowerCase();
     if(nominatimSearchCache[key]) return nominatimSearchCache[key];
-    // passa dal nostro endpoint /api/route-planner (proxy server-side) invece
-    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS.
-    // Se qualcosa va storto, l'errore viene fatto risalire con un messaggio
-    // preciso invece di sparire in silenzio.
     let res;
     try{
       res = await fetch(`/api/route-planner?action=search&q=${encodeURIComponent(query)}`);
@@ -2147,8 +1950,6 @@
   }
 
   async function reverseGeocode(lat, lon){
-    // passa dal nostro endpoint /api/route-planner (proxy server-side) invece
-    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS
     const res = await fetch(`/api/route-planner?action=reverse&lat=${lat}&lon=${lon}`);
     const data = await res.json();
     const a = data.address || {};
@@ -2156,9 +1957,6 @@
       || (data.display_name ? data.display_name.split(",")[0] : "Zona sconosciuta");
   }
 
-  // aggiunge un pulsante "usa la mia posizione" dentro un campo di
-  // partenza: legge la posizione GPS del browser (previo consenso
-  // dell'utente) e la usa direttamente come coordinate già risolte
   function attachGeolocationButton(inputEl){
     if(!navigator.geolocation) return;
     const field = inputEl.closest(".place-field");
@@ -2202,8 +2000,6 @@
     });
   }
 
-  // riga "GPS" sotto la partenza: nome + coordinate del punto davvero
-  // usato per i calcoli, così si vede subito se il paese è quello giusto
   function updatePlaceReadout(inputEl, coords){
     const readout = document.querySelector(`.nav-field-readout[data-for="${inputEl.id}"]`);
     if(!readout) return;
@@ -2263,20 +2059,16 @@
     }
     const cacheKey = `${startInput.toLowerCase()}|${it.zona}`;
     if(routeKmCache[cacheKey] !== undefined) return routeKmCache[cacheKey];
-    // NB: un fallimento (posto non trovato, rete assente) NON viene messo in
-    // cache, così un tentativo successivo (es. dopo aver scelto un
-    // suggerimento corretto) può ancora andare a buon fine invece di restare
-    // bloccato sulla prima risposta negativa per tutta la sessione.
     try{
       const [startCoords, destCoords] = await Promise.all([resolvePlace(startInputEl), geocodePlace(it.meteoPlace)]);
       if(!startCoords || !destCoords) return it.kmNum;
       const route = await fetchRoute(startCoords, destCoords);
       let km;
       if(route){
-        km = Math.round((route.distance / 1000) * 2); // andata e ritorno, distanza stradale reale
+        km = Math.round((route.distance / 1000) * 2);
       } else {
         const oneWay = haversineKm(startCoords.lat, startCoords.lon, destCoords.lat, destCoords.lon);
-        km = Math.round(oneWay * 2 * 1.3); // fallback se il routing non è disponibile
+        km = Math.round(oneWay * 2 * 1.3);
       }
       routeKmCache[cacheKey] = km;
       return km;
@@ -2294,10 +2086,6 @@
     return { km, costo };
   }
 
-  // Se l'utente cambia partenza/cilindrata/prezzo più volte di seguito,
-  // una richiesta lenta rimasta indietro non deve poter sovrascrivere il
-  // risultato di una richiesta più recente già arrivata: si tiene un
-  // "numero di turno" per ogni card e si scarta ogni risposta superata.
   const fuelRequestToken = new WeakMap();
   async function updateFuelEstimate(container, it){
     const myToken = (fuelRequestToken.get(container) || 0) + 1;
@@ -2310,17 +2098,9 @@
     if(priceEl) priceEl.innerHTML = `${mnIcon("fuel")} ${mnFmt.euro(costo)}`;
   }
 
-  // Le foto di Itinerari/Miniviaggi/Viaggi da ricordare arrivano da Wikimedia
-  // Commons come file originali, spesso da diversi MB anche se sullo schermo
-  // occupano un rettangolo piccolo: Special:FilePath supporta un parametro
-  // "width" che fa reindirizzare a una miniatura già ridimensionata, senza
-  // bisogno di nessun servizio esterno in più.
   function wikiThumb(url, width){
     if(!url) return url;
-    // copertine delle guide salvate nel sito: per gli elenchi c'è accanto la
-    // versione piccola "-800.webp" (la fa strumenti/copertine/render.js)
     if(url.startsWith("/img/manuale/") && /\/copertina[^/]*\.jpg$/.test(url) && width <= 800) return url.replace(/\.jpg$/, "-800.webp");
-    // foto della Galleria (Cloudinary): la misura si chiede nell'indirizzo
     if(url.includes("res.cloudinary.com") && url.includes("/image/upload/") && !/\/upload\/[^/]*(w_|c_)/.test(url)) return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width},c_limit/`);
     if(!url.includes("wikimedia.org")) return url;
     return url + (url.includes("?") ? "&" : "?") + "width=" + width;
@@ -2330,9 +2110,6 @@
   async function estimateKmMV(it){
     const startInputEl = document.getElementById("fuel-start");
     const startInput = startInputEl.value.trim() || "Roma";
-    // se la scheda ha già un totale reale precalcolato (viaggi a più tappe,
-    // dove sommare km di ogni tratta al volo non sarebbe comunque preciso) e
-    // la partenza è quella di default, si usa direttamente quello
     if(it.kmNum && startInput.toLowerCase() === "roma"){
       return it.kmNum;
     }
@@ -2344,10 +2121,10 @@
       const route = await fetchRoute(startCoords, destCoords);
       let km;
       if(route){
-        km = Math.round((route.distance / 1000) * 2); // andata e ritorno, distanza stradale reale
+        km = Math.round((route.distance / 1000) * 2);
       } else {
         const oneWay = haversineKm(startCoords.lat, startCoords.lon, destCoords.lat, destCoords.lon);
-        km = Math.round(oneWay * 2 * 1.3); // fallback se il calcolo del percorso stradale non è disponibile
+        km = Math.round(oneWay * 2 * 1.3);
       }
       routeKmCacheMV[cacheKey] = km;
       return km;
@@ -2387,9 +2164,6 @@
     return desc.split(/\n\n+/)[0];
   }
 
-  // La partenza scelta nel calcolatore benzina qui sopra (di default Roma)
-  // viaggia nell'URL della pagina dedicata di ogni viaggio, così l'anteprima
-  // del percorso lì può partire dallo stesso punto invece che sempre da Roma.
   function currentPartenza(){
     const el = document.getElementById("fuel-start");
     const val = el ? el.value.trim() : "";
@@ -2400,10 +2174,6 @@
     return `/viaggi/${window.VIAGGI_DATA.getSlug(it)}?partenza=${encodeURIComponent(currentPartenza())}`;
   }
 
-  // Ogni box della lista è un link diretto alla pagina dedicata del viaggio:
-  // niente più modale di dettaglio, un click apre subito /viaggi/<slug>.
-  // i testi degli itinerari arrivano dall'area riservata (Redis), non più
-  // solo da un file scritto a mano: li si scappa prima di metterli nell'HTML
   function escHtml(str){
     return String(str == null ? "" : str)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -2449,8 +2219,6 @@
     return item;
   }
 
-  // Stessa normalizzazione usata nella ricerca del Manuale di bordo: case e
-  // accenti non contano ("citta" trova anche "città").
   function normalizeFilterText(str){
     return String(str || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   }
@@ -2464,14 +2232,6 @@
       return { card: item, it, updateFuelFn };
     });
 
-    // Filtro per zona: ogni macro-categoria ha il suo campo, così si cerca
-    // solo tra le zone effettivamente presenti in quella lista (le zone degli
-    // itinerari sono aree del Lazio, quelle dei viaggi da ricordare sono
-    // paesi/regioni estere, non ha senso mescolarle in un filtro unico).
-    // 5 schede alla volta, con "Carica altro" sotto: con la lista tutta
-    // aperta, per arrivare al riquadro successivo bisognava scorrere ogni
-    // viaggio della sezione. Il filtro per zona riparte dalle prime 5
-    // schede che corrispondono
     const PAGE = 5;
     let shown = PAGE;
     let matches = entries;
@@ -2498,7 +2258,6 @@
           card.style.animationDelay = "";
         }, { once: true });
       });
-      // chi usa la tastiera riparte dalla prima scheda appena comparsa
       if(matches[from]) matches[from].card.focus({ preventScroll: true });
     });
     applyPaging();
@@ -2536,9 +2295,6 @@
   document.getElementById("fuel-start").addEventListener("change", refreshAllFuel);
   attachPlaceAutocomplete(document.getElementById("fuel-start"), document.getElementById("fuel-start-suggest"));
   attachGeolocationButton(document.getElementById("fuel-start"));
-  // la riga GPS va aggiornata anche quando i km non richiedono di cercare
-  // la partenza (con "Roma" si usano i km già noti): per Roma le coordinate
-  // sono fisse, così non serve una ricerca in rete a ogni visita
   const ROMA_COORDS = { lat: 41.8933, lon: 12.4829 };
   function refreshStartReadout(){
     const el = document.getElementById("fuel-start");
@@ -2557,8 +2313,6 @@
     readout.textContent = e.target.value.trim() ? "Scegli un luogo dall'elenco o premi invio" : "Scrivi una partenza";
   });
 
-  // Le tre macro-categorie sono chiuse di default: un click sull'header apre
-  // o chiude la lista sottostante (già costruita sopra, solo nascosta).
   document.querySelectorAll(".macro-box-toggle").forEach(toggle => {
     const list = document.getElementById(toggle.getAttribute("aria-controls"));
     const hint = toggle.querySelector(".macro-box-hint");
@@ -2570,16 +2324,11 @@
     });
   });
 
-  // Se si arriva da un link diretto a una categoria (es. "Torna a tutti i
-  // viaggi" nella pagina di un singolo Miniviaggio punta a
-  // /index.html#miniviaggi), apre subito quella macro-categoria invece di
-  // lasciarla chiusa.
   if(location.hash){
     const target = document.querySelector(`.macro-box-toggle[aria-controls="${location.hash.slice(1)}-list"]`);
     if(target) target.click();
   }
 
-  // "Scegli un itinerario" in apertura: scende agli Itinerari e ne apre l'elenco
   document.querySelectorAll("a[data-open-macro]").forEach(link => {
     link.addEventListener("click", () => {
       const target = document.querySelector(`.macro-box-toggle[aria-controls="${link.hash.slice(1)}-list"]`);
@@ -2587,7 +2336,6 @@
     });
   });
 
-  // box "ultimi articoli" in home: le 3 guide più recenti del Manuale di bordo
   const ultimiArticoliSection = document.getElementById("ultimi-articoli");
   const ultimiArticoliGrid = document.getElementById("ultimi-articoli-grid");
   const { GUIDE, getSlug: getGuidaSlug } = window.MANUALE_DATA;
@@ -2615,6 +2363,6 @@
 })();
 </script>
 
-<script src="script.js?v=20261013f"></script>
+<script src="script.js?v=20261017a"></script>
 </body>
 </html>

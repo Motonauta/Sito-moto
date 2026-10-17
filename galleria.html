@@ -20,17 +20,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013f">
+<link rel="stylesheet" href="style.css?v=20261017a">
 <script src="cookie-consent.js" defer></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
-  /* stesso sistema visivo di Alleati/Canale aperto: grafite freddo,
-     livrea rosso/blu sotto l'header, sweep diagonale dietro al titolo
-     — vedi sponsor.html. Niente doppia cornice sulle foto o sulla
-     griglia filtri: lì il bordo colorato stonerebbe con gli scatti,
-     restano con un tocco più leggero (angoli smussati, sollevamento
-     morbido in hover). */
   :root{
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
@@ -247,9 +241,8 @@
   </div>
 </footer>
 
-<script src="script.js?v=20261013f"></script>
+<script src="script.js?v=20261017a"></script>
 <script>
-  // pin di partenza (le destinazioni già esistenti prima della funzione automatica)
   const DESTINAZIONI_BASE = [
     { nome: "Olanda", filtro: "olanda", lat: 51.88, lng: 4.63 },
     { nome: "Passo dello Stelvio", filtro: "stelvio", lat: 46.53, lng: 10.45 },
@@ -292,12 +285,6 @@
     });
   }
 
-  // unisce i pin di base con quelli salvati automaticamente. I pin salvati
-  // per città (Paese > Città) "coprono" ed escludono qualunque destinazione
-  // di base con lo stesso nome/paese, per non avere due pin sullo stesso
-  // posto (es. il vecchio pin generico "Olanda" insieme al pin preciso di
-  // "Amsterdam" dentro Olanda) — e ogni città ha il suo pin distinto, mai
-  // un pin separato per l'intero paese
   fetch("/api/gallery?action=pins")
     .then(res => res.json())
     .then(data => {
@@ -322,18 +309,11 @@
     });
 </script>
 <script>
-  // carica album e foto direttamente da Cloudinary: nessun codice da scrivere a mano.
-  // Le foto arrivano organizzate in due gruppi: "countries" (Paese > Città,
-  // filtrabili a livello di Paese, con un'intestazione per ogni città) e
-  // "standalone" (i vecchi album senza Paese, come prima).
   (async function loadGallery(){
     const loadingEl = document.getElementById("gallery-loading");
     const gridEl = document.getElementById("gallery-grid");
     const filtersEl = document.getElementById("filters-container");
 
-    // Nella griglia solo miniature ridimensionate da Cloudinary; la foto grande
-    // e il video si scaricano solo quando li apri nel lightbox (prima la pagina
-    // scaricava ogni originale da 2-4 MB e tutti i video interi: ~680 MB)
     function imageUrl(url, width){
       return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width},c_limit/`);
     }
@@ -341,8 +321,6 @@
       return url.replace("/upload/", `/upload/so_1,f_auto,q_auto,w_${width},c_limit/`).replace(/\.\w+$/, ".jpg");
     }
     function videoUrl(url, ext){
-      // MP4 H.264 (Safari, Chrome, Edge) e WebM (i browser senza H.264):
-      // Cloudinary converte anche i .mov caricati dal telefono
       return url.replace("/upload/", "/upload/q_auto,w_1280,c_limit/").replace(/\.\w+$/, "." + ext);
     }
 
@@ -374,7 +352,6 @@
       mediaEl.decoding = "async";
       mediaEl.alt = isVideo ? `Video: ${caption}` : caption;
       item.appendChild(mediaEl);
-      // quello che il lightbox apre davvero
       item.dataset.type = isVideo ? "video" : "image";
       item.dataset.full = isVideo ? videoUrl(photo.url, "mp4") : imageUrl(photo.url, 2000);
       if (isVideo) item.dataset.fullWebm = videoUrl(photo.url, "webm");
@@ -400,9 +377,6 @@
       const countries = data.countries || {};
       const standalone = data.standalone || {};
 
-      // Paesi: un pulsante filtro per Paese, con un'intestazione per ogni
-      // città al suo interno (così si vedono subito le città visitate,
-      // invece di un mucchio indistinto di foto)
       Object.keys(countries).forEach(paese => {
         const cittaMap = countries[paese];
         const cittaConFoto = Object.keys(cittaMap).filter(c => cittaMap[c].length);
@@ -421,7 +395,6 @@
         });
       });
 
-      // Album "standalone" (senza Paese): stessa logica di sempre
       Object.keys(standalone).forEach(albumName => {
         const photos = standalone[albumName];
         if(!photos.length) return;

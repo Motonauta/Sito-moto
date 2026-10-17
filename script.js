@@ -1,13 +1,7 @@
-// Cruscotto (vedi style.css, CRUSCOTTO): ogni [data-odometer] diventa un
-// contachilometri, una colonna 0–9 per cifra, che gira fino al valore
-// quando il pannello entra nello schermo. Parte dal data-value scritto
-// nell'HTML; i dati veri arrivano dopo con window.mnCruscotto.set(id, n).
-// Sta fuori da DOMContentLoaded perché le pagine lo chiamano anche prima.
 (function initCruscotto(){
   const boxes = document.querySelectorAll(".cruscotto");
   if (!boxes.length) return;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  // data-plain: niente puntino delle migliaia (es. l'anno 2021)
   const fmt = (n, el) => el && el.hasAttribute("data-plain") ? String(n) : n.toLocaleString("it-IT");
   const current = new Map();
   const visible = new Set();
@@ -33,7 +27,6 @@
     current.set(el, n);
     if (reduce) { el.textContent = fmt(n, el); return; }
     build(el, n);
-    // due fotogrammi: prima le ruote ferme sullo 0, poi la rotazione
     if (visible.has(el.closest(".cruscotto"))) requestAnimationFrame(() => requestAnimationFrame(() => roll(el)));
   }
   boxes.forEach(box => box.querySelectorAll("[data-odometer]").forEach(el => set(el, Number(el.dataset.value))));
@@ -50,18 +43,10 @@
   window.mnCruscotto = { set };
 })();
 
-// File GPX di un percorso, da caricare sul navigatore della moto (Garmin
-// zūmo, TomTom Rider…) o su app come Calimoto e Komoot. Dentro ci sono:
-// le tappe come punti (wpt), il percorso per tappe (rte, chi lo apre lo
-// ricalcola con le sue strade) e, se c'è, la traccia stradale già
-// calcolata (trk). Usato dalle pagine dei viaggi e dall'Assistente di rotta.
-//   window.mnGpx.download({ nome, file, tappe: [{lat, lon, nome}], traccia: [[lat, lon], …] })
 window.mnGpx = (function(){
   const esc = (s) => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   const num = (n) => Number(n).toFixed(6);
   function build({ nome, tappe = [], traccia = [] }){
-    // tracce lunghissime (viaggi di migliaia di km): al massimo ~8000 punti,
-    // più che sufficienti e leggeri per i navigatori più vecchi
     const step = Math.max(1, Math.ceil(traccia.length / 8000));
     const punti = traccia.filter((_, i) => i % step === 0 || i === traccia.length - 1);
     const wpt = tappe.map(t => `  <wpt lat="${num(t.lat)}" lon="${num(t.lon)}"><name>${esc(t.nome)}</name></wpt>`).join("\n");
@@ -101,9 +86,6 @@ ${rte}
 document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // contatore "nostro" per le statistiche in area riservata (non Google
-  // Analytics): un solo numero per pagina, niente da configurare. admin.html
-  // resta fuori di proposito, come per Analytics (vedi CLAUDE.md).
   (function trackPageview(){
     const path = location.pathname;
     let page = null;
@@ -122,10 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }).catch(() => {});
   })();
 
-  // Contagiri per i <select data-dial> (cilindrata nel calcolatore benzina):
-  // numero grande con ‹ › ai lati. Il select vero resta dentro, invisibile
-  // sopra al numero: toccandolo si apre l'elenco nativo, e tutti gli script
-  // che lo leggono o lo ascoltano continuano a funzionare come prima.
   document.querySelectorAll("select[data-dial]").forEach(select => {
     const chevron = dir => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-chevron-${dir}"/></svg>`;
     const dial = document.createElement("div");
@@ -163,11 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
     render();
   });
 
-  // Comparsa morbida dei blocchi mentre entrano nello schermo. La prima
-  // sezione (hero) resta fuori: è già visibile al caricamento. Le griglie
-  // vengono "aperte" card per card con un piccolo sfalsamento. Finita
-  // l'animazione le classi si tolgono, così gli effetti al passaggio del
-  // mouse (che usano anch'essi transform) tornano a funzionare.
   (function initScrollReveal(){
     if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
     if (!document.querySelector(".site-header .nav-links")) return;
@@ -207,7 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   })();
 
-  // parallasse leggero sulla foto hero, durante lo scroll
   const heroParallax = document.querySelector(".hero-parallax");
   if (heroParallax && !prefersReducedMotion) {
     const frame = heroParallax.closest(".hero-parallax-frame") || heroParallax;
@@ -230,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateParallax();
   }
 
-  // logo in header: leggera inclinazione 3D verso il cursore
   if (!prefersReducedMotion) {
     const logoLink = document.querySelector(".logo");
     if (logoLink) {
@@ -249,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // intro "accendi il motore" in home: appare solo una volta a sessione
   const ignitionOverlay = document.getElementById("ignition-overlay");
   if (ignitionOverlay) {
     const alreadySeen = sessionStorage.getItem("motonauta_ignition_seen");
@@ -277,7 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
         master.gain.value = 0.5;
         master.connect(ctx.destination);
 
-        // fase 1: motorino d'avviamento (cranking), a scatti
         const crankDuration = 0.55;
         const crankOsc = ctx.createOscillator();
         crankOsc.type = "square";
@@ -312,7 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
         crankNoise.start(now);
         crankNoise.stop(now + crankDuration);
 
-        // fase 2: il motore attacca, sale di giri un attimo e si assesta al minimo
         const catchStart = now + crankDuration;
         const idleDuration = 2.6;
 
@@ -365,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (started) return;
         started = true;
         ignitionOverlay.classList.add("ignition-started");
-        try { playEngineStart(); } catch (err) { /* audio non disponibile: si procede comunque */ }
+        try { playEngineStart(); } catch(err){}
         setTimeout(reveal, 550);
       }
 
@@ -383,18 +351,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Cambio pagina "timbro del logo" (vedi style.css, CAMBIO PAGINA): al
-  // clic su un link interno la pagina si copre col logo che cresce, poi si
-  // naviga; quella nuova arriva già coperta (classe messa dallo scriptino
-  // in cima al <body>) e si scopre da sola. Qui: pulizia all'arrivo e
-  // gestione del clic.
   (function pageTransition(){
     const root = document.documentElement;
     try { sessionStorage.removeItem("vt-arrive"); } catch (e) {}
     if (root.classList.contains("vt-arriving")) {
       setTimeout(() => root.classList.remove("vt-arriving"), 800);
     }
-    // tornando indietro la pagina può riapparire così com'era: scoperta
     window.addEventListener("pageshow", (e) => {
       if (e.persisted) root.classList.remove("vt-leaving", "vt-arriving");
     });
@@ -403,13 +365,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const a = e.target.closest && e.target.closest("a[href]");
       if (!a || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
       const url = new URL(a.href, location.href);
-      if (url.origin !== location.origin) return;                                        // esterni, mailto:, tel:
-      if (url.pathname === location.pathname && url.search === location.search) return; // stessa pagina / ancora
+      if (url.origin !== location.origin) return;
+      if (url.pathname === location.pathname && url.search === location.search) return;
       e.preventDefault();
       try { sessionStorage.setItem("vt-arrive", String(Date.now())); } catch (err) {}
       root.classList.add("vt-leaving");
       setTimeout(() => { location.href = url.href; }, 220);
-      // se la navigazione non parte (rete assente), la pagina torna visibile
       setTimeout(() => root.classList.remove("vt-leaving"), 6000);
     });
   })();
@@ -442,33 +403,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // chiude il menu quando si clicca un link
     links.querySelectorAll("a").forEach(a =>
       a.addEventListener("click", closeMenu)
     );
 
-    // chiude il menu quando si clicca fuori
     document.addEventListener("click", (e) => {
       if (links.classList.contains("open") && !links.contains(e.target) && e.target !== toggle) {
         closeMenu();
       }
     });
 
-    // chiude il menu con il tasto Esc
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeMenu();
     });
 
-    // chiude il menu se lo schermo torna largo (es. rotazione tablet)
     window.addEventListener("resize", () => {
       if (window.innerWidth > 780) closeMenu();
     });
   }
 
-  // Sottomenu a tendina della nav ("Strumenti di viaggio", "Chi sono"):
-  // su desktop si aprono anche al passaggio del mouse (solo CSS), questo
-  // gestisce il click/tocco (necessario su touch, dove l'hover non esiste)
-  // e la chiusura automatica degli altri sottomenu aperti.
   const navDropdowns = document.querySelectorAll(".nav-dropdown");
   if (navDropdowns.length) {
     const closeDropdown = (dropdown) => {
@@ -501,7 +454,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // filtro galleria per destinazione (delegato: funziona anche con pulsanti aggiunti dopo)
   const filtersContainer = document.querySelector(".filters");
   const galleryGrid = document.getElementById("gallery-grid");
   let lightbox = null;
@@ -513,7 +465,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const mc = lightbox.querySelector(".lightbox-media");
       if(!mc) return;
       mc.querySelector("video")?.pause();
-      // svuota solo a dissolvenza finita, così la foto non sparisce di colpo
       setTimeout(() => {
         if(!lightbox.classList.contains("open")) mc.innerHTML = "";
       }, 160);
@@ -535,7 +486,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // lightbox: apre le foto della galleria a schermo intero (delegato sul contenitore)
   if (galleryGrid) {
     lightbox = document.createElement("div");
     lightbox.className = "lightbox";
@@ -562,8 +512,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!item) return;
       const mediaEl = item.querySelector("img, video");
       const tag = item.querySelector(".tag");
-      // nella Galleria la griglia ha solo miniature: la versione grande (o il
-      // video) sta in data-full e si scarica solo adesso
       const full = item.dataset.full || mediaEl.currentSrc || mediaEl.src;
       if (item.dataset.type === "video" || mediaEl.tagName === "VIDEO") {
         const poster = mediaEl.tagName === "IMG" ? mediaEl.src : "";
@@ -612,10 +560,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // "Torna su" con la moto vista dall'alto (pulsante fisso e quello nel piè
-  // di pagina): una copia della moto parte dal pulsante e sale lungo lo
-  // schermo, con la scia rossa del fanale, mentre la pagina torna in cima.
-  // Con "riduci movimento" si torna su e basta.
   const easeInOut = getComputedStyle(document.documentElement).getPropertyValue("--ease-in-out").trim() || "ease-in-out";
   function rideToTop(from){
     if (prefersReducedMotion) { window.scrollTo({ top: 0, behavior: "auto" }); return; }
@@ -636,9 +580,6 @@ document.addEventListener("DOMContentLoaded", () => {
       { transform: "translateY(" + (-dist * 0.82) + "px) scale(1.08)", opacity: 1, offset: 0.8 },
       { transform: "translateY(" + (-dist) + "px) scale(1.1)", opacity: 0 }
     ], { duration: DURATA, easing: easeInOut, fill: "forwards" });
-    // la pagina torna su con la stessa durata e la stessa curva della moto
-    // (lo scroll "smooth" del browser è più rapido e non andrebbe insieme):
-    // il progresso dell'animazione ha già dentro la curva --ease-in-out
     const startY = window.scrollY;
     const step = () => {
       const t = ride.effect.getComputedTiming().progress;
@@ -656,7 +597,6 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => rideToTop(btn));
   });
 
-  // pulsante fisso "torna su": compare dopo un po' di scroll, su tutte le pagine
   const backToTop = document.createElement("button");
   backToTop.id = "back-to-top";
   backToTop.type = "button";
@@ -679,7 +619,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   backToTop.addEventListener("click", () => rideToTop(backToTop));
 
-  // quando si vede il "torna su" del piè di pagina, quello fisso si fa da parte
   const footerRide = document.querySelector(".footer-ride");
   if (footerRide && "IntersectionObserver" in window) {
     new IntersectionObserver(entries => {
@@ -687,10 +626,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }).observe(footerRide);
   }
 
-  // pulsante "copia link" riusabile: basta dare a un <button> la classe
-  // .copy-link-btn (e opzionalmente data-copy="URL"; senza, copia l'URL
-  // della pagina corrente) per avere copia negli appunti + conferma animata
-  // ovunque nel sito, senza bisogno di altro JS per pagina
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest(".copy-link-btn");
     if (!btn) return;
@@ -719,14 +654,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   });
 
-  // ricerca globale (itinerari, viaggi da ricordare e guide del Manuale di
-  // bordo): pulsante iniettato nell'header di ogni pagina, dati caricati al
-  // primo utilizzo da data/viaggi-data.js e data/manuale-data.js se non già
-  // presenti nella pagina corrente
   (function initSiteSearch(){
     const headerWrap = document.querySelector(".site-header .wrap");
-    // niente ricerca nell'header semplificato dell'area riservata (lì non
-    // c'è la nav pubblica, solo il pulsante "Torna al sito")
     if (!headerWrap || !headerWrap.querySelector(".nav-links")) return;
 
     const trigger = document.createElement("button");
@@ -787,10 +716,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
     }
 
-    // Toglie accenti (città → citta) per confrontare parole indipendentemente
-    // da come sono scritte: prima la ricerca falliva su "citta" se il testo
-    // aveva "città", o su "borgo" scritto in ordine diverso da come appare
-    // nel testo, perché cercava solo la frase intera come un'unica sottostringa.
     function normalizeSearch(str){
       return String(str).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
     }
@@ -835,9 +760,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       if (!searchIndex) searchIndex = buildSearchIndex();
-      // ogni parola della ricerca deve comparire da qualche parte nel testo
-      // (non più un'unica frase esatta): "moto enduro" trova anche un
-      // itinerario che parla di "enduro in moto" o le cita in paragrafi diversi
       const words = q.split(/\s+/).filter(Boolean);
       const matches = searchIndex
         .filter(item => words.every(w => item.haystack.includes(w)))

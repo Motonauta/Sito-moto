@@ -3,8 +3,8 @@
 // è stata vista ogni pagina, e quante volte è stato usato ogni assistente
 // di Nostromo. Nessuno storico/andamento nel tempo, solo totali da quando
 // questa funzione è stata messa online.
-const { getRedisClient } = require('../lib/redis');
-const { isAuthenticated } = require('../lib/auth');
+const { getRedisClient } = require('./_lib/redis');
+const { isAuthenticated } = require('./_lib/auth');
 
 const PAGINE_VALIDE = [
   'index', 'nostromo', 'manuale', 'ilmotonauta', 'sponsor', 'galleria',

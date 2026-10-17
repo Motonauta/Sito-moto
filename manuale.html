@@ -20,13 +20,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013f">
+<link rel="stylesheet" href="style.css?v=20261017a">
 <script src="cookie-consent.js" defer></script>
 <style>
-  /* stesso sistema di base delle altre pagine già fatte: grafite
-     freddo, doppio filo rosso/blu sotto l'header e sulla sezione
-     alternata, sweep diagonale dietro al titolo (hero solo testo,
-     come su Alleati), bottone con freccia cerchiata in hover */
   :root{
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
@@ -177,7 +173,6 @@
   </div>
 </section>
 
-<!-- SUGGERISCI UNA GUIDA ============================================= -->
 <section class="section-alt" id="idea" style="margin-top:64px;">
   <div class="wrap" style="max-width:560px;">
     <p class="marker">Manca qualcosa?</p>
@@ -235,10 +230,7 @@
 
   function wikiThumb(url, width){
     if(!url) return url;
-    // copertine delle guide salvate nel sito: per gli elenchi c'è accanto la
-    // versione piccola "-800.webp" (la fa strumenti/copertine/render.js)
     if(url.startsWith("/img/manuale/") && /\/copertina[^/]*\.jpg$/.test(url) && width <= 800) return url.replace(/\.jpg$/, "-800.webp");
-    // foto della Galleria (Cloudinary): la misura si chiede nell'indirizzo
     if(url.includes("res.cloudinary.com") && url.includes("/image/upload/") && !/\/upload\/[^/]*(w_|c_)/.test(url)) return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width},c_limit/`);
     if(!url.includes("wikimedia.org")) return url;
     return url + (url.includes("?") ? "&" : "?") + "width=" + width;
@@ -249,10 +241,6 @@
   const noResultsMsg = document.getElementById("manuale-no-results");
   const searchInput = document.getElementById("manuale-search-input");
 
-  // indice di ricerca per ogni guida: titolo, categoria, estratto e tutto il
-  // testo dei blocchi (paragrafi, consigli, didascalie, link) — così cercando
-  // una parola tipo "sacco a pelo" si trova anche una guida che non la ha nel
-  // titolo, ma la cita nel contenuto
   function normalizeSearch(str){
     return String(str || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   }
@@ -277,7 +265,6 @@
       card.className = "manuale-card";
       card.href = `manuale/${getSlug(guida)}`;
 
-      // niente data sulle guide (sembrerebbero vecchie): minuti di lettura
       const minuti = tempoLettura(guida);
 
       card.innerHTML = `
@@ -362,6 +349,6 @@
     });
   })();
 </script>
-<script src="script.js?v=20261013f"></script>
+<script src="script.js?v=20261017a"></script>
 </body>
 </html>

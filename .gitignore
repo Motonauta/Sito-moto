@@ -1,5 +1,4 @@
-# File di configurazione degli strumenti AI (skill installate localmente),
-# non fanno parte del sito e non vanno pubblicati nel repository.
 .agents/
 .claude/
 skills-lock.json
+node_modules/

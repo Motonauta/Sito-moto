@@ -5,7 +5,7 @@
 // ancora vuoto) copia il suo contenuto su Redis, da lì in poi è Redis la
 // fonte di verità e data/viaggi-data.js non viene più letto.
 const { getRedisClient } = require('./redis');
-const seed = require('../data/viaggi-data');
+const seed = require('../../data/viaggi-data');
 
 const REDIS_KEY = 'site:viaggi-data';
 const CATEGORIE = ['ITINERARI', 'MINIVIAGGI', 'VIAGGI_RICORDARE'];

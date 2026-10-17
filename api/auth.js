@@ -1,6 +1,6 @@
 const crypto = require('crypto');
-const { getRedisClient } = require('../lib/redis');
-const { COOKIE_NAME, SESSION_SECONDS, isAuthenticated, parseCookies } = require('../lib/auth');
+const { getRedisClient } = require('./_lib/redis');
+const { COOKIE_NAME, SESSION_SECONDS, isAuthenticated, parseCookies } = require('./_lib/auth');
 
 const MAX_ATTEMPTS = 3;
 const BLOCK_SECONDS = 60 * 60 * 24; // 24 ore

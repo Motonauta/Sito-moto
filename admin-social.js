@@ -1,14 +1,3 @@
-// Area riservata, scheda "Social": generatore di titoli e green screen per i
-// video, nei colori e con i caratteri del sito. Tutto si disegna qui nel
-// browser e si scarica come immagine vettoriale (SVG), un file per volta:
-// le scritte sono trasformate in tracciati (opentype.js legge i caratteri del
-// sito da /font/), quindi l'SVG viene uguale in qualsiasi programma, anche
-// dove Oswald e JetBrains Mono non sono installati. Per i programmi che non
-// aprono gli SVG c'è anche il PNG.
-//
-// Testo: le parole tra *asterischi* vengono in rosso; andando a capo si
-// decidono le righe, altrimenti le divide il generatore. Senza asterischi
-// l'ultima riga è rossa, come nelle copertine delle guide.
 (function(){
   const C = {
     nero: "#0b0b0a", asfalto: "#1B1A17", rosso: "#C1272D", rossoChiaro: "#E8545A",
@@ -34,7 +23,6 @@
     quadrato: { w: 1080, h: 1080, larg: 0.84, alt: 0.5 }
   };
 
-  // ---------- caratteri: Oswald per i titoli, JetBrains Mono per la firma --
   let T = null, M = null;
   async function caratteri(){
     if(T && M) return;
@@ -54,7 +42,6 @@
   }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  // ---------- testo: righe e parole in rosso ------------------------------
   const PAROLINE = new Set(("IL LO LA I GLI LE L UN UNO UNA DI DA IN CON SU PER TRA FRA A E ED O MA CHE " +
     "DEL DELLO DELLA DEI DEGLI DELLE AL ALLO ALLA AI AGLI ALLE DAL DALLA DAI NEL NELLA NEI SUL SULLA SUI " +
     "COME PIÙ NON SE").split(" "));
@@ -77,10 +64,6 @@
     if(aCapo){
       parole.forEach((p, i) => { if(i === 0 || p.aCapo) out.push([]); out[out.length - 1].push(p); });
     } else {
-      // a capo da soli: tra tutti i modi di spezzare sceglie quello con le
-      // righe più vicine alla lunghezza giusta, meglio se va a capo dopo una
-      // virgola o dove cambia colore, e mai lasciando in fondo alla riga
-      // un "la", "di", "su"... (né una parolina da sola sull'ultima riga)
       const n = parole.length, obiettivo = maxChar * 0.85;
       const massimo = Math.max(Math.ceil(maxChar * 1.35), ...parole.map(p => p.t.length));
       const lung = (i, j) => parole.slice(i, j).reduce((s, p) => s + p.t.length, 0) + (j - i - 1);
@@ -95,7 +78,7 @@
           const ultima = parole[j - 1];
           if(/[,;:.!?]$/.test(ultima.t)) c -= 12;
           if(ultima.rossa !== parole[j].rossa) c -= 20;
-          else if(ultima.rossa) c += 12; // meglio non spezzare il gruppo in rosso
+          else if(ultima.rossa) c += 12;
           if(PAROLINE.has(ultima.t.toUpperCase())) c += 30;
         } else if(j - i === 1 && L <= 4 && n > 1) c += 15;
         if(c < costo[j]){ costo[j] = c; da[j] = i; }
@@ -110,11 +93,8 @@
     }
     return out.map(r => r.map(p => ({ t: p.t.toUpperCase(), rossa: p.rossa })));
   }
-  // f = carattere: Oswald (T) se non si dice altro, JetBrains Mono (M) per il Diario
   const largRighe = (rr, dim, f = T) => { const sp = larghezza(f, " ", dim); return rr.map(r => r.reduce((w, p, i) => w + larghezza(f, p.t, dim) + (i ? sp : 0), 0)); };
-  // dimensione del carattere perché la riga più lunga stia in "larghezza"
   const adatta = (rr, larg, massimo, f = T) => Math.min(massimo, 100 * larg / Math.max(...largRighe(rr, 100, f), 1));
-  // ogni parola con la sua posizione: { p, x, y, w }
   function posa(rr, dim, x0, y0, passo, centro, f = T){
     const sp = larghezza(f, " ", dim), larg = largRighe(rr, dim, f), out = [];
     rr.forEach((r, i) => {
@@ -131,7 +111,6 @@
       `<path d="${tracciato(M, FIRMA, x + dim * 1.05, y, dim, sp)}" fill="${colore}"/>`;
   }
   const largFirma = dim => dim * 1.05 + larghezza(M, FIRMA, dim, dim * 0.22);
-  // le parole rosse una accanto all'altra di ogni riga, come un pezzo unico: fn(x1, x2, y, riga)
   function gruppiRossi(rr, parole, fn){
     let out = "";
     rr.forEach((r, i) => {
@@ -152,15 +131,12 @@
     }
     return p + "Z";
   }
-  // ingombro di un disegno di iw×ih ruotato di "ang" gradi, più il margine P
   function ruotato(iw, ih, ang, P, dentro){
     const a = ang * Math.PI / 180;
     const w = iw * Math.cos(a) + ih * Math.abs(Math.sin(a)) + P * 2, h = iw * Math.abs(Math.sin(a)) + ih * Math.cos(a) + P * 2;
     return { w, h, corpo: `<g transform="translate(${n2(w / 2)} ${n2(h / 2)}) rotate(${ang}) translate(${n2(-iw / 2)} ${n2(-ih / 2)})">${dentro}</g>` };
   }
 
-  // ---------- i quattro stili ---------------------------------------------
-  // ognuno restituisce { w, h, defs, corpo } ritagliato attorno al titolo
   const DISEGNA = {
     copertina(rr, opz = {}){
       const F = adatta(rr, 960, 230), P = F * 0.22, dimFirma = opz.firma === false ? 0 : F * 0.19;
@@ -172,7 +148,6 @@
       let corpo = dimFirma ? firma(P, P + dimFirma, dimFirma, C.rossoChiaro) : "";
       corpo += `<path d="${d(parole, F)}" fill="none" stroke="${C.nero}" stroke-width="${n2(F * 0.11)}" stroke-linejoin="round"/>`;
       corpo += `<path d="${d(parole.filter(o => !o.p.rossa), F)}" fill="${C.crema}"/><path d="${d(parole.filter(o => o.p.rossa), F)}" fill="${C.rosso}"/>`;
-      // la riga rossa e blu sotto, come sotto i titoli del sito
       corpo += `<rect x="${n2(P - F * 0.04)}" y="${n2(yb - F * 0.04)}" width="${n2(F * 1.28)}" height="${n2(F * 0.19)}" fill="${C.nero}"/>` +
         `<rect x="${n2(P)}" y="${n2(yb)}" width="${n2(F * 0.78)}" height="${n2(F * 0.11)}" fill="${C.rosso}"/>` +
         `<rect x="${n2(P + F * 0.78)}" y="${n2(yb)}" width="${n2(F * 0.42)}" height="${n2(F * 0.11)}" fill="${C.blu}"/>`;
@@ -193,7 +168,6 @@
       rr.forEach((r, i) => {
         const y = sopra + i * (hRiga + gap);
         dentro += `<rect y="${n2(y)}" width="${n2(larg[i] + px * 2)}" height="${n2(hRiga)}" fill="${C.nero}"/><rect y="${n2(y)}" width="${n2(larg[i] + px * 2)}" height="${n2(F * 0.02)}" fill="#F5F0E6" fill-opacity="0.14"/>`;
-        // le parole rosse una accanto all'altra vanno su un'unica striscia
         const sue = parole.filter(o => o.riga === i);
         let inizio = null;
         sue.forEach((o, k) => {
@@ -205,7 +179,6 @@
         });
         dentro += `<path d="${sue.map(o => tracciato(T, o.p.t, o.x, y + py + cap, F)).join("")}" fill="${C.crema}"/>`;
       });
-      // inclinato di poco, come un adesivo
       const ang = -2.2, a = ang * Math.PI / 180, P = F * 0.16;
       const w = iw * Math.cos(a) + ih * Math.abs(Math.sin(a)) + P * 2, h = iw * Math.abs(Math.sin(a)) + ih * Math.cos(a) + P * 2;
       return { w, h, defs: "", corpo: `<g transform="translate(${n2(w / 2)} ${n2(h / 2)}) rotate(${ang}) translate(${n2(-iw / 2)} ${n2(-ih / 2)})">${dentro}</g>` };
@@ -217,11 +190,9 @@
       const w = Math.max(...larg) + P * 2 + ombra, h = P * 2 + cap + passo * (rr.length - 1) + ombra;
       const parole = posa(rr, F, 0, P + cap, passo, (w - ombra) / 2);
       const tutte = d(parole, F), rosse = d(parole.filter(o => o.p.rossa), F);
-      // ombra piena, poi contorno spesso, poi il colore
       let corpo = `<path d="${d(parole, F, ombra, ombra)}" fill="${C.nero}" stroke="${C.nero}" stroke-width="${n2(F * 0.16)}" stroke-linejoin="round"/>`;
       corpo += `<path d="${tutte}" fill="none" stroke="${C.nero}" stroke-width="${n2(F * 0.16)}" stroke-linejoin="round"/>`;
       corpo += `<path d="${d(parole.filter(o => !o.p.rossa), F)}" fill="${C.crema}"/><path d="${rosse}" fill="${C.rosso}"/>`;
-      // un filo chiaro sulle parole rosse, così si staccano anche sul nero
       if(rosse) corpo += `<path d="${rosse}" fill="none" stroke="#F5F0E6" stroke-opacity="0.55" stroke-width="${n2(F * 0.018)}" stroke-linejoin="round"/>`;
       return { w, h, defs: "", corpo };
     },
@@ -241,20 +212,16 @@
       let corpo = `<rect x="1" y="1" width="${n2(w - 2)}" height="${n2(h - 2)}" rx="${n2(raggio)}" fill="${C.nero}"/>`;
       corpo += `<g clip-path="url(#cpPannello)"><rect width="${n2(w)}" height="${n2(h)}" fill="url(#cpAlone)"/><rect width="${n2(w)}" height="${n2(F * 0.05)}" fill="url(#cpStriscia)"/></g>`;
       corpo += `<rect x="1" y="1" width="${n2(w - 2)}" height="${n2(h - 2)}" rx="${n2(raggio)}" fill="none" stroke="#F5F0E6" stroke-opacity="0.18" stroke-width="${n2(Math.max(2, F * 0.018))}"/>`;
-      // spia rossa e nome, come le etichette del cruscotto
       corpo += `<circle cx="${n2(pad + dimFirma * 0.3)}" cy="${n2(pad + dimFirma * 0.62)}" r="${n2(dimFirma * 0.3)}" fill="${C.rosso}" filter="url(#cpLuce)"/>`;
       corpo += `<path d="${tracciato(M, FIRMA, pad + dimFirma, pad + dimFirma, dimFirma, dimFirma * 0.2)}" fill="#F5F0E6" fill-opacity="0.68"/>`;
       corpo += `<path d="${d(parole.filter(o => !o.p.rossa), F)}" fill="${C.crema}"/>`;
       const rosse = d(parole.filter(o => o.p.rossa), F);
       if(rosse) corpo += `<path d="${rosse}" fill="#e3343a" filter="url(#cpLuce)"/>`;
-      // la mezzeria tratteggiata in fondo
       corpo += `<line x1="${n2(pad)}" y1="${n2(ym)}" x2="${n2(w - pad)}" y2="${n2(ym)}" stroke="#F5F0E6" stroke-opacity="0.35" stroke-width="${n2(F * 0.035)}" stroke-dasharray="${n2(F * 0.22)} ${n2(F * 0.18)}"/>`;
       return { w, h, defs, corpo };
     },
 
     targa(rr, opz = {}){
-      // la targa della moto (due righe, come quelle italiane): banda blu con le
-      // stelle e la "I", lettere scure in rilievo, viti, cornice nera con la firma
       const F = adatta(rr, 760, 210), cap = maiuscole(T, F), passo = cap * 1.32, larg = largRighe(rr, F);
       const bordo = F * 0.07, banda = F * 0.68, pad = F * 0.36, raggio = F * 0.2, ri = raggio - bordo * 0.6;
       const hTesto = cap + passo * (rr.length - 1);
@@ -265,7 +232,6 @@
       let corpo = `<rect width="${n2(w)}" height="${n2(h)}" rx="${n2(raggio)}" fill="${C.nero}"/>`;
       corpo += `<rect x="${n2(bordo)}" y="${n2(bordo)}" width="${n2(pw)}" height="${n2(ph)}" rx="${n2(ri)}" fill="${C.crema}"/>`;
       corpo += `<rect x="${n2(bordo)}" y="${n2(bordo)}" width="${n2(banda)}" height="${n2(ph)}" fill="${C.blu}" clip-path="url(#tgPiastra)"/>`;
-      // dodici stelle in cerchio e la "I" sotto, al centro della banda
       const rs = banda * 0.3, R = banda * 0.075, dimI = banda * 0.62, capI = maiuscole(T, dimI), stacco = banda * 0.12;
       const cx = bordo + banda / 2, alto = bordo + (ph - (rs * 2 + R * 2 + stacco + capI)) / 2, cy = alto + R + rs;
       let stelle = "";
@@ -275,7 +241,6 @@
       const parole = posa(rr, F, bordo + banda + pad, bordo + (ph - hTesto) / 2 + cap, passo);
       corpo += `<path d="${d(parole, F, F * 0.018, F * 0.026)}" fill="${C.nero}" fill-opacity="0.22"/>`;
       corpo += `<path d="${d(chiare(parole), F)}" fill="${C.nero}"/><path d="${d(rosse(parole), F)}" fill="${C.rosso}"/>`;
-      // le due viti in alto
       const vite = x => {
         const r = F * 0.055, y = bordo + Math.min(pad, (ph - hTesto) / 2) * 0.5;
         return `<circle cx="${n2(x)}" cy="${n2(y)}" r="${n2(r)}" fill="#B9B3A8" stroke="${C.nero}" stroke-opacity="0.45" stroke-width="${n2(F * 0.012)}"/>` +
@@ -290,11 +255,8 @@
     },
 
     cartello(rr, opz = {}){
-      // il cartello di direzione blu con la punta, il filo bianco dentro al bordo,
-      // le parole rosse su una targhetta e la firma sul pannello bianco sotto
       const F = adatta(rr, 780, 200), cap = maiuscole(T, F), passo = cap * 1.42, larg = largRighe(rr, F);
       const bordo = F * 0.08, filo = F * 0.05, spazio = F * 0.05;
-      // tre passate sullo stesso contorno: bordo blu, filo chiaro, blu dentro
       const s3 = spazio * 2, s2 = s3 + filo * 2, s1 = s2 + bordo * 2, o = s1 / 2;
       const padx = F * 0.36, pady = F * 0.34, hTesto = cap + passo * (rr.length - 1);
       const ph = hTesto + pady * 2, bw = padx * 2 + Math.max(...larg), punta = Math.min(ph * 0.42, F * 0.8);
@@ -316,8 +278,6 @@
     },
 
     neon(rr, opz = {}){
-      // insegna al neon: le lettere sono tubi luminosi (bianco-blu e rosso) con
-      // l'alone, su un'ombra scura sfumata che le fa leggere su qualsiasi video
       const F = adatta(rr, 900, 220), cap = maiuscole(T, F), passo = cap * 1.3, larg = largRighe(rr, F);
       const P = F * 0.5, df = F * 0.16, sopra = opz.firma === false ? 0 : df * 2.4;
       const w = Math.max(...larg) + P * 2, h = P * 2 + sopra + cap + passo * (rr.length - 1);
@@ -331,7 +291,6 @@
       let corpo = `<path d="${d(parole, F)}" fill="${C.nero}" fill-opacity="0.55" stroke="${C.nero}" stroke-opacity="0.6" stroke-width="${n2(F * 0.16)}" stroke-linejoin="round" filter="url(#neBuio)"/>`;
       corpo += tubo(d(chiare(parole), F), "#2F7BE0", "#CFE4FF", "#FFFFFF") + tubo(d(rosse(parole), F), "#E0252C", "#FF4D55", "#FFE1E1");
       if(sopra){
-        // la firma: una piccola insegna rossa piena, con due trattini ai lati
         const sp = df * 0.3, wf = larghezza(M, FIRMA, df, sp), x = (w - wf) / 2, y = P + df, ym = y - maiuscole(M, df) / 2;
         const p = tracciato(M, FIRMA, x, y, df, sp) + `M${n2(x - df * 2.2)} ${n2(ym)}H${n2(x - df * 0.8)}M${n2(x + wf + df * 0.8)} ${n2(ym)}H${n2(x + wf + df * 2.2)}`;
         corpo += `<path d="${p}" fill="#E0252C" stroke="#E0252C" stroke-width="${n2(df * 0.2)}" filter="url(#neAlone)"/>`;
@@ -341,8 +300,6 @@
     },
 
     toppa(rr, opz = {}){
-      // la toppa ricamata come il logo: bordo rosso a punto festone, cucitura
-      // tratteggiata, lettere in rilievo col verso dei fili, un filo storta
       const F = adatta(rr, 780, 200), cap = maiuscole(T, F), passo = cap * 1.26, larg = largRighe(rr, F);
       const bordo = F * 0.17, padx = F * 0.5, pady = F * 0.4, df = F * 0.15, hFirma = opz.firma === false ? 0 : df * 2.3;
       const hTesto = cap + passo * (rr.length - 1);
@@ -369,8 +326,6 @@
     },
 
     diario(rr, opz = {}){
-      // strisce di nastro di carta strappate, scritte a macchina (JetBrains
-      // Mono), ognuna un po' storta; in cima la striscia rossa "DIARIO DI BORDO"
       const F = adatta(rr, 820, 150, M), cap = maiuscole(M, F), larg = largRighe(rr, F, M);
       const px = F * 0.42, py = F * 0.34, dente = F * 0.09, hRiga = cap + py * 2, gap = F * 0.06, P = F * 0.16;
       const angoli = [-1.6, 1.2, -0.8, 1.5, -1.2, 0.7], scarti = [0, 0.35, 0.12, 0.42, 0.05, 0.28];
@@ -395,7 +350,6 @@
         voci.push({ w: larg[i] + px * 2, h: hRiga, x: F * scarti[i % scarti.length], ang: angoli[i % angoli.length], fondo: "url(#diCarta)",
           testo: `<path d="${d(chiare(pp), F, 0, 0, M)}" fill="${C.nero}"/><path d="${d(rosse(pp), F, 0, 0, M)}" fill="${C.rosso}"/>` });
       });
-      // una sotto l'altra, poi l'ingombro vero contando le rotazioni
       let y = 0, x1 = Infinity, x2 = -Infinity, y1 = Infinity, y2 = -Infinity;
       voci.forEach(v => {
         v.y = y; y += v.h + gap;
@@ -411,16 +365,12 @@
     },
 
     evidenziatore(rr, opz = {}){
-      // lettere chiare col contorno nero e una passata di evidenziatore rosso
-      // dietro le parole chiave: il contorno sparisce dove passa il pennarello
       const F = adatta(rr, 920, 230), cap = maiuscole(T, F), passo = cap * 1.24, larg = largRighe(rr, F);
       const P = F * 0.3, df = F * 0.17, sotto = opz.firma === false ? 0 : df * 2.4;
       const w = Math.max(...larg) + P * 2, h = P * 2 + cap + passo * (rr.length - 1) + F * 0.1 + sotto;
       const parole = posa(rr, F, P, P + cap, passo), tutte = d(parole, F);
       let corpo = `<path d="${tutte}" fill="none" stroke="${C.nero}" stroke-width="${n2(F * 0.1)}" stroke-linejoin="round"/>`;
       corpo += gruppiRossi(rr, parole, (a, b, y, i) => {
-        // punta a scalpello: le due estremità tagliate in obliquo, bordi un po' mossi
-        // (sulle parole corte, come il numero dei green screen, il taglio è meno obliquo)
         const x1 = a - F * 0.14, x2 = b + F * 0.14, ya = y - cap * 0.8, yb = y + F * 0.1, inc = Math.min(F * 0.16, (x2 - x1) * 0.1), ond = F * 0.03, s = i % 2 ? 1 : -1, m = (x1 + x2) / 2;
         const passata = `M${n2(x1 + inc)} ${n2(ya + ond * s)}Q${n2(m)} ${n2(ya - ond * s * 1.5)} ${n2(x2)} ${n2(ya)}L${n2(x2 - inc)} ${n2(yb)}Q${n2(m)} ${n2(yb + ond * s)} ${n2(x1)} ${n2(yb - ond * s)}Z`;
         const riga = k => `M${n2(x1 + inc * 1.2)} ${n2(ya + (yb - ya) * k)}L${n2(x2 - inc * 0.8)} ${n2(ya + (yb - ya) * (k - 0.04))}`;
@@ -435,7 +385,6 @@
     }
   };
 
-  // ---------- il file SVG: solo il titolo o l'inquadratura intera ---------
   function inquadra(t, formato, sfondo, posizione){
     const f = FORMATI[formato];
     const fondo = (W, H) => sfondo === "trasparente" ? "" : `<rect width="${W}" height="${H}" fill="${sfondo === "verde" ? C.verde : C.asfalto}"/>`;
@@ -446,7 +395,6 @@
     } else {
       W = f.w; H = f.h;
       const s = Math.min(f.w * f.larg / t.w, f.h * f.alt / t.h), w = t.w * s, h = t.h * s, x = (f.w - w) / 2;
-      // in basso nei reel resta sopra alla zona di didascalia e pulsanti
       const basso = formato === "reel" ? 0.74 : 0.9;
       const y = posizione === "alto" ? f.h * 0.1 : posizione === "basso" ? f.h * basso - h : (f.h - h) / 2;
       corpo = fondo(W, H) + `<g transform="translate(${n2(x)} ${n2(y)}) scale(${+s.toFixed(4)})">${t.corpo}</g>`;
@@ -454,21 +402,17 @@
     return { W, H, svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${t.defs ? `<defs>${t.defs}</defs>` : ""}${corpo}</svg>` };
   }
 
-  // ---------- scarico: SVG, o PNG per chi non apre gli SVG ----------------
   function scarica(blob, nome){
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob); a.download = nome;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }
-  // su iPad e iPhone un'immagine scaricata finisce in File > Download, dove
-  // CapCut e la Galleria non la vedono: per PNG e JPG si apre invece il menu
-  // Condividi, con "Salva immagine" che la mette in Foto. Sul computer si scarica.
   const tocco = navigator.maxTouchPoints > 1;
   async function condividi(files){
     if(!tocco || !navigator.canShare || !files.every(f => /^image\/(png|jpeg)$/.test(f.type)) || !navigator.canShare({ files })) return false;
     try{ await navigator.share({ files }); }
-    catch(err){ if(err.name !== "AbortError") return false; } // annullato dal menu: va bene così
+    catch(err){ if(err.name !== "AbortError") return false; }
     return true;
   }
   async function salvaImmagine(blob, nome){
@@ -512,7 +456,6 @@
     catch(err){ stato.innerHTML = `<div class="err">Non riesco a caricare i caratteri del sito: controlla la connessione e riprova.</div>`; return false; }
   }
 
-  // ---------- generatore di titoli ----------------------------------------
   async function generaTitoli(){
     const testo = document.getElementById("sg-titolo").value;
     const formato = document.getElementById("sg-formato").value;
@@ -531,7 +474,6 @@
     stato.innerHTML = `<div class="ok">Fatto: ${STILI.length} stili, scegli quello che ti piace e scaricalo.${notaTocco()}</div>`;
   }
 
-  // ---------- green screen a punti ----------------------------------------
   let ultimeGreen = [], giroGreen = 0;
   async function generaGreen(){
     const campi = [...document.querySelectorAll(".sg-punto")];
@@ -549,7 +491,6 @@
     stato.innerHTML = `<div>Disegno ${pieni.length === 1 ? "il green screen" : `${pieni.length} green screen`}...</div>`;
     if(!await pronti(stato)) return;
     pieni.forEach((arg, i) => {
-      // il numero è rosso, il resto chiaro (via gli asterischi dell'argomento)
       const testo = `*${i + 1})* ${arg.replace(/\*/g, "")}`;
       const img = inquadra(DISEGNA[stile](righe(testo, 16, false), { firma: false }), formato, "verde", posizione);
       const nome = `green-${String(i + 1).padStart(2, "0")}-${nomeFile(arg)}`;
@@ -559,14 +500,12 @@
     document.getElementById("sg-green-tutte").hidden = false;
     document.getElementById("sg-green-tutte-png").hidden = false;
     stato.innerHTML = `<div class="ok">Fatto: ${pieni.length === 1 ? "un green screen" : `${pieni.length} green screen`}, numerati nell'ordine delle caselle compilate.${notaTocco()}</div>`;
-    // i PNG si preparano subito, così "Tutte in PNG" apre il menu Condividi al primo tocco
     const lista = ultimeGreen;
     for(const g of lista){
       if(giro !== giroGreen) return;
-      try{ g.png = g.png || await blobPng(g.img); } catch(err){ /* lo rifà al clic */ }
+      try{ g.png = g.png || await blobPng(g.img); } catch(err){}
     }
   }
-  // un file SVG per ogni punto, uno dopo l'altro (niente ZIP)
   async function scaricaTutte(){
     const stato = document.getElementById("sg-green-stato");
     for(const g of ultimeGreen){
@@ -589,20 +528,13 @@
     stato.innerHTML = `<div class="ok">Scaricati ${files.length} file PNG. Se il browser chiede il permesso di scaricare più file, rispondi di sì.</div>`;
   }
 
-  // ---------- generatore di copertine --------------------------------------
-  // La foto si apre dal disco con un indirizzo "blob:" che vale solo in questa
-  // pagina e si disegna su una tela (canvas): non va a nessun server e non si
-  // salva da nessuna parte (niente localStorage, a differenza dei titoli).
-  // Ogni stile mette sopra alla foto il titolo dello stile omonimo.
   const COP_FORMATI = {
     youtube: { w: 1280, h: 720 },
-    // nella griglia del profilo Instagram e TikTok si vede solo il 3:4 centrale
     reel: { w: 1080, h: 1920, sicura: 0.125 },
     post: { w: 1080, h: 1350 },
     quadrato: { w: 1080, h: 1080 }
   };
   const FUOCHI = { centro: [0.5, 0.5], sinistra: [0, 0.5], destra: [1, 0.5], alto: [0.5, 0], basso: [0.5, 1] };
-  // la zona dove stanno le scritte: margini e, nei reel, la parte che si vede nella griglia
   function zona(f){
     const M = Math.min(f.w, f.h), m = M * 0.065, alto = f.sicura ? f.h * f.sicura : 0;
     return { x: m, y: alto + m, w: f.w - m * 2, h: f.h - (alto + m) * 2, y2: f.h - alto - m, M, oriz: f.w > f.h * 1.2 };
@@ -612,11 +544,8 @@
   const vignetta = (id, forza) => `<radialGradient id="${id}" cx="0.5" cy="0.5" r="0.75"><stop offset="0.4" stop-color="${C.nero}" stop-opacity="0"/><stop offset="1" stop-color="${C.nero}" stop-opacity="${forza}"/></radialGradient>`;
   const velo = (f, y, h, colore) => `<rect y="${n2(y)}" width="${f.w}" height="${n2(h)}" fill="${colore}"/>`;
 
-  // ogni stile: dove va la foto, cosa ci va sopra (velo) e il riquadro del titolo
-  // (box, allineato con ax/ay: 0 = sinistra/alto, 0.5 = centro, 1 = destra/basso)
   const COPERTINE = {
     copertina(f, Z){
-      // come le copertine delle guide: foto che sfuma nell'asfalto, titolo accanto
       if(Z.oriz){
         const fx = f.w * 0.36;
         return { foto: { x: fx, y: 0, w: f.w - fx, h: f.h }, defs: sfuma("cvA", 1, 0, C.asfalto, 1, 0),
@@ -653,7 +582,6 @@
         box: Z.oriz ? { x: Z.x, y: Z.y, w: f.w * 0.58, h: f.h * 0.5 } : { x: Z.x, y: Z.y, w: Z.w * 0.94, h: Z.h * 0.42 }, ax: 0, ay: 0 };
     },
     neon(f, Z){
-      // foto scurita e tinta di blu e rosso, come di sera sotto un'insegna
       const tinta = `<linearGradient id="cvT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${C.blu}" stop-opacity="0.32"/><stop offset="1" stop-color="${C.rosso}" stop-opacity="0.26"/></linearGradient>`;
       return { foto: piena(f), defs: tinta + vignetta("cvV", 0.8),
         velo: `<rect width="${f.w}" height="${f.h}" fill="${C.nero}" fill-opacity="0.5"/><rect width="${f.w}" height="${f.h}" fill="url(#cvT)"/><rect width="${f.w}" height="${f.h}" fill="url(#cvV)"/>`,
@@ -665,8 +593,6 @@
         ax: Z.oriz ? 0 : 0.5, ay: Z.oriz ? 0.5 : 1 };
     },
     diario(f, Z){
-      // la foto come una polaroid storta, attaccata con lo scotch, sulla stessa
-      // foto sfocata e scurita; la firma scritta sul bordo bianco
       let pw, ph, cx, cy, ang, box;
       if(Z.oriz){
         pw = f.w * 0.48; ph = pw * 0.75; ang = 3;
@@ -698,7 +624,6 @@
   };
 
   const caricaImg = src => new Promise((ok, ko) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ko(new Error("img")); im.src = src; });
-  // la foto ritagliata per riempire il riquadro r, tenendo la parte scelta
   function disegnaFoto(ctx, img, r, fuoco){
     const iw = img.naturalWidth, ih = img.naturalHeight, s = Math.max(r.w / iw, r.h / ih), sw = r.w / s, sh = r.h / s;
     ctx.drawImage(img, (iw - sw) * fuoco[0], (ih - sh) * fuoco[1], sw, sh, r.x, r.y, r.w, r.h);
@@ -709,7 +634,6 @@
     const ctx = tela.getContext("2d"); ctx.imageSmoothingQuality = "high";
     ctx.fillStyle = C.asfalto; ctx.fillRect(0, 0, f.w, f.h);
     if(L.sfocato){
-      // sfocatura alla buona ma uguale su tutti i browser: foto minuscola ingrandita
       const pic = document.createElement("canvas"); pic.width = 40; pic.height = Math.max(1, Math.round(40 * f.h / f.w));
       disegnaFoto(pic.getContext("2d"), img, { x: 0, y: 0, w: pic.width, h: pic.height }, fc);
       ctx.drawImage(pic, 0, 0, f.w, f.h);
@@ -725,7 +649,6 @@
       disegnaFoto(ctx, img, p, fc);
       ctx.restore();
     } else disegnaFoto(ctx, img, p, fc);
-    // sopra la foto: veli, decorazioni e titolo, disegnati in vettoriale
     const t = DISEGNA[stile](righe(testo, L.car || 12, true));
     const s = Math.min(L.box.w / t.w, L.box.h / t.h);
     const x = L.box.x + (L.box.w - t.w * s) * L.ax, y = L.box.y + (L.box.h - t.h * s) * L.ay;
@@ -738,13 +661,11 @@
   const aBlob = (tela, tipo, q) => new Promise((ok, ko) => tela.toBlob(b => b ? ok(b) : ko(new Error("blob")), tipo, q));
   async function inJpg(tela, formato){
     let b = await aBlob(tela, "image/jpeg", 0.9);
-    // YouTube accetta miniature fino a 2 MB
     if(formato === "youtube" && b.size > 2e6) b = await aBlob(tela, "image/jpeg", 0.8);
     return b;
   }
   const svuotaTela = tela => { tela.width = 0; tela.height = 0; };
 
-  // tutto quello che c'è in memoria: la foto e le anteprime (indirizzi blob:)
   const cop = { img: null, url: null, anteprime: [], giro: 0 };
   const el = id => document.getElementById(id);
   function liberaCopertine(){
@@ -758,7 +679,7 @@
     if(info){ info.hidden = true; info.querySelector("img").removeAttribute("src"); info.querySelector("span").textContent = ""; }
   }
   function cancellaCopertine(avvisa){
-    cop.giro++; // ferma una generazione ancora in corso
+    cop.giro++;
     liberaCopertine(); lasciaFoto();
     if(!el("cg-foto")) return;
     el("cg-foto").value = ""; el("cg-titolo").value = "";
@@ -818,7 +739,7 @@
         stato.innerHTML = `<div>Preparo la copertina ${i + 1} di ${STILI.length}...</div>`;
         const tela = await rendiCopertina(STILI[i].id, cop.img, testo, formato, fuoco);
         const blob = await inJpg(tela, formato); svuotaTela(tela);
-        if(giro !== cop.giro) return; // nel frattempo è stato cancellato tutto o cambiata foto
+        if(giro !== cop.giro) return;
         out.appendChild(schedaCopertina(blob, STILI[i], testo, formato, fuoco));
       }
       stato.innerHTML = `<div class="ok">Fatto: ${STILI.length} copertine. Scarica quella che ti piace; quando hai finito premi "Cancella tutto" (o chiudi la pagina) e la foto sparisce dalla memoria.${notaTocco()}</div>`;
@@ -827,8 +748,6 @@
     } finally { btn.disabled = false; }
   }
 
-  // ---------- avvio --------------------------------------------------------
-  // ---------- i tre generatori, uno alla volta -----------------------------
   function viste(){
     const bottoni = [...document.querySelectorAll(".sg-vista")];
     if(!bottoni.length) return;
@@ -843,7 +762,6 @@
     };
     bottoni.forEach((b, i) => {
       b.addEventListener("click", () => mostra(b.dataset.vista));
-      // frecce come nelle schede vere
       b.addEventListener("keydown", e => {
         const passo = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
         if(!passo) return;
@@ -889,13 +807,11 @@
       el("cg-foto").addEventListener("change", sceltaFoto);
       el("cg-btn").addEventListener("click", generaCopertine);
       el("cg-cancella").addEventListener("click", () => cancellaCopertine(true));
-      // chiudendo o lasciando la pagina non resta niente in memoria
       window.addEventListener("pagehide", () => cancellaCopertine(false));
     }
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 
-  // per le prove: await mnSocialGen.svg("copertina", "testo *rosso*", "titolo", "asfalto")
   window.mnSocialGen = {
     righe: (testo, maxChar = 14) => righe(testo, maxChar, true).map(r => r.map(p => p.rossa ? `*${p.t}*` : p.t).join(" ")),
     svg: async (stile, testo, formato = "titolo", sfondo = "trasparente", posizione = "centro", opz) => {

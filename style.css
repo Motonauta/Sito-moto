@@ -1,37 +1,14 @@
-/* ==========================================================
-   TOKENS
-   ========================================================== */
 :root{
-  --css-build:"20261013f"; /* stessa sigla del ?v= nei link a style.css/script.js: va cambiata insieme a ogni modifica */
-  /* curve di movimento condivise: --ease-out per entrate, hover e
-     pressioni; --ease-drawer per pannelli che scorrono (menu mobile) */
+  --css-build:"20261017a";
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --asphalt: #1B1A17;
   --asphalt-2: #232019;
-  /* stesso rosso esatto usato per "MOTO" nel logo e per l'anello
-     bicolore — un solo rosso in tutto il sito, nessuna variante diversa
-     (--rust-dim non è usato da nessuna pagina, ma lo teniamo identico
-     per sicurezza) */
   --rust: #C1272D;
-  /* lo stesso rosso, un filo più chiaro, per le SCRITTE piccole (titoletti,
-     etichette, errori): il --rust pieno sul fondo scuro arriva a 3:1 e al
-     sole sul telefono non si legge; questo supera 4,5:1 su tutti i fondi.
-     Pulsanti, fondi, bordi e testi grandi restano col --rust */
   --rust-text: #E8545A;
   --rust-dim: #C1272D;
-  /* "--gold" è rimasto il nome storico della variabile, ma dal
-     restyling rosso/blu del logo il suo valore è diventato un blu —
-     lo stesso identico blu di "NAUTA" nel logo, su richiesta di
-     Angelo (stessa regola già applicata al rosso) — usata per link,
-     hover, prezzi, badge: tutto ciò che prima era "oro" in giro per
-     il sito */
   --gold: #1E5FAE;
-  /* stesso blu, con un altro nome: usato per la "livrea" rosso/blu
-     ripresa su più pagine (header, sezioni alternate, card). Molte
-     pagine lo ridichiarano anche in locale (storico, invariato) ma
-     qui c'è anche come fallback condiviso */
   --racing-blue: #1E5FAE;
   --sand: #EDE3D0;
   --steel: #4A5859;
@@ -52,9 +29,6 @@
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body{
-  /* atmosfera di sfondo: due bagliori morbidi rosso/blu negli angoli
-     opposti, fissi rispetto alla finestra (non scorrono con la pagina),
-     molto tenui per non intaccare la leggibilità del testo sopra */
   background:
     url(img/topo.svg) right -280px top -60px / min(1400px, 170vw) auto no-repeat,
     radial-gradient(ellipse 1100px 900px at 10% -10%, rgba(193,39,45,0.24), transparent 65%),
@@ -67,50 +41,24 @@ body{
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
-  /* cursore: freccia "sei qui" da navigatore nei colori del logo (rosso/blu) con il bordo bianco
-     (img/cursore.svg è il disegno, i PNG sono la versione normale e retina).
-     Il punto di clic è la punta (3,3). Su link e pulsanti resta la manina */
   cursor:url("/img/cursore.png") 3 3, auto;
   cursor:-webkit-image-set(url("/img/cursore.png") 1x, url("/img/cursore@2x.png") 2x) 3 3, auto;
   cursor:image-set(url("/img/cursore.png") 1x, url("/img/cursore@2x.png") 2x) 3 3, auto;
 }
 input, textarea, select{ cursor:auto; }
 
-/* elenco delle scelte dei menu a tendina: su Windows Chrome lo apre su
-   fondo bianco ma con il colore del testo del select (crema), quindi le
-   voci sparivano (es. la cilindrata, il cui select è trasparente).
-   Fondo scuro e testo chiaro per tutte le tendine del sito */
 select{ color-scheme:dark; }
 select option, select optgroup{ background-color:var(--asphalt-2); color:var(--cream); }
 
-/* suggerimenti delle città sopra a tutto: nei riquadri (Nostromo, calcolo
-   benzina, box vari) i figli hanno tutti position:relative + z-index:1
-   per stare sopra al fondo decorativo, quindi un blocco che viene dopo
-   copriva la tendina aperta di quello prima. Il blocco in uso sale sopra
-   agli altri. Due regole separate: chi non conosce :has() ignora solo
-   la seconda */
 :is(.route-weather-widget, .fuel-calc, .macro-box, .nostromo-history-box) > :focus-within{ z-index:5; }
 :is(.route-weather-widget, .fuel-calc, .macro-box, .nostromo-history-box) > :has(.place-suggest-list.open){ z-index:5; }
 
-/* ==========================================================
-   TEXTURE "DA CARTA" — grana leggerissima su tutto lo sfondo e curve
-   di livello topografiche (img/topo.svg) in cima a ogni pagina
-   (strato dello sfondo del body, sfuma da solo) e sulle sezioni alternate. Restano dietro ai contenuti: le
-   card col loro fondo le coprono, si vedono solo nei vuoti.
-   ========================================================== */
 body::before{
   content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   opacity:.07;
 }
 
-/* ==========================================================
-   CALCOLATORE BENZINA "A CRUSCOTTO" (home e Nostromo)
-   tre pannelli neri dello stesso tipo: prezzo come il totem di un
-   distributore (rosso), cilindrata come un contagiri (sabbia), partenza
-   come un navigatore (blu). I selettori sono più specifici di
-   ".fuel-calc select/input" delle singole pagine, che li caricano dopo.
-   ========================================================== */
 .fuel-price-sign, .cc-dial, .place-field.nav-field{
   background:#0b0b0a; border:1px solid rgba(245,240,230,0.16); border-radius:6px;
   min-height:58px;
@@ -134,9 +82,6 @@ body::before{
   letter-spacing:0.05em; color:var(--cream-dim); white-space:nowrap;
 }
 
-/* contagiri: costruito da script.js attorno a <select data-dial>; il
-   select vero resta sopra al numero, invisibile, così un tocco sul numero
-   apre comunque l'elenco completo */
 .cc-dial{
   display:flex; align-items:center; gap:8px; padding:7px 8px;
 }
@@ -171,9 +116,6 @@ body::before{
 }
 .cc-dial-readout:focus-within{ outline:2px solid var(--rust); outline-offset:2px; }
 
-/* navigatore: segnaposto blu a sinistra, "posizione attuale" tonda a
-   destra (il pulsante lo aggiunge lo script della pagina) e, sotto, la
-   riga in stile GPS con nome e coordinate del punto riconosciuto */
 .place-field.nav-field{ display:flex; align-items:center; }
 .nav-field-pin{
   position:absolute; left:14px; top:50%; transform:translateY(-50%);
@@ -204,11 +146,6 @@ body::before{
 .nav-field-readout.is-locked{ color:var(--racing-blue); }
 .nav-field-readout.is-locked::before{ background:var(--racing-blue); box-shadow:0 0 8px rgba(30,95,174,0.9); }
 
-/* Reazione alla pressione: pulsanti e card "si schiacciano" appena li
-   tocchi, così l'interfaccia conferma subito di aver sentito il dito.
-   "html" davanti alza la priorità quanto basta per vincere sugli effetti
-   :hover delle singole pagine (che si caricano dopo questo file). Niente
-   movimento per chi ha chiesto meno animazioni. */
 @media (prefers-reduced-motion: no-preference){
   html :is(.btn, .admin-btn, .filter-btn, .idea-type-btn, .print-pdf-btn, .copy-link-btn,
            .map-popup-btn, .nav-toggle, .nostromo-history-clear):active:not(:disabled){
@@ -221,8 +158,6 @@ body::before{
   }
 }
 
-/* comparsa allo scroll (classi aggiunte da script.js, mai presenti se JS
-   è disattivato o se l'utente ha chiesto meno animazioni) */
 .reveal{ opacity:0; }
 .reveal.is-visible{
   animation:reveal-up .6s var(--ease-out) both;
@@ -236,8 +171,6 @@ body::before{
   .reveal{ opacity:1 !important; animation:none !important; }
 }
 
-/* icone a tratto sottile da /icons.svg (al posto delle emoji): prendono
-   colore e dimensione dal testo intorno */
 .icon{
   width:1.1em; height:1.1em; flex-shrink:0;
   fill:none; stroke:currentColor; stroke-width:1.6;
@@ -258,19 +191,12 @@ ul{list-style:none;}
   padding:0 28px;
 }
 
-/* eyebrow / mile-marker label -------------------------------------- */
-/* Font display (Oswald) invece di mono: il mono resta solo per i dati
-   veri (prezzi, coordinate, codici) come da sito — l'eyebrow è un
-   testo editoriale, non un dato, e nella texture mono accanto al
-   titolo grande condensato stonava. */
 .marker{
   font-family:var(--font-display);
   font-size:0.78rem;
   font-weight:600;
   letter-spacing:0.1em;
   text-transform:uppercase;
-  /* rosso del logo (prima era il blu): Angelo vuole più rosso nel sito,
-     il blu resta per link e accenti. Versione "da testo" per leggibilità */
   color:var(--rust-text);
   display:inline-flex;
   align-items:center;
@@ -278,20 +204,15 @@ ul{list-style:none;}
   margin-bottom:14px;
 }
 
-/* headings ----------------------------------------------------------*/
 h1,h2,h3{
   font-family:var(--font-display);
   text-transform:uppercase;
   font-weight:600;
   letter-spacing:0.01em;
   line-height:1.05;
-  /* righe bilanciate: niente parola sola a capo ("…NEL / LAZIO") */
   text-wrap:balance;
 }
 h2{font-size:clamp(1.9rem, 4vw, 2.8rem); color:var(--sand);}
-/* piccola firma rosso/blu sotto ogni titolo di pagina, stessi colori
-   del logo — un accento minimo e riutilizzabile ovunque, senza dover
-   rifare lo sfondo di ogni pagina */
 h1{
   position:relative;
   padding-bottom:20px;
@@ -305,8 +226,6 @@ h1::after{
   background:linear-gradient(to right, #C1272D 50%, #1E5FAE 50%);
 }
 p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
-/* numeri che cambiano o stanno in colonna (km, prezzi, contatori): cifre
-   tutte della stessa larghezza, così non "ballano" e si allineano */
 .tabular, .value, .km-value, [data-odometer]{ font-variant-numeric:tabular-nums; }
 
 .btn{
@@ -324,16 +243,11 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   transition:background .25s ease, color .25s ease, transform .2s ease;
 }
 .btn.solid{background:var(--rust); border-color:var(--rust);}
-/* il colore al passaggio del mouse solo dove c'è davvero un mouse: sul
-   telefono, dopo un tocco, il pulsante restava "acceso" pieno di rosso */
 @media (hover: hover) and (pointer: fine){
   .btn:hover{background:var(--rust); transform:translateY(-2px);}
   .btn.solid:hover{background:var(--gold); border-color:var(--gold); color:var(--asphalt);}
 }
 
-/* ==========================================================
-   COPIA LINK (bottone riusabile, gestito da script.js)
-   ========================================================== */
 .copy-link-btn{
   display:inline-flex; align-items:center; gap:8px;
   font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
@@ -354,10 +268,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   100%{ transform:scale(1); }
 }
 
-/* ==========================================================
-   TORNA SU
-   ========================================================== */
-/* stessa moto vista dall'alto del piè di pagina, in piccolo */
 #back-to-top{
   position:fixed; right:22px; bottom:22px; z-index:80;
   width:44px; height:62px; border-radius:22px; display:flex; align-items:center; justify-content:center;
@@ -377,9 +287,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   #back-to-top{ right:16px; bottom:16px; width:42px; height:58px; }
 }
 
-/* ==========================================================
-   RICERCA (iniettata da script.js, disponibile su tutte le pagine)
-   ========================================================== */
 #site-search-trigger{
   flex-shrink:0; margin-left:18px;
   width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -398,8 +305,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   transition:opacity .15s var(--ease-out), display .15s allow-discrete;
 }
 #site-search-overlay.open{ display:block; opacity:1; transition-duration:.2s; }
-/* entrata breve (dissolvenza + il box che "scende" di pochi pixel),
-   uscita più rapida dell'entrata */
 #site-search-overlay .site-search-box{
   transform:translateY(-8px) scale(0.98);
   transition:transform .15s var(--ease-out);
@@ -446,9 +351,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 
-/* ==========================================================
-   HEADER / NAV
-   ========================================================== */
 .site-header{
   position:sticky; top:0; z-index:50;
   background:rgba(27,26,23,0.92);
@@ -468,19 +370,11 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   line-height:1;
   --tilt-x:0deg;
   --tilt-y:0deg;
-  /* prospettiva dentro al transform del logo stesso, non su un
-     antenato condiviso con il menu mobile: "perspective" su un
-     contenitore crea un nuovo "containing block" per i figli con
-     position:fixed, e rompeva il menu a tendina su mobile */
   transform:perspective(800px) rotateX(var(--tilt-y)) rotateY(var(--tilt-x));
   transition:transform .15s ease-out;
   will-change:transform;
 }
 .logo .accent{color:var(--rust);}
-/* "MOTO" rosso + "NAUTA" blu, gli stessi colori dell'anello attorno
-   al logo — bordo scurissimo per dare spessore alla scritta. Il logo
-   intero (anello + testo) si inclina leggermente verso il cursore
-   (script.js imposta --tilt-x/--tilt-y al passaggio del mouse). */
 .logo .accent-moto,
 .logo .accent-nauta{
   -webkit-text-stroke:0.4px rgba(0,0,0,0.55);
@@ -510,16 +404,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 .nav-links a:hover, .nav-links a.active{color:var(--sand);}
 .nav-links a:hover::after, .nav-links a.active::after{width:100%;}
 
-/* Sottomenu a tendina per raggruppare le pagine affini (es. "Viaggia con
-   noi" = Nostromo + Manuale di bordo), invece di 7 voci tutte sullo
-   stesso piano. Hover e focus-within lo aprono su desktop senza JS; il
-   click (gestito in script.js) serve da touch/tastiera e su mobile,
-   dove il sottomenu diventa una lista verticale sempre nel flusso. */
-/* padding-bottom (compensato dal margin-bottom negativo, che non altera lo
-   spazio occupato nella riga della nav) allunga l'area "attiva" per :hover
-   fino a toccare il sottomenu: senza, il vuoto visivo tra il pulsante e il
-   menu non apparteneva a nessun elemento, e passandoci sopra con il mouse
-   si perdeva l'hover prima di arrivare alle voci (bisognava cliccare). */
 .nav-dropdown{ position:relative; padding-bottom:18px; margin-bottom:-18px; }
 .nav-dropdown-toggle{
   display:flex; align-items:center; gap:6px;
@@ -616,8 +500,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .nav-links.open{transform:translateY(0);}
   .nav-links a{padding:18px 0; border-bottom:var(--line); width:100%;}
 
-  /* sul mobile il sottomenu non è un popover ma una lista che si apre
-     nel flusso, sotto il pulsante che la controlla */
   .nav-dropdown{ width:100%; padding-bottom:0; margin-bottom:0; }
   .nav-dropdown-toggle{
     width:100%; justify-content:space-between;
@@ -638,9 +520,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active{ background:none; }
 }
 
-/* ==========================================================
-   ROAD LINE — signature element
-   ========================================================== */
 .road-line{
   width:100%; height:auto; display:block;
 }
@@ -665,12 +544,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 }
 @keyframes drive{ to{ stroke-dashoffset:-1000; } }
 
-/* ==========================================================
-   GRID UTILITIES — responsive (desktop -> tablet -> mobile)
-   ========================================================== */
-/* griglia 2+1 asimmetrica (prima erano 3 colonne piatte uguali, il
-   layout più generico che ci sia) con la stessa cornice a doppia
-   bordatura delle card di Alleati */
 .grid-flat-3{
   display:grid;
   grid-template-columns:repeat(2, 1fr);
@@ -780,8 +653,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   border:1px solid rgba(245,240,230,0.14);
   padding:16px;
 }
-/* sfondo a loghi del social (tenui, nei colori del marchio) e bordo in tinta,
-   così si capisce subito quale cornice è TikTok e quale Instagram */
 .social-feed-card--tiktok{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' opacity='.17'%3E%3Cg transform='translate(6 8) rotate(-14 12 12)' stroke='%2325F4EE'%3E%3Cpath d='M14 3.5v11.2a3.7 3.7 0 1 1-3.7-3.7'/%3E%3Cpath d='M14 3.5c.5 2.7 2.3 4.4 5 4.7'/%3E%3C/g%3E%3Cg transform='translate(54 6) rotate(10 12 12)' stroke='%23FE2C55'%3E%3Cpath d='M14 3.5v11.2a3.7 3.7 0 1 1-3.7-3.7'/%3E%3Cpath d='M14 3.5c.5 2.7 2.3 4.4 5 4.7'/%3E%3C/g%3E%3Cg transform='translate(30 52) rotate(6 12 12)' stroke='%2325F4EE'%3E%3Cpath d='M14 3.5v11.2a3.7 3.7 0 1 1-3.7-3.7'/%3E%3Cpath d='M14 3.5c.5 2.7 2.3 4.4 5 4.7'/%3E%3C/g%3E%3Cg transform='translate(76 58) rotate(-8 12 12)' stroke='%23FE2C55'%3E%3Cpath d='M14 3.5v11.2a3.7 3.7 0 1 1-3.7-3.7'/%3E%3Cpath d='M14 3.5c.5 2.7 2.3 4.4 5 4.7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   background-size:96px 96px;
@@ -801,8 +672,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 .social-feed-card--instagram .social-rete{ color:#F06BA8; }
 .social-feed-card--tiktok .social-placeholder-icon{ color:#25F4EE; }
 .social-feed-card--instagram .social-placeholder-icon{ color:#F06BA8; }
-/* riquadri social della home (TikTok e Instagram, uguali): la scheda col
-   link resta finché il feed non arriva (lib/tiktok.js, lib/instagram.js) */
 .social-box{ min-height:420px; display:flex; }
 .social-box.is-loaded{ display:block; min-height:0; }
 .social-placeholder{
@@ -823,7 +692,7 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 .ig-head-text strong{ font-family:var(--font-display); font-size:1.15rem; letter-spacing:0.03em; color:var(--sand); overflow:hidden; text-overflow:ellipsis; }
 .ig-head-text span{ font-family:var(--font-mono); font-size:0.74rem; color:var(--cream-dim); }
 .ig-head .btn.ig-follow{ padding:9px 14px; font-size:0.7rem; flex-shrink:0; }
-.ig-head .btn.ig-follow::after{ display:none; } /* niente pallino con la freccia: pulsante piccolo */
+.ig-head .btn.ig-follow::after{ display:none; }
 @media (max-width:420px){
   .ig-avatar{ width:46px; height:46px; }
   .ig-head-text strong{ font-size:1rem; }
@@ -879,8 +748,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 @media (max-width:480px){
   .logo-wrap img{ height:32px; }
 }
-/* Anello bicolore attorno al logo, richiama i colori del nuovo patch senza
-   toccare il resto della palette del sito */
 .logo-ring{
   display:flex;
   flex-shrink:0;
@@ -889,9 +756,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   background:conic-gradient(from 180deg, #C1272D 0deg, #1E5FAE 180deg, #C1272D 360deg);
 }
 
-/* ==========================================================
-   LIGHTBOX — anteprima foto a schermo intero
-   ========================================================== */
 .gallery-item.has-img{ cursor:zoom-in; }
 .lightbox{
   display:none; position:fixed; inset:0; background:rgba(10,9,7,0.94);
@@ -934,13 +798,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .lightbox-close{ top:12px; right:14px; }
 }
 
-/* ==========================================================
-   FOOTER
-   ========================================================== */
-/* PIÈ DI PAGINA — "fine della tappa": in cima la mezzeria tratteggiata
-   di una strada, poi la toppa con le coordinate della base (stile
-   cruscotto), i social e a destra la moto vista dall'alto che riporta in
-   cima (vedi rideToTop in script.js) */
 .site-footer{
   position:relative;
   padding:56px 0 30px;
@@ -979,7 +836,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 }
 .footer-social a:focus-visible{ outline:2px solid var(--rust); outline-offset:2px; }
 
-/* "torna su": un tratto di strada con la moto sopra */
 .footer-ride{
   display:flex; flex-direction:column; align-items:center; gap:8px;
   background:none; border:none; padding:0; cursor:pointer; color:var(--cream);
@@ -1003,7 +859,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .footer-ride:hover .moto-top{ transform:translateY(-4px); }
   .footer-ride:hover .footer-ride-label{ color:var(--sand); }
 }
-/* passandoci sopra la mezzeria scorre: la moto "va" */
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference){
   .footer-ride:hover .footer-road::before{ animation:road-run .45s linear infinite; }
 }
@@ -1024,7 +879,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
 .footer-bottom a{
   font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.05em; text-transform:uppercase;
   color:var(--cream-dim); transition:color .2s ease;
-  /* area di tocco alta 44 px anche se la scritta è piccola */
   display:inline-flex; align-items:center; min-height:44px;
 }
 .footer-bottom a:hover{ color:var(--sand); }
@@ -1034,8 +888,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .footer-ride{ grid-column:2; grid-row:1; }
 }
 
-/* la moto che parte dal pulsante e sale lungo lo schermo, con la scia
-   rossa del fanale */
 .moto-top{ fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 .moto-ride{ position:fixed; z-index:90; width:37px; height:80px; pointer-events:none; color:var(--cream); }
 .moto-ride .moto-top{ width:37px; height:80px; display:block; position:relative; z-index:1; filter:drop-shadow(0 6px 10px rgba(0,0,0,0.55)); }
@@ -1045,15 +897,9 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   filter:blur(1.5px);
 }
 
-/* ==========================================================
-   HERO PARALLAX
-   ========================================================== */
 .hero-parallax-frame{ position:relative; }
 .hero-parallax{ will-change:transform; }
 
-/* ==========================================================
-   COOKIE BANNER
-   ========================================================== */
 .cookie-banner{
   position:fixed; left:0; right:0; bottom:0; z-index:150;
   background:var(--asphalt-2);
@@ -1076,11 +922,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .cookie-banner-actions .btn{ flex:1; justify-content:center; }
 }
 
-/* ==========================================================
-   COSA FACCIO — lista "editoriale" (pagina Il Motonauta): righe
-   separate da un filo, numero grande rosso a contorno che si riempie
-   al passaggio del mouse. Niente riquadri: non è l'ennesima fila di card
-   ========================================================== */
 .cf-grid{ list-style:none; margin-top:44px; border-top:1px solid rgba(245,240,230,0.12); }
 .cf-row{
   display:grid; grid-template-columns:clamp(84px, 11vw, 150px) minmax(0, 1fr) minmax(0, 1.1fr);
@@ -1103,14 +944,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .cf-num{ grid-row:span 2; font-size:3rem; }
 }
 
-/* ==========================================================
-   APERTURA DELLA HOME — una foto vera della XR (di notte, col faro
-   acceso). Sul telefono la foto sta sopra a tutta larghezza e sfuma in
-   basso dentro l'asfalto, il titolo le sale un po' addosso; sul computer
-   segue lo schema delle copertine delle guide: titolo a sinistra, foto a
-   destra che sfuma verso il testo. Il parallasse leggero è quello già in
-   script.js (.hero-parallax dentro .hero-parallax-frame)
-   ========================================================== */
 .home-hero{ position:relative; overflow:hidden; isolation:isolate; }
 .home-hero-photo{
   position:relative; aspect-ratio:4/3; overflow:hidden; background:var(--asphalt);
@@ -1143,15 +976,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   .home-hero-sub{ max-width:42ch; }
 }
 
-/* ==========================================================
-   CRUSCOTTO — quadro strumenti nero con cifre rosse "a LED" (il rosso
-   del logo, per bilanciare il tanto blu del sito). Usato in home (i
-   numeri del sito) e nella pagina Il Motonauta (le caratteristiche
-   della moto). Colonne con --cols sul contenitore; i fili tra i
-   riquadri sono il fondo del contenitore che si vede nei 1px di gap,
-   così funziona con qualsiasi numero di righe. Le cifre in
-   [data-odometer] girano come un contachilometri (script.js).
-   ========================================================== */
 .cruscotto{
   --cols:4;
   display:grid; grid-template-columns:repeat(var(--cols), minmax(0, 1fr)); gap:1px;
@@ -1183,35 +1007,21 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   font-size:clamp(1.7rem, 3.2vw, 2.4rem); color:var(--rust);
   filter:drop-shadow(0 0 9px rgba(193,39,45,0.55));
 }
-/* valori a parole (modello, data): un po' più piccoli */
 .cruscotto-value--text{ font-size:clamp(1.15rem, 2vw, 1.55rem); white-space:normal; }
 .cruscotto-unit{ font-size:0.42em; letter-spacing:0.08em; color:var(--cream-dim); }
 .cruscotto-sub{ margin:8px 0 0; font-size:0.78rem; color:rgba(245,240,230,0.5); }
-/* ruote del contachilometri: una colonna 0–9 per cifra */
 .odo-digit{ display:inline-block; height:1em; overflow:hidden; vertical-align:top; }
 .odo-strip{ display:block; transition:transform 1.1s var(--ease-out); }
 .odo-strip > span{ display:block; height:1em; }
-/* telefono: due colonne; i riquadri .cruscotto-wide prendono la riga intera */
 @media (max-width:860px){
   .cruscotto{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
   .cruscotto-wide{ grid-column:1 / -1; }
   .cruscotto-cell{ padding:18px 20px 16px; }
 }
 
-/* ==========================================================
-   CAMBIO PAGINA — "timbro del logo" (fatto dal sito, non dal browser)
-   Al clic su un link interno script.js aggiunge html.vt-leaving: la
-   pagina si copre di asfalto e al centro il logo cresce (~0,22 s), poi
-   si naviga. La pagina nuova nasce GIÀ coperta (html.vt-arriving, messo
-   dallo scriptino in cima al <body>), tiene il logo fermo ~0,3 s e poi
-   lo rimpicciolisce scoprendosi. Così va sempre uguale, con qualunque
-   browser e connessione. L'intestazione resta sopra, ferma.
-   (Le View Transitions del browser sono state tolte: su Chrome per Mac
-   partivano solo verso alcune pagine.)
-   ========================================================== */
 .vt-logo{
   --vt-size:clamp(140px, 34vmin, 300px);
-  position:fixed; inset:0; z-index:45;   /* sotto l'intestazione (50) */
+  position:fixed; inset:0; z-index:45;
   pointer-events:none; visibility:hidden; opacity:0;
   background:var(--asphalt);
 }
@@ -1222,7 +1032,6 @@ p{color:var(--cream-dim); max-width:60ch; text-wrap:pretty;}
   background:url(img/logo-toppa.webp) center / contain no-repeat;
 }
 
-/* uscita: copre e fa crescere il logo, poi resta così finché si naviga */
 html.vt-leaving .vt-logo{ visibility:visible; animation:vt-cover .22s var(--ease-out) both; }
 html.vt-leaving .vt-logo::before{ animation:vt-logo-in .22s var(--ease-out) both; }
 @keyframes vt-cover{ from{ opacity:0; } to{ opacity:1; } }
@@ -1232,7 +1041,6 @@ html.vt-leaving .vt-logo::before{ animation:vt-logo-in .22s var(--ease-out) both
   to{ opacity:1; transform:scale(1); }
 }
 
-/* arrivo: parte coperta, pausa col logo fermo, poi si scopre */
 html.vt-arriving .vt-logo{ visibility:visible; opacity:1; animation:vt-uncover .75s both; }
 html.vt-arriving .vt-logo::before{ animation:vt-logo-out .75s both; }
 @keyframes vt-uncover{
@@ -1244,9 +1052,6 @@ html.vt-arriving .vt-logo::before{ animation:vt-logo-out .75s both; }
   100%{ opacity:0; transform:scale(.6); }
 }
 
-/* "riduci movimento": stessa copertura e stessa pausa, ma il logo
-   compare e sparisce solo sfumando. Le durate vanno forzate perché la
-   regola generale più in alto azzera tutte le animazioni */
 @keyframes vt-logo-fade-in{ from{ opacity:0; } to{ opacity:1; } }
 @keyframes vt-logo-fade-out{ 0%, 40%{ opacity:1; } 100%{ opacity:0; } }
 @media (prefers-reduced-motion: reduce){
@@ -1256,9 +1061,6 @@ html.vt-arriving .vt-logo::before{ animation:vt-logo-out .75s both; }
   html.vt-arriving .vt-logo::before{ animation-name:vt-logo-fade-out; }
 }
 
-/* ==========================================================
-   IGNITION INTRO — "accendi il motore" in home
-   ========================================================== */
 .ignition-overlay{
   position:fixed; inset:0; z-index:500;
   background:var(--asphalt);
@@ -1299,17 +1101,12 @@ html.vt-arriving .vt-logo::before{ animation:vt-logo-out .75s both; }
 }
 .ignition-skip:hover{ opacity:1; color:var(--gold); }
 
-/* ==========================================================
-   SECTION SPACING
-   ========================================================== */
 section{padding:96px 0;}
 @media (max-width:780px){
   section{padding:64px 0;}
   .wrap{padding:0 20px;}
 }
 .section-alt{
-  /* curve di livello anche sulle sezioni alternate, dal lato opposto
-     rispetto a quelle della prima sezione */
   background:url(img/topo.svg) left -360px center / min(1300px, 160vw) auto no-repeat, var(--asphalt-2);
 }
 

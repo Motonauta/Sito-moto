@@ -1,13 +1,7 @@
-// Riquadri "TikTok" e "Instagram" (home e pagina Il Motonauta): il sito legge
-// profilo e ultimi 9 contenuti dalle sue API (lib/tiktok.js, lib/instagram.js
-// tramite /api/gallery), le anteprime arrivano da Cloudinary, quindi niente
-// cookie dei social per chi visita. Finché i dati non arrivano, o se un social
-// non risponde, resta la scheda col link scritta nell'HTML.
 (function socialFeeds(){
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
   const icona = n => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${n}"/></svg>`;
   const intero = n => Number(n).toLocaleString("it-IT");
-  // 1.900.000 → "1,9 Mln", 56.900 → "56.900" (il "Mio" automatico del browser in italiano si legge male)
   const breve = n => Number(n) >= 1e6
     ? `${(Number(n) / 1e6).toLocaleString("it-IT", { maximumFractionDigits: 1 })} Mln`
     : intero(n);
@@ -16,7 +10,7 @@
     try{
       const res = await fetch(`/api/gallery?action=${box.dataset.feed}`);
       const data = await res.json();
-      if(!data.collegato || !data.post || !data.post.length) return; // resta la scheda
+      if(!data.collegato || !data.post || !data.post.length) return;
       const p = data.profilo || {};
       const nome = p.username || box.dataset.utente;
       const numeri = [
@@ -37,10 +31,9 @@
           <span class="btn solid ig-follow">Segui</span>
         </a>
         <div class="ig-grid">${griglia}</div>`;
-    } catch(err){ /* resta la scheda con il link */ }
+    } catch(err){}
   }
 
-  // solo quando la sezione si avvicina allo schermo
   const boxes = document.querySelectorAll(".social-box[data-feed]");
   if(!("IntersectionObserver" in window)) return boxes.forEach(carica);
   const io = new IntersectionObserver(entries => {

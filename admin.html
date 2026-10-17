@@ -6,7 +6,6 @@
 <link rel="icon" href="https://res.cloudinary.com/whqpxxz1/image/upload/w_64,h_64,c_fill,r_max,f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#1B1A17">
-<!-- icona se l'area riservata si aggiunge alla schermata Home di iPad/iPhone -->
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/whqpxxz1/image/upload/w_180,h_180,c_pad,b_rgb:1B1A17,f_png/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png">
 <meta name="apple-mobile-web-app-title" content="Motonauta">
 <title>Area riservata — Il Motonauta</title>
@@ -14,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013f">
+<link rel="stylesheet" href="style.css?v=20261017a">
 <style>
   .admin-label{
     font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase;
@@ -27,11 +26,9 @@
     color:var(--cream);
     padding:12px 14px;
     font-family:var(--font-body);
-    /* 16px: con meno, iPhone e iPad ingrandiscono la pagina quando tocchi il campo */
     font-size:1rem;
     margin-bottom:20px;
   }
-  /* tendine con la freccetta, altrimenti sembrano campi di testo */
   .admin-select{
     appearance:none; padding-right:42px;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23F5F0E6' stroke-opacity='.7' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -43,8 +40,6 @@
     cursor:pointer;
     transition:background-color 180ms var(--ease-out), border-color 180ms var(--ease-out), color 180ms var(--ease-out), transform 160ms var(--ease-out);
   }
-  /* i colori al passaggio del mouse solo col mouse: su iPad e telefono dopo
-     un tocco il pulsante resterebbe acceso */
   @media (hover: hover) and (pointer: fine){
     .admin-btn:not(:disabled):hover{ background:var(--gold); border-color:var(--gold); color:var(--asphalt); transform:translateY(-2px); }
     .admin-btn.outline:not(:disabled):hover{ background:var(--rust); border-color:var(--rust); color:var(--cream); }
@@ -53,7 +48,6 @@
   }
   .admin-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
   .admin-btn.outline{ background:transparent; }
-  /* foto del viaggio: scelta dalla Galleria con anteprima */
   .vf-foto-row{ display:flex; gap:10px; align-items:stretch; flex-wrap:wrap; }
   .vf-foto-row .admin-input{ flex:1; min-width:220px; margin-bottom:0; }
   .vf-foto-row .admin-btn{ padding:10px 18px; font-size:0.74rem; }
@@ -116,7 +110,6 @@
     width:110px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
   .caption-row input{ margin-bottom:0; }
-  /* sul telefono il nome del file va sopra al campo, che resta largo */
   @media (max-width:600px){
     .caption-row{ display:grid; grid-template-columns:56px 1fr; gap:6px 12px; margin-bottom:14px; }
     .caption-row img, .caption-row video{ grid-row:span 2; align-self:center; }
@@ -157,8 +150,6 @@
   @media (prefers-reduced-motion: no-preference){
     html :is(.admin-tab, .sg-vista):active{ transform:scale(0.97); }
   }
-  /* iPad in verticale e telefono: riquadri con l'icona sopra, tutti in una
-     riga sull'iPad, su due righe (4 + 3) sul telefono */
   @media (max-width:1000px){
     .admin-tabs{ display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; border-bottom:none; }
     .admin-tab{
@@ -174,7 +165,6 @@
     .admin-tab{ min-height:66px; font-size:0.62rem; letter-spacing:0.02em; }
   }
 
-  /* scheda Social: i tre generatori, uno alla volta */
   .sg-viste-sezione{ padding:36px 0 0; }
   .sg-viste{
     display:grid; grid-template-columns:repeat(3, 1fr); gap:4px; padding:4px; max-width:660px;
@@ -197,7 +187,6 @@
     .sg-vista{ flex-direction:column; gap:5px; min-height:62px; padding:8px 4px; font-size:0.66rem; letter-spacing:0.03em; }
   }
 
-  /* scheda Social: generatori di titoli e green screen */
   .sg-opzioni{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0 16px; }
   .sg-opzioni [hidden]{ display:none; }
   .sg-punti{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:0 16px; margin-bottom:6px; }
@@ -208,7 +197,6 @@
   .sg-card .sg-preview{
     display:flex; align-items:center; justify-content:center; padding:10px; min-height:160px;
     border:1px solid rgba(245,240,230,0.16);
-    /* scacchiera: si vede cosa è trasparente */
     background:repeating-conic-gradient(#2b2a26 0% 25%, #1f1e1b 0% 50%) 50% / 18px 18px;
   }
   .sg-card .sg-preview img{ display:block; max-width:100%; max-height:340px; object-fit:contain; }
@@ -242,7 +230,6 @@
   </div>
 </header>
 
-<!-- BLOCCO ACCESSO ================================================ -->
 <section id="gate">
   <div class="wrap" style="text-align:center; max-width:480px;">
     <p class="marker" style="justify-content:center;">Area riservata</p>
@@ -260,7 +247,6 @@
   </div>
 </section>
 
-<!-- PANNELLO ADMIN ================================================= -->
 <section id="panel" style="display:none; padding-bottom:0;">
   <div class="wrap">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap;">
@@ -283,9 +269,6 @@
   </div>
 </section>
 
-<!-- tutte le schede stanno qui dentro: nascoste finché il server non
-     conferma l'accesso (prima la Galleria si vedeva sotto la schermata della
-     password). Le modifiche le blocca comunque il server senza sessione -->
 <div id="panel-content" hidden>
 <div data-tab-content="galleria">
 <section style="padding-top:32px;" id="panel-upload">
@@ -451,9 +434,6 @@
 </div>
 
 <div data-tab-content="social" style="display:none;">
-<!-- GENERATORI PER I SOCIAL (admin-social.js): si disegna tutto qui nel
-     browser, nei colori e coi caratteri del sito, e si scarica in SVG
-     (o PNG). Se ne vede uno alla volta: si sceglie con i tre pulsanti -->
 <section class="sg-viste-sezione">
   <div class="wrap">
     <div class="sg-viste" role="tablist" aria-label="Scegli il generatore">
@@ -518,7 +498,6 @@
       <div class="sg-opzioni">
         <div>
           <label class="admin-label" for="sg-g-stile">Stile</label>
-          <!-- le voci le mette admin-social.js, dall'elenco STILI -->
           <select id="sg-g-stile" class="admin-select"></select>
         </div>
         <div>
@@ -549,9 +528,6 @@
   </div>
 </section>
 
-<!-- GENERATORE DI COPERTINE (admin-social.js): la foto non lascia mai il
-     browser, niente Cloudinary e niente localStorage; "Cancella tutto" (e la
-     chiusura della pagina) la toglie dalla memoria insieme alle copertine -->
 <section id="panel-copertine" data-vista-panel="copertine" role="tabpanel" aria-labelledby="sg-vista-copertine" hidden>
   <div class="wrap">
     <p class="marker">Miniature e copertine</p>
@@ -618,7 +594,7 @@
   <div class="wrap">
     <p class="marker">Itinerari del sito</p>
     <h2>Itinerari, miniviaggi e viaggi da ricordare</h2>
-    <p style="margin-top:14px;">Aggiungi, modifica o elimina le voci che compaiono in home e nelle pagine singole — non serve più chiedere a Claude di modificare il codice.</p>
+    <p style="margin-top:14px;">Aggiungi, modifica o elimina le voci che compaiono in home e nelle pagine singole.</p>
 
     <div class="contact-card" style="margin-top:28px;">
       <div class="viaggi-cerca-riga">
@@ -712,7 +688,7 @@
   </div>
 </section>
 </div>
-</div><!-- /panel-content -->
+</div>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -742,12 +718,10 @@
   </div>
 </footer>
 
-<script src="script.js?v=20261013f"></script>
+<script src="script.js?v=20261017a"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/opentype.js/1.3.4/opentype.min.js" defer></script>
 <script src="/admin-social.js" defer></script>
 <script>
-  // { Paese: [Città, ...] } letto da /api/gallery ("countries"), più gli
-  // album "standalone" caricati prima di questa organizzazione a due livelli
   let PAESI_CITTA = {};
   let STANDALONE_ALBUMS = [];
 
@@ -756,7 +730,6 @@
     document.querySelectorAll("[data-tab-content]").forEach(el => {
       el.style.display = el.dataset.tabContent === tab ? "block" : "none";
     });
-    // se Safari ricarica la pagina (sull'iPad succede quando torni dopo un po'), riapre la stessa scheda
     try{ sessionStorage.setItem("mn-admin-scheda", tab); } catch(err){}
   }
 
@@ -775,7 +748,6 @@
     loadInstagramStatus();
   }
 
-  // -------- Instagram (riquadro della home, vedi lib/instagram.js) --------
   const escIg = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
   const dataIt = ms => ms ? new Date(ms).toLocaleString("it-IT", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "—";
   async function loadInstagramStatus(){
@@ -858,7 +830,7 @@
   }
 
   async function logout(){
-    try{ await fetch("/api/auth?action=logout", { method: "POST" }); } catch(err){ /* usciamo comunque */ }
+    try{ await fetch("/api/auth?action=logout", { method: "POST" }); } catch(err){}
     location.reload();
   }
 
@@ -867,9 +839,7 @@
       const res = await fetch("/api/auth?action=check");
       const data = await res.json();
       if(data.authenticated) showPanel();
-    } catch(err){
-      // se il controllo fallisce resta semplicemente la schermata di accesso
-    }
+    } catch(err){}
   });
 
   async function populateAlbumSelects(){
@@ -897,9 +867,7 @@
       populateManageSelect();
       populateMoveFromSelect();
       populateStandaloneSelect();
-    } catch(err){
-      // se le funzioni /api non sono ancora pronte, i menu restano vuoti
-    }
+    } catch(err){}
   }
 
   function populateManageSelect(){
@@ -979,7 +947,6 @@
     document.getElementById("move-new-paese-wrap").style.display = (val === "__new__") ? "block" : "none";
   }
 
-  // -------- modalità di caricamento: viaggio (Paese/Città) oppure album singolo --------
   let uploadMode = "viaggio";
 
   function setUploadMode(mode){
@@ -1008,7 +975,6 @@
     return url.replace("/upload/", "/upload/f_auto,q_auto/");
   }
 
-  // -------- didascalie per singola foto --------
   function renderCaptionRows(){
     const files = document.getElementById("file-input").files;
     const wrap = document.getElementById("caption-list");
@@ -1034,10 +1000,6 @@
     });
   }
 
-  // -------- compressione immagini prima dell'upload --------
-  // riduce le foto troppo pesanti (es. scattate col telefono) prima di
-  // caricarle: upload più veloce e meno banda usata. I video non vengono
-  // toccati (ricomprimerli via browser non è affidabile).
   const MAX_DIMENSION = 2000;
   const JPEG_QUALITY = 0.82;
   const SKIP_BELOW_BYTES = 700 * 1024;
@@ -1089,15 +1051,12 @@
     });
   }
 
-  // -------- upload --------
   async function uploadOne(file, folder, tag, caption){
     const isVideo = file.type.startsWith("video/");
     const resourceType = isVideo ? "video" : "image";
     const context = `caption=${caption.replace(/[|=]/g, "-")}`;
     const uploadFile = isVideo ? file : await compressImage(file);
 
-    // il preset è "signed": la firma va generata lato server (serve la
-    // chiave segreta di Cloudinary, che non deve mai finire nel browser)
     const signRes = await fetch("/api/gallery?action=sign-upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1210,7 +1169,7 @@
         try{
           const parsed = JSON.parse(err.message);
           dettaglio = (parsed.error && parsed.error.message) || err.message;
-        } catch(e){ /* non era JSON, va bene così com'è */ }
+        } catch(e){}
         row.textContent = `✗ ${file.name} — ${dettaglio}`;
         row.classList.add("err");
       }
@@ -1263,12 +1222,10 @@
     setTimeout(() => confirmEl.style.display = "none", 2000);
   }
 
-  // -------- link diretti dopo l'upload (per incollarli negli articoli del Manuale di bordo) --------
   async function copyText(text, btnEl, originalLabel){
     try{
       await navigator.clipboard.writeText(text);
     } catch(err){
-      // fallback per browser/contesti senza Clipboard API
       const ta = document.createElement("textarea");
       ta.value = text;
       document.body.appendChild(ta);
@@ -1340,7 +1297,6 @@
     });
   }
 
-  // -------- gestione / cancellazione --------
   async function loadAlbumPhotos(){
     const slug = document.getElementById("manage-album-select").value;
     const statusEl = document.getElementById("manage-status");
@@ -1418,7 +1374,6 @@
     }
   }
 
-  // -------- sposta un album "senza paese" dentro Paese/Città --------
   async function moveAlbum(){
     const fromAlbum = document.getElementById("move-from-select").value;
     if(!fromAlbum){
@@ -1463,7 +1418,6 @@
     }
   }
 
-  // -------- idee dai visitatori --------
   function escapeHtml(str){
     const div = document.createElement("div");
     div.textContent = str;
@@ -1524,16 +1478,13 @@
     }
   }
 
-  // -------- km moto --------
   async function loadKm(){
     try{
       const res = await fetch("/api/km");
       const data = await res.json();
       const input = document.getElementById("km-input");
       if(input) input.value = data.km || "";
-    } catch(err){
-      // se non riesce a caricarlo, lascia il campo vuoto senza bloccare la pagina
-    }
+    } catch(err){}
   }
 
   async function saveKm(){
@@ -1560,10 +1511,6 @@
     }
   }
 
-  // -------- itinerari / miniviaggi / viaggi da ricordare --------
-  // escapeHtml è pensato per il testo (es. <p>${escapeHtml(x)}</p>): qui
-  // serve anche dentro attributi value="...", dove una virgoletta non
-  // scappata romperebbe l'HTML — da qui questa variante in più.
   function escapeAttr(str){
     return escapeHtml(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
@@ -1582,7 +1529,6 @@
       if(!res.ok) throw new Error(data.error || "Errore sconosciuto");
       viaggiDataCache = data;
       statusEl.innerHTML = "";
-      // il nuovo elenco si costruisce a parte e sostituisce il vecchio in un colpo
       const nuovo = document.createDocumentFragment();
 
       Object.keys(VIAGGI_CATEGORIE_LABELS).forEach(categoria => {
@@ -1623,7 +1569,6 @@
     }
   }
 
-  // cerca tra gli itinerari (titolo e zona), utile con una sessantina di voci
   function filtraViaggi(){
     const q = (document.getElementById("viaggi-cerca").value || "").trim().toLowerCase();
     let trovati = 0;
@@ -1675,15 +1620,11 @@
     }
 
     const formPanel = document.getElementById("panel-viaggi-form");
-    // per tornare alla stessa riga dell'elenco quando si chiude il modulo
     if(formPanel.style.display !== "block") viaggiRitorno = window.scrollY;
     formPanel.style.display = "block";
     formPanel.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  // -------- foto del viaggio scelta dalla Galleria --------
-  // album della Galleria (anche quelli nascosti) → elenco di foto; nel campo
-  // va l'indirizzo originale di Cloudinary, il sito poi la ridimensiona da sé
   let FOTO_ALBUMS = null;
   function cloudThumb(url, w){
     return url.replace("/upload/", `/upload/f_auto,q_auto,w_${w},h_${Math.round(w * 0.75)},c_fill/`);
@@ -1801,7 +1742,6 @@
     }
   }
 
-  // -------- statistiche --------
   const STATS_PAGINE_LABELS = {
     "index": "Rotte (home)", "nostromo": "Nostromo", "manuale": "Manuale di bordo",
     "ilmotonauta": "Il Motonauta", "sponsor": "Alleati", "galleria": "Diario di bordo",

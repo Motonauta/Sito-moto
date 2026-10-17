@@ -1,6 +1,6 @@
 const { ULTIMO_AGGIORNAMENTO_DATI } = require('../data/viaggi-data');
-const { getViaggiData, saveViaggiData, findBySlug, CATEGORIE } = require('../lib/viaggi-store');
-const { isAuthenticated } = require('../lib/auth');
+const { getViaggiData, saveViaggiData, findBySlug, CATEGORIE } = require('./_lib/viaggi-store');
+const { isAuthenticated } = require('./_lib/auth');
 
 const LOGO_URL = 'https://res.cloudinary.com/whqpxxz1/image/upload/f_auto,q_auto/v1789141526/Manuale%20di%20bordo/crvox1bhiytw9ejguh0q.png';
 
@@ -100,7 +100,7 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20261013f">
+<link rel="stylesheet" href="/style.css?v=20261017a">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
@@ -161,7 +161,7 @@ const FOOTER_HTML = `<footer class="site-footer">
     </div>
   </div>
 </footer>
-<script src="/script.js?v=20261013f"></script>`;
+<script src="/script.js?v=20261017a"></script>`;
 
 function render404() {
   return `<!DOCTYPE html>
@@ -373,11 +373,6 @@ ${HEAD_COMMON}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
-  /* stesso sistema di base delle altre pagine già fatte: grafite
-     freddo, doppio filo rosso/blu sotto l'header, bottone pieno con
-     freccia cerchiata in hover. Niente sweep diagonale: qui l'hero e
-     il resto della pagina condividono la stessa unica sezione, un
-     effetto pensato per un hero corto stonerebbe su tutta l'altezza */
   :root{
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
@@ -425,7 +420,6 @@ ${HEAD_COMMON}
   .viaggio-actions-minor .print-pdf-btn, .viaggio-actions-minor .copy-link-btn{ padding:10px 16px; font-size:0.72rem; }
   .viaggio-gpx-note{ margin-top:10px; font-size:0.82rem; color:var(--cream-dim); }
   @media (max-width:600px){
-    /* sul telefono le tre azioni principali una sotto l'altra, larghe uguali */
     .viaggio-actions{ flex-direction:column; }
     .viaggio-actions .btn{ width:100%; justify-content:center; }
   }
@@ -500,19 +494,12 @@ ${HEAD_COMMON}
   @media print {
     .site-header, .site-footer, .viaggio-actions, .nostromo-cta, .print-pdf-btn, .copy-link-btn, #back-to-top, .viaggio-route-preview{ display:none !important; }
 
-    /* Sfondo bianco "di serie" invece che forzare quello scuro del sito: gli
-       sfondi impostati via CSS sono la prima cosa che molti browser/telefoni
-       tolgono in stampa, col rischio di lasciare testo chiaro illeggibile su
-       bianco. Il colore del testo invece stampa sempre, quindi restiamo su
-       sfondo bianco "di serie" con testo scuro: robusto ovunque. */
     body{ background:#fff !important; color:#1b1a17 !important; }
     .viaggio-breadcrumb, .marker, .viaggio-stops p.label{ color:#555 !important; }
     h1, h2{ color:#1b1a17 !important; }
     a{ color:#1b1a17 !important; text-decoration:underline; }
     body > section{ position:relative; z-index:1; }
 
-    /* scritta enorme e molto leggera sotto al testo, come una vera carta
-       intestata: è testo vero (non uno sfondo CSS), quindi stampa sempre */
     .print-watermark{
       display:block; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-22deg);
       font-family:"Oswald", Arial, sans-serif; font-weight:700;
@@ -521,8 +508,6 @@ ${HEAD_COMMON}
       z-index:0; pointer-events:none;
     }
 
-    /* il logo piccolo in alto a destra è un'immagine vera, così stampa
-       sempre anche quando il browser non stampa gli "sfondi/grafica" */
     .print-logo-corner{
       display:block; position:fixed; top:24px; right:24px; width:64px; height:64px; object-fit:cover;
       border-radius:50%;
@@ -553,8 +538,6 @@ ${HEADER_HTML}
       <img src="${escapeHtml(wikiThumb(it.foto, 1200))}" alt="${escapeHtml(it.titolo)}">
     </div>
 
-    <!-- azioni: in alto quelle per partire (Maps, Waze, GPX per il
-         navigatore), sotto quelle di servizio, più piccole -->
     <div class="viaggio-actions">
       <a class="btn solid" href="${mapsUrl}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-map"/></svg> Apri su Google Maps</a>
       <a class="btn" href="${wazeUrl}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-pin"/></svg> Prima tappa su Waze</a>
@@ -614,11 +597,6 @@ ${FOOTER_HTML}
     }
   }
 
-  // Il campo "query" delle tappe è pensato per la ricerca libera di Google
-  // Maps, che capisce anche descrizioni come "Via dei Laghi SP217 RM": il
-  // geocoder che usiamo qui (Nominatim/OpenStreetMap) è molto più rigido e
-  // spesso non trova nulla per query così descrittive. Se fallisce, si
-  // ritenta con "nome" (il paese/luogo), quasi sempre geocodificabile.
   async function routePreviewGeocode(t){
     const byQuery = await routePreviewGeocodeOne(t.query);
     if(byQuery) return byQuery;
@@ -631,12 +609,6 @@ ${FOOTER_HTML}
     return val || 'Roma';
   }
 
-  // Inserisce nel percorso la partenza scelta da chi visita il sito (di
-  // default Roma, la stessa del calcolatore benzina in home): se la prima
-  // o l'ultima tappa del viaggio è già "Roma" (i viaggi da ricordare partono
-  // e tornano sempre lì) la sostituisce con la partenza scelta, altrimenti
-  // la aggiunge come primo punto e, sui giri ad anello che per definizione
-  // partono e tornano a Roma, anche come ultimo, per chiudere il giro.
   function buildTappeConPartenza(){
     const partenza = getPartenza();
     const tappe = ROUTE_TAPPE.slice();
@@ -663,14 +635,6 @@ ${FOOTER_HTML}
     return 2 * R * Math.asin(Math.sqrt(h));
   }
 
-  // Il router pubblico usato per calcolare il percorso reale (lo stesso di
-  // Nostromo) a volte "impazzisce" su tappe geocodificate correttamente e
-  // restituisce un percorso che fa un giro assurdo (es. passa da un altro
-  // paese senza motivo): capita raramente ma produce un'anteprima fuorviante.
-  // Controllo di sicurezza: se una tratta tra due tappe consecutive è molto
-  // più lunga della distanza in linea d'aria (più del previsto anche per
-  // strade di montagna/costiere), non ci si fida del percorso calcolato e si
-  // torna alla linea diretta tra le tappe.
   function routePreviewLegsLookSane(legs, coords){
     if(!Array.isArray(legs) || legs.length !== coords.length - 1) return false;
     for(let i = 0; i < legs.length; i++){
@@ -682,13 +646,6 @@ ${FOOTER_HTML}
     return true;
   }
 
-  // Anteprima del percorso come quella che si vede su Maps prima di avviare
-  // la navigazione: geocodifica ogni tappa, calcola il percorso stradale
-  // reale (stesso motore usato da Nostromo) e disegna la linea su una mappa
-  // Leaflet. Le tappe che non vengono geocodificate (anche col fallback)
-  // sono semplicemente saltate, invece di far fallire tutto il widget: si
-  // nasconde solo se restano meno di due punti validi, o se il calcolo del
-  // percorso non riesce comunque.
   async function loadRoutePreview(){
     const mapEl = document.getElementById('route-preview-map');
     if(!mapEl) return;
@@ -707,14 +664,8 @@ ${FOOTER_HTML}
       if(coords.length < 2) throw new Error('tappe geocodificate insufficienti per disegnare un percorso');
 
       const coordsParam = coords.map(c => c.lat + ',' + c.lon).join(';');
-      // Linea diretta tra le tappe come base: se il calcolo del percorso
-      // stradale reale funziona la sostituiamo, altrimenti resta questa.
-      // Sui viaggi più lunghi (molte tappe, migliaia di km, più paesi) il
-      // router pubblico usato da Nostromo può essere lento o non rispondere
-      // affatto: meglio mostrare comunque una linea indicativa che far
-      // sparire tutta l'anteprima.
       let latlngs = coords.map(function(c){ return [c.lat, c.lon]; });
-      let tracciaStradale = null; // solo il percorso stradale vero finisce nel GPX
+      let tracciaStradale = null;
       try{
         const controller = new AbortController();
         const timeoutId = setTimeout(function(){ controller.abort(); }, 7000);
@@ -728,7 +679,6 @@ ${FOOTER_HTML}
           tracciaStradale = latlngs;
         }
       } catch(routeErr){
-        // resta la linea diretta calcolata sopra
       }
 
       mapEl.innerHTML = '';
@@ -739,14 +689,9 @@ ${FOOTER_HTML}
         maxZoom: 19,
       }).addTo(map);
 
-      // Linea con "glow" (una copia più larga e sfocata sotto) e tratteggio
-      // animato sopra, per dare l'idea di un percorso "in movimento" come
-      // nell'anteprima di navigazione di un vero navigatore.
       L.polyline(latlngs, { color: '#C1272D', weight: 10, opacity: 0.35, className: 'route-line-glow' }).addTo(map);
       const line = L.polyline(latlngs, { color: '#E8545A', weight: 4, opacity: 0.95, className: 'route-line-main' }).addTo(map);
 
-      // Marker differenziati: partenza in verde, arrivo nel blu del logo,
-      // tappe intermedie color crema (la linea è rossa, come il sito)
       coords.forEach(function(c, i){
         const isStart = i === 0;
         const isEnd = i === coords.length - 1;
@@ -767,8 +712,6 @@ ${FOOTER_HTML}
     }
   }
 
-  // Scarica GPX: si accende appena il percorso è calcolato (le tappe con le
-  // coordinate + la traccia stradale, se il calcolo stradale è riuscito)
   function enableGpx(tappe, traccia){
     const btn = document.getElementById('gpx-btn');
     if(!btn || !window.mnGpx) return;
