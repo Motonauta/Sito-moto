@@ -32,7 +32,7 @@ const HEAD_COMMON = `<link rel="icon" href="https://res.cloudinary.com/whqpxxz1/
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20261013f">
+<link rel="stylesheet" href="/style.css?v=20261017a">
 <script src="/cookie-consent.js" defer></script>`;
 
 const HEADER_HTML = `<header class="site-header">
@@ -93,11 +93,9 @@ const FOOTER_HTML = `<footer class="site-footer">
     </div>
   </div>
 </footer>
-<script src="/script.js?v=20261013f"></script>`;
+<script src="/script.js?v=20261017a"></script>`;
 
 const STYLE = `<style>
-  /* stesso sistema di base delle altre pagine già fatte: grafite
-     freddo, doppio filo rosso/blu sotto l'header */
   :root{
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
@@ -119,7 +117,6 @@ const STYLE = `<style>
   .manuale-meta-sep{ width:4px; height:4px; border-radius:50%; background:var(--rust); }
   .manuale-readtime{ display:inline-flex; align-items:center; gap:6px; color:var(--sand); }
   .manuale-readtime .icon{ color:var(--rust); }
-  /* barra di lettura in cima allo schermo, rossa come la spia del cruscotto */
   .read-progress{
     position:fixed; left:0; right:0; top:0; height:3px; z-index:60; pointer-events:none;
     background:rgba(245,240,230,0.06);
@@ -229,19 +226,12 @@ const STYLE = `<style>
   @media print {
     .site-header, .site-footer, .print-pdf-btn, .copy-link-btn, .manuale-correlati{ display:none !important; }
 
-    /* Sfondo bianco "di serie" invece che forzare quello scuro del sito: gli
-       sfondi impostati via CSS sono la prima cosa che molti browser/telefoni
-       tolgono in stampa, col rischio di lasciare testo chiaro illeggibile su
-       bianco. Il colore del testo invece stampa sempre, quindi restiamo su
-       sfondo bianco "di serie" con testo scuro: robusto ovunque. */
     body{ background:#fff !important; color:#1b1a17 !important; }
     .manuale-breadcrumb, .marker, .manuale-meta{ color:#555 !important; }
     h1, h2, .manuale-tip-title{ color:#1b1a17 !important; }
     a{ color:#1b1a17 !important; text-decoration:underline; }
     body > section{ position:relative; z-index:1; }
 
-    /* scritta enorme e molto leggera sotto al testo, come una vera carta
-       intestata: è testo vero (non uno sfondo CSS), quindi stampa sempre */
     .print-watermark{
       display:block; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-22deg);
       font-family:"Oswald", Arial, sans-serif; font-weight:700;
@@ -250,8 +240,6 @@ const STYLE = `<style>
       z-index:0; pointer-events:none;
     }
 
-    /* il logo piccolo in alto a destra è un'immagine vera, così stampa
-       sempre anche quando il browser non stampa gli "sfondi/grafica" */
     .print-logo-corner{
       display:block; position:fixed; top:24px; right:24px; width:64px; height:64px; object-fit:cover;
       border-radius:50%;
@@ -483,8 +471,6 @@ ${HEADER_HTML}
 
 ${FOOTER_HTML}
 <script>
-  // animazioni della guida: partono quando sono nello schermo e si fermano
-  // quando escono; con "riduci movimento" restano ferme sulla locandina
   (function(){
     const vids = document.querySelectorAll(".manuale-anim video");
     if (!vids.length || !("IntersectionObserver" in window)) return;
@@ -496,8 +482,6 @@ ${FOOTER_HTML}
   })();
 </script>
 <script>
-  // barra di lettura: si riempie di rosso dall'inizio alla fine del testo
-  // della guida, come la lancetta del serbatoio che sale
   (function(){
     const bar = document.querySelector(".read-progress span");
     const body = document.querySelector(".manuale-content");

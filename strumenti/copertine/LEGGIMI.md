@@ -28,6 +28,6 @@ crea anche la sua `-800.webp` (stesso nome + `-800.webp`).
 
 Per la foto: Angelo vuole un momento del lavoro (la catena, la mano, la
 valigia misurata), non la sua faccia. Dai reel Instagram si estrae il
-fotogramma con ffmpeg (vedi CLAUDE.md), ritagliando sopra i sottotitoli
+fotogramma con ffmpeg (vedi le note del progetto), ritagliando sopra i sottotitoli
 impressi. Le copertine della catena e delle valigie sono state fatte così,
 a mano, prima di questo generatore.

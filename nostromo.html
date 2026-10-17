@@ -20,22 +20,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013f">
-<script src="formati.js?v=20261013f"></script>
+<link rel="stylesheet" href="style.css?v=20261017a">
+<script src="formati.js?v=20261017a"></script>
 <script src="cookie-consent.js" defer></script>
 <style>
-  /* "overflow-x:hidden" qui era un cerotto per nascondere lo scroll
-     orizzontale causato da una griglia a 4 colonne che non si
-     adattava al telefono (vedi .grid-4-wide più sotto) — ma
-     "overflow" su html/body impedisce anche all'header "sticky" di
-     restare fisso in cima durante lo scroll. Risolto il vero
-     problema, tolto il cerotto. */
   html, body{ max-width:100vw; }
 
-  /* stesso sistema di base delle altre pagine già fatte: grafite
-     freddo, doppio filo rosso/blu sotto l'header, sweep diagonale
-     dietro al titolo (hero solo testo, come su Alleati), bottoni con
-     freccia cerchiata in hover. Nessuna sezione section-alt qui. */
   :root{
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
@@ -242,9 +232,6 @@
   }
   .itinerari-note strong{ color:var(--gold); }
 
-  /* stesso trattamento "a doppia cornice" delle card di Alleati, qui
-     applicato ai pannelli funzionali (prima erano piatti: un bordo
-     sottile e basta) */
   .fuel-calc{
     position:relative;
     margin-top:44px; border:1px solid rgba(245,240,230,0.1); border-radius:24px;
@@ -270,7 +257,6 @@
     color:var(--cream); padding:11px 12px; font-family:var(--font-body); font-size:0.92rem;
   }
   .fuel-calc-note{ margin-top:14px; font-size:0.8rem; color:var(--cream-dim); }
-  /* qui solo cilindrata e prezzo: 2 colonne, ma una sola su telefono */
   .fuel-calc-grid-2{ grid-template-columns:repeat(2, 1fr); max-width:620px; }
   @media (max-width:780px){ .fuel-calc-grid{ grid-template-columns:1fr; } }
 
@@ -304,12 +290,7 @@
     font-family:var(--font-mono); font-size:0.85rem; color:var(--gold); margin-top:2px; margin-bottom:14px;
   }
 
-  /* Desktop: carosello con le cartoline laterali visibili, card con tutte le info sempre in vista */
   @media (min-width:861px){
-    /* Carosello largo (le cartoline laterali restano visibili), formato
-       "da cartolina" (foto 16:9 come su mobile) ma tutta la sezione scalata
-       di circa il 20% in meno rispetto al formato base, per stare nello
-       schermo senza dover scorrere per vedere le info in basso. */
     .itinerari-carousel{ max-width:100%; }
     .itinerari-grid{ gap:20px; padding:4px 4px 12px; }
     .itinerario-card{ flex:0 0 min(416px, 43vw); width:auto; cursor:default; }
@@ -408,11 +389,6 @@
   .route-weather-grid input[type="time"]::-webkit-calendar-picker-indicator{ filter:invert(0.85); cursor:pointer; }
   @media (max-width:780px){ .route-weather-grid{ grid-template-columns:1fr 1fr; } }
   @media (max-width:480px){ .route-weather-grid{ grid-template-columns:1fr; } }
-  /* niente più inline style per questa variante a 4 colonne: un inline
-     style vince sempre sulle regole mobile qui sopra, lasciando 4
-     colonne strette anche su telefono — causa dello scroll
-     orizzontale che costringeva a overflow-x:hidden sul body (che a
-     sua volta rompeva l'header sticky) */
   @media (min-width:781px){
     .route-weather-grid.grid-4-wide{ grid-template-columns:repeat(4, 1fr); }
   }
@@ -478,7 +454,6 @@
 
   .print-pdf-btn{ margin-top:16px; }
   .rotta-result-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
-  /* menu dei tre assistenti, sotto il titolo */
   .nostromo-menu{
     display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px;
     margin-top:30px; max-width:980px;
@@ -508,12 +483,6 @@
     body > *:not(#print-root){ display:none !important; }
     #print-root{ display:block !important; }
 
-    /* Sfondo bianco "di serie" invece che forzare quello scuro del sito: gli
-       sfondi impostati via CSS (colori o immagini) sono la prima cosa che
-       molti browser/telefoni tolgono in stampa, col risultato che uno sfondo
-       scuro forzato può sparire lasciando testo chiaro illeggibile su bianco.
-       Il colore del testo, invece, stampa sempre: si può restare bianco
-       "di serie" e usare testo scuro, robusto ovunque. */
     #print-root{
       position:relative; overflow:hidden;
       font-family:"Work Sans", Arial, sans-serif;
@@ -521,8 +490,6 @@
       padding:34px 28px; min-height:100vh;
     }
 
-    /* scritta enorme e molto leggera sotto al testo, come una vera carta
-       intestata: è testo vero (non uno sfondo CSS), quindi stampa sempre */
     .print-watermark{
       position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-22deg);
       font-family:"Oswald", Arial, sans-serif; font-weight:700;
@@ -531,8 +498,6 @@
       z-index:0; pointer-events:none;
     }
 
-    /* il logo piccolo in alto a destra è un'immagine vera, così stampa
-       sempre anche quando il browser non stampa gli "sfondi/grafica" */
     .print-logo-corner{
       position:fixed; top:24px; right:24px; width:64px; height:64px; object-fit:cover;
       border-radius:50%;
@@ -594,7 +559,6 @@
   </div>
 </header>
 
-<!-- NOSTROMO ============================================================ -->
 <section style="padding-top:70px; padding-bottom:0;">
   <div class="wrap">
     <p class="marker">La cassetta degli attrezzi</p>
@@ -608,8 +572,6 @@
       non devi pensarci tu. Sono tre: scegli quello che ti serve.
     </p>
 
-    <!-- salto diretto ai tre assistenti: sul telefono sono uno sotto
-         l'altro e l'ultimo stava parecchio in basso -->
     <nav class="nostromo-menu" aria-label="Gli assistenti di Nostromo">
       <a href="#widget-viaggio" class="nostromo-menu-item">
         <span class="nostromo-menu-icon"><svg class="icon" aria-hidden="true"><use href="/icons.svg#i-cloud-sun"/></svg></span>
@@ -847,8 +809,6 @@
 <script>
   const mnIcon = name => `<svg class="icon" aria-hidden="true"><use href="/icons.svg#i-${name}"/></svg>`;
 
-  // isDay (1/0 da Open-Meteo): di notte luna al posto del sole. Se manca
-  // (es. previsioni giornaliere della valigia) vale come giorno
   function weatherIcon(code, isDay){
     const notte = isDay === 0;
     if (code === 0) return mnIcon(notte ? "moon" : "sun");
@@ -861,10 +821,6 @@
     return mnIcon("thermo");
   }
 
-  // ===== Salva risultato come PDF (stampa nativa del browser) ==========
-  // Nessuna libreria esterna: la finestra di stampa del browser offre già
-  // "Salva come PDF" e, stampando il DOM vero, i link (Maps/Waze/Mappe)
-  // restano cliccabili nel PDF risultante.
   function printAssistantResult(title, paramsHTML, resultsHTML){
     const root = document.getElementById("print-content");
     const now = new Date();
@@ -896,8 +852,6 @@
       .replace(/'/g, "&#39;");
   }
 
-  // ===== Cronologia Nostromo (salvata solo in localStorage, su questo
-  // browser: nessun dato lascia il dispositivo) =========================
   const NOSTROMO_HISTORY_KEY = "motonauta_nostromo_history";
   const NOSTROMO_HISTORY_MAX = 12;
   const NOSTROMO_TOOL_LABELS = {
@@ -1017,22 +971,12 @@
     return d.toISOString().slice(0, 10);
   }
 
-  // ===== Ricerca luoghi con autocompletamento (Nominatim/OpenStreetMap) =====
-  // Usata al posto della sola geocodifica "al buio": mostra un elenco di
-  // luoghi reali mentre si scrive, così non si può sbagliare a interpretare
-  // un nome di paese poco conosciuto (bug corretto: prima capitava che nomi
-  // di frazioni piccole venissero geocodificati nel posto sbagliato).
   const placeResolvedCoords = {};
   const nominatimSearchCache = {};
 
   async function nominatimSearch(query){
     const key = query.toLowerCase();
     if(nominatimSearchCache[key]) return nominatimSearchCache[key];
-    // passa dal nostro endpoint /api/route-planner (proxy server-side) invece
-    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS.
-    // Se qualcosa va storto, l'errore viene fatto risalire con un messaggio
-    // preciso (invece di sparire in silenzio) così si capisce subito se è un
-    // problema di rete, di deploy della funzione o altro.
     let res;
     try{
       res = await fetch(`/api/route-planner?action=search&q=${encodeURIComponent(query)}`);
@@ -1046,8 +990,6 @@
     if(!Array.isArray(data)){
       throw new Error("Risposta inattesa dal servizio di ricerca luoghi.");
     }
-    // Nominatim a volte restituisce lo stesso posto due volte (es. il comune
-    // e la sua area amministrativa, "Roma, Lazio, Italia" doppio): si tiene il primo
     const visti = new Set();
     const results = data
       .map(r => ({ label: r.display_name, lat: parseFloat(r.lat), lon: parseFloat(r.lon) }))
@@ -1125,10 +1067,6 @@
     });
   }
 
-  // aggiunge un pulsante "usa la mia posizione" dentro un campo di
-  // partenza: legge la posizione GPS del browser (previo consenso
-  // dell'utente), la traduce in un nome di località leggibile con
-  // reverseGeocode() e la usa direttamente come coordinate già risolte
   function attachGeolocationButton(inputEl){
     if(!navigator.geolocation) return;
     const field = inputEl.closest(".place-field");
@@ -1185,10 +1123,6 @@
     }
   }
 
-  // Versione "rumorosa" di resolvePlace: usata dal meteo di percorso, dove è
-  // un'azione esplicita dell'utente e conviene mostrare l'errore vero
-  // (servizio non raggiungibile, posto non trovato...) invece di un generico
-  // "non riesco a trovare partenza o arrivo" che non aiuta a capire cosa fare.
   async function resolvePlaceOrThrow(inputEl, label){
     const resolved = placeResolvedCoords[inputEl.id];
     if(resolved) return resolved;
@@ -1209,8 +1143,6 @@
     if(opts.steps) params.set("steps", "1");
     if(opts.exclude) params.set("exclude", opts.exclude);
     try{
-      // passa dal nostro endpoint /api/route-planner (proxy server-side)
-      // invece di chiamare OSRM direttamente dal browser: evita i problemi di CORS
       const res = await fetch(`/api/route-planner?action=route&${params.toString()}`);
       const data = await res.json();
       if(data.code !== "Ok" || !data.routes || !data.routes[0]) return null;
@@ -1220,12 +1152,9 @@
     }
   }
 
-  // ===== Meteo lungo il percorso ====================================
   function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
   async function reverseGeocode(lat, lon){
-    // passa dal nostro endpoint /api/route-planner (proxy server-side) invece
-    // di chiamare Nominatim direttamente dal browser: evita i problemi di CORS
     const res = await fetch(`/api/route-planner?action=reverse&lat=${lat}&lon=${lon}`);
     const data = await res.json();
     const a = data.address || {};
@@ -1233,7 +1162,6 @@
       || (data.display_name ? data.display_name.split(",")[0] : "Zona sconosciuta");
   }
 
-  // "BRESCIA ovest" → "Brescia Ovest" (solo se il cartello è l'unico nome)
   function titleCaseLabel(s){
     return String(s).toLowerCase().replace(/(^|[\s'’-])\p{L}/gu, m => m.toUpperCase());
   }
@@ -1244,10 +1172,6 @@
     return `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())}`;
   }
 
-  // Meteo orario per l'orario stimato di passaggio in quel punto (non "adesso"
-  // né la media della giornata): un viaggio dura ore, quindi il meteo di una
-  // tappa a metà strada va chiesto per l'ora in cui ci si arriva davvero, non
-  // per l'ora di partenza.
   async function fetchWeatherForCoords(lat, lon, arrivalDate){
     const dateStr = isoDateFromDate(arrivalDate);
     const targetHour = pad2(arrivalDate.getHours());
@@ -1255,10 +1179,6 @@
     const data = await res.json();
     const hourly = data.hourly || {};
     const times = hourly.time || [];
-    // il timestamp orario è tipo "2026-08-10T14:00": confrontiamo l'ora come
-    // stringa invece di ricostruire un Date, per non reintrodurre conversioni
-    // di fuso orario (i timestamp sono già nel fuso locale del posto, grazie
-    // a timezone=auto)
     let idx = times.findIndex(t => t.slice(11, 13) === targetHour);
     if(idx === -1) idx = 0;
     const temp = (hourly.temperature_2m || [])[idx];
@@ -1271,8 +1191,6 @@
     };
   }
 
-  // Km percorsi in autostrada (nomi via "ref"/"name" tipo A1, A24...), usati
-  // per una stima indicativa del pedaggio.
   function estimateMotorwayKm(route){
     let km = 0;
     (route.legs || []).forEach(leg => (leg.steps || []).forEach(step => {
@@ -1283,9 +1201,6 @@
     return km;
   }
 
-  // Ricava, in ordine, i punti di manovra del percorso (svolte/uscite) con la
-  // distanza percorsa cumulata in km e (quando disponibile) il nome
-  // dell'uscita autostradale, letto dai cartelli di destinazione (dati OSM).
   function collectManeuverPoints(route){
     const pts = [];
     let cumKm = 0;
@@ -1306,7 +1221,6 @@
     return pts;
   }
 
-  // Tiene solo i punti distanti almeno minKm (percorsi lungo la strada) l'uno dall'altro
   function spaceByDistance(points, minKm){
     const kept = [];
     let lastKm = -Infinity;
@@ -1320,11 +1234,9 @@
   }
 
   function cleanExitLabel(label){
-    // i cartelli di uscita elencano spesso più destinazioni separate da virgola/due punti
     return label.split(",")[0].split(":").pop().trim();
   }
 
-  // Distanza approssimata in km tra due coordinate (formula haversine)
   function haversineKm(lat1, lon1, lat2, lon2){
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -1334,11 +1246,6 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  // Campiona la geometria reale del percorso ogni minKm km percorsi (non punti
-  // a caso: sono comunque le coordinate esatte della strada). Serve come rete
-  // di sicurezza quando il percorso ha pochissime manovre "off ramp" segnalate
-  // da OSRM (es. un tragitto quasi tutto dritto, con o senza autostrada), caso
-  // in cui affidarsi ai soli punti di svolta lascia grandi tratti senza tappe.
   function sampleRouteGeometry(route, minKm){
     const coords = (route.geometry && route.geometry.coordinates) || [];
     const pts = [];
@@ -1358,18 +1265,10 @@
 
   async function buildRouteStops(route, startPlace, startCoords, endPlace, endCoords){
     const pts = collectManeuverPoints(route);
-    // uscite autostradali nominate (dai cartelli di destinazione OSM), con la
-    // loro posizione lungo il percorso
     const exits = pts
       .filter(p => p.isExit && p.exitLabel)
       .map(p => ({ name: cleanExitLabel(p.exitLabel), lat: p.lat, lon: p.lon, cumKm: p.cumKm }));
 
-    // campiona comunque la geometria reale ogni 50 km lungo TUTTO il percorso:
-    // le uscite autostradali, quando ci sono, coprono spesso solo un tratto
-    // del viaggio (es. un'unica uscita finale su un percorso quasi tutto
-    // autostrada), quindi da sole non bastano a garantire tappe intermedie su
-    // tutto il tragitto. Dove un'uscita nominata è già vicina si scarta il
-    // campione generico e si tiene il nome reale del cartello.
     const geomSamples = sampleRouteGeometry(route, 50)
       .filter(gp => !exits.some(ep => Math.abs(ep.cumKm - gp.cumKm) < 40));
 
@@ -1378,19 +1277,13 @@
 
     const middle = [];
     for(const p of spaced){
-      // anche per le uscite autostradali si mostra il paese in cui si è
-      // davvero: il testo del cartello ("MILANO VENEZIA", "BRESCIA ovest")
-      // indica dove porta la strada, non dove sei. Resta solo di riserva.
-      // Se il reverse-geocoding di UN punto fallisce (rete lenta, posto non
-      // trovato), si salta solo quel punto invece di far fallire tutto il
-      // calcolo del meteo di percorso
       try{
         const name = await reverseGeocode(p.lat, p.lon);
         middle.push({ name, lat: p.lat, lon: p.lon, cumKm: p.cumKm });
       } catch(err){
         if(p.name) middle.push({ name: titleCaseLabel(p.name), lat: p.lat, lon: p.lon, cumKm: p.cumKm });
       }
-      await sleep(1100); // rispetta il rate limit di Nominatim (max 1 richiesta/sec)
+      await sleep(1100);
     }
 
     const all = [
@@ -1422,11 +1315,6 @@
     resultsEl.innerHTML = `<p class="route-weather-loading">Cerco partenza e arrivo...</p>`;
 
     try{
-      // Usa la posizione esatta scelta dal menu di autocompletamento quando
-      // c'è (niente più geocodifica "al buio" di nomi di paese ambigui);
-      // altrimenti prova comunque a risolvere il testo scritto. Un eventuale
-      // errore (servizio non raggiungibile, posto non trovato) risale con il
-      // messaggio vero, per capire subito cosa non va.
       const [startCoords, endCoords] = await Promise.all([
         resolvePlaceOrThrow(startInputEl, "Partenza"),
         resolvePlaceOrThrow(endInputEl, "Arrivo")
@@ -1438,11 +1326,6 @@
       let tollsAvoided = false;
       let tollsFailReason = null;
       if(avoidTolls){
-        // chiamata diretta (non fetchRoute) solo per questo tentativo, per
-        // poter leggere il motivo esatto di un eventuale fallimento invece del
-        // generico "nessun percorso trovato" (es. se anche il router usato
-        // lato server per evitare le autostrade non trova un percorso valido
-        // per questa tratta specifica)
         const exclParams = new URLSearchParams({
           startLat: startCoords.lat, startLon: startCoords.lon,
           endLat: endCoords.lat, endLon: endCoords.lon,
@@ -1475,9 +1358,6 @@
 
       resultsEl.innerHTML = `<p class="route-weather-loading">Scarico il meteo per ${stops.length} tappe...</p>`;
 
-      // orario stimato di passaggio in ogni tappa: partenza + una quota
-      // dell'intera durata del viaggio proporzionale ai km già percorsi a
-      // quel punto (stima indicativa, non tiene conto di soste)
       const [depY, depM, depD] = dateStr.split("-").map(Number);
       const [depH, depMin] = timeStr.split(":").map(Number);
       const departureDate = new Date(depY, depM - 1, depD, depH, depMin);
@@ -1494,7 +1374,6 @@
         ? (tollsAvoided ? "(percorso senza autostrade)" : "")
         : "(percorso più veloce, autostrade incluse)";
 
-      // Costo carburante (sola andata, con i parametri del calcolatore benzina qui sopra)
       const consumo = parseFloat(document.getElementById("fuel-cc").value) || 17;
       const prezzoBenzina = parseFloat(document.getElementById("fuel-price").value) || 1.75;
       const fuelCost = (distanceKm / consumo) * prezzoBenzina;
@@ -1503,7 +1382,7 @@
       if(!avoidTolls){
         const motorwayKm = estimateMotorwayKm(route);
         if(motorwayKm > 1){
-          const tollCost = motorwayKm * 0.075; // tariffa media indicativa autostrade italiane, €/km
+          const tollCost = motorwayKm * 0.075;
           costsLine += ` &nbsp;·&nbsp; ${mnIcon("road")} Pedaggio stimato: <strong>${mnFmt.euro(tollCost)}</strong>`;
         }
       }
@@ -1571,13 +1450,9 @@
   attachGeolocationButton(document.getElementById("route-start"));
   attachPlaceAutocomplete(document.getElementById("route-end"), document.getElementById("route-end-suggest"));
 
-  // ===== Assistente di valigia ========================================
   const RAIN_CODES = new Set([51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99]);
   const VALIGIA_HIST_YEARS = 5;
 
-  // Paesi dell'Unione Europea (per la tessera sanitaria europea) e paesi
-  // Schengen non-UE dove basta comunque la carta d'identità, senza passaporto
-  // (nomi in italiano, come li restituisce Nominatim con accept-language=it).
   const EU_COUNTRIES = new Set([
     "Austria", "Belgio", "Bulgaria", "Cechia", "Repubblica Ceca", "Cipro", "Croazia",
     "Danimarca", "Estonia", "Finlandia", "Francia", "Germania", "Grecia", "Irlanda",
@@ -1586,19 +1461,12 @@
   ]);
   const SCHENGEN_NON_EU_COUNTRIES = new Set(["Svizzera", "Norvegia", "Islanda", "Liechtenstein", "Andorra"]);
 
-  // Il servizio di geocodifica (Nominatim) restituisce il nome del posto come
-  // stringa unica "Via, Città, Regione, Paese": il paese è sempre l'ultimo
-  // pezzo. Non è infallibile al 100% ma è l'unico dato che già abbiamo senza
-  // chiamate aggiuntive.
   function paeseDaLabel(label){
     if(!label) return null;
     const parts = label.split(",").map(p => p.trim()).filter(Boolean);
     return parts.length ? parts[parts.length - 1] : null;
   }
 
-  // Documenti per l'estero: indipendenti dal meteo, dipendono solo dal paese
-  // di destinazione. Nessuna voce se la destinazione è in Italia (o se il
-  // paese non è riconoscibile dalla risposta del servizio di geocodifica).
   function documentiEsteriItems(paese){
     if(!paese || paese === "Italia" || paese === "Italy") return [];
 
@@ -1617,9 +1485,6 @@
     return items;
   }
 
-  // Per date troppo lontane per una previsione vera (oltre ~15 giorni), usa
-  // la media storica dello stesso periodo (stesso mm-gg, stessa durata) negli
-  // ultimi VALIGIA_HIST_YEARS anni, invece di inventare un meteo che non c'è.
   async function fetchHistoricalAverage(lat, lon, startDate, giorni){
     const thisYear = new Date().getFullYear();
     const years = [];
@@ -1695,10 +1560,6 @@
     try{
       const destCoords = await resolvePlaceOrThrow(destInputEl, "Destinazione");
 
-      // il meteo dettagliato copre solo i prossimi ~15 giorni: entro quel
-      // limite si usa la previsione reale, oltre si usa la media storica
-      // (ultimi anni) dello stesso periodo, invece di inventare un meteo che
-      // non c'è ancora
       const [y, m, d] = dataStr.split("-").map(Number);
       const startDate = new Date(y, m - 1, d);
       const maxForecastDate = new Date();
@@ -1741,7 +1602,6 @@
         }
       }
 
-      // --- Abbigliamento moto ---
       const motoItems = ["Casco", "Guanti da moto", "Stivali o scarpe da moto", "Visiera o lente di ricambio (chiara per la notte, scura per il giorno)"];
       if(!weatherAvailable){
         motoItems.push("Giacca e pantaloni moto con inserto termico removibile (copre sia caldo che freddo)");
@@ -1757,7 +1617,6 @@
         motoItems.push("Guanti impermeabili di ricambio");
       }
 
-      // --- Abbigliamento giornaliero ---
       const capiPerGiorno = bucato ? Math.max(2, Math.ceil(giorni / 2)) : giorni;
       const pantaloni = Math.max(1, Math.ceil(giorni / 3));
       const dailyItems = [
@@ -1775,7 +1634,6 @@
         dailyItems.push("Un giubbotto o piumino leggero per la sera (temperature vicine o sotto lo zero previste)");
       }
 
-      // --- Accessori ---
       const accessori = [
         "Documenti (patente, libretto, assicurazione)",
         "Caricabatterie e power bank",
@@ -1785,7 +1643,6 @@
         "Contanti (non ovunque si paga con carta)"
       ];
 
-      // --- Igiene personale --- (sempre uguale, non dipende dal meteo)
       const igiene = [
         "Spazzolino e dentifricio",
         "Deodorante",
@@ -1794,8 +1651,6 @@
         "Asciugamano microfibra da viaggio"
       ];
 
-      // --- Documenti per l'estero --- (dipende solo dal paese di
-      // destinazione, non dal meteo: mostrata solo se si esce dall'Italia)
       const paeseDestinazione = paeseDaLabel(destCoords.label);
       const documentiEsteri = documentiEsteriItems(paeseDestinazione);
 
@@ -1849,7 +1704,6 @@
   document.getElementById("valigia-btn").addEventListener("click", calculateValigia);
   attachPlaceAutocomplete(document.getElementById("valigia-dest"), document.getElementById("valigia-dest-suggest"));
 
-  // ===== Assistente di rotta ==========================================
   let rottaStopCounter = 0;
 
   function addRottaStopField(){
@@ -1870,10 +1724,7 @@
   }
   document.getElementById("rotta-add-stop").addEventListener("click", addRottaStopField);
 
-  // Cerca, tra i distributori/Autogrill reali restituiti da OpenStreetMap
-  // vicino a un punto, quello più vicino in linea d'aria
   async function findNearestFuelStation(lat, lon){
-    // il server cerca già il più vicino, qui basta leggere il risultato
     try{
       const res = await fetch(`/api/route-planner?action=fuel-near&lat=${lat}&lon=${lon}&radius=17000`);
       const data = await res.json();
@@ -1883,11 +1734,6 @@
     }
   }
 
-  // Esegue fn su ogni elemento con al massimo `limit` richieste in volo
-  // contemporaneamente, invece che una alla volta: il servizio di ricerca
-  // distributori (Overpass) regge un piccolo numero di richieste in
-  // parallelo, e questo taglia parecchio i tempi rispetto al fare tutto in
-  // sequenza con una pausa tra una tappa e l'altra
   async function mapWithConcurrency(items, limit, fn){
     const results = new Array(items.length);
     let nextIndex = 0;
@@ -1915,8 +1761,6 @@
     return `https://maps.apple.com/?saddr=${a.lat},${a.lon}&daddr=${b.lat},${b.lon}&dirflg=d`;
   }
   function legWazeUrl(b){
-    // Waze naviga sempre dalla posizione attuale: quando si è alla tappa
-    // precedente il punto di partenza reale è già quello, serve solo la destinazione
     return `https://waze.com/ul?ll=${b.lat},${b.lon}&navigate=yes`;
   }
 
@@ -1939,9 +1783,6 @@
     `;
   }
 
-  // Il link "tutto in uno" di Google Maps regge un numero limitato di tappe:
-  // oltre una certa soglia si tengono sempre partenza e arrivo, e si
-  // campionano le tappe di mezzo distribuendole uniformemente
   function capStopsForGoogle(stops, max){
     if(stops.length <= max) return stops;
     const first = stops[0];
@@ -1999,7 +1840,6 @@
       const distanceKm = route.distance / 1000;
       const durationH = route.duration / 3600;
 
-      // km cumulati di ogni tappa scelta da te, sommando la distanza di ogni tratta
       let cum = 0;
       allStops[0].cumKm = 0;
       (route.legs || []).forEach((leg, i) => {
@@ -2009,7 +1849,6 @@
 
       if(intervalKm > 0){
         resultsEl.innerHTML = `<p class="route-weather-loading">Cerco distributori e Autogrill lungo il percorso...</p>`;
-        // salta i punti automatici troppo vicini a una tappa già scelta da te
         const geomSamples = sampleRouteGeometry(route, intervalKm)
           .filter(p => !allStops.some(s => Math.abs(s.cumKm - p.cumKm) < intervalKm * 0.3));
 
@@ -2093,10 +1932,6 @@
   attachGeolocationButton(document.getElementById("rotta-start"));
   attachPlaceAutocomplete(document.getElementById("rotta-end"), document.getElementById("rotta-end-suggest"));
 
-  // ===== Precompilazione da un link "Fatti aiutare dal Nostromo" =====
-  // arrivo da una pagina di un viaggio (/viaggi/<slug>), che passa
-  // ?tool=viaggio|valigia|rotta più i campi già noti del viaggio, così
-  // l'assistente giusto si apre già pronto invece di far ricopiare tutto a mano
   (function initFromViaggioLink(){
     const params = new URLSearchParams(location.search);
     const tool = params.get("tool");
@@ -2132,6 +1967,6 @@
   })();
 </script>
 
-<script src="script.js?v=20261013f"></script>
+<script src="script.js?v=20261017a"></script>
 </body>
 </html>

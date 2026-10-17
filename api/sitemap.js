@@ -1,5 +1,5 @@
 const seed = require('../data/viaggi-data');
-const { getViaggiData } = require('../lib/viaggi-store');
+const { getViaggiData } = require('./_lib/viaggi-store');
 const { GUIDE, getSlug: getGuidaSlug } = require('../data/manuale-data');
 
 const BASE = 'https://ilmotonauta.com';

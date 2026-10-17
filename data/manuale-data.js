@@ -1,7 +1,3 @@
-// Dati condivisi delle guide del Manuale di bordo: stesso schema di
-// data/viaggi-data.js, un solo file caricato sia dal browser (manuale.html,
-// per l'elenco) sia dalle funzioni serverless (api/manuale.js, per generare
-// la pagina dedicata di ogni guida).
 (function (root, factory) {
   if (typeof module !== "undefined" && module.exports) {
     module.exports = factory();
@@ -729,9 +725,6 @@
     return GUIDE.find(g => getSlug(g) === slug) || null;
   }
 
-  // minuti di lettura (~200 parole al minuto, tutto il testo della guida:
-  // paragrafi, sottotitoli, consigli e didascalie). Al posto della data,
-  // che su una guida farebbe sembrare "vecchio" un consiglio ancora valido
   function tempoLettura(guida) {
     const pezzi = [guida.titolo, guida.copertinaCaption];
     (guida.blocchi || []).forEach(b => {

@@ -1,5 +1,5 @@
-const { getRedisClient } = require('../lib/redis');
-const { isAuthenticated } = require('../lib/auth');
+const { getRedisClient } = require('./_lib/redis');
+const { isAuthenticated } = require('./_lib/auth');
 
 async function handleGet(req, res) {
   try {

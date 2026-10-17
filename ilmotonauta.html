@@ -17,13 +17,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261013f">
+<link rel="stylesheet" href="style.css?v=20261017a">
 <script src="cookie-consent.js" defer></script>
 <style>
-  /* stesso sistema di base di Alleati/Canale aperto/Diario di bordo:
-     grafite freddo, livrea rosso/blu sotto l'header e sulle sezioni
-     alternate. Niente sweep diagonale nell'hero: qui c'è già una foto
-     vera e la strada disegnata, sarebbe troppo carico. */
   :root{
     --racing-blue:#1E5FAE;
     --asphalt:#15171B;
@@ -68,8 +64,6 @@
   .btn.solid:hover::after{ transform:translate(3px,-50%); background:rgba(8,10,18,0.28); }
 }
 
-  /* cornice sulle foto: angoli stile mirino fotografico (non un bordo
-     continuo) — 4 parentesi agli angoli, rosso/blu in diagonale */
   .photo-frame{
     position:relative;
     --arm:30px; --thick:3px; --gap:12px;
@@ -174,7 +168,6 @@
   </div>
 </header>
 
-<!-- HERO ============================================================ -->
 <section style="padding-top:70px; padding-bottom:0;">
   <div class="wrap feature-grid">
     <div>
@@ -198,17 +191,13 @@
   </div>
 
   <svg class="road-line" viewBox="0 -15 1180 210" preserveAspectRatio="none" style="margin-top:56px;">
-    <!-- superficie stradale -->
     <path class="road-surface" d="M -50 110 C 200 10, 400 170, 650 80 C 900 -10, 1100 0, 1230 90 L 1230 110 C 1100 20, 900 10, 650 100 C 400 190, 200 30, -50 130 Z"/>
-    <!-- bordi della carreggiata -->
     <path class="road-edge" d="M -50 110 C 200 10, 400 170, 650 80 C 900 -10, 1100 0, 1230 90"/>
     <path class="road-edge" d="M -50 130 C 200 30, 400 190, 650 100 C 900 10, 1100 20, 1230 110"/>
-    <!-- linea di mezzeria tratteggiata, animata -->
     <path class="road-center" d="M -50 120 C 200 20, 400 180, 650 90 C 900 0, 1100 10, 1230 100"/>
   </svg>
 </section>
 
-<!-- CHI SONO ======================================================== -->
 <section class="section-alt">
   <div class="wrap feature-grid">
    <div class="photo-frame" style="aspect-ratio:4/5;">
@@ -232,7 +221,6 @@
   </div>
 </section>
 
-<!-- LA MIA MOTO ====================================================== -->
 <section style="padding-bottom:0;">
   <div class="wrap">
     <p class="marker">Il mio mezzo</p>
@@ -285,8 +273,6 @@
 </section>
 
 <script>
-  // km attuali della moto (quelli che aggiorno dall'area riservata): il
-  // contachilometri del cruscotto (script.js) gira fino al valore vero
   fetch("/api/km")
     .then(res => res.json())
     .then(data => {
@@ -353,9 +339,6 @@
   </div>
 </section>
 
-<!-- COSA FACCIO ===================================================== -->
-<!-- lista "editoriale" senza riquadri: grandi numeri rossi a contorno,
-     righe separate da un filo, così non è l'ennesima fila di card -->
 <section class="section-alt">
   <div class="wrap">
     <p class="marker">Cosa faccio</p>
@@ -381,11 +364,6 @@
   </div>
 </section>
 
-<!-- SOCIAL FEEDS ==================================================== -->
-<!-- TikTok e Instagram uguali: il sito legge profilo e ultimi 9 contenuti
-     (lib/tiktok.js, lib/instagram.js), copia le anteprime su Cloudinary e le
-     mostra da lì, quindi niente cookie dei social per chi visita. Finché i
-     dati non arrivano (o se un social non risponde) resta la scheda col link -->
 <section>
   <div class="wrap">
     <p class="marker">Seguimi</p>
@@ -454,6 +432,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=20261013f"></script>
+<script src="script.js?v=20261017a"></script>
 </body>
 </html>

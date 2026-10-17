@@ -1,4 +1,4 @@
-// Riquadro "TikTok" della home, uguale a quello di Instagram (lib/instagram.js):
+// Riquadro "TikTok" della home, uguale a quello di Instagram (_lib/instagram.js):
 // profilo e ultimi 9 video di @ilmotonauta, con le copertine copiate su
 // Cloudinary e mostrate dal sito, così i visitatori non si collegano a TikTok.
 //

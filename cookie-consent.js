@@ -43,7 +43,6 @@
     banner.querySelector("#cookie-accept").addEventListener("click", () => {
       saveConsent("accepted");
       loadAnalytics();
-      // per i contenuti esterni che aspettano il consenso (es. il riquadro TikTok)
       document.dispatchEvent(new CustomEvent("mn:cookie-accepted"));
       dismiss();
     });
@@ -53,13 +52,11 @@
     });
   }
 
-  // in navigazione privata o con i dati del sito bloccati localStorage può
-  // dare errore: in quel caso il banner si mostra e la scelta vale per la visita
   function readConsent() {
     try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
   }
   function saveConsent(value) {
-    try { localStorage.setItem(CONSENT_KEY, value); } catch (e) { /* niente */ }
+    try { localStorage.setItem(CONSENT_KEY, value); } catch(e){}
   }
 
   const consent = readConsent();
